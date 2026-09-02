@@ -1,0 +1,105 @@
+/**
+ * Page chrome for demo/states.html. Not part of the package.
+ *
+ * Everything here is prefixed demo- so it can never be mistaken for kit CSS,
+ * and tastecheck.config.json allows that prefix rather than approving the
+ * class names one at a time.
+ *
+ * It reads panelware's own tokens rather than declaring values, so the demo
+ * page follows the theme along with the components on it. A demo that hard
+ * coded a white page would show the dark kit on the wrong ground and hide
+ * exactly the mistakes it exists to surface.
+ */
+
+body {
+  margin: 0;
+  padding: var(--pw-space-2xl) var(--pw-space-xl) 6rem;
+  background-color: var(--pw-color-base-100);
+  color: var(--pw-color-base-content);
+  font-family: var(--pw-font-ui);
+  font-size: var(--pw-text-ui);
+  line-height: var(--pw-leading-body);
+}
+
+.demo-header { margin-bottom: var(--pw-space-2xl); }
+
+.demo-title {
+  margin: 0;
+  font-size: var(--pw-text-display);
+  line-height: var(--pw-leading-tight);
+  letter-spacing: var(--pw-tracking-display);
+  font-weight: 600;
+}
+
+.demo-heading {
+  margin: 0 0 var(--pw-space-2xs);
+  font-size: var(--pw-text-subhead);
+  line-height: var(--pw-leading-ui);
+  font-weight: 600;
+}
+
+.demo-note {
+  margin: 0 0 var(--pw-space-lg);
+  max-width: 46ch;
+  color: var(--pw-color-base-content);
+  opacity: 0.75;
+  font-size: var(--pw-text-micro);
+}
+
+.demo-section {
+  padding-top: var(--pw-space-xl);
+  border-top: var(--pw-border) solid var(--pw-bevel-frame);
+}
+.demo-section + .demo-section { margin-top: var(--pw-space-2xl); }
+
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pw-space-lg);
+  min-width: 0;
+}
+
+.demo-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pw-space-lg);
+  width: min(30rem, 100%);
+}
+
+/* The dialog is fixed and centred in the kit, which would put it over
+   everything else on a page whose whole job is showing everything else at
+   once. Held in flow here, and only here. */
+.demo-dialog-stage {
+  position: relative;
+  /* The stage has to be sized by the row, not by its contents. Left to size
+     itself it takes the panel's specified 28rem, the panel's max-width
+     resolves against that, and the pair agree on a width wider than the
+     screen. A flex item also defaults to min-width: auto, so it refuses to
+     shrink below that agreement and pushes the page sideways at 320. */
+  width: 100%;
+  min-width: 0;
+  /* Padding, not a margin on the panel. The panel's own max-width already
+     reserves a gutter against its containing block, so a margin on top of it
+     added to a width that was already full and pushed the page sideways at
+     320 and 375. */
+  padding: var(--pw-space-xl);
+}
+.demo-dialog-stage .pw-overlay { position: absolute; }
+.demo-dialog-stage .pw-panel {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  animation: none;
+  max-height: none;
+}
+
+/* Flattens the treatment without touching a component, which is the point. */
+.demo-flat {
+  --pw-bevel-depth: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pw-space-lg);
+}

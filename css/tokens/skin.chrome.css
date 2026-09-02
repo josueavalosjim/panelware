@@ -52,9 +52,10 @@
      live-sampling blur path, which is why it is cheap. */
   --pw-glass-blur: 0px;
 
-  /* Outer cast shadow, under the inset bevel stack. Kept small: this is a
-     control sitting on a surface, not a card floating over a page. */
-  --pw-shadow-outer: 0 1px 2px rgba(20, 20, 19, 0.16);
+  /* The cast shadow's colour. Its geometry lives in css/treatment/bevel.css,
+     where it can be derived per element from the inherited depth. Kept quiet:
+     this is a control sitting on a surface, not a card floating over a page. */
+  --pw-shadow-outer-color: rgba(20, 20, 19, 0.16);
 }
 
 :root[data-theme="dark"],
@@ -75,5 +76,5 @@
 
   --pw-glass-blur: 0px;
 
-  --pw-shadow-outer: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0.5);
 }

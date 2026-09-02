@@ -11,7 +11,7 @@
 
 @layer pw.components {
   .pw-slider {
-    position: relative;
+    position: relative;   /* the thumb is positioned against this */
     display: flex;
     align-items: center;
     /* The touch target is the row, not the 8px track. */
@@ -39,11 +39,34 @@
   .pw-slider-thumb {
     --pw-elev: var(--pw-shadow-raised);
     display: block;
+    /* Radix positions the thumb itself, by writing an inline offset onto it.
+       All this does is establish how it sits vertically and give the hit
+       expander something to anchor to.
+
+       Vertical centring is top plus a negative margin rather than a
+       translateY, because the grab state animates transform and the two
+       would overwrite each other: the thumb would drop half its height the
+       moment it was pressed. */
+    position: absolute;
+    top: 50%;
+    margin-top: calc(var(--pw-thumb-h) / -2);
     width: var(--pw-thumb-w);
     height: var(--pw-thumb-h);
     background-color: var(--pw-color-base-200);
     border-radius: var(--pw-radius-control);
     transition: transform var(--pw-duration-press) var(--pw-ease-press);
+  }
+
+  /* The hit area, larger than the grip and invisible. Centred on the grip so
+     growing it does not move where the control appears to be. */
+  .pw-slider-thumb::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--pw-thumb-hit);
+    height: var(--pw-thumb-hit);
+    transform: translate(-50%, -50%);
   }
 
   /* The grab. Scale rather than translate, because the thumb has to stay on

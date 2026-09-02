@@ -112,8 +112,15 @@
   --pw-press-travel: 1px;
 
   --pw-track-h:  0.5rem;
+  /* The grip is 22x28 and the thing a finger hits is 44x44. They are
+     different numbers on purpose, and the split is the house pattern: the
+     burger menu on the portfolio draws 22px bars inside a --burger-hit of
+     44px for exactly this reason. A 22x44 painted grip on an 8px track reads
+     as a domino balanced on a wire; a 44px target you cannot see reads as
+     nothing at all, which is the correct outcome. */
   --pw-thumb-w:  1.375rem;
-  --pw-thumb-h:  2.75rem;   /* the thumb is the touch target, so it is 44 */
+  --pw-thumb-h:  1.75rem;
+  --pw-thumb-hit: var(--pw-control-h);
   --pw-badge-h:  1.5rem;
   --pw-panel-pad: var(--pw-space-xl);
   --pw-dialog-w:  28rem;

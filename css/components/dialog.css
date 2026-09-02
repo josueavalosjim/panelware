@@ -30,8 +30,17 @@
     top: 50%;
     left: 50%;
     width: var(--pw-dialog-w);
-    max-width: calc(100vw - (var(--pw-space-lg) * 2));
-    max-height: calc(100vh - (var(--pw-space-xl) * 2));
+    /* Percentages, not 100vw and 100vh.
+
+       A fixed element's percentages resolve against the initial containing
+       block, which is the viewport WITHOUT its scrollbars. 100vw includes
+       them. On any page long enough to scroll, and with classic rather than
+       overlay scrollbars, 100vw is about 15px wider than the space the panel
+       actually has, so the gutter this is trying to reserve quietly shrinks
+       to half. Headless Chromium uses overlay scrollbars and would never
+       have shown it. */
+    max-width: calc(100% - (var(--pw-space-lg) * 2));
+    max-height: calc(100% - (var(--pw-space-xl) * 2));
     border-radius: var(--pw-radius-box);
     clip-path: var(--pw-clip-box);
     font-family: var(--pw-font-ui);
@@ -69,7 +78,6 @@
     width: var(--pw-control-h);
     height: var(--pw-control-h);
     min-width: 0;
-    border: var(--pw-border) solid var(--pw-bevel-frame);
     border-radius: var(--pw-radius-control);
     background-color: var(--pw-color-base-200);
     color: var(--pw-color-base-content);

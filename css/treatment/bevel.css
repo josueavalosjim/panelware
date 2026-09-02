@@ -24,8 +24,28 @@
  */
 
 @layer pw.treatment {
-  :root,
-  :root[data-skin="chrome"] {
+  /* ── Where these are declared is load-bearing ───────────────────────────
+     On the component, not on :root, and that is not a style preference.
+
+     A custom property that references another one is substituted against the
+     element the FIRST one is declared on. Declare --pw-bevel-1 on :root and
+     its var(--pw-bevel-depth) resolves against :root's depth, once. What
+     descendants then inherit is the already-computed "1px" — so setting
+     --pw-bevel-depth: 0 on a container does nothing at all, and setting it
+     on the readout to sink it deeper does nothing either.
+
+     Both of those were shipped and both looked correct in the source. The
+     depth-0 panel on demo/states.html is what caught them, which is the
+     entire reason that panel exists: the knob had been verified by reading
+     the calc() rather than by looking at a component with the knob turned
+     down.
+
+     Declaring the derivation here means every surface computes its own
+     stack from whatever depth it has inherited, so the knob works at any
+     level: :root, a container, or one component. */
+  :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
+         .pw-slider-track, .pw-slider-thumb, .pw-lcd,
+         .pw-raised, .pw-sunken) {
     --pw-bevel-1:  calc(var(--pw-bevel-depth) * 1px);
     --pw-bevel-2:  calc(var(--pw-bevel-depth) * 2px);
     --pw-bevel-1n: calc(var(--pw-bevel-depth) * -1px);
@@ -44,6 +64,13 @@
     --pw-bevel-sunken-inner:
       inset var(--pw-bevel-2n) var(--pw-bevel-2n) var(--pw-bevel-face),
       inset var(--pw-bevel-2)  var(--pw-bevel-2)  var(--pw-bevel-shade);
+
+    /* The cast shadow. The skin owns its colour and the treatment owns its
+       geometry, so this scales with depth for free and collapses with the
+       rest of the stack. */
+    --pw-shadow-outer:
+      0 calc(var(--pw-bevel-depth) * 1px)
+        calc(var(--pw-bevel-depth) * 2px) var(--pw-shadow-outer-color);
 
     /* The two values a component actually swaps between. A raised surface
        casts; a sunken one is a hole in something and casts nothing. */
@@ -77,12 +104,35 @@
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
          .pw-slider-track, .pw-slider-thumb, .pw-lcd) {
     box-shadow: var(--pw-elev);
-    border: var(--pw-border) solid var(--pw-bevel-frame);
+    /* No border. The outer inset shadow IS the frame, which is 98.css's own
+       arrangement: it sets border: none on its buttons and lets the four
+       insets carry the whole edge.
+
+       Drawing both was the first thing the depth-0 panel on demo/states.html
+       caught. A 1px border in --pw-bevel-frame sitting immediately outside a
+       1px inset shadow in --pw-bevel-frame reads as one 2px line on the dark
+       side, pushes the white highlight a pixel inward where the border hides
+       half of it, and — the part that actually matters — does not scale with
+       --pw-bevel-depth, so it survived depth 0 as a ghost edge. Everything
+       the comment at the top of this file warns about, shipped. */
+    border: 0;
     border-radius: var(--pw-radius-control);
     clip-path: var(--pw-clip-control);
     background-color: var(--pw-color-base-200);
     background-image: var(--pw-texture);
     color: var(--pw-color-base-content);
+  }
+
+  /* Forced colors strips box-shadow and keeps border, so a kit whose entire
+     boundary is a shadow has no boundary at all in Windows High Contrast.
+     This is the reason to own the case explicitly rather than to keep a
+     border everywhere for it: here the border is the only edge, it uses the
+     system's own colours, and it is the one place --pw-border is read. */
+  @media (forced-colors: active) {
+    :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
+           .pw-slider-track, .pw-slider-thumb, .pw-lcd) {
+      border: var(--pw-border) solid ButtonBorder;
+    }
   }
 
   /* Documented escape hatches for surfaces a consumer builds that are not

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>panelware states</title>
+<!--
+  Every component in every attribute-driven state, and no JavaScript at all.
+
+  No script for three reasons that happen to agree. It is the standing proof
+  that the CSS works without React, which is the product claim and so deserves
+  a file that actually tests it. taste-check's runtime check can open it over
+  file:// with no server. And a states page that needed a framework to render
+  its states would be testing the framework.
+
+  Pointer states are not faked here. :hover, :active and :focus-visible have no
+  static markup, and rules that mimicked them would be testing this file rather
+  than the kit, so they are exercised live in a browser instead.
+
+  demo.css is page chrome for this file only. It is not part of the package and
+  is not in the files array.
+-->
+<link rel="stylesheet" href="../css/panelware.css">
+<link rel="stylesheet" href="./demo.css">
+</head>
+<body>
+  <header class="demo-header">
+    <h1 class="demo-title">panelware</h1>
+    <p class="demo-note">Chrome skin. Every state that an attribute can reach.</p>
+  </header>
+  <main class="demo-main">
+
+    <section class="demo-section" id="buttons">
+      <h2 class="demo-heading">Button</h2>
+      <p class="demo-note">Rest, primary, glossed, and disabled. The press and the hover are pointer states and are not mocked up here.</p>
+      <div class="demo-row">
+        <button class="pw-button">Open</button>
+        <button class="pw-button" data-variant="primary">Save changes</button>
+        <button class="pw-button" data-variant="primary" data-gloss><span>Glossed</span></button>
+        <button class="pw-button" data-gloss><span>Gloss on silver</span></button>
+        <button class="pw-button" disabled>Unavailable</button>
+      </div>
+    </section>
+
+    <section class="demo-section" id="toggle">
+      <h2 class="demo-heading">Toggle</h2>
+      <p class="demo-note">Off is raised, on is sunken and heavier. Neither state is carried by colour.</p>
+      <div class="demo-row">
+        <button class="pw-toggle" type="button" data-state="off" aria-pressed="false">Repeat</button>
+        <button class="pw-toggle" type="button" data-state="on" aria-pressed="true">Shuffle</button>
+        <button class="pw-toggle" type="button" data-state="off" aria-pressed="false" disabled>Crossfade</button>
+      </div>
+    </section>
+
+    <section class="demo-section" id="tabs">
+      <h2 class="demo-heading">Tabs</h2>
+      <p class="demo-note">The active trigger sits a pixel lower and drops its bottom line, so it fuses with the panel.</p>
+      <div class="demo-row">
+        <div class="demo-stack">
+          <div class="pw-tab-list" role="tablist">
+            <button class="pw-tab" role="tab" type="button" data-state="inactive" aria-selected="false">Output</button>
+            <button class="pw-tab" role="tab" type="button" data-state="active" aria-selected="true">Equaliser</button>
+            <button class="pw-tab" role="tab" type="button" data-state="inactive" aria-selected="false">Playlist</button>
+          </div>
+          <div class="pw-tab-panel" role="tabpanel">
+            The panel and the active trigger share an edge. That fuse is the
+            only thing separating a tab strip from a row of pressed buttons.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section" id="dialog">
+      <h2 class="demo-heading">Dialog</h2>
+      <p class="demo-note">Held in flow by demo.css so it can be seen next to everything else. In the kit it is fixed and centred, over a flat scrim with no backdrop-filter.</p>
+      <div class="demo-row">
+        <div class="demo-dialog-stage">
+          <div class="pw-overlay" aria-hidden="true"></div>
+          <div class="pw-panel" role="dialog" aria-label="Preferences">
+            <div class="pw-panel-title-bar" data-gloss>
+              <h3 class="pw-panel-title">Preferences</h3>
+              <button class="pw-panel-close" type="button" aria-label="Close">&#215;</button>
+            </div>
+            <div class="pw-panel-body">
+              The title bar is the one place gloss is on by default. It is the
+              Luna titlebar, and it is the single element where the highlight
+              is the point rather than an option.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section" id="slider">
+      <h2 class="demo-heading">Slider</h2>
+      <p class="demo-note">Track sunken, thumb raised. The thumb never sinks: a sunken grip reads as dropped rather than held. The grip is 22 by 28 and its hit area is 44 by 44. Radix positions the thumb in the real component; these offsets stand in for it.</p>
+      <div class="demo-row">
+        <div class="demo-stack">
+          <span class="pw-slider">
+            <span class="pw-slider-track"><span class="pw-slider-range" style="width: 0%"></span></span>
+            <span class="pw-slider-thumb" style="left: calc(0% - (var(--pw-thumb-w) / 2))" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></span>
+          </span>
+          <span class="pw-slider">
+            <span class="pw-slider-track"><span class="pw-slider-range" style="width: 40%"></span></span>
+            <span class="pw-slider-thumb" style="left: calc(40% - (var(--pw-thumb-w) / 2))" role="slider" tabindex="0" aria-label="Balance" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"></span>
+          </span>
+          <span class="pw-slider" data-disabled>
+            <span class="pw-slider-track"><span class="pw-slider-range" style="width: 70%"></span></span>
+            <span class="pw-slider-thumb" style="left: calc(70% - (var(--pw-thumb-w) / 2))" role="slider" tabindex="-1" aria-label="Gain" aria-disabled="true" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"></span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section" id="badge">
+      <h2 class="demo-heading">Status badge</h2>
+      <p class="demo-note">Every badge is a glyph and a word. A coloured dot alone is the failure this component exists to avoid.</p>
+      <div class="demo-row">
+        <span class="pw-badge" data-status="success"><span class="pw-badge-glyph" aria-hidden="true">&#10003;</span>Connected</span>
+        <span class="pw-badge" data-status="warning"><span class="pw-badge-glyph" aria-hidden="true">!</span>Buffering</span>
+        <span class="pw-badge" data-status="error"><span class="pw-badge-glyph" aria-hidden="true">&#215;</span>No device</span>
+      </div>
+    </section>
+
+    <section class="demo-section" id="lcd">
+      <h2 class="demo-heading">Readout</h2>
+      <p class="demo-note">A sprite sheet stepped by whole pixels, painted through a mask so the ink stays a token. The hidden text beside each one is what a screen reader gets.</p>
+      <div class="demo-row">
+        <div class="demo-stack">
+          <output class="pw-lcd">
+            <span class="pw-sr-only">04:21</span>
+            <span class="pw-lcd-render" aria-hidden="true"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 4"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 12"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1"></span></span>
+          </output>
+          <output class="pw-lcd">
+            <span class="pw-sr-only">-12.5</span>
+            <span class="pw-lcd-render" aria-hidden="true"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 11"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 13"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 5"></span></span>
+          </output>
+          <output class="pw-lcd">
+            <span class="pw-sr-only">PANELWARE</span>
+            <span class="pw-lcd-render" aria-hidden="true"><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span></span>
+          </output>
+          <output class="pw-lcd pw-lcd-marquee" style="width: 22rem">
+            <span class="pw-sr-only">Now playing: panelware 0.1.0</span>
+            <span class="pw-lcd-render" aria-hidden="true"><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 14; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 24; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 6; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 1; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 14; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 24; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 6; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 1; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span></span>
+          </output>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section" id="flat">
+      <h2 class="demo-heading">Depth 0</h2>
+      <p class="demo-note">The same components with --pw-bevel-depth set to 0. Every offset in the bevel is a calc of that number, so the whole stack collapses to nothing. A single literal px in there would leave a ghost edge here.</p>
+      <div class="demo-row">
+        <div class="demo-flat">
+          <button class="pw-button">Open</button>
+          <button class="pw-button" data-variant="primary">Save changes</button>
+          <button class="pw-toggle" type="button" data-state="on" aria-pressed="true">Shuffle</button>
+          <span class="pw-badge" data-status="success"><span class="pw-badge-glyph" aria-hidden="true">&#10003;</span>Connected</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

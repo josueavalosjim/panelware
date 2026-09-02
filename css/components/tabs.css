@@ -37,16 +37,25 @@
     --pw-elev: var(--pw-shadow-sunken);
     background-color: var(--pw-color-base-200);
     font-weight: 600;
-    /* Sits a pixel lower and loses its bottom line, so the trigger and the
-       panel read as one surface. */
+    /* The fuse: the trigger drops a pixel and then overlaps the panel by the
+       same pixel, so its own bottom edge lands underneath the panel's top
+       edge instead of beside it. z-index decides which of the two overlapping
+       edges is visible, and it has to be the panel's.
+
+       The obvious version of this was border-bottom-color: transparent, and
+       it stopped working the moment the frame became a shadow rather than a
+       border. Overlap does not care which one draws the edge. */
     transform: translateY(var(--pw-press-travel));
-    border-bottom-color: transparent;
+    margin-bottom: calc(var(--pw-press-travel) * -2);
+    position: relative;
+    z-index: 0;
   }
+
+  .pw-tab-panel { position: relative; z-index: 1; }
 
   .pw-tab-panel {
     padding: var(--pw-panel-pad);
     background-color: var(--pw-color-base-200);
-    border: var(--pw-border) solid var(--pw-bevel-frame);
     border-radius: 0 var(--pw-radius-box) var(--pw-radius-box) var(--pw-radius-box);
     box-shadow: var(--pw-shadow-sunken);
     color: var(--pw-color-base-content);
