@@ -101,6 +101,43 @@
       </div>
     </section>
 
+    <section class="demo-section" id="list">
+      <h2 class="demo-heading">Playlist</h2>
+      <p class="demo-note">A listbox, and one tab stop rather than one per row. Three states are shown at once and they are all different things: the first row is playing, the third is selected, the fifth is where the keyboard is. Winamp colour-codes its rows and that is the one thing here not taken from it, because colour alone says nothing to a reader who cannot see it.</p>
+      <div class="demo-row">
+        <div class="demo-stack">
+          <ul class="pw-list" role="listbox" aria-label="Playlist" tabindex="0">
+            <li class="pw-list-item" role="option" aria-selected="false" aria-current="true">
+              <span class="pw-list-marker"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 0"></span></span>
+              <span class="pw-list-primary">DJ Mike Llama - Llama Whippin Intro</span>
+              <span class="pw-list-secondary">0:05</span>
+              <span class="pw-sr-only">, now playing</span>
+            </li>
+            <li class="pw-list-item" role="option" aria-selected="false">
+              <span class="pw-list-primary">Mori Calliope - Go-Getters</span>
+              <span class="pw-list-secondary">3:15</span>
+            </li>
+            <li class="pw-list-item" role="option" aria-selected="true">
+              <span class="pw-list-primary">CircusP - Goodbye</span>
+              <span class="pw-list-secondary">3:24</span>
+            </li>
+            <li class="pw-list-item" role="option" aria-selected="false">
+              <span class="pw-list-primary">AmaLee - Siren</span>
+              <span class="pw-list-secondary">4:02</span>
+            </li>
+            <li class="pw-list-item" role="option" aria-selected="false" data-active>
+              <span class="pw-list-primary">Crusher-P - Echo</span>
+              <span class="pw-list-secondary">3:50</span>
+            </li>
+            <li class="pw-list-item" role="option" aria-selected="false">
+              <span class="pw-list-primary">M83 - Midnight City</span>
+              <span class="pw-list-secondary">4:03</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section class="demo-section" id="window">
       <h2 class="demo-heading">Window chrome</h2>
       <p class="demo-note">A title bar, its controls, and the chassis. The dialog uses the same bar, because a dialog is a window that happens to be modal. The bar does not pretend to drag: there is no window to move, and a handle that looks draggable and is not is the same failure as a button that looks pressable and is not.</p>

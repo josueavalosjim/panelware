@@ -47,7 +47,7 @@
     import { createRoot } from 'react-dom/client';
     import {
       Badge, Button, Dialog, DialogPanel, DialogTrigger, Equalizer, Icon,
-      Menu, MenuCheckboxItem, MenuContent, MenuItem, MenuLabel, MenuRadioGroup,
+      List, Menu, MenuCheckboxItem, MenuContent, MenuItem, MenuLabel, MenuRadioGroup,
       MenuRadioItem, MenuSeparator, MenuSub, MenuTrigger, Menubar,
       Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
       Transport, TransportButton, Window,
@@ -70,6 +70,18 @@
       const [doubleSize, setDoubleSize] = useState(false);
       const [alwaysOnTop, setAlwaysOnTop] = useState(true);
       const [skin, setSkin] = useState('base');
+      const [picked, setPicked] = useState('t3');
+      const [nowPlaying, setNowPlaying] = useState('t1');
+      const tracks = [
+        ['t1', 'DJ Mike Llama - Llama Whippin Intro', '0:05'],
+        ['t2', 'Mori Calliope - Go-Getters', '3:15'],
+        ['t3', 'CircusP - Goodbye', '3:24'],
+        ['t4', 'AmaLee - Siren', '4:02'],
+        ['t5', 'Crusher-P - Echo', '3:50'],
+        ['t6', 'M83 - Midnight City', '4:03'],
+        ['t7', 'Sunnexo - Please Wait', '4:15'],
+        ['t8', 'Omaru Polka - Persona', '4:56'],
+      ].map(([id, primary, secondary]) => ({ id, primary, secondary }));
       const [eq, setEq] = useState(() => [
         ['60', '60 hertz', 4], ['170', '170 hertz', 2], ['310', '310 hertz', 0],
         ['600', '600 hertz', -2], ['1k', '1 kilohertz', -4], ['3k', '3 kilohertz', -1],
@@ -182,6 +194,20 @@
                 value: position[0] + 30, max: 210, label: 'Buffered',
                 format: (v, m) => `${Math.round((v / m) * 100)} percent buffered`,
               })))),
+
+        h(Section, {
+          id: 'list', title: 'Playlist',
+          note: 'A listbox. Click a row or arrow through it; Enter or a double click plays. Selected and playing are separate states, because you scroll a selection past the playing track constantly. The playing row carries a mark and a weight, not only a colour: Winamp colour-codes its rows and that is the one thing here not taken from it.',
+        },
+          h('div', { className: 'demo-stack' },
+            h(List, {
+              label: 'Playlist',
+              rows: tracks,
+              selected: picked,
+              onSelect: setPicked,
+              onActivate: setNowPlaying,
+              current: nowPlaying,
+            }))),
 
         h(Section, {
           id: 'menubar', title: 'Menu bar',

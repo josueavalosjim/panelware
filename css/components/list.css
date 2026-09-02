@@ -1,0 +1,104 @@
+/**
+ * LIST.
+ *
+ * A selectable list of rows: a playlist, a file list, a queue.
+ *
+ * ── Two states, not one ──────────────────────────────────────────────────
+ * A playlist row can be selected and it can be the one playing, and they are
+ * independent: you scroll a selection past the playing track all the time.
+ * Collapsing them into one highlight is the mistake this component exists to
+ * avoid, so selection inverts the row and playing marks it, and a row can
+ * carry both at once.
+ *
+ * ── The marker is a mark, not a colour ───────────────────────────────────
+ * Winamp's playlist colour-codes rows and that is the one thing from the
+ * reference this kit does not take. Colour alone cannot say which row is
+ * playing to a reader who cannot see it, and cannot say it at all in forced
+ * colors. The playing row gets an icon in a reserved gutter and a weight
+ * change, and the colour is the third signal rather than the only one.
+ */
+
+@layer pw.components {
+  .pw-list {
+    --pw-elev: var(--pw-shadow-sunken);
+    display: block;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    max-height: var(--pw-list-h);
+    background-color: var(--pw-color-base-300);
+    border-radius: var(--pw-radius-control);
+    clip-path: var(--pw-clip-control);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-control-text);
+    color: var(--pw-color-base-content);
+    list-style: none;
+  }
+
+  .pw-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--pw-control-gap);
+    min-height: var(--pw-control-h);
+    /* The gutter is reserved on every row, playing or not, for the same
+       reason a menu reserves one: a list whose text shifts sideways when the
+       track changes is a list that moves while you are reading it. */
+    padding: 0 var(--pw-control-pad-x) 0 var(--pw-menu-gutter);
+    position: relative;
+    cursor: default;
+    user-select: none;
+  }
+
+  /* Selection inverts. This is the only place in the kit where a full-width
+     inversion is right: a row IS the control, so there is nothing smaller to
+     mark. */
+  .pw-list-item[aria-selected="true"] {
+    background-color: var(--pw-color-primary);
+    color: var(--pw-color-primary-content);
+  }
+
+  /* The row the keyboard is on, which is not necessarily the selected one.
+     A quieter band, so moving through a list does not look like selecting
+     every row on the way. */
+  .pw-list-item[data-active] {
+    outline: var(--pw-focus-width) solid var(--pw-color-focus);
+    outline-offset: calc(var(--pw-focus-width) * -1);
+  }
+  .pw-list-item[aria-selected="true"][data-active] {
+    outline-color: var(--pw-color-focus-contrast);
+  }
+
+  .pw-list-marker {
+    position: absolute;
+    left: var(--pw-space-sm);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .pw-list-item[aria-current="true"] { font-weight: 600; }
+
+  .pw-list-primary {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Right-aligned and tabular, because a column of durations that does not
+     line up is a column of noise. */
+  .pw-list-secondary {
+    flex: 0 0 auto;
+    padding-left: var(--pw-space-lg);
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+  }
+  .pw-list-item[aria-selected="true"] .pw-list-secondary { opacity: 0.85; }
+
+  @media (forced-colors: active) {
+    .pw-list-item[aria-selected="true"] {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+  }
+}

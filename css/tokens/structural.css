@@ -140,6 +140,11 @@
      pointer. */
   --pw-menu-gutter: 2rem;
 
+  /* How tall a list gets before it scrolls. Stated rather than left to the
+     content, because a list that grows without limit stops being a list and
+     becomes the page. */
+  --pw-list-h: 16rem;
+
   --pw-eq-height: 10rem;
   --pw-eq-gap:    var(--pw-space-2xs);
   /* Where the zero line sits, as a percentage down the well. Declared here

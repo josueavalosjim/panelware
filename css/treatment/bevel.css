@@ -46,7 +46,7 @@
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
-         .pw-transport-button, .pw-progress, .pw-eq, .pw-menu,
+         .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
          .pw-raised, .pw-sunken) {
     --pw-bevel-1:  calc(var(--pw-bevel-depth) * 1px);
     --pw-bevel-2:  calc(var(--pw-bevel-depth) * 2px);
@@ -106,7 +106,7 @@
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
-         .pw-transport-button, .pw-progress, .pw-eq, .pw-menu) {
+         .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list) {
     /* The bevel, plus the focus ring's inner half when there is one.
        --pw-focus-halo is transparent by default and set on :focus-visible. */
     box-shadow: var(--pw-elev), var(--pw-focus-halo);
@@ -138,7 +138,7 @@
     :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
            .pw-slider-track, .pw-slider-thumb, .pw-lcd,
            .pw-tab-panel, .pw-title-button, .pw-window,
-           .pw-transport-button, .pw-progress, .pw-eq, .pw-menu) {
+           .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list) {
       border: var(--pw-border) solid ButtonBorder;
     }
   }

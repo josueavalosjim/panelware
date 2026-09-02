@@ -43,5 +43,6 @@
 @import "./components/transport.css";
 @import "./components/equalizer.css";
 @import "./components/menubar.css";
+@import "./components/list.css";
 @import "./components/badge.css";
 @import "./components/lcd.css";

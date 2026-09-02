@@ -28,6 +28,9 @@ export type { WindowProps } from './window.js';
 export { Dialog, DialogTrigger, DialogPanel } from './dialog.js';
 export type { DialogPanelProps } from './dialog.js';
 
+export { List } from './list.js';
+export type { ListProps, ListRow } from './list.js';
+
 export {
   Menubar, Menu, MenuTrigger, MenuContent, MenuItem, MenuCheckboxItem,
   MenuRadioGroup, MenuRadioItem, MenuSeparator, MenuLabel, MenuSub,
