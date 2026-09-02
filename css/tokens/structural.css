@@ -133,6 +133,13 @@
      flat. A fader is thin along the travel and long across it, which is what
      every physical one is, and for the same reason. */
   --pw-fader-h: 0.75rem;
+  /* The reserved left gutter in a menu, where a check or a radio dot lands.
+     Wide enough for a 16px mark plus its breathing room, and reserved on
+     every item rather than only the checkable ones, because a menu whose
+     labels shift sideways when one item is checkable moves under the
+     pointer. */
+  --pw-menu-gutter: 2rem;
+
   --pw-eq-height: 10rem;
   --pw-eq-gap:    var(--pw-space-2xs);
   /* Where the zero line sits, as a percentage down the well. Declared here

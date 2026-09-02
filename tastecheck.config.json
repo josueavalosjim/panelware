@@ -70,6 +70,7 @@
             "css/components/icon.css",
       "demo/demo.css"
     ],
+    "allowPrefixes": ["--radix-"],
     "files": [
       "css/**/*.css",
       "demo/*.html",

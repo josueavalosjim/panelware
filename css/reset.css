@@ -21,10 +21,21 @@
 /* Native control chrome, removed so the bevel is the only chrome. Font is
    reset to the kit's own rather than inherited, because a button does not
    inherit font-family from its ancestors in any browser and inheriting the
-   consumer's page font would make the kit look different in every app. */
+   consumer's page font would make the kit look different in every app.
+
+   border: 0 belongs here rather than on each component. appearance: none
+   removes a button's native background in Chrome and leaves its border
+   alone, so a control outside the shared elevation slot keeps the UA's
+   2px outset and renders as a bevelled box nobody asked for. The menu bar
+   triggers did exactly that, and the bar is meant to be flat.
+
+   The slot sets border: 0 as well, which is why every component built before
+   this one looked right and hid the gap. Setting it once here covers the
+   next control added outside the slot too. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button,
-       .pw-transport-button) {
+       .pw-transport-button, .pw-menubar-trigger) {
   appearance: none;
+  border: 0;
   margin: 0;
   font-family: var(--pw-font-ui);
   font-size: var(--pw-control-text);
@@ -55,7 +66,7 @@
    why the ring no longer needs an offset: the inner ring fills what the gap
    used to. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
-       .pw-slider-thumb, .pw-panel):focus-visible {
+       .pw-menubar-trigger, .pw-slider-thumb, .pw-panel):focus-visible {
   --pw-focus-halo: 0 0 0 var(--pw-focus-width) var(--pw-color-focus-contrast);
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
   outline-offset: var(--pw-focus-width);

@@ -1,0 +1,164 @@
+/**
+ * MENU BAR.
+ *
+ * The strip under a title bar, and its dropdowns. This plus the window chrome
+ * is what makes the kit read as an application rather than as a web page
+ * wearing an application's colours.
+ *
+ * ── The bar is flat and the menus are raised ─────────────────────────────
+ * Every other surface in this kit carries a bevel. The bar does not, and that
+ * is the period behaviour rather than an omission: a menu bar is part of the
+ * window's face, not a control sitting on it, and giving each trigger a
+ * raised edge would turn File, Play and Options into five buttons in a row.
+ * The trigger only takes a treatment when its menu is open, and then it
+ * inverts rather than sinking, which is what Windows did and what
+ * distinguishes "this menu is showing" from "this button is pressed".
+ *
+ * ── The separator is engraved, not drawn ─────────────────────────────────
+ * A menu separator in this era is two lines: a dark one with a light one
+ * directly under it, which reads as a groove cut into the face rather than a
+ * rule painted on it. That is the same two-tone logic as the bevel, at one
+ * pixel, so it uses the same tokens and re-pitches with the theme for free.
+ */
+
+@layer pw.components {
+  .pw-menubar {
+    display: flex;
+    align-items: stretch;
+    gap: var(--pw-space-3xs);
+    padding: var(--pw-space-3xs) var(--pw-space-2xs);
+    background-color: var(--pw-color-base-200);
+    font-family: var(--pw-font-ui);
+  }
+
+  .pw-menubar-trigger {
+    display: inline-flex;
+    align-items: center;
+    /* Menu labels are short and a 75px minimum would space them like a
+       toolbar. The height still comes from the control scale, so the target
+       holds even though the width does not. */
+    min-width: 0;
+    min-height: var(--pw-control-h);
+    padding: 0 var(--pw-control-pad-x);
+    border-radius: var(--pw-radius-control);
+    background: none;
+    color: var(--pw-color-base-content);
+    font-size: var(--pw-control-text);
+    transition: opacity var(--pw-duration-hover) var(--pw-ease-state);
+  }
+  .pw-menubar-trigger:hover { opacity: 0.72; }
+
+  /* Open inverts. Not a sunken bevel: a pressed button and an open menu are
+     different states and reading the same would be a lie about which. */
+  .pw-menubar-trigger[data-state="open"] {
+    background-color: var(--pw-color-primary);
+    color: var(--pw-color-primary-content);
+    opacity: 1;
+  }
+
+  .pw-menu {
+    --pw-elev: var(--pw-shadow-raised);
+    min-width: 12rem;
+    padding: var(--pw-space-3xs) 0;
+    background-color: var(--pw-color-base-200);
+    border-radius: var(--pw-radius-control);
+    clip-path: var(--pw-clip-control);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-control-text);
+    color: var(--pw-color-base-content);
+    /* transform and opacity only, and the origin follows the trigger so the
+       menu grows out of the thing that opened it rather than from its own
+       middle. Radix supplies the origin. */
+    animation: pw-menu-in var(--pw-duration-fast) var(--pw-ease-enter);
+    transform-origin: var(--radix-menubar-content-transform-origin);
+  }
+
+  .pw-menu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--pw-control-gap);
+    min-height: var(--pw-control-h);
+    /* The left gutter is where a check or a radio dot lands. It is reserved
+       on every item, checkable or not, because a menu whose text shifts
+       sideways when one item happens to be checkable is a menu that moves
+       under the pointer. */
+    padding: 0 var(--pw-control-pad-x) 0 var(--pw-menu-gutter);
+    position: relative;
+    cursor: default;
+    user-select: none;
+  }
+
+  /* Radix marks the item the keyboard or pointer is on with data-highlighted,
+     which is one state for both. That is correct here: a menu has a single
+     current item however you arrived at it. */
+  .pw-menu-item[data-highlighted] {
+    background-color: var(--pw-color-primary);
+    color: var(--pw-color-primary-content);
+    outline: none;
+  }
+
+  .pw-menu-item[data-disabled] {
+    color: var(--pw-color-disabled-content);
+  }
+  .pw-menu-item[data-disabled][data-highlighted] {
+    background: none;
+    color: var(--pw-color-disabled-content);
+  }
+
+  .pw-menu-indicator {
+    position: absolute;
+    left: var(--pw-space-sm);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Right-aligned, and pushed there by margin rather than by justify-content,
+     so an item with no shortcut does not centre its label. */
+  .pw-menu-shortcut {
+    margin-left: auto;
+    padding-left: var(--pw-space-lg);
+    font-size: var(--pw-text-micro);
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+  }
+  .pw-menu-item[data-highlighted] .pw-menu-shortcut { opacity: 0.85; }
+
+  .pw-menu-label {
+    padding: var(--pw-space-2xs) var(--pw-control-pad-x) var(--pw-space-2xs) var(--pw-menu-gutter);
+    font-size: var(--pw-text-micro);
+    opacity: 0.7;
+  }
+
+  /* Two lines, dark over light: a groove cut into the face rather than a rule
+     painted on it. The same two-tone logic as the bevel, at one pixel. */
+  .pw-menu-separator {
+    height: 0;
+    margin: var(--pw-space-2xs) var(--pw-space-sm);
+    border-top: var(--pw-border) solid var(--pw-bevel-shade);
+    border-bottom: var(--pw-border) solid var(--pw-bevel-light);
+  }
+
+  @keyframes pw-menu-in {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  @media (forced-colors: active) {
+    .pw-menubar-trigger[data-state="open"],
+    .pw-menu-item[data-highlighted] {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+    /* A groove drawn in two greys is two greys in forced colors. */
+    .pw-menu-separator {
+      border-top-color: CanvasText;
+      border-bottom-color: Canvas;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-menubar-trigger { transition-duration: 1ms; }
+    .pw-menu { animation-duration: 1ms; }
+  }
+}
