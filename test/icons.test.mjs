@@ -74,3 +74,140 @@ describe('the icon sheet', () => {
     assert.match(scale, /^\d+$/, `--pw-icon-scale is ${scale}`);
   });
 });
+
+describe('the drawings, not just the pipeline', () => {
+  /* Everything above this point tests the machinery: that the sheet matches
+     the data, the index matches the generator, nothing bleeds between cells.
+     None of it looks at the shapes, and three comments in icon-font.mjs
+     turned out to be describing drawings that did not do what they said.
+
+     A comment is the design documentation in this repo, so a comment that
+     lies is worse than an undocumented decision: it makes the defect
+     invisible to review. These assert the claims instead. */
+  const grid = (name) => {
+    const g = Array.from({ length: ICON_H }, () => Array(ICON_W).fill(0));
+    for (const r of iconRects(name)) {
+      for (let x = r.x; x < r.x + r.w; x += 1) for (let y = r.y; y < r.y + r.h; y += 1) g[y][x] = 1;
+    }
+    return g;
+  };
+  const same = (a, b) => a.every((row, y) => row.every((v, x) => v === b[y][x]));
+  const rot90 = (g) => g[0].map((_, x) => g.map((row) => row[x]).reverse());
+  const flipX = (g) => g.map((row) => [...row].reverse());
+  const bbox = (g) => {
+    let x0 = 99, x1 = -1, y0 = 99, y1 = -1;
+    g.forEach((row, y) => row.forEach((v, x) => {
+      if (!v) return;
+      x0 = Math.min(x0, x); x1 = Math.max(x1, x);
+      y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+    }));
+    return { x0, x1, y0, y1, w: x1 - x0 + 1, h: y1 - y0 + 1 };
+  };
+
+  test('the four chevrons really are one shape turned four ways', () => {
+    /* They were not. The vertical pair measured 12x7 and the horizontal pair
+       6x10, and a 90 degree turn of 12x7 is 7x12. */
+    /* Clockwise, which is the order the derivation actually turns them in:
+       down, left, up, right. Writing the chain in the wrong order here is
+       how the two horizontal chevrons ended up swapped in the first place. */
+    let g = grid('chevron-down');
+    for (const next of ['chevron-left', 'chevron-up', 'chevron-right']) {
+      g = rot90(g);
+      assert.ok(same(g, grid(next)), `${next} is not the previous chevron rotated`);
+    }
+  });
+
+  test('next really is prev mirrored', () => {
+    /* It was not. Every one of the twelve rows differed, the bar-to-triangle
+       gap was 2px in one and 1px in the other, and the two shapes were 10
+       and 9 pixels wide. */
+    assert.ok(same(flipX(grid('prev')), grid('next')));
+  });
+
+  test('a triangle that claims a two-pixel apex has an even height', () => {
+    /* A shape symmetric about the middle of an odd number of rows has one
+       middle row, so its point is one pixel wide however it is drawn. */
+    for (const name of ['play', 'prev', 'next']) {
+      const g = grid(name);
+      const widths = g.map((row) => row.reduce((a, v) => a + v, 0));
+      const widest = Math.max(...widths);
+      assert.equal(widths.filter((w) => w === widest).length, 2,
+        `${name}'s apex is not two rows`);
+    }
+  });
+
+  test('a shape symmetric on an axis has an even size on that axis', () => {
+    /* An odd dimension in an even grid cannot be centred: it sits half a
+       pixel off. Only shapes that are actually symmetric are held to this,
+       because a right-pointing triangle is not symmetric horizontally and
+       has no business being centred there. */
+    for (const name of ['stop', 'dot', 'close', 'maximize', 'restore', 'pause']) {
+      const { w, h } = bbox(grid(name));
+      assert.equal(w % 2, 0, `${name} is ${w} wide, which cannot centre`);
+      assert.equal(h % 2, 0, `${name} is ${h} tall, which cannot centre`);
+    }
+  });
+
+  test('every glyph but play keeps the 12x12 live area', () => {
+    /* 2px of trim on a 16px cell, which is the construction Fluent's own
+       16px icons use. play is the documented exception: a triangle filling
+       the same box as a square reads lighter, so it overshoots on purpose,
+       the way Material gives a circle 20 units against a square's 18. */
+    for (const name of ICON_ORDER) {
+      if (name === 'play') continue;
+      const { x0, x1, y0, y1 } = bbox(grid(name));
+      assert.ok(x0 >= 2 && x1 <= 13 && y0 >= 2 && y1 <= 13,
+        `${name} leaves the live area: x ${x0}-${x1}, y ${y0}-${y1}`);
+    }
+  });
+});
+
+describe('a chevron points where its name says', () => {
+  /* The rotation test above cannot catch this. Four glyphs can be exact
+     rotations of one another and still be labelled the wrong way round, and
+     two of them were: rot90 turns clockwise, so the first turn of a down
+     chevron points left, and it had been assigned to chevron-right.
+
+     This asks the shape itself. A chevron's tip is the row or column where
+     its ink reaches furthest in the direction it names, and that tip sits on
+     the middle of the perpendicular axis. */
+  const grid = (name) => {
+    const g = Array.from({ length: ICON_H }, () => Array(ICON_W).fill(0));
+    for (const r of iconRects(name)) {
+      for (let x = r.x; x < r.x + r.w; x += 1) for (let y = r.y; y < r.y + r.h; y += 1) g[y][x] = 1;
+    }
+    return g;
+  };
+
+  const tip = (g, dir) => {
+    const ink = [];
+    g.forEach((row, y) => row.forEach((v, x) => { if (v) ink.push({ x, y }); }));
+    if (dir === 'down') return Math.max(...ink.map((p) => p.y));
+    if (dir === 'up') return Math.min(...ink.map((p) => p.y));
+    if (dir === 'right') return Math.max(...ink.map((p) => p.x));
+    return Math.min(...ink.map((p) => p.x));
+  };
+
+  for (const [name, dir, axis] of [
+    ['chevron-down', 'down', 'y'], ['chevron-up', 'up', 'y'],
+    ['chevron-right', 'right', 'x'], ['chevron-left', 'left', 'x'],
+  ]) {
+    test(`${name} reaches furthest ${dir}`, () => {
+      const g = grid(name);
+      const edge = tip(g, dir);
+      /* The pixels at the extreme are the tip, and they must sit around the
+         middle of the other axis. A chevron pointing the wrong way has its
+         extreme pixels at the two ends of that axis instead. */
+      const at = [];
+      g.forEach((row, y) => row.forEach((v, x) => {
+        if (!v) return;
+        if (axis === 'y' && y === edge) at.push(x);
+        if (axis === 'x' && x === edge) at.push(y);
+      }));
+      const centre = (Math.min(...at) + Math.max(...at)) / 2;
+      assert.ok(Math.abs(centre - (ICON_W - 1) / 2) <= 1,
+        `${name}'s furthest-${dir} ink sits at ${centre}, not near the middle: it points the other way`);
+      assert.ok(at.length <= 4, `${name}'s tip is ${at.length} pixels wide, so it is a flat edge, not a point`);
+    });
+  }
+});

@@ -1069,8 +1069,19 @@
  * component knowing an icon is there. A coloured PNG would need one file per
  * state per theme.
  *
- * It also means forced-colors works with no special case. The system paints
- * the text colour, and the icon is the text colour.
+ * ── Forced colors needs a special case, and this file used to claim it did
+ *    not ────────────────────────────────────────────────────────────────────
+ * The claim was that the system paints the text colour and the icon is the
+ * text colour. It is not. background-color is one of the properties forced
+ * colors overrides and mask-image is not, so the mask survives and gets
+ * painted in the forced BACKGROUND colour: measured, .pw-icon computed
+ * rgb(255,255,255) while its host's color was rgb(0,0,0). White ink on a
+ * white canvas. Every icon in the kit was invisible to exactly the user the
+ * mode exists for, and the comment above the code said it was fine.
+ *
+ * System colour keywords are exempt from the forcing, so the fix is to name
+ * them per context. forced-color-adjust: none is the wrong tool here: it
+ * would preserve the authored colour, which is the thing that is wrong.
  *
  * ── The scale is a whole number, and the size does not follow density ─────
  * The sheet is a pixel grid. A fractional scale puts cell edges between
@@ -1129,6 +1140,16 @@
      control needs an accessible name from somewhere else. The Icon component
      enforces that; this is here for anyone writing the markup by hand. */
   .pw-icon[data-standalone] { margin: 0 auto; }
+
+  @media (forced-colors: active) {
+    /* Named per context rather than once, because the system paints a link,
+       a button and body text in three different colours and an icon has to
+       follow the one it is sitting in. */
+    .pw-icon { background-color: CanvasText; }
+    a .pw-icon { background-color: LinkText; }
+    button .pw-icon,
+    [role="button"] .pw-icon { background-color: ButtonText; }
+  }
 }
 
 /**

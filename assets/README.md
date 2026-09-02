@@ -93,11 +93,31 @@ normal one at (23,18). That number is recorded here and deliberately unused: a
 second grid would need a second set of size tokens, a second scale knob and a
 second sheet, to place five glyphs.
 
+## Two constraints a consumer needs to know about
+
+**Serve the sheet same-origin, or set CORS headers on it.** `mask-image` is
+fetched in CORS mode and `background-image` is not, so an `icons.svg` on a
+different host without `Access-Control-Allow-Origin` kills every icon in
+Chromium, WebKit and Firefox alike. If your bundler emits assets to a CDN on
+another origin, either set the header or override `--pw-icon-sheet` with a
+data URI. The failure is at least quiet rather than ugly: a mask whose URL
+fails renders nothing, not a solid block.
+
+**`--pw-icon-scale` controls CSS pixels, not device pixels.** Windows display
+scaling at 125, 150 or 175% puts a 16px icon on 20, 24 or 28 device pixels,
+which is 1.25 to 1.75 device pixels per art pixel. The whole-number rule
+cannot prevent that, and that is precisely the environment this aesthetic
+cites. Known limit, not a solved problem.
+
 `--pw-icon-scale` must stay a whole number, for the same reason
 `--pw-lcd-scale` must. It is also why an icon stays 16px in compact density
 while the control around it drops from 44 to 32: scaling by the same ratio
 would be 0.727 of the grid, and a 16px mark inside a 32px control is a
 proportion the whole 90s toolbar canon already used.
+
+These are original drawings citing an era. Nothing here is traced from
+Microsoft, Apple or Nullsoft artwork, and the marks themselves are the common
+geometric shapes and familiar symbols that copyright does not reach.
 
 Optical note, since it is the kind of thing that gets "corrected" later: play,
 pause and stop do not share a bounding box. A solid square reads heavier than

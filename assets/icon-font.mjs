@@ -31,8 +31,17 @@ export const ICON_H = 16;
 export const ICON_COLS = 8;
 
 const I = {
-  /* Transport. The triangles carry a two-pixel apex rather than one, which
-     is what stops them shimmering when the readout is scaled up. */
+  /* Transport. The triangles carry a two-pixel apex, which needs an EVEN
+     height to be possible at all: a shape symmetric about the middle of an
+     odd number of rows has exactly one middle row, so its point is one pixel.
+     play was 13 rows tall while this comment claimed a two-pixel apex, which
+     is the kind of thing a comment can say for months.
+
+     play is also deliberately taller than the 12x12 live area every other
+     glyph keeps. A triangle filling the same box as a square reads lighter
+     than it, which is the same reason Material's keyshapes give a circle 20
+     units against a square's 18 on a 24 grid. The overshoot is the
+     correction, not a violation of the grid. */
   play: [
     '................',
     '.....#..........',
@@ -42,13 +51,13 @@ const I = {
     '.....#####......',
     '.....######.....',
     '.....#######....',
+    '.....#######....',
     '.....######.....',
     '.....#####......',
     '.....####.......',
     '.....###........',
     '.....##.........',
     '.....#..........',
-    '................',
     '................',
   ],
   pause: [
@@ -74,15 +83,15 @@ const I = {
     '................',
     '................',
     '................',
-    '....#########...',
-    '....#########...',
-    '....#########...',
-    '....#########...',
-    '....#########...',
-    '....#########...',
-    '....#########...',
-    '....#########...',
-    '....#########...',
+    '....########....',
+    '....########....',
+    '....########....',
+    '....########....',
+    '....########....',
+    '....########....',
+    '....########....',
+    '....########....',
+    '................',
     '................',
     '................',
     '................',
@@ -102,24 +111,6 @@ const I = {
     '..##.....###....',
     '..##......##....',
     '..##.......#....',
-    '................',
-    '................',
-  ],
-  next: [
-    '................',
-    '................',
-    '....#......##...',
-    '....##.....##...',
-    '....###....##...',
-    '....####...##...',
-    '....#####..##...',
-    '....######.##...',
-    '....######.##...',
-    '....#####..##...',
-    '....####...##...',
-    '....###....##...',
-    '....##.....##...',
-    '....#......##...',
     '................',
     '................',
   ],
@@ -219,9 +210,17 @@ const I = {
     '................',
   ],
 
-  /* Direction. One shape, four rotations, drawn four times rather than
-     rotated with a transform: a rotated bitmap lands between pixels at every
-     angle that is not a multiple of the grid. */
+  /* Direction. One shape, and the other three ARE rotations of it, derived
+     at the bottom of this file rather than drawn.
+
+     They used to be drawn four times, and the comment here used to claim
+     they were rotations, and they were not: the vertical pair measured 12x7
+     and the horizontal pair 6x10, when a 90 degree turn of 12x7 is 7x12. A
+     hand copy of a rotation is a rotation with a mistake in it.
+
+     The old comment also justified drawing them by hand on the grounds that
+     a rotated bitmap lands between pixels. That is simply wrong. A 90 degree
+     rotation of a square lattice is exact; it is a symmetry of the grid. */
   'chevron-down': [
     '................',
     '................',
@@ -240,60 +239,6 @@ const I = {
     '................',
     '................',
   ],
-  'chevron-up': [
-    '................',
-    '................',
-    '................',
-    '................',
-    '.......##.......',
-    '......####......',
-    '.....######.....',
-    '....###..###....',
-    '...###....###...',
-    '..###......###..',
-    '..##........##..',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
-  'chevron-right': [
-    '................',
-    '................',
-    '................',
-    '....##..........',
-    '....###.........',
-    '.....###........',
-    '......###.......',
-    '.......###......',
-    '.......###......',
-    '......###.......',
-    '.....###........',
-    '....###.........',
-    '....##..........',
-    '................',
-    '................',
-    '................',
-  ],
-  'chevron-left': [
-    '................',
-    '................',
-    '................',
-    '..........##....',
-    '.........###....',
-    '........###.....',
-    '.......###......',
-    '......###.......',
-    '......###.......',
-    '.......###......',
-    '........###.....',
-    '.........###....',
-    '..........##....',
-    '................',
-    '................',
-    '................',
-  ],
 
   /* Status. These replace the text glyphs the badge shipped with, which were
      a check, a bang and a multiplication sign borrowed from the font: they
@@ -302,12 +247,12 @@ const I = {
     '................',
     '................',
     '................',
-    '.............##.',
-    '............###.',
+    '............##..',
     '...........###..',
-    '..##......###...',
-    '..###....###....',
-    '...###..###.....',
+    '..........###...',
+    '..##.....###....',
+    '..###...###.....',
+    '...###.###......',
     '....######......',
     '.....####.......',
     '......##........',
@@ -362,6 +307,26 @@ export const ICON_ORDER = [
 ];
 
 export const ICON_ROWS = Math.ceil(ICON_ORDER.length / ICON_COLS);
+
+/* ── Derived glyphs ───────────────────────────────────────────────────────
+   Rotations and mirrors, computed rather than copied. A 90 degree rotation
+   and a horizontal flip are both exact on a square lattice, so there is
+   nothing to lose by deriving them and one obvious thing to lose by not:
+   these three chevrons and this `next` were all hand copies that had quietly
+   drifted from the shape they claimed to be. */
+const rot90 = (r) => r[0].split('').map((_, x) => r.map((row) => row[x]).reverse().join(''));
+const flipX = (r) => r.map((row) => [...row].reverse().join(''));
+
+/* rot90 here turns clockwise, so the first turn of a down chevron points
+   LEFT. Assigning it to chevron-right produced four glyphs that were exact
+   rotations of each other and two of which were labelled the wrong way
+   round, which the rotation test above cannot see: consistent and
+   mislabelled is still consistent. There is a separate test for which way
+   each one actually points. */
+I['chevron-left'] = rot90(I['chevron-down']);
+I['chevron-up'] = rot90(I['chevron-left']);
+I['chevron-right'] = rot90(I['chevron-up']);
+I.next = flipX(I.prev);
 
 /** The rectangles an icon paints, in cell-local pixels, runs merged per row. */
 export function iconRects(name) {
