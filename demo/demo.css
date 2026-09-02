@@ -11,6 +11,14 @@
  * exactly the mistakes it exists to surface.
  */
 
+/* One content width, shared by the rules and the prose.
+   The rules used to span the full window while the prose was capped at 46ch
+   and the specimens at 30rem, so half of every section was empty and the
+   copy broke mid-clause to fill a column nothing else respected. A measure
+   is a constraint on the text; it is not a reason to announce the space it
+   is not using. */
+:root { --demo-measure: 64rem; }
+
 body {
   margin: 0;
   padding: var(--pw-space-2xl) var(--pw-space-xl) 6rem;
@@ -20,6 +28,9 @@ body {
   font-size: var(--pw-text-ui);
   line-height: var(--pw-leading-body);
 }
+
+.demo-header,
+.demo-main { max-width: var(--demo-measure); margin-inline: auto; }
 
 .demo-header { margin-bottom: var(--pw-space-2xl); }
 
@@ -60,7 +71,12 @@ body {
 
 .demo-note {
   margin: 0 0 var(--pw-space-lg);
-  max-width: 46ch;
+  /* 56ch measures 67 actual characters at this face and size, which is the
+     number that matters. ch is the width of a zero, not of an average
+     character, so the cap and the measure are never the same figure: 46ch
+     was reading at 45 characters and breaking clauses badly, and 68ch
+     overshot to 82. Calibrated rather than assumed. */
+  max-width: 56ch;
   color: var(--pw-color-base-content);
   opacity: 0.75;
   font-size: var(--pw-text-micro);

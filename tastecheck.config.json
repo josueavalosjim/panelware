@@ -54,7 +54,7 @@
     ]
   },
   "tokens": {
-    "$comment": "Scans the whole kit, not just markup. A var(--pw-typo) anywhere in a component file is the cheapest bug in this project to introduce and the most annoying to see: it renders as nothing at all, silently.",
+    "$comment": "Scans the whole kit, not just markup. A var(--pw-typo) anywhere in a component file is the cheapest bug in this project to introduce and the most annoying to see: it renders as nothing at all, silently. demo/demo.css is in declaredIn as well as files because it declares its own demo- prefixed tokens; it is page chrome, not part of the package.",
     "declaredIn": [
       "css/tokens/primitive.chrome.css",
       "css/tokens/semantic.chrome.css",
@@ -65,7 +65,8 @@
       "css/tokens/theme-auto.css",
       "css/treatment/bevel.css",
       "css/components/lcd.css",
-      "css/components/icon.css"
+            "css/components/icon.css",
+      "demo/demo.css"
     ],
     "files": [
       "css/**/*.css",
