@@ -23,12 +23,19 @@
  */
 
 /* ── Digits: 9 x 13, fourteen cells ───────────────────────────────────────
-   Cells 0 through 11 are Winamp's numbers.bmp layout exactly, including the
-   blank at 10 and the minus at 11 that the spec calls the hidden minus-sign
-   trick. Cells 12 and 13 are ours: a time readout needs a separator, and two
-   more cells is cheaper than a separate element with its own alignment
-   problem. Anyone reading this later should know which half is the source
-   and which half is the extension. */
+   Cells 0 to 10 are numbers.bmp's whole layout: ten digits and a blank. That
+   file is 99px wide, which is eleven 9px cells and nothing else.
+
+   Cell 11, the minus, is nums_ex.bmp's. That is a separate twelve-cell sheet
+   Winamp prefers when a skin ships it. This comment used to say cell 11 was
+   numbers.bmp's "hidden minus-sign sprite trick", which ran two unrelated
+   things together: the trick is what Winamp does when a skin has NO
+   nums_ex.bmp, faking a minus from a 5x1 slice of the crossbar of the 2.
+
+   Cells 12 and 13 are ours. A time readout needs a separator, and two more
+   cells is cheaper than a separate element with its own alignment problem.
+   See assets/README.md for where any of these numbers come from, which is
+   not where it looks: Nullsoft published no dimensions at all. */
 export const DIGIT_W = 9;
 export const DIGIT_H = 13;
 
@@ -73,9 +80,16 @@ export function digitRects(cell) {
 }
 
 /* ── Glyphs: 5 x 6 ────────────────────────────────────────────────────────
-   The cell is Winamp's. The grid shape, 31 columns by 3 rows, is ours, and
-   --pw-lcd-glyph-cols in css/components/lcd.css is the only other place that
-   number is written down.
+   The cell is Winamp's. So, as it turns out, is the column count: text.bmp
+   is 155px wide, which is 31 cells of 5px, and 18px tall, which is 3 rows.
+   That is a coincidence rather than a citation, because this sheet's ORDER
+   is ours and does not match. Winamp's row 0 is A-Z then a quote, an at
+   sign, two unused cells and a space at column 30; row 1 is the digits and
+   punctuation; row 2 is Å Ö Ä ? and an asterisk. Ours puts the space at 26
+   and the digits on row 1 from column 0.
+
+   --pw-lcd-glyph-cols in css/components/lcd.css is the only other place the
+   column count is written down.
 
    Five pixels wide is the constraint that decides every letterform here. M
    and W get their diagonals as a centre stem rather than true diagonals,

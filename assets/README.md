@@ -18,9 +18,19 @@ bitmap sprite font, and the player stepped an offset across one image.
 | --- | --- | --- | --- | --- | --- |
 | Glyph | `0`-`9` | blank | `-` | `:` | `.` |
 
-Cells 0 through 11 are `numbers.bmp`'s layout exactly, including the blank and
-the minus that the spec describes as a hidden sprite trick. **Cells 12 and 13
-are ours**, not Winamp's: a clock needs a separator, and two more cells cost
+**Cells 0 to 10 are `numbers.bmp`'s layout**: ten digits and a blank, which is
+all of it. That file is 99px wide, which is eleven 9px cells and no more.
+
+**Cell 11, the minus, is not from `numbers.bmp`.** It is `nums_ex.bmp`'s, an
+extended sheet of twelve cells that Winamp uses in preference when a skin
+ships it. An earlier version of this file said cell 11 was `numbers.bmp`'s
+"hidden minus-sign sprite trick", which conflated two different things: the
+trick is what Winamp does when a skin has *no* `nums_ex.bmp`, where it fakes a
+minus by lifting a 5x1 slice out of the crossbar of the `2`. There is no
+eleventh cell to find.
+
+**Cells 12 and 13 are ours**, not Winamp's: a clock needs a separator, and two
+more cells cost
 less than a separate element with its own vertical alignment problem.
 
 **`lcd-glyphs.svg`** — 155x12, 5x6 cells in a 31 x 2 grid. The cell is
@@ -28,6 +38,26 @@ less than a separate element with its own vertical alignment problem.
 marks, which is 31, and that is where the column count comes from. Row 1 is
 the digits and a `?` fallback, so an unmapped character renders as a question
 mark rather than as a gap.
+
+## Where these numbers come from
+
+Worth stating plainly, because this kit trades on sourced technique and the
+provenance here is thinner than it first appears.
+
+**Nullsoft's own skinning documentation contains no pixel dimensions at all.**
+The official tutorial ran on winamp.com from 2000, moved to dev.winamp.com and
+then wiki.winamp.com, and is prose throughout: "the top row is the unpressed
+state, the second row is the pressed state", illustrated with GIFs. There is
+no first-party sprite-offset table. The one exception is `region.txt` inside
+the base skin, a commented tutorial signed by Justin Frankel, which states
+that the main window runs 0 to 275 by 0 to 116.
+
+Every precise number in this file therefore comes from community
+reverse-engineering: Strider's "Unofficial WinAMP Skin Specifications" (1998,
+and the word Unofficial is in its title), Skinner's Atlas 1.5 (2003), and
+Webamp's `skinSprites.ts`, which are in broad agreement and disagree in
+places. That is a perfectly good basis for a citation. It is not the same
+thing as a specification, and this kit should not imply that it is.
 
 ## Why SVG, and why a mask
 

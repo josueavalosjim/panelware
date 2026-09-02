@@ -98,8 +98,9 @@ better call only if a real dim/unlit-ghost-segment look is wanted later, which t
 Winamp display did not actually have.)
 
 `viscolor.txt` (also in Strider's spec) is the real spectrum-analyzer palette if that visualizer
-ever gets built: 23 RGB triples, indices 2-17 the analyzer gradient top-to-bottom, 18-22
-oscilloscope brightness levels.
+ever gets built. Corrected against the base skin's own self-documenting copy: **24** lines, not 23.
+Line 0 is the visualiser background, 1 the dot grid, 2-17 the analyser gradient top to bottom,
+18-22 the oscilloscope centre to edge, and 23 the analyser peak marker.
 
 ### Real hex values on file, if a Luna-adjacent palette variant is ever wanted
 
