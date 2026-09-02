@@ -97,4 +97,31 @@ describe('the list', () => {
     const arrows = src.match(/case 'ArrowDown':[\s\S]*?case ' ':/)[0];
     assert.doesNotMatch(arrows, /onSelect/, 'a movement key selects');
   });
+
+  test('the scroll follows the active row without reading offsetTop', () => {
+    /* offsetTop is measured from the nearest POSITIONED ancestor, and
+       .pw-list is static, so it returned the row's distance from the top of
+       the document instead of from the scroller: three thousand pixels
+       against a scroller two hundred and fifty-six tall. Every bounds check
+       was therefore true, the first keypress slammed the scroll to its
+       maximum and it never moved again, and the highlight walked off the top
+       edge. Measured in a browser at the time: Home, then four ArrowDowns,
+       scrollTop pinned at 96 throughout.
+
+       Reading the two rects instead is what makes this independent of a
+       property in another file that nothing stops a skin from changing. */
+    const src = read('src/list.tsx');
+    const scroll = src.match(/const el = ref\.current\?\.querySelector[\s\S]*?\n    \}/)[0];
+    assert.doesNotMatch(scroll, /offsetTop/, 'the scroll maths reads offsetTop');
+    assert.match(scroll, /getBoundingClientRect/);
+  });
+
+  test('the list wears the kit focus ring, not the browser default', () => {
+    /* It is one tab stop and the only place the keyboard lands, so a missing
+       entry in the shared list is not cosmetic. It shipped showing Chrome's
+       own 1px auto ring, which the two-tone rule exists to replace. */
+    const reset = read('css/reset.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    const ring = reset.match(/:where\([^)]*\):focus-visible \{/)[0];
+    assert.match(ring, /\.pw-list[,)]/);
+  });
 });

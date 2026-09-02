@@ -79,13 +79,30 @@ export function List({
     setActive(row.id);
     /* Scroll the row, not the page. scrollIntoView on a row inside a
        scrolling list moves the whole document when the list is near an edge;
-       writing to the scroller keeps the movement where the user is looking. */
+       writing to the scroller keeps the movement where the user is looking.
+
+       The row's position is measured from the two rects rather than from
+       offsetTop, and that is the fix for a real bug rather than a
+       preference. offsetTop is relative to the nearest POSITIONED ancestor,
+       and .pw-list is static, so it was returning the row's distance from
+       the top of the document: three thousand and twenty-nine pixels against
+       a scroller two hundred and fifty-six tall. Every comparison was
+       therefore true, every keypress slammed the scroll to its maximum, and
+       the view then never moved again while the highlight walked off the top
+       edge. It read as "the arrow keys do not scroll".
+
+       Positioning .pw-list would also have fixed it and would have left this
+       component silently depending on a property in another file that
+       nothing stops a skin from changing. */
     const el = ref.current?.querySelector<HTMLElement>(`#${CSS.escape(rowId(row.id))}`);
     const box = ref.current;
     if (el && box) {
-      if (el.offsetTop < box.scrollTop) box.scrollTop = el.offsetTop;
-      else if (el.offsetTop + el.offsetHeight > box.scrollTop + box.clientHeight) {
-        box.scrollTop = el.offsetTop + el.offsetHeight - box.clientHeight;
+      const rowBox = el.getBoundingClientRect();
+      const boxBox = box.getBoundingClientRect();
+      const top = rowBox.top - boxBox.top + box.scrollTop;
+      if (top < box.scrollTop) box.scrollTop = top;
+      else if (top + rowBox.height > box.scrollTop + box.clientHeight) {
+        box.scrollTop = top + rowBox.height - box.clientHeight;
       }
     }
   }, [enabled, baseId]);
