@@ -148,6 +148,26 @@ describe('the drawings, not just the pipeline', () => {
     }
   });
 
+  test('a stroke does not fatten as it converges', () => {
+    /* The wedge signature. check used to run 2 3 3 5 6 6 6 4 2: the ink
+       climbs steadily toward the vertex, which is a tick turning into a blob.
+       It runs 2 2 2 4 4 4 2 now, where the 4s are the two arms lying
+       adjacent at the meeting point.
+
+       The rule is a ratio rather than a ceiling, because close is an X whose
+       strokes CROSS and whose rows legitimately carry more ink at the
+       crossing. Its profile is 4 6 6 6 4 4 6 6 6 4, a ratio of 1.5. The old
+       check was 3. Anything up to double is two strokes touching; beyond
+       that the stroke itself is growing. */
+    for (const name of ['check', 'close']) {
+      const g = grid(name);
+      const perRow = g.map((row) => row.reduce((a, v) => a + v, 0)).filter(Boolean);
+      const ratio = Math.max(...perRow) / Math.min(...perRow);
+      assert.ok(ratio <= 2,
+        `${name}'s ink swells ${ratio}x across its rows, so the stroke thickens: ${perRow.join(' ')}`);
+    }
+  });
+
   test('every glyph but play keeps the 12x12 live area', () => {
     /* 2px of trim on a 16px cell, which is the construction Fluent's own
        16px icons use. play is the documented exception: a triangle filling

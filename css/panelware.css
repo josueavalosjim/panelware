@@ -1668,8 +1668,17 @@
     background-color: var(--pw-color-base-300);
     border-radius: var(--pw-radius-control);
   }
-  .pw-slider[data-orientation="horizontal"] .pw-slider-track { height: var(--pw-track-h); }
-  .pw-slider[data-orientation="vertical"]   .pw-slider-track { width: var(--pw-track-h); }
+  /* Horizontal is the unscoped default and vertical is the override, rather
+     than one rule per orientation. Scoping both meant a .pw-slider with no
+     data-orientation matched neither, so its track had no height and the
+     control rendered as a thumb floating in nothing. Radix always sets the
+     attribute; a consumer writing the markup by hand does not know to, and
+     the demo's own static page did not either. */
+  .pw-slider-track { height: var(--pw-track-h); }
+  .pw-slider[data-orientation="vertical"] .pw-slider-track {
+    width: var(--pw-track-h);
+    height: auto;
+  }
 
   .pw-slider-range {
     position: absolute;
@@ -1679,8 +1688,13 @@
   /* Radix sets the offset and the length inline, on the axis that varies.
      The cross axis is ours, and it has to be scoped per orientation or a
      vertical range inherits height: 100% and fills the whole track. */
-  .pw-slider[data-orientation="horizontal"] .pw-slider-range { height: 100%; }
-  .pw-slider[data-orientation="vertical"]   .pw-slider-range { width: 100%; }
+  .pw-slider-range { height: 100%; }
+  .pw-slider[data-orientation="vertical"] .pw-slider-range {
+    width: 100%;
+    /* Radix writes the vertical extent inline, so this only clears the
+       horizontal default rather than setting anything. */
+    height: auto;
+  }
 
   /* ── Vertical ────────────────────────────────────────────────────────────
      The touch cost is real and it is not solvable, so it is documented rather

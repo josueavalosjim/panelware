@@ -153,22 +153,22 @@
         <div class="demo-stack">
           <label class="demo-field">
             <span class="demo-field-label">Volume</span>
-            <span class="pw-slider">
-              <span class="pw-slider-track"><span class="pw-slider-range" style="width: 0%"></span></span>
+            <span class="pw-slider" data-orientation="horizontal">
+              <span class="pw-slider-track" data-orientation="horizontal"><span class="pw-slider-range" style="width: 0%"></span></span>
               <span class="demo-thumb-pos" style="left: calc((var(--pw-thumb-w) / 2) + 0 * (100% - var(--pw-thumb-w)))"><span class="pw-slider-thumb" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></span></span>
             </span>
           </label>
           <label class="demo-field">
             <span class="demo-field-label">Balance</span>
-            <span class="pw-slider">
-              <span class="pw-slider-track"><span class="pw-slider-range" style="width: 40%"></span></span>
+            <span class="pw-slider" data-orientation="horizontal">
+              <span class="pw-slider-track" data-orientation="horizontal"><span class="pw-slider-range" style="width: 40%"></span></span>
               <span class="demo-thumb-pos" style="left: calc((var(--pw-thumb-w) / 2) + 0.4 * (100% - var(--pw-thumb-w)))"><span class="pw-slider-thumb" role="slider" tabindex="0" aria-label="Balance" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"></span></span>
             </span>
           </label>
           <label class="demo-field">
             <span class="demo-field-label">Gain</span>
-            <span class="pw-slider" data-disabled>
-              <span class="pw-slider-track"><span class="pw-slider-range" style="width: 70%"></span></span>
+            <span class="pw-slider" data-orientation="horizontal" data-disabled>
+              <span class="pw-slider-track" data-orientation="horizontal"><span class="pw-slider-range" style="width: 70%"></span></span>
               <span class="demo-thumb-pos" style="left: calc((var(--pw-thumb-w) / 2) + 0.7 * (100% - var(--pw-thumb-w)))"><span class="pw-slider-thumb" role="slider" tabindex="0" aria-label="Gain" aria-disabled="true" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"></span></span>
             </span>
           </label>
@@ -476,9 +476,9 @@
       <h2 class="demo-heading">Status badge</h2>
       <p class="demo-note">Every badge is a glyph and a word. A coloured dot alone is the failure this component exists to avoid.</p>
       <div class="demo-row">
-        <span class="pw-badge" data-status="success"><span class="pw-badge-glyph" aria-hidden="true">&#10003;</span>Connected</span>
-        <span class="pw-badge" data-status="warning"><span class="pw-badge-glyph" aria-hidden="true">!</span>Buffering</span>
-        <span class="pw-badge" data-status="error"><span class="pw-badge-glyph" aria-hidden="true">&#215;</span>No device</span>
+        <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 1"></span>Connected</span>
+        <span class="pw-badge" data-status="warning"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 7; --pw-icon-y: 1"></span>Buffering</span>
+        <span class="pw-badge" data-status="error"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 0"></span>No device</span>
       </div>
     </section>
 
@@ -513,7 +513,7 @@
           <button class="pw-button">Open</button>
           <button class="pw-button" data-variant="primary">Save changes</button>
           <button class="pw-toggle" type="button" data-state="on" aria-pressed="true">Shuffle</button>
-          <span class="pw-badge" data-status="success"><span class="pw-badge-glyph" aria-hidden="true">&#10003;</span>Connected</span>
+          <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 1"></span>Connected</span>
         </div>
       </div>
     </section>
