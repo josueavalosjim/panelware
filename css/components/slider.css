@@ -1,12 +1,31 @@
 /**
- * SLIDER, single thumb.
+ * SLIDER, single thumb, either orientation.
  *
- * Multi-thumb is deferred and the reason is in HANDOFF.md: the WAI-ARIA APG's
- * own reference pattern flags unresolved touch and assistive-tech gaps in the
- * spec's own example. That is not a v1 fight.
+ * ── Why there is no multi-thumb variant, measured rather than deferred ────
+ * HANDOFF.md deferred multi-thumb on the grounds that the WAI-ARIA APG flags
+ * unresolved gaps in its own reference pattern. Building the equaliser meant
+ * finding out what that actually means, and the answer changes the design
+ * rather than qualifying it.
+ *
+ * A multi-thumb slider is a RANGE. Its thumbs are the ends of one span and
+ * they are ordered. Driven three thumbs at 20, 60 and 40 and pressed
+ * ArrowRight sixty times on the middle one, Radix returns 20, 40, 100: it
+ * re-sorted, so the thumb being driven moved to a different index and the
+ * focused element's aria-valuenow now reads 40, a number belonging to a band
+ * nobody touched. The identity of a thumb is not stable under interaction.
+ *
+ * For a price filter that is correct behaviour, because "the low end" and
+ * "the high end" are what the thumbs mean. For an equaliser it is a bug with
+ * no workaround: 3kHz is 3kHz forever, and driving it up must not silently
+ * reassign it to 6kHz.
+ *
+ * So an equaliser is not a multi-thumb slider with an accessibility problem.
+ * It is N independent sliders sharing a scale, and this file supports the
+ * vertical orientation they need. See css/components/equalizer.css.
  *
  * The thumb never sinks. A sunken thumb reads as a grip that has been
  * dropped, not one that is being held, which is backwards. It scales instead.
+ * Disabled is the exception, because a dropped grip is what disabled means.
  */
 
 @layer pw.components {
@@ -24,16 +43,37 @@
     --pw-elev: var(--pw-shadow-sunken);
     position: relative;
     flex-grow: 1;
-    height: var(--pw-track-h);
     background-color: var(--pw-color-base-300);
     border-radius: var(--pw-radius-control);
   }
+  .pw-slider[data-orientation="horizontal"] .pw-slider-track { height: var(--pw-track-h); }
+  .pw-slider[data-orientation="vertical"]   .pw-slider-track { width: var(--pw-track-h); }
 
   .pw-slider-range {
     position: absolute;
-    height: 100%;
     background-color: var(--pw-color-range);
     border-radius: var(--pw-radius-control);
+  }
+  /* Radix sets the offset and the length inline, on the axis that varies.
+     The cross axis is ours, and it has to be scoped per orientation or a
+     vertical range inherits height: 100% and fills the whole track. */
+  .pw-slider[data-orientation="horizontal"] .pw-slider-range { height: 100%; }
+  .pw-slider[data-orientation="vertical"]   .pw-slider-range { width: 100%; }
+
+  /* ── Vertical ────────────────────────────────────────────────────────────
+     The touch cost is real and it is not solvable, so it is documented rather
+     than hidden. A vertical slider captures vertical drag, and vertical drag
+     is also how a page scrolls. Radix sets touch-action: none on the root, so
+     a column of ten of these is a band of the page a finger cannot scroll
+     through. There is no arrangement that gives both gestures to one region.
+     Keep the group narrow, leave scrollable page either side of it, and say
+     so in the docs. */
+  .pw-slider[data-orientation="vertical"] {
+    flex-direction: column;
+    width: var(--pw-control-h);
+    min-width: var(--pw-control-h);
+    height: 100%;
+    min-height: 0;
   }
 
   .pw-slider-thumb {
@@ -65,6 +105,14 @@
     width: var(--pw-thumb-hit);
     height: var(--pw-thumb-hit);
     transform: translate(-50%, -50%);
+  }
+
+  /* A vertical grip is the horizontal one turned, so its dimensions swap.
+     Reusing the horizontal ones would give a 22 wide by 28 tall grip lying
+     across an 8px column, which overhangs the track by seven pixels a side. */
+  .pw-slider[data-orientation="vertical"] .pw-slider-thumb {
+    width: var(--pw-thumb-h);
+    height: var(--pw-thumb-w);
   }
 
   /* The grab. Scale rather than translate, because the thumb has to stay on

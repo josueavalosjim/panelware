@@ -447,6 +447,24 @@
      comfortable target. Same trap that made --pw-bevel-depth inert. */
   --pw-dialog-w:  28rem;
 
+  /* The equaliser's own geometry. The height is stated rather than derived
+     from the control scale because a band's travel is the whole point of the
+     component: a 44px tall equaliser is a row of switches. */
+  /* A fader is not a slider grip turned on its side. The generic grip is 22
+     across the travel axis, and on an equaliser that is most of the distance
+     a band actually moves: a 4dB change on a 24dB scale is 21px of a 128px
+     well, so the grip covered its own fill entirely and every band read as
+     flat. A fader is thin along the travel and long across it, which is what
+     every physical one is, and for the same reason. */
+  --pw-fader-h: 0.75rem;
+  --pw-eq-height: 10rem;
+  --pw-eq-gap:    var(--pw-space-2xs);
+  /* Where the zero line sits, as a percentage down the well. Declared here
+     with the symmetric default and overwritten inline by the component,
+     because only the component knows the range: a -12 to +12 scale puts zero
+     in the middle, a 0 to 24 scale puts it at the bottom. */
+  --pw-eq-zero:   50%;
+
   /* ── Stacking ──────────────────────────────────────────────────────────
      Two numbers, and they are tokens because a consumer's page has its own
      stacking order and this kit cannot know it.

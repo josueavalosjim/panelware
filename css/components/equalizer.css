@@ -1,0 +1,109 @@
+/**
+ * EQUALIZER.
+ *
+ * A group of independent vertical sliders sharing one scale, a zero line and
+ * a frame. Not a multi-thumb slider: css/components/slider.css records the
+ * measurement that rules that out, and it is a correctness argument rather
+ * than an accessibility compromise.
+ *
+ * ── The zero line ────────────────────────────────────────────────────────
+ * An equaliser's scale is signed, and the thing that makes it readable at a
+ * glance is not the numbers, it is being able to see which bands are cut and
+ * which are boosted without reading any. That is one rule across the well at
+ * the zero position, and it is the reason this component exists at all
+ * rather than being ten sliders a consumer arranges themselves.
+ *
+ * It is drawn on the well, behind the tracks, rather than per band, so it is
+ * continuous. Ten separate one-pixel rules with nine gaps is not a line.
+ */
+
+@layer pw.components {
+  .pw-eq {
+    --pw-elev: var(--pw-shadow-sunken);
+    display: flex;
+    align-items: stretch;
+    gap: var(--pw-eq-gap);
+    padding: var(--pw-space-md) var(--pw-space-sm);
+    background-color: var(--pw-color-base-300);
+    border-radius: var(--pw-radius-box);
+    clip-path: var(--pw-clip-box);
+  }
+
+  .pw-eq-well {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: var(--pw-eq-gap);
+    height: var(--pw-eq-height);
+  }
+
+  /* The zero line. A pseudo-element on the well rather than a border on
+     anything, so it spans the bands and the gaps between them alike. */
+  .pw-eq-well[data-zero]::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    /* Set inline as a percentage by the component, because where zero sits
+       depends on the range and only the component knows it. */
+    top: var(--pw-eq-zero, 50%);
+    height: var(--pw-border);
+    background-color: var(--pw-bevel-boundary);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* The band's fill. Positioned by the component between the zero line and
+     the value, because which way it travels depends on the sign and CSS
+     cannot know it. */
+  .pw-eq-fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: var(--pw-color-range);
+    border-radius: var(--pw-radius-control);
+  }
+
+  @media (forced-colors: active) {
+    .pw-eq-fill { background-color: Highlight; forced-color-adjust: none; }
+  }
+
+  /* Thin along the travel. The 44px hit area is unaffected: it is the
+     ::after expander in slider.css, which is centred on the grip and sized
+     independently of it.
+
+     The selector matches slider.css's own vertical rule rather than being
+     shorter than it. Both live in the same layer, so the longer selector
+     wins on specificity regardless of import order, and .pw-eq
+     .pw-slider-thumb at (0,2,0) simply lost to (0,3,0) and did nothing. */
+  .pw-eq .pw-slider[data-orientation="vertical"] .pw-slider-thumb {
+    height: var(--pw-fader-h);
+  }
+
+  .pw-eq-band {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pw-space-2xs);
+    height: 100%;
+  }
+
+  .pw-eq-label {
+    flex: 0 0 auto;
+    font-family: var(--pw-font-mono);
+    font-size: var(--pw-text-micro);
+    line-height: 1;
+    color: var(--pw-color-base-content);
+    /* The frequency labels are the one place in the kit where a row of
+       numbers has to align to a grid, so they are tabular and monospace. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (forced-colors: active) {
+    .pw-eq-well[data-zero]::before {
+      background-color: CanvasText;
+      opacity: 1;
+      forced-color-adjust: none;
+    }
+  }
+}

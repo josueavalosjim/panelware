@@ -28,6 +28,9 @@ export type { WindowProps } from './window.js';
 export { Dialog, DialogTrigger, DialogPanel } from './dialog.js';
 export type { DialogPanelProps } from './dialog.js';
 
+export { Equalizer } from './equalizer.js';
+export type { EqualizerProps, EqualizerBand } from './equalizer.js';
+
 export { Transport, TransportButton, Progress } from './transport.js';
 export type { TransportProps, TransportButtonProps, ProgressProps } from './transport.js';
 

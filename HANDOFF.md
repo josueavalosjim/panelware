@@ -36,9 +36,17 @@ hard work, not one new thing pretending to solve both.
 Radix primitives — plus a status badge and the LCD/segment readout (the one genuinely custom
 piece, no existing ARIA pattern to borrow).
 
-**Deferred to v1.1+:** multi-thumb EQ-style slider. The WAI-ARIA APG's own reference pattern flags
-unresolved touch+assistive-tech gaps even in the spec's example — not a v1 fight. The
-accessible-cyberpunk second skin is also deferred until the engine/first-skin split is proven.
+**Deferred to v1.1+:** ~~multi-thumb EQ-style slider~~. Built, and the deferral turned out to rest on a
+wrong premise, so the correction is recorded here rather than the note quietly deleted. An equaliser is
+not a multi-thumb slider. A multi-thumb slider is a RANGE: its thumbs are the ends of one span and they
+are ordered. Given three thumbs at 20, 60 and 40, driving the middle one upward returns 20, 40, 100 from
+Radix — it re-sorts, so the thumb being driven lands at a different index and the focused element reports
+a value belonging to a band nobody touched. Correct for a price filter, unfixable for an equaliser where
+3kHz is 3kHz permanently. So the APG's unresolved gap does not apply: the component is N independent
+sliders sharing a scale, and each keeps its own identity. What IS unresolved, and is documented in the
+component, is touch: a vertical slider captures vertical drag and so does page scroll, and no arrangement
+gives both gestures to one region. The accessible-cyberpunk second skin is still deferred until the
+engine/first-skin split is proven.
 
 **Packaging:** one core package, skins as CSS/`data-theme` swaps in the same bundle (DaisyUI/Radix
 Themes pattern), not separate npm installs per skin — that split (Theme UI's model) is only worth

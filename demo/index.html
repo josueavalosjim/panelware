@@ -46,7 +46,7 @@
     import { createElement as h, useState, StrictMode } from 'react';
     import { createRoot } from 'react-dom/client';
     import {
-      Badge, Button, Dialog, DialogPanel, DialogTrigger, Icon,
+      Badge, Button, Dialog, DialogPanel, DialogTrigger, Equalizer, Icon,
       Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
       Transport, TransportButton, Window,
     } from '../dist/index.js';
@@ -65,6 +65,12 @@
       const [position, setPosition] = useState([28]);
       const [density, setDensity] = useState('comfortable');
       const [theme, setTheme] = useState('light');
+      const [eq, setEq] = useState(() => [
+        ['60', '60 hertz', 4], ['170', '170 hertz', 2], ['310', '310 hertz', 0],
+        ['600', '600 hertz', -2], ['1k', '1 kilohertz', -4], ['3k', '3 kilohertz', -1],
+        ['6k', '6 kilohertz', 3], ['12k', '12 kilohertz', 6], ['14k', '14 kilohertz', 5],
+        ['16k', '16 kilohertz', 2],
+      ].map(([label, name, value]) => ({ id: label, label, name, value })));
       const [gain, setGain] = useState([70]);
 
       return h('div', null,
@@ -171,6 +177,20 @@
                 value: position[0] + 30, max: 210, label: 'Buffered',
                 format: (v, m) => `${Math.round((v / m) * 100)} percent buffered`,
               })))),
+
+        h(Section, {
+          id: 'equalizer', title: 'Equaliser',
+          note: 'Ten independent bands, not a multi-thumb slider. A multi-thumb slider is a range and re-sorts its thumbs, so driving one band would silently renumber it into another. Each band keeps its own name and value. Gain is announced in decibels, because a bare signed number is not something you can hear the sign of.',
+        },
+          h(Equalizer, {
+            label: 'Equaliser',
+            bands: eq,
+            min: -12, max: 12,
+            onBandChange: (id, value) =>
+              setEq((prev) => prev.map((b) => (b.id === id ? { ...b, value } : b))),
+            format: (v, band) =>
+              `${band.name}, ${v > 0 ? 'plus ' : v < 0 ? 'minus ' : ''}${Math.abs(v)} decibels`,
+          })),
 
         h(Section, {
           id: 'badge', title: 'Status badge',

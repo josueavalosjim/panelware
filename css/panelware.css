@@ -479,6 +479,24 @@
      comfortable target. Same trap that made --pw-bevel-depth inert. */
   --pw-dialog-w:  28rem;
 
+  /* The equaliser's own geometry. The height is stated rather than derived
+     from the control scale because a band's travel is the whole point of the
+     component: a 44px tall equaliser is a row of switches. */
+  /* A fader is not a slider grip turned on its side. The generic grip is 22
+     across the travel axis, and on an equaliser that is most of the distance
+     a band actually moves: a 4dB change on a 24dB scale is 21px of a 128px
+     well, so the grip covered its own fill entirely and every band read as
+     flat. A fader is thin along the travel and long across it, which is what
+     every physical one is, and for the same reason. */
+  --pw-fader-h: 0.75rem;
+  --pw-eq-height: 10rem;
+  --pw-eq-gap:    var(--pw-space-2xs);
+  /* Where the zero line sits, as a percentage down the well. Declared here
+     with the symmetric default and overwritten inline by the component,
+     because only the component knows the range: a -12 to +12 scale puts zero
+     in the middle, a 0 to 24 scale puts it at the bottom. */
+  --pw-eq-zero:   50%;
+
   /* ── Stacking ──────────────────────────────────────────────────────────
      Two numbers, and they are tokens because a consumer's page has its own
      stacking order and this kit cannot know it.
@@ -832,7 +850,7 @@
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
-         .pw-transport-button, .pw-progress, .pw-raised, .pw-sunken) {
+         .pw-transport-button, .pw-progress, .pw-eq, .pw-raised, .pw-sunken) {
     --pw-bevel-1:  calc(var(--pw-bevel-depth) * 1px);
     --pw-bevel-2:  calc(var(--pw-bevel-depth) * 2px);
     --pw-bevel-1n: calc(var(--pw-bevel-depth) * -1px);
@@ -891,7 +909,7 @@
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
-         .pw-transport-button, .pw-progress) {
+         .pw-transport-button, .pw-progress, .pw-eq) {
     /* The bevel, plus the focus ring's inner half when there is one.
        --pw-focus-halo is transparent by default and set on :focus-visible. */
     box-shadow: var(--pw-elev), var(--pw-focus-halo);
@@ -923,7 +941,7 @@
     :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
            .pw-slider-track, .pw-slider-thumb, .pw-lcd,
            .pw-tab-panel, .pw-title-button, .pw-window,
-           .pw-transport-button, .pw-progress) {
+           .pw-transport-button, .pw-progress, .pw-eq) {
       border: var(--pw-border) solid ButtonBorder;
     }
   }
@@ -1584,14 +1602,33 @@
 }
 
 /**
- * SLIDER, single thumb.
+ * SLIDER, single thumb, either orientation.
  *
- * Multi-thumb is deferred and the reason is in HANDOFF.md: the WAI-ARIA APG's
- * own reference pattern flags unresolved touch and assistive-tech gaps in the
- * spec's own example. That is not a v1 fight.
+ * ── Why there is no multi-thumb variant, measured rather than deferred ────
+ * HANDOFF.md deferred multi-thumb on the grounds that the WAI-ARIA APG flags
+ * unresolved gaps in its own reference pattern. Building the equaliser meant
+ * finding out what that actually means, and the answer changes the design
+ * rather than qualifying it.
+ *
+ * A multi-thumb slider is a RANGE. Its thumbs are the ends of one span and
+ * they are ordered. Driven three thumbs at 20, 60 and 40 and pressed
+ * ArrowRight sixty times on the middle one, Radix returns 20, 40, 100: it
+ * re-sorted, so the thumb being driven moved to a different index and the
+ * focused element's aria-valuenow now reads 40, a number belonging to a band
+ * nobody touched. The identity of a thumb is not stable under interaction.
+ *
+ * For a price filter that is correct behaviour, because "the low end" and
+ * "the high end" are what the thumbs mean. For an equaliser it is a bug with
+ * no workaround: 3kHz is 3kHz forever, and driving it up must not silently
+ * reassign it to 6kHz.
+ *
+ * So an equaliser is not a multi-thumb slider with an accessibility problem.
+ * It is N independent sliders sharing a scale, and this file supports the
+ * vertical orientation they need. See css/components/equalizer.css.
  *
  * The thumb never sinks. A sunken thumb reads as a grip that has been
  * dropped, not one that is being held, which is backwards. It scales instead.
+ * Disabled is the exception, because a dropped grip is what disabled means.
  */
 
 @layer pw.components {
@@ -1609,16 +1646,37 @@
     --pw-elev: var(--pw-shadow-sunken);
     position: relative;
     flex-grow: 1;
-    height: var(--pw-track-h);
     background-color: var(--pw-color-base-300);
     border-radius: var(--pw-radius-control);
   }
+  .pw-slider[data-orientation="horizontal"] .pw-slider-track { height: var(--pw-track-h); }
+  .pw-slider[data-orientation="vertical"]   .pw-slider-track { width: var(--pw-track-h); }
 
   .pw-slider-range {
     position: absolute;
-    height: 100%;
     background-color: var(--pw-color-range);
     border-radius: var(--pw-radius-control);
+  }
+  /* Radix sets the offset and the length inline, on the axis that varies.
+     The cross axis is ours, and it has to be scoped per orientation or a
+     vertical range inherits height: 100% and fills the whole track. */
+  .pw-slider[data-orientation="horizontal"] .pw-slider-range { height: 100%; }
+  .pw-slider[data-orientation="vertical"]   .pw-slider-range { width: 100%; }
+
+  /* ── Vertical ────────────────────────────────────────────────────────────
+     The touch cost is real and it is not solvable, so it is documented rather
+     than hidden. A vertical slider captures vertical drag, and vertical drag
+     is also how a page scrolls. Radix sets touch-action: none on the root, so
+     a column of ten of these is a band of the page a finger cannot scroll
+     through. There is no arrangement that gives both gestures to one region.
+     Keep the group narrow, leave scrollable page either side of it, and say
+     so in the docs. */
+  .pw-slider[data-orientation="vertical"] {
+    flex-direction: column;
+    width: var(--pw-control-h);
+    min-width: var(--pw-control-h);
+    height: 100%;
+    min-height: 0;
   }
 
   .pw-slider-thumb {
@@ -1650,6 +1708,14 @@
     width: var(--pw-thumb-hit);
     height: var(--pw-thumb-hit);
     transform: translate(-50%, -50%);
+  }
+
+  /* A vertical grip is the horizontal one turned, so its dimensions swap.
+     Reusing the horizontal ones would give a 22 wide by 28 tall grip lying
+     across an 8px column, which overhangs the track by seven pixels a side. */
+  .pw-slider[data-orientation="vertical"] .pw-slider-thumb {
+    width: var(--pw-thumb-h);
+    height: var(--pw-thumb-w);
   }
 
   /* The grab. Scale rather than translate, because the thumb has to stay on
@@ -1794,6 +1860,116 @@
     /* The fill still moves to the new value, it just stops easing there.
        Removing the transform would freeze the bar at zero. */
     .pw-progress-fill { transition-duration: 1ms; }
+  }
+}
+
+/**
+ * EQUALIZER.
+ *
+ * A group of independent vertical sliders sharing one scale, a zero line and
+ * a frame. Not a multi-thumb slider: css/components/slider.css records the
+ * measurement that rules that out, and it is a correctness argument rather
+ * than an accessibility compromise.
+ *
+ * ── The zero line ────────────────────────────────────────────────────────
+ * An equaliser's scale is signed, and the thing that makes it readable at a
+ * glance is not the numbers, it is being able to see which bands are cut and
+ * which are boosted without reading any. That is one rule across the well at
+ * the zero position, and it is the reason this component exists at all
+ * rather than being ten sliders a consumer arranges themselves.
+ *
+ * It is drawn on the well, behind the tracks, rather than per band, so it is
+ * continuous. Ten separate one-pixel rules with nine gaps is not a line.
+ */
+
+@layer pw.components {
+  .pw-eq {
+    --pw-elev: var(--pw-shadow-sunken);
+    display: flex;
+    align-items: stretch;
+    gap: var(--pw-eq-gap);
+    padding: var(--pw-space-md) var(--pw-space-sm);
+    background-color: var(--pw-color-base-300);
+    border-radius: var(--pw-radius-box);
+    clip-path: var(--pw-clip-box);
+  }
+
+  .pw-eq-well {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: var(--pw-eq-gap);
+    height: var(--pw-eq-height);
+  }
+
+  /* The zero line. A pseudo-element on the well rather than a border on
+     anything, so it spans the bands and the gaps between them alike. */
+  .pw-eq-well[data-zero]::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    /* Set inline as a percentage by the component, because where zero sits
+       depends on the range and only the component knows it. */
+    top: var(--pw-eq-zero, 50%);
+    height: var(--pw-border);
+    background-color: var(--pw-bevel-boundary);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* The band's fill. Positioned by the component between the zero line and
+     the value, because which way it travels depends on the sign and CSS
+     cannot know it. */
+  .pw-eq-fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: var(--pw-color-range);
+    border-radius: var(--pw-radius-control);
+  }
+
+  @media (forced-colors: active) {
+    .pw-eq-fill { background-color: Highlight; forced-color-adjust: none; }
+  }
+
+  /* Thin along the travel. The 44px hit area is unaffected: it is the
+     ::after expander in slider.css, which is centred on the grip and sized
+     independently of it.
+
+     The selector matches slider.css's own vertical rule rather than being
+     shorter than it. Both live in the same layer, so the longer selector
+     wins on specificity regardless of import order, and .pw-eq
+     .pw-slider-thumb at (0,2,0) simply lost to (0,3,0) and did nothing. */
+  .pw-eq .pw-slider[data-orientation="vertical"] .pw-slider-thumb {
+    height: var(--pw-fader-h);
+  }
+
+  .pw-eq-band {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--pw-space-2xs);
+    height: 100%;
+  }
+
+  .pw-eq-label {
+    flex: 0 0 auto;
+    font-family: var(--pw-font-mono);
+    font-size: var(--pw-text-micro);
+    line-height: 1;
+    color: var(--pw-color-base-content);
+    /* The frequency labels are the one place in the kit where a row of
+       numbers has to align to a grid, so they are tabular and monospace. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (forced-colors: active) {
+    .pw-eq-well[data-zero]::before {
+      background-color: CanvasText;
+      opacity: 1;
+      forced-color-adjust: none;
+    }
   }
 }
 

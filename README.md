@@ -52,10 +52,28 @@ Button, toggle, tabs, dialog, single-thumb slider, status badge, and a segment
 readout. Two themes, `chrome` light and dark, swapped with `data-theme` on the
 root.
 
-The multi-thumb equaliser slider is deliberately absent. The WAI-ARIA APG's
-own reference pattern flags unresolved touch and assistive-technology gaps in
-the spec's own example, and that is not a fight worth picking in a first
-version.
+There is an equaliser, and it is deliberately **not** a multi-thumb slider.
+
+That was going to be the reason to leave it out: the WAI-ARIA APG flags
+unresolved gaps in its own multi-thumb reference pattern. Building it found a
+better reason to build it differently. A multi-thumb slider is a *range* — its
+thumbs are the two ends of one span, and they are ordered. Give Radix three
+thumbs at 20, 60 and 40 and drive the middle one up: it returns 20, 40, 100.
+It re-sorted. The thumb being driven is now at a different index, and the
+focused element reports a value belonging to a band nobody touched.
+
+For a price filter that is correct, because "the low end" and "the high end"
+are what the thumbs mean. For an equaliser it is unfixable, because 3kHz is
+3kHz permanently and driving it up must not silently reassign it to 6kHz.
+
+So the bands are separate sliders sharing a scale, a zero line and a frame.
+Each keeps its own name and value, and none can renumber another.
+
+Two costs, stated rather than hidden. Ten bands are ten tab stops, which is
+the APG's own model and still a lot of stops. And on touch a vertical slider
+captures vertical drag, which is also how a page scrolls, so the equaliser is
+a region a finger cannot scroll through. No arrangement gives both gestures to
+one area; keep it narrow and leave scrollable page either side.
 
 ## The token contract
 

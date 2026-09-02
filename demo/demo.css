@@ -128,6 +128,13 @@ body {
   opacity: 0.75;
 }
 
+/* Radix positions a vertical thumb by writing an offset onto its own
+   wrapper, the same as it does horizontally. This stands in for it. */
+.demo-thumb-pos-v {
+  position: absolute;
+  transform: translateY(-50%);
+}
+
 .demo-field {
   display: flex;
   align-items: center;

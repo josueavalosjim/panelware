@@ -321,6 +321,157 @@
       </div>
     </section>
 
+    <section class="demo-section" id="equalizer">
+      <h2 class="demo-heading">Equaliser</h2>
+      <p class="demo-note">Ten independent bands, not a multi-thumb slider. A multi-thumb slider is a range and re-sorts its thumbs, so driving one band would silently renumber it into another. The fill leaves the zero line and travels to the value, in whichever direction that is, because a cut drawn as a short bar rising from the floor is a lie about the shape of the curve.</p>
+      <div class="demo-row">
+        <div class="pw-eq" role="group" aria-label="Equaliser">
+          <div class="pw-eq-well" data-zero style="--pw-eq-zero: 50%">
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 33.33%; height: 16.67%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 33.33%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="60 hertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="4"
+                        aria-valuetext="60 hertz, plus 4 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">60</span>
+            </div>
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 41.67%; height: 8.333%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 41.67%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="170 hertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="2"
+                        aria-valuetext="170 hertz, plus 2 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">170</span>
+            </div>
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 50%; height: 0%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 50%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="310 hertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="0"
+                        aria-valuetext="310 hertz, 0 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">310</span>
+            </div>
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 50%; height: 8.333%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 58.33%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="600 hertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="-2"
+                        aria-valuetext="600 hertz, minus 2 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">600</span>
+            </div>
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 50%; height: 16.67%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 66.67%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="1 kilohertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="-4"
+                        aria-valuetext="1 kilohertz, minus 4 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">1k</span>
+            </div>
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 50%; height: 4.167%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 54.17%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="3 kilohertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="-1"
+                        aria-valuetext="3 kilohertz, minus 1 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">3k</span>
+            </div>
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 37.5%; height: 12.5%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 37.5%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="6 kilohertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="3"
+                        aria-valuetext="6 kilohertz, plus 3 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">6k</span>
+            </div>
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 25%; height: 25%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 25%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="12 kilohertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="6"
+                        aria-valuetext="12 kilohertz, plus 6 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">12k</span>
+            </div>
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 29.17%; height: 20.83%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 29.17%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="14 kilohertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="5"
+                        aria-valuetext="14 kilohertz, plus 5 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">14k</span>
+            </div>
+            <div class="pw-eq-band">
+              <span class="pw-slider" data-orientation="vertical">
+                <span class="pw-slider-track" data-orientation="vertical">
+                  <span class="pw-eq-fill" style="top: 41.67%; height: 8.333%"></span>
+                </span>
+                <span class="demo-thumb-pos-v" style="top: 41.67%">
+                  <span class="pw-slider-thumb" role="slider" tabindex="0"
+                        aria-label="16 kilohertz" aria-orientation="vertical"
+                        aria-valuemin="-12" aria-valuemax="12" aria-valuenow="2"
+                        aria-valuetext="16 kilohertz, plus 2 decibels"></span>
+                </span>
+              </span>
+              <span class="pw-eq-label" aria-hidden="true">16k</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="demo-section" id="badge">
       <h2 class="demo-heading">Status badge</h2>
       <p class="demo-note">Every badge is a glyph and a word. A coloured dot alone is the failure this component exists to avoid.</p>
