@@ -1,0 +1,83 @@
+/**
+ * The shipped stylesheet against the sources it is built from.
+ *
+ * css/panelware.css is generated and committed, which means the same rules
+ * exist twice in the repo and one copy is the one consumers get. Editing the
+ * bundle by hand would work, would look right, and would be silently undone
+ * by the next `npm run generate`.
+ */
+import assert from 'node:assert/strict';
+import { readdirSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { describe, test } from 'node:test';
+import { fileURLToPath } from 'node:url';
+
+import { bundle } from '../scripts/build-css.mjs';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
+
+describe('the shipped stylesheet', () => {
+  /* These comparisons only mean something because `npm test` compiles but
+     does not regenerate. It used to run the generators first, which
+     overwrote any drift a moment before the comparison and made every test
+     in this file and in icons.test.mjs unable to fail. Four planted hand
+     edits went undetected. `npm run build` generates; `npm test` checks. */
+  test('is what the sources build to', () => {
+    assert.equal(read('css/panelware.css'), bundle('css/_panelware.css'));
+  });
+
+  test('the tokens-only entry is too', () => {
+    assert.equal(read('css/tokens.css'), bundle('css/tokens/index.css'));
+  });
+
+  test('ships as one file, with no imports left to chain', () => {
+    /* The @import version made 22 requests for one page, in serial waves,
+       because a browser cannot discover a nested import until the parent has
+       parsed. It also meant one stale file in the chain could silently
+       remove a whole component's styling with no error, which is exactly
+       what happened to the dialog's title bar. */
+    const css = read('css/panelware.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    assert.doesNotMatch(css, /@import/);
+  });
+
+  test('every url() in the bundle resolves from css/', () => {
+    /* The icon sheet is referenced as ../../assets/ from css/components/.
+       Inlined one directory shallower it would be wrong by a level, and the
+       icons would silently stop painting rather than erroring. */
+    const refs = [...read('css/panelware.css').matchAll(/url\("([^"]+)"\)/g)].map((m) => m[1]);
+    assert.ok(refs.length >= 3, 'expected the sprite sheets to be referenced');
+    for (const ref of refs) {
+      assert.ok(readFileSync(join(ROOT, 'css', ref)), `${ref} does not resolve from css/`);
+    }
+  });
+
+  test('no source file is emitted twice', () => {
+    /* @import is idempotent in the cascade; concatenation is not. A file
+       pulled in from two places would put a second copy of its rules after
+       the first, and a consumer override written to beat the first copy
+       would lose to the second.
+
+       Counting selectors would not test this: .pw-button legitimately
+       appears twice in its own file, once in the components layer and once
+       inside its reduced-motion block. What has to occur once is each FILE,
+       so this counts each source's own header line. */
+    const css = read('css/panelware.css');
+    const sources = readdirSync(join(ROOT, 'css'), { recursive: true })
+      .filter((f) => typeof f === 'string' && f.endsWith('.css'))
+      .filter((f) => !['panelware.css', 'tokens.css', '_panelware.css'].includes(f));
+    assert.ok(sources.length >= 12, `expected the split sources, found ${sources.length}`);
+
+    for (const rel of sources) {
+      const first = read(join('css', rel)).split('\n')[1];
+      if (!first || !first.startsWith(' *')) continue;
+      const hits = css.split(first).length - 1;
+      /* theme-auto is opt-in and deliberately not in the bundle. */
+      if (rel.endsWith('theme-auto.css')) {
+        assert.equal(hits, 0, `${rel} is opt-in and must not be bundled`);
+        continue;
+      }
+      assert.equal(hits, 1, `${rel} appears ${hits} times in the bundle`);
+    }
+  });
+});

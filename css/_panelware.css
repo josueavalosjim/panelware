@@ -1,0 +1,45 @@
+/**
+ * The kit.
+ *
+ *   import "@josueavalosjim/panelware/css";
+ *
+ * ── The layer order is the API ────────────────────────────────────────────
+ * Later layers win regardless of specificity, which is what kills the
+ * specificity arms race before it starts: no !important anywhere in this
+ * kit, and no selector written longer than it needs to be just to out-rank
+ * another one.
+ *
+ * pw.overrides is last and empty. It is there for the consumer:
+ *
+ *   @layer pw.overrides { .pw-button { --pw-elev: none; } }
+ *
+ * wins over anything shipped here with one class and no fight.
+ *
+ * The layer statement legally precedes the imports. @import must come before
+ * other rules, and a bare @layer statement is one of the two things allowed
+ * in front of it.
+ *
+ * ── A note for anyone adding a taste-check scope ──────────────────────────
+ * @layer is transparent to taste-check's parser: css.mjs treats grouping
+ * at-rules as always applying and only makes conditional ones (@media,
+ * @supports, @container, @scope) opt in by name. So a :root inside
+ * layer(pw.tokens) resolves exactly as a bare :root would, and the config
+ * does not name the layer. Leaving it unnamed is deliberate, so renaming a
+ * layer later cannot silently turn a scope into an unmatched one.
+ */
+@layer pw.reset, pw.tokens, pw.treatment, pw.components, pw.overrides;
+
+@import "./tokens/index.css"        layer(pw.tokens);
+@import "./reset.css"               layer(pw.reset);
+@import "./treatment/bevel.css";
+@import "./treatment/gloss.css";
+@import "./components/icon.css";
+@import "./components/button.css";
+@import "./components/toggle.css";
+@import "./components/tabs.css";
+@import "./components/window.css";
+@import "./components/dialog.css";
+@import "./components/slider.css";
+@import "./components/transport.css";
+@import "./components/badge.css";
+@import "./components/lcd.css";

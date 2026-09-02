@@ -33,7 +33,7 @@
       "import": "./dist/index.js"
     },
     "./css": "./css/panelware.css",
-    "./css/tokens": "./css/tokens/index.css",
+    "./css/tokens": "./css/tokens.css",
     "./css/theme-auto": "./css/tokens/theme-auto.css",
     "./assets/*": "./assets/*",
     "./package.json": "./package.json"
@@ -47,9 +47,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc",
-    "sprites": "node scripts/build-sprites.mjs && node scripts/build-icons-index.mjs",
-    "test": "npm run build && node --test \"test/**/*.test.mjs\"",
+    "generate": "node scripts/build-sprites.mjs && node scripts/build-icons-index.mjs && node scripts/build-css.mjs",
+    "build": "npm run generate && tsc",
+    "test": "tsc && node --test \"test/**/*.test.mjs\"",
     "check": "taste-check",
     "check:runtime": "node scripts/runtime.mjs",
     "prepublishOnly": "npm run build",

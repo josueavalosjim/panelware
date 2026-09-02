@@ -80,8 +80,18 @@
     background-color: var(--pw-color-disabled-content);
   }
   .pw-slider[data-disabled] .pw-slider-thumb {
-    /* Flattened, so the grip stops looking grabbable. Shape, not colour. */
-    --pw-elev: none;
+    /* Sunken, not flat.
+       Flat worked, and it left the chrome vocabulary: a surface with no
+       bevel at all is not a state of this skin, it is an absence of it, and
+       it read as a component from a different kit.
+
+       Sunken says the right thing, and the reasoning was already written
+       down in this file in the opposite direction. The note above the grab
+       state says never to sink the thumb on :active, because a sunken thumb
+       reads as a dropped grip rather than a held one. That is exactly what a
+       disabled slider is. The shape rejected for the live state is the
+       correct meaning for the dead one. */
+    --pw-elev: var(--pw-shadow-sunken);
     background-color: var(--pw-color-base-300);
     cursor: default;
   }
