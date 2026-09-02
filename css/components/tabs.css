@@ -1,0 +1,64 @@
+/**
+ * TABS.
+ *
+ * The one detail that makes a tab strip read as tabs rather than as a row of
+ * buttons: the active trigger's bottom edge is suppressed so it fuses with
+ * the panel below it. Without that the active tab is a pressed button that
+ * happens to sit above a box.
+ */
+
+@layer pw.components {
+  .pw-tab-list {
+    display: flex;
+    gap: var(--pw-space-3xs);
+    /* The strip itself is flat. A bevelled container around bevelled
+       triggers is two frames deep and reads as a mistake. */
+    background: none;
+    border: 0;
+  }
+
+  .pw-tab {
+    --pw-elev: var(--pw-shadow-raised);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--pw-control-h);
+    padding: 0 var(--pw-control-pad-x);
+    /* The bottom corners stay square so the fuse below has a straight edge
+       to meet. */
+    border-radius: var(--pw-radius-control) var(--pw-radius-control) 0 0;
+    transition: transform var(--pw-duration-press) var(--pw-ease-press),
+                opacity var(--pw-duration-hover) var(--pw-ease-state);
+  }
+
+  .pw-tab:hover { opacity: 0.92; }
+
+  .pw-tab[data-state="active"] {
+    --pw-elev: var(--pw-shadow-sunken);
+    background-color: var(--pw-color-base-200);
+    font-weight: 600;
+    /* Sits a pixel lower and loses its bottom line, so the trigger and the
+       panel read as one surface. */
+    transform: translateY(var(--pw-press-travel));
+    border-bottom-color: transparent;
+  }
+
+  .pw-tab-panel {
+    padding: var(--pw-panel-pad);
+    background-color: var(--pw-color-base-200);
+    border: var(--pw-border) solid var(--pw-bevel-frame);
+    border-radius: 0 var(--pw-radius-box) var(--pw-radius-box) var(--pw-radius-box);
+    box-shadow: var(--pw-shadow-sunken);
+    color: var(--pw-color-base-content);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-text-ui);
+    line-height: var(--pw-leading-body);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-tab { transition-duration: 1ms; }
+    /* Repeated at its own (0,2,0), or the active tab would spring back up
+       and un-fuse from the panel under reduced motion. */
+    .pw-tab[data-state="active"] { transform: translateY(var(--pw-press-travel)); }
+  }
+}

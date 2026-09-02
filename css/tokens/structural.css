@@ -1,0 +1,132 @@
+/**
+ * STRUCTURAL — everything that is not a colour.
+ *
+ * DaisyUI v5's real contribution is that it splits these out from the colour
+ * roles instead of folding shape into the palette, so a theme can change how
+ * square something is without touching what colour it is. That split is what
+ * HANDOFF.md asked to extend, and this is it.
+ *
+ * The names come from the house system rather than from DaisyUI: --space-lg,
+ * --radius-control, --text-ui. The colour roles borrow DaisyUI's names for
+ * portability; nothing else needs to, and running two naming schemes in one
+ * kit would buy nothing.
+ *
+ * Every value here is skin-overridable. A skin that wants a 0 radius and a
+ * notched corner reassigns two tokens and edits no component.
+ */
+
+:root {
+  /* ── Type ──────────────────────────────────────────────────────────────
+     Five sizes, and the ladder stops there. Each step is at least 25% over
+     the one below (1.25, 1.27, 1.26, 1.25), because steps closer than that
+     read as a mistake rather than as hierarchy.
+
+     --pw-text-ui is the default and the one nearly everything uses. 15px is
+     what a real desktop UI runs at: macOS is 13, Windows is 15. A component
+     kit that shipped 16px body would be a web page pretending to be an
+     application. */
+  --pw-text-micro:    0.75rem;      /* 12px. badge, unit label, LCD caption */
+  --pw-text-ui:       0.9375rem;    /* 15px. buttons, tabs, labels, body */
+  --pw-text-subhead:  1.1875rem;    /* 19px. dialog title */
+  --pw-text-heading:  1.5rem;       /* 24px */
+  --pw-text-display:  1.875rem;     /* 30px */
+
+  --pw-leading-tight: 1.1;          /* display */
+  --pw-leading-ui:    1.2;          /* a single-line control label */
+  --pw-leading-body:  1.55;         /* prose inside a panel */
+
+  /* Tracking tightens as size goes up. A 15px control label needs none. */
+  --pw-tracking-display: -0.02em;
+  --pw-tracking-ui:      0;
+
+  /* system-ui first, and this is a considered choice rather than a default.
+     The faces this kit is imitating were Tahoma and Segoe UI, both of which
+     are in the stack and both of which are already on the machines that have
+     them. Shipping a webfont to look like the operating system would be a
+     download to render something the reader already owns. */
+  --pw-font-ui:   system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+  --pw-font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --pw-font-lcd:  var(--pw-font-mono);
+
+  /* ── Space ─────────────────────────────────────────────────────────────
+     One scale, 4px based, and nothing off it. Space belongs to the
+     container, not scattered onto children. */
+  --pw-space-3xs: 0.125rem;   /*  2px */
+  --pw-space-2xs: 0.25rem;    /*  4px */
+  --pw-space-xs:  0.375rem;   /*  6px */
+  --pw-space-sm:  0.5rem;     /*  8px */
+  --pw-space-md:  0.75rem;    /* 12px */
+  --pw-space-lg:  1rem;       /* 16px */
+  --pw-space-xl:  1.5rem;     /* 24px */
+  --pw-space-2xl: 2rem;       /* 32px */
+
+  /* ── Shape ─────────────────────────────────────────────────────────────
+     2px, not 8px and not a pill. A bevel is a set of 1px and 2px edges, and
+     a large radius forces those edges to curve through the corner where
+     there is not enough room for two of them to stay distinct. The shape
+     and the treatment are the same decision here. */
+  --pw-radius-control: 2px;
+  --pw-radius-box:     3px;
+  --pw-border:         1px;
+
+  /* Corner clipping, default none, and it does nothing today.
+     It is here because a scalar radius cannot express a notched corner, and
+     the deferred second skin is built out of notched corners. Three
+     declarations that are inert now, against editing every component later. */
+  --pw-clip-control: none;
+  --pw-clip-box:     none;
+
+  /* DaisyUI's structural scalar, kept by name. 1 is the shipped depth; 0
+     flattens the kit without removing it. See css/treatment/bevel.css for
+     what actually reads this. */
+  --pw-depth: 1;
+
+  /* Surface texture. Generalised from DaisyUI's --noise, which hard-codes a
+     noise SVG. The second skin wants scanlines, not noise, and the honest
+     name for the slot is what it is for rather than what chrome puts in it. */
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+
+  /* ── Control knobs ─────────────────────────────────────────────────────
+     Knobs live with the tokens, not with the rules. Restyling is editing a
+     knob; the component file is only opened to change structure.
+
+     44px is the house floor for anything a finger has to hit, and it is
+     stricter than the standard requires: WCAG 2.2 AA asks 24x24 (2.5.8) and
+     44x44 is AAA (2.5.5). Holding the higher number by default is the
+     decision, and it costs the period silhouette something — an XP command
+     button was 75x23. The 75 survives as --pw-control-min-w; the 23 does
+     not, because a kit whose default control cannot be tapped is not an
+     accessible kit with a nice skin, it is a skin. */
+  --pw-control-h:      2.75rem;     /* 44px */
+  --pw-control-min-w:  4.6875rem;   /* 75px, the XP command button width */
+  --pw-control-pad-x:  var(--pw-space-md);
+  --pw-control-gap:    var(--pw-space-sm);
+
+  --pw-focus-width:  2px;
+  --pw-focus-offset: 2px;
+
+  /* How far a pressed control travels. One pixel, which is what a real
+     bevelled button did, and enough that the press is felt on a trackpad
+     with no colour change at all. */
+  --pw-press-travel: 1px;
+
+  --pw-track-h:  0.5rem;
+  --pw-thumb-w:  1.375rem;
+  --pw-thumb-h:  2.75rem;   /* the thumb is the touch target, so it is 44 */
+  --pw-badge-h:  1.5rem;
+  --pw-panel-pad: var(--pw-space-xl);
+  --pw-dialog-w:  28rem;
+}
+
+/* Reassign tokens at the breakpoint rather than duplicating component rules,
+   so type and spacing shrink together in one place. The kit changes very
+   little here on purpose: a control that shrinks on a phone is a control that
+   got harder to hit on the device where hitting it is hardest. */
+@media (max-width: 30rem) {
+  :root {
+    --pw-dialog-w: calc(100vw - (var(--pw-space-lg) * 2));
+    --pw-panel-pad: var(--pw-space-lg);
+    --pw-text-subhead: 1.0625rem;
+  }
+}

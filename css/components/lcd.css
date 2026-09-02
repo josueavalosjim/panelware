@@ -1,0 +1,144 @@
+/**
+ * LCD READOUT — the one genuinely custom piece.
+ *
+ * Every other component in the kit borrows an interaction from Radix and an
+ * ARIA pattern from the APG. This one has neither to borrow, because a
+ * segment display is not a control, it is an image of text.
+ *
+ * That is also its whole accessibility problem, and the answer is in the
+ * markup rather than here: the component renders the real string into a
+ * visually hidden span and marks the sprite render aria-hidden. One span
+ * with "04:21" in it, never one span per character, or a screen reader
+ * spells the time out digit by digit.
+ *
+ * ── Why the cell index arrives as a unitless integer ──────────────────────
+ * The component writes --pw-cell-x: 4, not background-position: -27px 0.
+ * Two reasons, and they agree. taste-check's treatments check flags any
+ * literal carrying px, rem or em inside markup as a one-off value, which is
+ * exactly what "-27px" would be. And every pixel dimension in this kit
+ * belongs in a stylesheet, so the arithmetic lives here where the cell size
+ * is already declared. CSS mod() and round() could split a single index into
+ * a row and a column, but they only reached Chrome in 125, and the character
+ * map has to exist in the component anyway, so it emits both integers.
+ */
+
+@layer pw.components {
+  :root,
+  :root[data-skin="chrome"] {
+    /* Geometry, from Strider's 1998 spec. See assets/README.md. */
+    --pw-lcd-digit-w: 9px;
+    --pw-lcd-digit-h: 13px;
+    --pw-lcd-digit-cols: 14;
+    --pw-lcd-glyph-w: 5px;
+    --pw-lcd-glyph-h: 6px;
+    --pw-lcd-glyph-cols: 31;
+    --pw-lcd-glyph-rows: 2;
+
+    /* One knob rescales the readout. It must stay a whole number: the sheet
+       is a pixel grid, and a fractional scale puts cell edges between device
+       pixels, which tears the glyph rather than softening it. 3 puts a digit
+       at 27x39 and a glyph at 15x18. */
+    --pw-lcd-scale: 3;
+
+    --pw-lcd-sheet-digits: url("../../assets/lcd-digits.svg");
+    --pw-lcd-sheet-glyphs: url("../../assets/lcd-glyphs.svg");
+  }
+
+  .pw-lcd {
+    --pw-elev: var(--pw-shadow-sunken);
+    /* The readout is set deeper than anything else in the kit. It is a
+       window into a box, not a face on one. */
+    --pw-bevel-depth: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--pw-lcd-scale) * 1px);
+    padding: var(--pw-space-sm) var(--pw-space-md);
+    background-color: var(--pw-color-lcd);
+    border-radius: var(--pw-radius-control);
+  }
+
+  .pw-lcd-render {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--pw-lcd-scale) * 1px);
+  }
+
+  .pw-lcd-cell {
+    display: inline-block;
+    /* Set per cell by the component, in markup, as plain integers. */
+    --pw-cell-x: 0;
+    --pw-cell-y: 0;
+    background-color: var(--pw-color-lcd-content);
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    /* The phosphor bloom. drop-shadow rather than box-shadow because the ink
+       is a mask, so the glow has to follow the glyph's own shape instead of
+       its rectangle. At --pw-glow-intensity 0 the radius computes to 0 and
+       this paints nothing. */
+    filter: drop-shadow(0 0
+      calc(var(--pw-glow-radius) * var(--pw-glow-intensity))
+      var(--pw-glow-color));
+  }
+
+  .pw-lcd-cell[data-sheet="digits"] {
+    width:  calc(var(--pw-lcd-digit-w) * var(--pw-lcd-scale));
+    height: calc(var(--pw-lcd-digit-h) * var(--pw-lcd-scale));
+    mask-image: var(--pw-lcd-sheet-digits);
+    -webkit-mask-image: var(--pw-lcd-sheet-digits);
+    mask-size: calc(var(--pw-lcd-digit-cols) * var(--pw-lcd-digit-w) * var(--pw-lcd-scale)) auto;
+    -webkit-mask-size: calc(var(--pw-lcd-digit-cols) * var(--pw-lcd-digit-w) * var(--pw-lcd-scale)) auto;
+    mask-position: calc(var(--pw-cell-x) * var(--pw-lcd-digit-w) * var(--pw-lcd-scale) * -1) 0;
+    -webkit-mask-position: calc(var(--pw-cell-x) * var(--pw-lcd-digit-w) * var(--pw-lcd-scale) * -1) 0;
+  }
+
+  .pw-lcd-cell[data-sheet="glyphs"] {
+    width:  calc(var(--pw-lcd-glyph-w) * var(--pw-lcd-scale));
+    height: calc(var(--pw-lcd-glyph-h) * var(--pw-lcd-scale));
+    mask-image: var(--pw-lcd-sheet-glyphs);
+    -webkit-mask-image: var(--pw-lcd-sheet-glyphs);
+    mask-size:
+      calc(var(--pw-lcd-glyph-cols) * var(--pw-lcd-glyph-w) * var(--pw-lcd-scale))
+      calc(var(--pw-lcd-glyph-rows) * var(--pw-lcd-glyph-h) * var(--pw-lcd-scale));
+    -webkit-mask-size:
+      calc(var(--pw-lcd-glyph-cols) * var(--pw-lcd-glyph-w) * var(--pw-lcd-scale))
+      calc(var(--pw-lcd-glyph-rows) * var(--pw-lcd-glyph-h) * var(--pw-lcd-scale));
+    mask-position:
+      calc(var(--pw-cell-x) * var(--pw-lcd-glyph-w) * var(--pw-lcd-scale) * -1)
+      calc(var(--pw-cell-y) * var(--pw-lcd-glyph-h) * var(--pw-lcd-scale) * -1);
+    -webkit-mask-position:
+      calc(var(--pw-cell-x) * var(--pw-lcd-glyph-w) * var(--pw-lcd-scale) * -1)
+      calc(var(--pw-cell-y) * var(--pw-lcd-glyph-h) * var(--pw-lcd-scale) * -1);
+  }
+
+  /* The scrolling title. A marquee is continuous motion, so the duration
+     table does not govern it, and it translates rather than animating a
+     scroll offset so it stays on the compositor. */
+  .pw-lcd-marquee {
+    overflow: hidden;
+    max-width: 100%;
+  }
+  .pw-lcd-marquee > .pw-lcd-render {
+    animation: pw-lcd-scroll var(--pw-duration-marquee) linear infinite;
+  }
+  /* It pauses on hover and on focus-within, because a reader who needs
+     longer than one pass has no other way to get it. */
+  .pw-lcd-marquee:hover > .pw-lcd-render,
+  .pw-lcd-marquee:focus-within > .pw-lcd-render {
+    animation-play-state: paused;
+  }
+
+  @keyframes pw-lcd-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* Continuous motion stops outright rather than speeding up. A marquee at
+       1ms is not a reduced marquee, it is a strobe. The selector is repeated
+       from above at its own specificity, because the media query adds none. */
+    .pw-lcd-marquee > .pw-lcd-render {
+      animation: none;
+      transform: none;
+    }
+  }
+}

@@ -1,0 +1,92 @@
+/**
+ * GLOSS — the Web 2.0 highlight, opt-in twice.
+ *
+ * Per element with [data-gloss], and per skin with --pw-gloss-opacity. Both
+ * gates exist for different reasons. The attribute keeps the decision at the
+ * call site, where "this one button is the primary action" is known. The
+ * token keeps the decision reversible for a whole skin at once: a skin that
+ * refuses gloss sets the opacity to 0 and every [data-gloss] in every
+ * consumer's markup goes quiet without anyone editing markup.
+ *
+ * An attribute rather than a class, because a class would accumulate in the
+ * markup next to the component class and that is the beginning of treatment
+ * classes smeared across HTML.
+ *
+ * The values are the period ones, recorded in HANDOFF.md from the actual
+ * 2006-07 tutorials and from makeaero's current source. The 120deg glare with
+ * its four stops is makeaero's verbatim. The tutorials specify blend modes
+ * (Overlay at 70%, Soft Light at 30-70%); those became plain alpha here,
+ * because a blend mode composites against whatever is behind the element and
+ * a component kit does not know what that is. An unmeasurable value is not a
+ * value this kit can gate.
+ *
+ * Neither pseudo-element is transitioned. The gloss is a static highlight on
+ * a still surface; a sweeping glare is the thing that makes a page look like
+ * it is selling something.
+ */
+
+@layer pw.treatment {
+  :where([data-gloss]) {
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* The diagonal glare. */
+  :where([data-gloss])::before,
+  /* The inset top-highlight capsule, which is the half that actually reads
+     as a curved surface. The glare alone reads as a reflection on flat
+     glass. */
+  :where([data-gloss])::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    opacity: var(--pw-gloss-opacity);
+    /* Each pseudo clips itself rather than the host clipping both with
+       overflow: hidden. See the note in bevel.css: overflow would clip the
+       second skin's outer glow along with the highlight. */
+    border-radius: inherit;
+    z-index: 1;
+  }
+
+  :where([data-gloss])::before {
+    inset: 0;
+    background-image: linear-gradient(
+      120deg,
+      transparent 30%,
+      rgb(255 255 255 / var(--pw-gloss-glare-alpha)) 45%,
+      rgb(255 255 255 / calc(var(--pw-gloss-glare-alpha) * 0.14)) 55%,
+      transparent 70%
+    );
+  }
+
+  :where([data-gloss])::after {
+    inset: var(--pw-bevel-2) var(--pw-bevel-2) auto var(--pw-bevel-2);
+    height: var(--pw-gloss-cap-height);
+    background-image: linear-gradient(
+      to bottom,
+      rgb(255 255 255 / var(--pw-gloss-cap-alpha)),
+      transparent
+    );
+  }
+
+  /* A glossed control's label has to sit above both layers. The alternative
+     is a lower z-index on the pseudos, which does not work: they would then
+     fall behind the host's own background rather than behind its text, and
+     the gloss would disappear entirely. */
+  :where([data-gloss]) > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* A pressed control is sunken, and a sunken thing does not catch a
+     highlight on its top edge. Killing the capsule and dimming the glare is
+     what makes the press read as depth rather than as a colour change. */
+  :where([data-gloss]):active::after,
+  :where([data-gloss][data-state="on"])::after {
+    opacity: 0;
+  }
+  :where([data-gloss]):active::before,
+  :where([data-gloss][data-state="on"])::before {
+    opacity: calc(var(--pw-gloss-opacity) * 0.4);
+  }
+}

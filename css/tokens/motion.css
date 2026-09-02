@@ -1,0 +1,48 @@
+/**
+ * MOTION — a locked scale, and open role assignments.
+ *
+ * The scale is the house scale and a skin may not add to it. What a skin may
+ * do is re-point a role at a different rung: a skin that wants a heavier
+ * press sets --pw-duration-press to --pw-duration-fast. That is the whole
+ * difference between motion being a system and motion being seven numbers
+ * scattered across seven component files.
+ *
+ * Only transform and opacity are ever transitioned in this kit. box-shadow is
+ * a paint property, so animating the bevel would drop every press off the
+ * compositor — and a real bevelled button never eased anyway. It flipped.
+ */
+
+:root {
+  /* The scale. Locked. */
+  --pw-duration-snap: 100ms;   /* the floor; under this reads as instant */
+  --pw-duration-fast: 150ms;
+  --pw-duration-base: 200ms;
+  --pw-duration-slow: 300ms;
+
+  /* Never linear. Linear is for progress, not for interface. */
+  --pw-ease-out:    cubic-bezier(0.23, 1, 0.32, 1);   /* arrives, settles */
+  --pw-ease-in:     cubic-bezier(0.5, 0, 0.75, 0);    /* gets out of the way */
+  --pw-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* stays on screen */
+
+  /* Roles. Re-point these, do not invent a sixth duration.
+
+     Exit is 150 against an enter of 200. The rule of thumb is 0.8x, which
+     would be 160ms, and 160ms is not on the scale. Staying on the scale
+     matters more than hitting the ratio exactly, and 0.75x still leaves
+     first. */
+  --pw-duration-press: var(--pw-duration-snap);
+  --pw-duration-hover: var(--pw-duration-fast);
+  --pw-duration-enter: var(--pw-duration-base);
+  --pw-duration-exit:  var(--pw-duration-fast);
+
+  --pw-ease-press: var(--pw-ease-out);
+  --pw-ease-enter: var(--pw-ease-out);
+  --pw-ease-exit:  var(--pw-ease-in);
+  --pw-ease-state: var(--pw-ease-in-out);
+
+  /* Continuous motion, which the duration table above does not govern: it
+     measures how long a transition takes to finish, and a marquee does not
+     finish. It is exempt from the scale and it is NOT exempt from reduced
+     motion, where it stops outright rather than speeding up. */
+  --pw-duration-marquee: 12s;
+}

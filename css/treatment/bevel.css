@@ -1,0 +1,94 @@
+/**
+ * BEVEL — the chrome, as a swappable pair of shadow stacks.
+ *
+ * The pattern is 98.css's, read from its source rather than remembered: two
+ * stacked inset box-shadows as a raised/sunken pair, swapped on press. The
+ * whole of 98.css is 994 lines and none of it is expensive, because a
+ * box-shadow never touches the live-sampling blur path that makes
+ * backdrop-filter the documented jank primitive.
+ *
+ * 98.css writes its offsets as literals. Here they are calc()s multiplied by
+ * --pw-bevel-depth, so one number flattens the kit. That is not decoration:
+ * it is the mechanism by which the deferred second skin, which has no bevel
+ * at all, turns this off without editing anything. Every offset below is a
+ * calc for that reason. A single literal 1px sneaking in leaves a ghost edge
+ * at depth 0, the flat skin stops being flat, and nothing reports an error.
+ *
+ * The sunken pair is the raised pair mirrored: highlight swaps with frame,
+ * face swaps with shade. That is 98.css's own derivation, not a new one.
+ *
+ * NES.css reaches the same effect through a Sass mixin that flips the shadow
+ * direction on :active. Custom properties are the better carrier here for one
+ * reason: a mixin is resolved at build time and cannot be re-pointed by a
+ * consumer's stylesheet, and this kit ships no build.
+ */
+
+@layer pw.treatment {
+  :root,
+  :root[data-skin="chrome"] {
+    --pw-bevel-1:  calc(var(--pw-bevel-depth) * 1px);
+    --pw-bevel-2:  calc(var(--pw-bevel-depth) * 2px);
+    --pw-bevel-1n: calc(var(--pw-bevel-depth) * -1px);
+    --pw-bevel-2n: calc(var(--pw-bevel-depth) * -2px);
+
+    --pw-bevel-raised-outer:
+      inset var(--pw-bevel-1n) var(--pw-bevel-1n) var(--pw-bevel-frame),
+      inset var(--pw-bevel-1)  var(--pw-bevel-1)  var(--pw-bevel-light);
+    --pw-bevel-raised-inner:
+      inset var(--pw-bevel-2n) var(--pw-bevel-2n) var(--pw-bevel-shade),
+      inset var(--pw-bevel-2)  var(--pw-bevel-2)  var(--pw-bevel-face);
+
+    --pw-bevel-sunken-outer:
+      inset var(--pw-bevel-1n) var(--pw-bevel-1n) var(--pw-bevel-light),
+      inset var(--pw-bevel-1)  var(--pw-bevel-1)  var(--pw-bevel-frame);
+    --pw-bevel-sunken-inner:
+      inset var(--pw-bevel-2n) var(--pw-bevel-2n) var(--pw-bevel-face),
+      inset var(--pw-bevel-2)  var(--pw-bevel-2)  var(--pw-bevel-shade);
+
+    /* The two values a component actually swaps between. A raised surface
+       casts; a sunken one is a hole in something and casts nothing. */
+    --pw-shadow-raised:
+      var(--pw-bevel-raised-outer),
+      var(--pw-bevel-raised-inner),
+      var(--pw-shadow-outer);
+    --pw-shadow-sunken:
+      var(--pw-bevel-sunken-outer),
+      var(--pw-bevel-sunken-inner);
+
+    /* The default for anything that has not said otherwise. */
+    --pw-elev: var(--pw-shadow-raised);
+  }
+
+  /* ── The shared slot ─────────────────────────────────────────────────────
+     Every panelware surface reads --pw-elev and nothing reads
+     --pw-shadow-raised directly. The name is deliberately role-neutral: the
+     second skin puts an outer glow and a hairline in this slot, and a
+     component file that said "bevel" would then be describing something that
+     is not there. Renaming it later is a major version; naming it right now
+     is free.
+
+     :where() so the whole block is zero specificity and a component rule,
+     or a consumer's, overrides any line of it with one class.
+
+     Nothing here sets overflow: hidden, and nothing downstream may either.
+     It is the obvious way to clip a gloss highlight to a rounded corner, and
+     it would clip the second skin's outer glow dead. gloss.css clips its own
+     pseudo-elements instead. */
+  :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
+         .pw-slider-track, .pw-slider-thumb, .pw-lcd) {
+    box-shadow: var(--pw-elev);
+    border: var(--pw-border) solid var(--pw-bevel-frame);
+    border-radius: var(--pw-radius-control);
+    clip-path: var(--pw-clip-control);
+    background-color: var(--pw-color-base-200);
+    background-image: var(--pw-texture);
+    color: var(--pw-color-base-content);
+  }
+
+  /* Documented escape hatches for surfaces a consumer builds that are not
+     panelware components. Nothing internal uses them; internal components
+     assign --pw-elev instead, which is one declaration rather than a second
+     class in the markup. */
+  .pw-raised { box-shadow: var(--pw-shadow-raised); }
+  .pw-sunken { box-shadow: var(--pw-shadow-sunken); }
+}

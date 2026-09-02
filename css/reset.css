@@ -1,0 +1,59 @@
+/**
+ * RESET — the smallest set of assumptions the skin needs, and nothing more.
+ *
+ * A component kit that resets globally is a kit that fights every page it is
+ * dropped into. Everything here is scoped to panelware's own class names via
+ * :where(), which contributes zero specificity, so a consumer overrides any
+ * of it with a single class and no !important.
+ *
+ * This file declares no colour. If a colour appears here the skin split has
+ * already leaked, because a reset that knows what colour a button is has
+ * stopped being a reset.
+ */
+
+:where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-panel-close,
+       .pw-badge, .pw-slider, .pw-slider-track, .pw-slider-range,
+       .pw-slider-thumb, .pw-lcd, .pw-lcd-render, .pw-lcd-cell,
+       .pw-tab-list, .pw-tab-panel, .pw-overlay) {
+  box-sizing: border-box;
+}
+
+/* Native control chrome, removed so the bevel is the only chrome. Font is
+   reset to the kit's own rather than inherited, because a button does not
+   inherit font-family from its ancestors in any browser and inheriting the
+   consumer's page font would make the kit look different in every app. */
+:where(.pw-button, .pw-toggle, .pw-tab, .pw-panel-close) {
+  appearance: none;
+  margin: 0;
+  font-family: var(--pw-font-ui);
+  font-size: var(--pw-text-ui);
+  line-height: var(--pw-leading-ui);
+  letter-spacing: var(--pw-tracking-ui);
+  cursor: pointer;
+}
+
+/* The focus ring is declared once, here, for every control in the kit.
+   :focus-visible rather than :focus, so a mouse press does not leave a ring
+   behind and a Tab does. The offset matters as much as the ring: without it
+   a 2px ring fuses with the bevel's own outer line and reads as a slightly
+   thicker border rather than as focus. */
+:where(.pw-button, .pw-toggle, .pw-tab, .pw-panel-close,
+       .pw-slider-thumb, .pw-panel):focus-visible {
+  outline: var(--pw-focus-width) solid var(--pw-color-focus);
+  outline-offset: var(--pw-focus-offset);
+}
+
+/* The text a screen reader gets when the visible thing is a picture of text.
+   Not display:none and not visibility:hidden, both of which remove it from
+   the accessibility tree along with the screen. */
+.pw-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
+}

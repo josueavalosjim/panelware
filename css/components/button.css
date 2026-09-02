@@ -1,0 +1,66 @@
+/**
+ * BUTTON.
+ *
+ * Radix ships no Button primitive. shadcn uses Slot for asChild and nothing
+ * else, and so does this. Worth stating plainly, because a reader who assumes
+ * @radix-ui/react-button exists will spend an afternoon on it.
+ */
+
+@layer pw.components {
+  .pw-button {
+    --pw-elev: var(--pw-shadow-raised);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pw-control-gap);
+    min-height: var(--pw-control-h);
+    min-width: var(--pw-control-min-w);
+    padding: 0 var(--pw-control-pad-x);
+    /* transform only. The bevel flip is not transitioned and does not want
+       to be: box-shadow is a paint property, and a real bevelled button
+       snapped rather than eased. */
+    transition: transform var(--pw-duration-press) var(--pw-ease-press),
+                opacity var(--pw-duration-hover) var(--pw-ease-state);
+  }
+
+  /* Hover moves opacity, so the state is never carried by colour alone. */
+  .pw-button:hover { opacity: 0.92; }
+
+  .pw-button:active {
+    --pw-elev: var(--pw-shadow-sunken);
+    transform: translateY(var(--pw-press-travel));
+    opacity: 1;
+  }
+
+  .pw-button[data-variant="primary"] {
+    background-color: var(--pw-color-primary);
+    color: var(--pw-color-primary-content);
+  }
+
+  .pw-button:disabled,
+  .pw-button[aria-disabled="true"] {
+    color: var(--pw-color-disabled-content);
+    cursor: default;
+  }
+  /* Disabled stops moving as well as dimming. Contrast alone does not carry
+     the state here (3.85:1 is quiet, not absent), so the absent press and
+     the absent hover carry the rest of it. */
+  .pw-button:disabled:hover,
+  .pw-button[aria-disabled="true"]:hover { opacity: 1; }
+  .pw-button:disabled:active,
+  .pw-button[aria-disabled="true"]:active { transform: none; }
+
+  /* Reduced motion cuts the duration and keeps the state change, because the
+     1px drop IS the affordance here and removing it would leave a 0.92
+     opacity shift doing the work alone.
+
+     Both selectors are repeated verbatim from above. A @media block adds no
+     specificity, so a bare `.pw-button { transform: none }` at (0,1,0) would
+     lose to `.pw-button:active` at (0,2,0) no matter where it sat in the
+     file, and this whole block would silently do nothing while reading as
+     correct. */
+  @media (prefers-reduced-motion: reduce) {
+    .pw-button { transition-duration: 1ms; }
+    .pw-button:active { transform: translateY(var(--pw-press-travel)); }
+  }
+}

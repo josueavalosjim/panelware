@@ -1,0 +1,14 @@
+/**
+ * Every token, and nothing that paints.
+ *
+ * Exported as "@josueavalosjim/panelware/css/tokens" so a consumer can adopt
+ * the contract without the skin: a design system that wants panelware's
+ * palette and scale under its own components imports this file alone.
+ *
+ * theme-auto.css is deliberately not here. See its own header.
+ */
+@import "./primitive.chrome.css";
+@import "./semantic.chrome.css";
+@import "./structural.css";
+@import "./skin.chrome.css";
+@import "./motion.css";

@@ -1,0 +1,46 @@
+/**
+ * TOGGLE.
+ *
+ * The difference from a button is that :active is momentary and
+ * [data-state="on"] is not. Radix gives the second for free.
+ */
+
+@layer pw.components {
+  .pw-toggle {
+    --pw-elev: var(--pw-shadow-raised);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pw-control-gap);
+    min-height: var(--pw-control-h);
+    min-width: var(--pw-control-h);
+    padding: 0 var(--pw-control-pad-x);
+    transition: transform var(--pw-duration-press) var(--pw-ease-press),
+                opacity var(--pw-duration-hover) var(--pw-ease-state);
+  }
+
+  .pw-toggle:hover { opacity: 0.92; }
+
+  /* On is a persistent sunken state, plus a weight shift. The bevel alone is
+     a shape cue, and a shape cue at 2px is exactly what a low-vision reader
+     at 200% zoom can miss. The weight is the second, non-shape signal, and
+     neither of them is colour. */
+  .pw-toggle[data-state="on"] {
+    --pw-elev: var(--pw-shadow-sunken);
+    background-color: var(--pw-color-base-300);
+    font-weight: 600;
+  }
+
+  .pw-toggle:active { transform: translateY(var(--pw-press-travel)); }
+
+  .pw-toggle:disabled,
+  .pw-toggle[aria-disabled="true"] {
+    color: var(--pw-color-disabled-content);
+    cursor: default;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-toggle { transition-duration: 1ms; }
+    .pw-toggle:active { transform: translateY(var(--pw-press-travel)); }
+  }
+}

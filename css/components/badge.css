@@ -1,0 +1,45 @@
+/**
+ * STATUS BADGE.
+ *
+ * An XP status-bar cell: sunken, small, and never a floating pill.
+ *
+ * This is the easiest component in the kit to fail the "colour is never the
+ * only affordance" rule, because a coloured dot is the obvious way to draw
+ * it and a coloured dot is exactly the failure. Every badge renders a glyph
+ * and a word. Success is a check and the word OK, not a green circle.
+ */
+
+@layer pw.components {
+  .pw-badge {
+    --pw-elev: var(--pw-shadow-sunken);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pw-space-2xs);
+    min-height: var(--pw-badge-h);
+    padding: 0 var(--pw-space-sm);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-text-micro);
+    line-height: var(--pw-leading-ui);
+    border-radius: var(--pw-radius-control);
+  }
+
+  .pw-badge[data-status="success"] {
+    background-color: var(--pw-color-success);
+    color: var(--pw-color-success-content);
+  }
+  .pw-badge[data-status="warning"] {
+    background-color: var(--pw-color-warning);
+    color: var(--pw-color-warning-content);
+  }
+  .pw-badge[data-status="error"] {
+    background-color: var(--pw-color-error);
+    color: var(--pw-color-error-content);
+  }
+
+  /* The glyph inherits the cell's ink rather than carrying its own colour,
+     so the pair that was measured is the pair that is painted. */
+  .pw-badge-glyph {
+    font-weight: 700;
+    color: currentColor;
+  }
+}

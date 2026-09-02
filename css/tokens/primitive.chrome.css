@@ -1,0 +1,77 @@
+/**
+ * PRIMITIVE — the chrome skin's raw ramp.
+ *
+ * Nothing outside css/tokens/ reads these. They exist so the semantic layer
+ * has somewhere to point and so a value moves in one place. A component that
+ * names a rung directly has skipped the part of the system that makes a
+ * second skin possible.
+ *
+ * The ramp is not per theme. Light and dark are two different readings of the
+ * same rungs, which is why several rungs below carry two roles: silver-700 is
+ * the boundary line in light and the disabled label in light, silver-600 is
+ * both of those in dark. Every one of those double duties was measured, not
+ * assumed, and the number is on the rung.
+ *
+ * Every value here is a literal. taste-check's parser lists color-mix() and
+ * color() in KNOWN_UNSUPPORTED (taste-check/src/color.mjs:28) and rejects
+ * relative colour syntax, so a derived colour is not a colour the gate can
+ * check. It would be skipped, and a skipped pair reports as a pass. DaisyUI
+ * derives its whole button treatment this way; panelware cannot.
+ */
+
+:root {
+  /* ── Silver ────────────────────────────────────────────────────────────
+     The chrome itself. Neutral with a trace of warmth, so it reads as
+     painted metal rather than as a grey UI. Ratios are against the ground
+     each rung actually sits on in the semantic layer. */
+  --pw-silver-000: #ffffff;   /* bevel highlight. 1.83:1 on the face, and
+                                 deliberately so: see --pw-bevel-light. */
+  --pw-silver-100: #eceae4;   /* light page. Dark label: 13.10:1 on 900. */
+  --pw-silver-200: #e5e3dc;   /* the light face with the gloss flattened in.
+                                 Not painted directly; it is what contrast
+                                 measures a glossed button against. */
+  --pw-silver-300: #d8d5cd;   /* light control face. Label 11.88:1. */
+  --pw-silver-400: #c2bfb6;   /* light well: slider track, sunken cell. */
+  --pw-silver-500: #9a968b;   /* light bevel shade. Decoration, no floor. */
+  --pw-silver-600: #8a857a;   /* dark boundary 4.29:1, dark disabled 3.49:1 */
+  --pw-silver-700: #6b675d;   /* light boundary 4.69:1, light disabled 3.85:1 */
+  --pw-silver-750: #56544d;   /* dark bevel highlight. Decoration. */
+  --pw-silver-800: #403f3a;   /* the dark face with the gloss flattened in. */
+  --pw-silver-850: #33322e;   /* dark control face. Label 10.67:1. */
+  --pw-silver-900: #232320;   /* dark page. */
+  --pw-silver-950: #1a1a18;   /* light label 14.49:1, and the dark well. */
+
+  /* ── Blue ──────────────────────────────────────────────────────────────
+     The one accent, and it is a citation. These are the real anchors from
+     the archived Windows XP Visual Guidelines (Microsoft, August 2001).
+     Colour is the last thing to add and the first to cut, so there is one
+     hue here and it carries meaning: the primary action, and the focus ring.
+
+     The XP control-blue ramp is not usable for either. Its lightest usable
+     anchor, #2178E0, measures 2.97:1 on the light control face and misses
+     the 3:1 that WCAG 1.4.11 asks of a focus indicator. #003399 is the
+     anchor that clears it, at 7.41:1. */
+  --pw-blue-300: #9dc0ff;     /* dark primary + dark focus. 6.98:1 on 850. */
+  --pw-blue-700: #1b3fa8;     /* primary with the gloss flattened in. */
+  --pw-blue-800: #003399;     /* light primary + light focus. 7.41:1 on 300. */
+
+  /* ── Phosphor ──────────────────────────────────────────────────────────
+     The readout, and the only place in the kit where a saturated colour
+     covers a whole surface. It does not follow the page theme in either
+     direction, for the same reason the portfolio's --media-plate does not:
+     a lit display is a light source, not a surface we paint, and a readout
+     that went pale in light theme would stop being a readout. 11.26:1. */
+  --pw-phos-300: #3ff08a;
+  --pw-phos-950: #12201a;
+
+  /* ── Status ────────────────────────────────────────────────────────────
+     Three hues, each a light cell and a dark cell, all measured at their
+     own pairing. Colour never carries the state on its own here: every
+     badge renders a glyph and a word, so these only reinforce. */
+  --pw-green-100: #d8ead6;  --pw-green-800: #0d5c0a;  /* 6.53:1 */
+  --pw-green-300: #7fdc86;  --pw-green-900: #16301a;  /* 8.48:1 */
+  --pw-amber-100: #f7e9c2;  --pw-amber-800: #6b4e00;  /* 6.41:1 */
+  --pw-amber-300: #e6c463;  --pw-amber-900: #332a10;  /* 8.41:1 */
+  --pw-red-100:   #f2d6d3;  --pw-red-800:   #8c1a10;  /* 6.75:1 */
+  --pw-red-300:   #f0a09a;  --pw-red-900:   #3a1a16;  /* 7.62:1 */
+}

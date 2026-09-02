@@ -1,0 +1,61 @@
+/**
+ * SLIDER, single thumb.
+ *
+ * Multi-thumb is deferred and the reason is in HANDOFF.md: the WAI-ARIA APG's
+ * own reference pattern flags unresolved touch and assistive-tech gaps in the
+ * spec's own example. That is not a v1 fight.
+ *
+ * The thumb never sinks. A sunken thumb reads as a grip that has been
+ * dropped, not one that is being held, which is backwards. It scales instead.
+ */
+
+@layer pw.components {
+  .pw-slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    /* The touch target is the row, not the 8px track. */
+    min-height: var(--pw-control-h);
+    width: 100%;
+    touch-action: none;
+  }
+
+  .pw-slider-track {
+    --pw-elev: var(--pw-shadow-sunken);
+    position: relative;
+    flex-grow: 1;
+    height: var(--pw-track-h);
+    background-color: var(--pw-color-base-300);
+    border-radius: var(--pw-radius-control);
+  }
+
+  .pw-slider-range {
+    position: absolute;
+    height: 100%;
+    background-color: var(--pw-color-range);
+    border-radius: var(--pw-radius-control);
+  }
+
+  .pw-slider-thumb {
+    --pw-elev: var(--pw-shadow-raised);
+    display: block;
+    width: var(--pw-thumb-w);
+    height: var(--pw-thumb-h);
+    background-color: var(--pw-color-base-200);
+    border-radius: var(--pw-radius-control);
+    transition: transform var(--pw-duration-press) var(--pw-ease-press);
+  }
+
+  /* The grab. Scale rather than translate, because the thumb has to stay on
+     the value it is pointing at while it responds. */
+  .pw-slider-thumb:active { transform: scale(0.96); }
+
+  .pw-slider[data-disabled] .pw-slider-range {
+    background-color: var(--pw-color-disabled-content);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-slider-thumb { transition-duration: 1ms; }
+    .pw-slider-thumb:active { transform: scale(0.96); }
+  }
+}

@@ -1,0 +1,112 @@
+/**
+ * DIALOG / PANEL.
+ *
+ * The title bar is the one place gloss is on by default. It is the Luna
+ * titlebar, and it is the single element in the kit where the highlight is
+ * the point rather than an option.
+ */
+
+@layer pw.components {
+  .pw-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: var(--pw-color-scrim);
+    /* A flat scrim, and that is a decision rather than an omission.
+       backdrop-filter is the documented jank primitive (shadcn-ui #327,
+       Chromium's GPU blur re-composite), it is worst on a fixed
+       full-viewport element, and this is exactly that element. The blur is
+       available and defaults to 0px; a consumer who wants the glass moment
+       opts into it and pays for it knowingly. */
+    animation: pw-fade var(--pw-duration-enter) var(--pw-ease-enter);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .pw-overlay[data-glass] { backdrop-filter: blur(var(--pw-glass-blur)); }
+  }
+
+  .pw-panel {
+    --pw-elev: var(--pw-shadow-raised);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: var(--pw-dialog-w);
+    max-width: calc(100vw - (var(--pw-space-lg) * 2));
+    max-height: calc(100vh - (var(--pw-space-xl) * 2));
+    border-radius: var(--pw-radius-box);
+    clip-path: var(--pw-clip-box);
+    font-family: var(--pw-font-ui);
+    /* The centring translate is part of the animated transform, so the two
+       cannot be separate declarations. */
+    animation: pw-panel-in var(--pw-duration-enter) var(--pw-ease-enter);
+    transform: translate(-50%, -50%);
+  }
+
+  .pw-panel-title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--pw-space-md);
+    padding: var(--pw-space-sm) var(--pw-space-sm) var(--pw-space-sm) var(--pw-space-md);
+    background-color: var(--pw-color-primary);
+    color: var(--pw-color-primary-content);
+    border-radius: var(--pw-radius-control) var(--pw-radius-control) 0 0;
+  }
+
+  .pw-panel-title {
+    margin: 0;
+    font-size: var(--pw-text-subhead);
+    line-height: var(--pw-leading-ui);
+    font-weight: 600;
+  }
+
+  .pw-panel-close {
+    --pw-elev: var(--pw-shadow-raised);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Square, and 44 because it is a target before it is a glyph. The X
+       inside it is small; the box around it is not. */
+    width: var(--pw-control-h);
+    height: var(--pw-control-h);
+    min-width: 0;
+    border: var(--pw-border) solid var(--pw-bevel-frame);
+    border-radius: var(--pw-radius-control);
+    background-color: var(--pw-color-base-200);
+    color: var(--pw-color-base-content);
+    box-shadow: var(--pw-elev);
+  }
+  .pw-panel-close:active {
+    --pw-elev: var(--pw-shadow-sunken);
+    transform: translateY(var(--pw-press-travel));
+  }
+
+  .pw-panel-body {
+    padding: var(--pw-panel-pad);
+    font-size: var(--pw-text-ui);
+    line-height: var(--pw-leading-body);
+    color: var(--pw-color-base-content);
+    overflow-y: auto;
+  }
+
+  @keyframes pw-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* transform and opacity only, and the -50% centring has to be carried
+     through every frame or the panel flies in from the corner. */
+  @keyframes pw-panel-in {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.98); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* Both animating selectors repeated at their own specificity. The state
+       change is kept and the duration goes to near zero, rather than the
+       animation being removed: removing it would leave the panel with no
+       from-state at all. */
+    .pw-overlay { animation-duration: 1ms; }
+    .pw-panel   { animation-duration: 1ms; }
+    .pw-panel-close:active { transform: translateY(var(--pw-press-travel)); }
+  }
+}

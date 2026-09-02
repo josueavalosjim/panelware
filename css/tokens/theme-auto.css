@@ -1,0 +1,82 @@
+/**
+ * OS-following dark, opt-in.
+ *
+ *   import "@josueavalosjim/panelware/css/theme-auto";
+ *
+ * Not imported by css/panelware.css, and the reason is a difference from the
+ * house position rather than a copy of it. The portfolio deliberately removed
+ * prefers-color-scheme switching, because it flipped the first impression of
+ * a portfolio depending on a setting the visitor made for some other reason.
+ * A component kit has no first impression to protect and its consumers
+ * reasonably expect their app to follow the OS, so it ships. It ships as a
+ * separate import because the consumer is the one who knows.
+ *
+ * ── The duplication here is real, and it is checked ───────────────────────
+ * This block is a verbatim copy of the dark block in semantic.chrome.css and
+ * skin.chrome.css. CSS has no way to say "apply that block under this
+ * condition too", and this kit ships no build step to generate it. So the
+ * duplication is enforced instead of avoided: test/contract.test.mjs asserts
+ * that every token here matches the dark block value for value, and fails if
+ * the two drift.
+ *
+ * :root:not([data-theme]) is (0,2,0), so it beats the base :root at (0,1,0)
+ * and ties with an explicit :root[data-theme="light"]. The tie resolves on
+ * source order, and this file is imported after the tokens, so an explicit
+ * light choice made by the consumer would lose. That is why the selector
+ * carries :not([data-theme]) rather than being a bare :root: an explicit
+ * choice always wins, because when one has been made this rule matches
+ * nothing at all.
+ *
+ * This file needs its OWN theme entry in tastecheck.config.json. css.mjs
+ * treats @media as conditional and skips it unless a scope names the at-rule,
+ * so without that entry these values are never measured.
+ */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]),
+  :root[data-skin="chrome"]:not([data-theme]) {
+    --pw-color-base-100: var(--pw-silver-900);
+    --pw-color-base-200: var(--pw-silver-850);
+    --pw-color-base-300: var(--pw-silver-950);
+    --pw-color-base-content: var(--pw-silver-100);
+
+    --pw-color-disabled-content: var(--pw-silver-600);
+
+    --pw-color-primary: var(--pw-blue-300);
+    --pw-color-primary-content: var(--pw-silver-950);
+
+    --pw-color-focus: var(--pw-blue-300);
+    --pw-color-range: var(--pw-blue-300);
+
+    --pw-color-lcd: var(--pw-phos-950);
+    --pw-color-lcd-content: var(--pw-phos-300);
+
+    --pw-color-success: var(--pw-green-900);
+    --pw-color-success-content: var(--pw-green-300);
+    --pw-color-warning: var(--pw-amber-900);
+    --pw-color-warning-content: var(--pw-amber-300);
+    --pw-color-error: var(--pw-red-900);
+    --pw-color-error-content: var(--pw-red-300);
+
+    --pw-bevel-frame: var(--pw-silver-600);
+    --pw-bevel-light: var(--pw-silver-750);
+    --pw-bevel-shade: var(--pw-silver-950);
+    --pw-bevel-face:  var(--pw-silver-800);
+
+    --pw-gloss-lit-base-200: var(--pw-silver-800);
+    --pw-gloss-lit-primary:  var(--pw-blue-300);
+
+    --pw-color-scrim: rgba(0, 0, 0, 0.62);
+
+    --pw-bevel-depth: 1;
+    --pw-gloss-opacity: 1;
+    --pw-gloss-glare-alpha: 0.16;
+    --pw-gloss-cap-alpha:   0.12;
+    --pw-gloss-cap-height:  46%;
+    --pw-glow-intensity: 1;
+    --pw-glow-radius: 6px;
+    --pw-glow-color: var(--pw-phos-300);
+    --pw-glass-blur: 0px;
+    --pw-shadow-outer: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+}

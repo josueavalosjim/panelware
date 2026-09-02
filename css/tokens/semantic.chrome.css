@@ -1,0 +1,154 @@
+/**
+ * SEMANTIC — the roles, and the whole reason a second skin is possible.
+ *
+ * Names follow DaisyUI v5 (base-100/200/300, base-content, primary,
+ * primary-content, success/warning/error and their -content) with a --pw-
+ * prefix. Borrowing the taxonomy rather than inventing one is deliberate:
+ * anyone who has themed DaisyUI already knows what base-200 means, and the
+ * mapping in css/tokens/interop is then a rename rather than a translation.
+ * The prefix is not optional. DaisyUI v5 and Tailwind v4 both own the bare
+ * --color-* namespace, and a kit that expects to be dropped into either
+ * cannot squat it too.
+ *
+ * Everything not a colour role follows the house vocabulary instead
+ * (--pw-space-lg, --pw-duration-fast, --pw-radius-control), because that is
+ * the system this is being built inside and a second naming scheme in one
+ * file would be a decision nobody gets anything for.
+ *
+ * ── The rule that governs this file ────────────────────────────────────────
+ * Each skin x theme block declares the COMPLETE set. Not the differences.
+ *
+ * The reason is a specificity tie, and it is silent when you get it wrong.
+ * :root[data-theme="dark"] and a future :root[data-skin="cyber"] are both
+ * (0,2,0). If the dark block were skin-agnostic and a cyber block came after
+ * it in the bundle, then on a root carrying both attributes every token cyber
+ * declares in its light block would beat dark — but only for the tokens
+ * cyber-dark happened not to redeclare. Writing dark as *chrome's* dark, and
+ * keeping every block complete, removes the tie instead of depending on
+ * bundle order. taste-check enforces the completeness at no cost: a pair
+ * naming a token a theme does not declare is a hard failure, not a skip.
+ *
+ * Attribute values are quoted here and in tastecheck.config.json. The config
+ * compares normalised selector strings, so [data-theme=dark] in one and
+ * [data-theme="dark"] in the other do not match. The scope then contributes
+ * nothing while the theme still resolves from :root, and the dark palette
+ * gets measured against light numbers and reports a pass.
+ */
+
+:root,
+:root[data-skin="chrome"] {
+  /* Surfaces, lightest to deepest. base-100 is the page the kit sits on,
+     base-200 is a control face, base-300 is anything sunk into the page. */
+  --pw-color-base-100: var(--pw-silver-100);
+  --pw-color-base-200: var(--pw-silver-300);
+  --pw-color-base-300: var(--pw-silver-400);
+  --pw-color-base-content: var(--pw-silver-950);
+
+  /* Disabled. WCAG 1.4.3 exempts inactive controls from the 4.5:1 floor and
+     this does not take the exemption, but it does not hold 4.5 either: a
+     disabled label at full contrast does not look disabled, and the state
+     would then be carried by nothing. 3.85:1 is the compromise, and it is
+     never the only cue — the press travel and the hover opacity both stop.
+     XP's own disabled ink, rgb(161,161,146), measures 1.78:1 here. It is in
+     HANDOFF.md as a sourced value and it is not usable as one. */
+  --pw-color-disabled-content: var(--pw-silver-700);
+
+  --pw-color-primary: var(--pw-blue-800);
+  --pw-color-primary-content: var(--pw-silver-000);
+
+  /* The focus ring. Held to 3:1 against BOTH the control it rings and the
+     page behind it, because an offset ring crosses that boundary and is
+     only as visible as its worse half. 7.41:1 and 9.03:1. */
+  --pw-color-focus: var(--pw-blue-800);
+
+  /* The filled part of a slider, against the track it sits in. Its own role
+     rather than a second reference to primary, so a skin can separate a
+     value display from an action without touching a component file. */
+  --pw-color-range: var(--pw-blue-800);
+
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+
+  --pw-color-success: var(--pw-green-100);
+  --pw-color-success-content: var(--pw-green-800);
+  --pw-color-warning: var(--pw-amber-100);
+  --pw-color-warning-content: var(--pw-amber-800);
+  --pw-color-error: var(--pw-red-100);
+  --pw-color-error-content: var(--pw-red-800);
+
+  /* ── The bevel's four inks ───────────────────────────────────────────────
+     Only one of these has a floor, and the split is the whole point.
+
+     --pw-bevel-frame is the outer line. It is what tells you where the
+     control ends and the page begins, so WCAG 1.4.11 applies to it and it
+     is held to 3:1 in the gate: 4.69:1 on the page, 3.85:1 on a panel.
+
+     --pw-bevel-light is the classic white top-left highlight, and on a
+     silver face it measures 1.83:1. That is not a failure to fix. It is a
+     shading cue on an interior edge, it identifies nothing on its own, and
+     the control stays fully identifiable with it removed. Raising it to 3:1
+     would mean a grey highlight, which is not a highlight.
+
+     This is the same split the portfolio makes between --ink-faint (1.60:1,
+     decoration) and --ink-edge (3.33:1, bounds a control). Two tokens doing
+     two jobs, and only one of the jobs has a legal floor. */
+  --pw-bevel-frame: var(--pw-silver-700);
+  --pw-bevel-light: var(--pw-silver-000);
+  --pw-bevel-shade: var(--pw-silver-500);
+  --pw-bevel-face:  var(--pw-silver-200);
+
+  /* What a glossed surface actually measures.
+     The glare is a translucent white layer sitting between the label and the
+     face, so a check that composites label-over-face never sees it and reads
+     high. These are that stack pre-flattened into an opaque colour, the same
+     move the portfolio makes with --ink-solid, so the static gate measures
+     what the runtime gate will find painted. */
+  --pw-gloss-lit-base-200: var(--pw-silver-200);
+  --pw-gloss-lit-primary:  var(--pw-blue-700);
+
+  /* A flat scrim. Not a blur: see css/components/dialog.css. */
+  --pw-color-scrim: rgba(20, 20, 19, 0.45);
+}
+
+:root[data-theme="dark"],
+:root[data-skin="chrome"][data-theme="dark"] {
+  --pw-color-base-100: var(--pw-silver-900);
+  --pw-color-base-200: var(--pw-silver-850);
+  --pw-color-base-300: var(--pw-silver-950);
+  --pw-color-base-content: var(--pw-silver-100);
+
+  --pw-color-disabled-content: var(--pw-silver-600);
+
+  --pw-color-primary: var(--pw-blue-300);
+  --pw-color-primary-content: var(--pw-silver-950);
+
+  --pw-color-focus: var(--pw-blue-300);
+  --pw-color-range: var(--pw-blue-300);
+
+  /* Unchanged, and that is the decision. A lit display does not dim because
+     the page around it did. */
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+
+  --pw-color-success: var(--pw-green-900);
+  --pw-color-success-content: var(--pw-green-300);
+  --pw-color-warning: var(--pw-amber-900);
+  --pw-color-warning-content: var(--pw-amber-300);
+  --pw-color-error: var(--pw-red-900);
+  --pw-color-error-content: var(--pw-red-300);
+
+  /* The bevel re-pitches rather than inverting. The highlight is still the
+     lighter of the pair and still sits top-left; it is simply a lift out of
+     the dark face instead of a white edge on a silver one. Keeping the light
+     source in the same place across themes is what stops the dark kit
+     reading as an embossed negative of the light one. */
+  --pw-bevel-frame: var(--pw-silver-600);
+  --pw-bevel-light: var(--pw-silver-750);
+  --pw-bevel-shade: var(--pw-silver-950);
+  --pw-bevel-face:  var(--pw-silver-800);
+
+  --pw-gloss-lit-base-200: var(--pw-silver-800);
+  --pw-gloss-lit-primary:  var(--pw-blue-300);
+
+  --pw-color-scrim: rgba(0, 0, 0, 0.62);
+}
