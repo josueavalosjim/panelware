@@ -119,6 +119,14 @@ These are original drawings citing an era. Nothing here is traced from
 Microsoft, Apple or Nullsoft artwork, and the marks themselves are the common
 geometric shapes and familiar symbols that copyright does not reach.
 
+The check is a 3px stroke where the chevrons are 2px, and that is deliberate.
+Drawn at 2px it measured 20 ink pixels against close's 52 and read as a
+noticeably lighter mark in the same row. Five variants were rendered side by
+side with close and bang for reference before picking; the chosen one is 29.
+A tick is one bent stroke where an X is two crossing, so matching their ink
+exactly would make the tick look heavy, and matching their stroke width made
+it look thin.
+
 Optical note, since it is the kind of thing that gets "corrected" later: play,
 pause and stop do not share a bounding box. A solid square reads heavier than
 a triangle that fills the same box, so the square is pulled in to 9x9 and the
