@@ -25,7 +25,14 @@
      a shape cue, and a shape cue at 2px is exactly what a low-vision reader
      at 200% zoom can miss. The weight is the second, non-shape signal, and
      neither of them is colour. */
-  .pw-toggle[data-state="on"] {
+  /* Both attributes, because the CSS was keyed entirely off data-state and
+     the accessibility tree entirely off aria-pressed, with nothing binding
+     them. Radix emits both, so this holds under Radix; the kit also ships as
+     standalone CSS, and a consumer wiring it by hand got a button announced
+     as pressed that rendered completely unpressed. The kit already pairs
+     :disabled with [aria-disabled="true"] for the same reason. */
+  .pw-toggle[data-state="on"],
+  .pw-toggle[aria-pressed="true"] {
     --pw-elev: var(--pw-shadow-sunken);
     background-color: var(--pw-color-base-300);
     font-weight: 600;
@@ -37,6 +44,18 @@
   .pw-toggle[aria-disabled="true"] {
     color: var(--pw-color-disabled-content);
     cursor: default;
+  }
+
+  /* In forced colors the bevel is stripped and both faces force to Canvas,
+     so two of the three cues the on-state relies on are gone and font-weight
+     is left carrying it alone. */
+  @media (forced-colors: active) {
+    .pw-toggle[data-state="on"],
+    .pw-toggle[aria-pressed="true"] {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

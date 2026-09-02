@@ -138,6 +138,22 @@
     to   { transform: translateX(-50%); }
   }
 
+  /* In forced colors the cell's background-color is overridden to Canvas,
+     and so is the readout's ground, so ink and ground become the same
+     system colour and all four displays render as empty boxes. The
+     forced-colors block in bevel.css restores a border for the nine classes
+     in its list, which does not help here: the problem is not a missing
+     boundary, it is that the content is gone.
+
+     The screen-reader mirror means this hits only the sighted low-vision
+     user the mode exists for, which makes it the worst place in the kit to
+     have missed. The glow goes too: drop-shadow on a forced colour paints a
+     second smear around every glyph. */
+  @media (forced-colors: active) {
+    .pw-lcd      { background-color: Canvas; }
+    .pw-lcd-cell { background-color: CanvasText; filter: none; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     /* Continuous motion stops outright rather than speeding up. A marquee at
        1ms is not a reduced marquee, it is a strobe. The selector is repeated

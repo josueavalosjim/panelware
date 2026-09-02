@@ -58,10 +58,11 @@
     --pw-color-error: var(--pw-red-900);
     --pw-color-error-content: var(--pw-red-300);
 
-    --pw-bevel-frame: var(--pw-silver-600);
-    --pw-bevel-light: var(--pw-silver-750);
-    --pw-bevel-shade: var(--pw-silver-950);
-    --pw-bevel-face:  var(--pw-silver-800);
+    --pw-bevel-light: var(--pw-silver-600);
+    --pw-bevel-face:  var(--pw-silver-750);
+    --pw-bevel-shade: var(--pw-silver-900);
+    --pw-bevel-frame: var(--pw-silver-950);
+    --pw-bevel-boundary: var(--pw-silver-600);
 
     --pw-gloss-lit-base-200: var(--pw-silver-800);
     --pw-gloss-lit-primary:  var(--pw-blue-300);

@@ -73,8 +73,29 @@
      the value it is pointing at while it responds. */
   .pw-slider-thumb:active { transform: scale(0.96); }
 
+  /* Disabled restyled the range and nothing else, so the enabled and
+     disabled thumbs were byte-identical: same face, same bevel, same
+     opacity, same cursor. The only difference on the whole control was the
+     fill colour, which is colour as the sole affordance. button.css already
+     gets this right by killing the press travel and the hover. */
   .pw-slider[data-disabled] .pw-slider-range {
     background-color: var(--pw-color-disabled-content);
+  }
+  .pw-slider[data-disabled] .pw-slider-thumb {
+    /* Flattened, so the grip stops looking grabbable. Shape, not colour. */
+    --pw-elev: none;
+    background-color: var(--pw-color-base-300);
+    cursor: default;
+  }
+  .pw-slider[data-disabled] .pw-slider-thumb:active { transform: none; }
+
+  /* The range is neither in the elevation list nor the forced-colors border
+     list, so in forced colors it becomes the same Canvas as the track and
+     the slider stops reading as a level. The thumb still carries the value,
+     which is why this is not as bad as the readout, but a slider whose fill
+     is invisible is a marker on a rail. */
+  @media (forced-colors: active) {
+    .pw-slider-range { background-color: Highlight; forced-color-adjust: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -78,6 +78,14 @@
     z-index: 2;
   }
 
+  /* Except the screen-reader mirror. This rule is zero specificity, but it
+     is in a later layer than the reset that makes .pw-sr-only absolute, and
+     layer order beats specificity outright. A hidden label inside a glossed
+     button therefore came back into flow and took a flex slot and a gap,
+     shifting the visible label. It stayed visually hidden, so nothing
+     leaked; it just moved everything next to it. */
+  :where([data-gloss]) > .pw-sr-only { position: absolute; }
+
   /* A pressed control is sunken, and a sunken thing does not catch a
      highlight on its top edge. Killing the capsule and dimming the glare is
      what makes the press read as depth rather than as a colour change.

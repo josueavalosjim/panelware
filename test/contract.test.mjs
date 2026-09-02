@@ -11,6 +11,7 @@
  * Three of the five were real bugs in this repo before they were tests.
  */
 import assert from 'node:assert/strict';
+import { luminance, parseColor } from '@josueavalosjim/taste-check';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { describe, test } from 'node:test';
@@ -19,8 +20,16 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
 
-/** Comments removed. Every file here explains its own selectors in prose. */
-const bare = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
+/**
+ * Comments removed. Every file here explains its own selectors in prose, and
+ * those prose selectors are matchable text.
+ *
+ * A function declaration, not a const: describe() bodies run at collection
+ * time, so a suite defined above a const helper hits its temporal dead zone.
+ */
+function bare(css) {
+  return css.replace(/\/\*[\s\S]*?\*\//g, '');
+}
 
 /**
  * Every `--name: value;` inside the first rule whose selector list begins at
@@ -31,7 +40,7 @@ const bare = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
  * dark block is written the way it is, and every one of these tests then
  * measured the light block against itself and passed.
  */
-function block(css, selector) {
+function block_(css, selector) {
   const source = bare(css);
   /* Leading whitespace allowed: theme-auto's block is indented inside its
      media query. */
@@ -39,6 +48,7 @@ function block(css, selector) {
   assert.notEqual(at, -1, `no block found for ${selector}`);
   return declarations(source, at);
 }
+const block = block_;
 
 function declarations(css, at) {
   const open = css.indexOf('{', at);
@@ -92,6 +102,58 @@ describe('the theme contract', () => {
   });
 });
 
+describe('where the light comes from', () => {
+  const primitive = read('css/tokens/primitive.chrome.css');
+  const semantic = read('css/tokens/semantic.chrome.css');
+
+  /** The ramp, as luma. Semantic tokens are one var() hop off a primitive. */
+  const ramp = new Map(
+    [...bare(primitive).matchAll(/(--pw-[\w-]+):\s*(#[0-9a-fA-F]{3,8})\s*;/g)]
+      .map(([, name, hex]) => [name, luminance(parseColor(hex).rgba)]));
+
+  const lumaOf = (block, token) => {
+    const value = block.get(token);
+    assert.ok(value, `${token} is not declared in this theme`);
+    const hop = value.match(/^var\((--[\w-]+)\)$/);
+    assert.ok(hop, `${token} is ${value}, not a single var() off a primitive`);
+    const l = ramp.get(hop[1]);
+    assert.notEqual(l, undefined, `${hop[1]} is not a primitive`);
+    return l;
+  };
+
+  for (const [name, selector] of [
+    ['light', ':root,\n:root[data-skin="chrome"]'],
+    ['dark', ':root[data-theme="dark"]'],
+  ]) {
+    test(`${name} is lit from above and to the left`, () => {
+      /* The four bevel inks plus the face have to run monotonically from the
+         bottom-right outer edge up to the top-left outer edge. That is what
+         "there is a light source, and it is above" means as a number.
+
+         The dark theme failed this and it was the most serious defect in the
+         kit. --pw-bevel-frame had been pointed at a light rung so the outer
+         line would clear 3:1 against a dark page, which fixed the contrast
+         and inverted the physics: the bottom-right shadow came out brighter
+         than every other part of the control, so the light source sat below
+         the object in dark and above it in light. A raised control in dark
+         and a sunken one in light then shared a signature.
+
+         Contrast is checked by the gate and cannot see this, because every
+         individual pair still passed. Only the ordering says it. */
+      const block = block_(semantic, selector);
+      const order = ['--pw-bevel-frame', '--pw-bevel-shade', '__face',
+                     '--pw-bevel-face', '--pw-bevel-light'];
+      const values = order.map((t) =>
+        t === '__face' ? lumaOf(block, '--pw-color-base-200') : lumaOf(block, t));
+      for (let i = 1; i < values.length; i += 1) {
+        assert.ok(values[i] > values[i - 1],
+          `${order[i]} (${values[i].toFixed(3)}) is not lighter than ` +
+          `${order[i - 1]} (${values[i - 1].toFixed(3)}); the bevel is lit from the wrong side`);
+      }
+    });
+  }
+});
+
 describe('the depth knob', () => {
   const bevel = read('css/treatment/bevel.css');
 
@@ -124,6 +186,27 @@ describe('the depth knob', () => {
   });
 });
 
+describe('visual state and ARIA state', () => {
+  test('every data-state rule has its aria twin', () => {
+    /* The CSS keyed off data-state and the accessibility tree keyed off
+       aria-pressed / aria-selected, with nothing binding them. Radix emits
+       both so it held under Radix, but the kit also ships as standalone CSS,
+       and a consumer wiring it by hand got a control announced as pressed
+       that rendered completely unpressed. */
+    const pairs = [
+      ['css/components/toggle.css', 'data-state="on"', 'aria-pressed="true"'],
+      ['css/components/tabs.css', 'data-state="active"', 'aria-selected="true"'],
+    ];
+    for (const [rel, dataAttr, ariaAttr] of pairs) {
+      const css = bare(read(rel));
+      const dataCount = css.split(`[${dataAttr}]`).length - 1;
+      const ariaCount = css.split(`[${ariaAttr}]`).length - 1;
+      assert.equal(ariaCount, dataCount,
+        `${rel} styles [${dataAttr}] ${dataCount} times but [${ariaAttr}] ${ariaCount} times`);
+    }
+  });
+});
+
 describe('state rules that could reach an ancestor', () => {
   const gloss = read('css/treatment/gloss.css');
 
@@ -141,15 +224,13 @@ describe('state rules that could reach an ancestor', () => {
        The guard is on the selector because the selector is the fix. Every
        :active rule in this file has to name what kind of element it applies
        to, so a container can never satisfy it. */
-    const bare = [...bare_(gloss).matchAll(/([^{}]*):active[^{}]*\{/g)]
+    const unscoped = [...bare(gloss).matchAll(/([^{}]*):active[^{}]*\{/g)]
       .map((m) => m[0].trim())
       .filter((rule) => !/\b(?:button|a\[href\]|\[role=)/.test(rule));
-    assert.deepEqual(bare, [],
-      `a gloss :active rule does not restrict to a control, so it fires on ancestors too:\n${bare.join('\n')}`);
+    assert.deepEqual(unscoped, [],
+      `a gloss :active rule does not restrict to a control, so it fires on ancestors too:\n${unscoped.join('\n')}`);
   });
 });
-
-const bare_ = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
 
 describe('what a colour token is allowed to be', () => {
   const files = [

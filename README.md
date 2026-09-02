@@ -120,8 +120,20 @@ there is a rename that costs a major version.
 ## Contrast, and the one pair that is exempt
 
 Body text holds 4.5:1. Focus rings, control boundaries and the filled part of
-a slider hold 3:1. The bevel's outer frame is a control boundary and holds
-3:1, because it is the thing that says where the control ends.
+a slider hold 3:1.
+
+One of the bevel's four edges is the control boundary and holds 3:1, and
+which one differs by theme. In light it is the dark bottom-right line; in
+dark it is the light top-left one. `--pw-bevel-boundary` names whichever
+edge carries it, and the gate checks that role rather than a fixed token.
+
+That role exists because getting it wrong is invisible to a contrast checker.
+The dark theme originally pointed the bottom-right edge at a light value so
+it would clear 3:1 against a dark page. Every pair still passed, and the
+light source had flipped to below the object: the shadow was the brightest
+line on the control, so a raised control in dark and a sunken one in light
+shared a signature. Only the ordering of the five values says it, so there is
+a test for the ordering.
 
 The bevel's white inner highlight does not hold 3:1. It measures 1.47:1, and
 that is deliberate. It is a shading cue on an interior edge, it identifies
@@ -134,6 +146,37 @@ would notice if it were quietly deleted.
 Colour is never the only carrier of a state. A pressed control moves a pixel
 and flips its bevel; a badge renders a glyph and a word rather than a coloured
 dot; a hover moves opacity.
+
+## What the React layer still owes
+
+The CSS assumes a component that does not exist yet, and an audit of the
+stand-in markup found the obligations it inherits. They are listed here so
+they are inherited rather than rediscovered.
+
+The readout's marquee must ship a real pause control. Right now it pauses on
+hover and stops entirely under `prefers-reduced-motion`, and neither is a
+mechanism a keyboard or switch user can operate, which WCAG 2.2.2 requires
+for anything moving for more than five seconds.
+
+The readout is an image of text and carries its string as `aria-label` on a
+`role="img"`, not as a live region. A value display that actually changes may
+opt into `<output>`, but it must not be the default: four readouts on a page
+defaulting to live means a clock announcing itself once a second over
+whatever the reader was doing, from four regions at once.
+
+Tabs need roving tabindex, `aria-controls`, `aria-labelledby` on the panel,
+`tabindex="0"` on the panel, and an arrow-key handler. The APG pattern is not
+optional and none of it is CSS's job.
+
+The dialog needs `aria-modal`, a focus trap, focus return, an Escape handler,
+and `inert` on the background. `.pw-panel-body` scrolls, so it needs
+`tabindex="0"` when it overflows or a keyboard user in Chrome cannot reach
+content below the fold.
+
+The slider needs an arrow-key handler and `aria-valuetext` for any value that
+is not a bare percentage. A disabled thumb keeps `tabindex="0"` with
+`aria-disabled="true"`, so it stays discoverable; removing it from the tab
+sequence means a screen-reader user never learns the control is there.
 
 ## Motion
 
@@ -180,6 +223,13 @@ npm run sprites       # redraw the readout sheets from the font data
 
 `npm run check` reads files and takes about half a second. `check:runtime`
 needs a Chromium and refuses to run without one, rather than skipping quietly.
+
+Several tests guard things that fail silently rather than loudly: a theme
+missing a token, a bevel offset written as a literal, a `color-mix()` the gate
+cannot parse, a bevel lit from the wrong side, a visual state with no ARIA
+twin. Each was checked by planting the exact mistake it claims to catch and
+confirming the suite goes red, because a guard that cannot be made to fail is
+not a guard.
 
 ## Prior art
 

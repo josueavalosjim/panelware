@@ -95,6 +95,13 @@
     overflow-y: auto;
   }
 
+  /* The title bar's blue ground forces to Canvas and it carries no border,
+     so in forced colors the dialog loses its header entirely and the close
+     button stops being grouped with the title. */
+  @media (forced-colors: active) {
+    .pw-panel-title-bar { border-bottom: var(--pw-border) solid ButtonBorder; }
+  }
+
   @keyframes pw-fade {
     from { opacity: 0; }
     to   { opacity: 1; }

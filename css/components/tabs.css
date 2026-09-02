@@ -33,7 +33,9 @@
 
   .pw-tab:hover { opacity: 0.92; }
 
-  .pw-tab[data-state="active"] {
+  /* Both attributes. See the note in toggle.css. */
+  .pw-tab[data-state="active"],
+  .pw-tab[aria-selected="true"] {
     --pw-elev: var(--pw-shadow-sunken);
     background-color: var(--pw-color-base-200);
     font-weight: 600;
@@ -64,10 +66,21 @@
     line-height: var(--pw-leading-body);
   }
 
+  @media (forced-colors: active) {
+    .pw-tab[data-state="active"],
+    .pw-tab[aria-selected="true"] {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .pw-tab { transition-duration: 1ms; }
     /* Repeated at its own (0,2,0), or the active tab would spring back up
-       and un-fuse from the panel under reduced motion. */
-    .pw-tab[data-state="active"] { transform: translateY(var(--pw-press-travel)); }
+       and un-fuse from the panel under reduced motion. Both selectors, or
+       the aria-only spelling loses its transform here. */
+    .pw-tab[data-state="active"],
+    .pw-tab[aria-selected="true"] { transform: translateY(var(--pw-press-travel)); }
   }
 }

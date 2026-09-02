@@ -92,10 +92,18 @@
      This is the same split the portfolio makes between --ink-faint (1.60:1,
      decoration) and --ink-edge (3.33:1, bounds a control). Two tokens doing
      two jobs, and only one of the jobs has a legal floor. */
-  --pw-bevel-frame: var(--pw-silver-700);
-  --pw-bevel-light: var(--pw-silver-000);
-  --pw-bevel-shade: var(--pw-silver-500);
-  --pw-bevel-face:  var(--pw-silver-200);
+  --pw-bevel-light: var(--pw-silver-000);   /* top-left outer,  255 */
+  --pw-bevel-face:  var(--pw-silver-200);   /* top-left inner,  229 */
+  --pw-bevel-shade: var(--pw-silver-500);   /* bottom-right inner, 154 */
+  --pw-bevel-frame: var(--pw-silver-700);   /* bottom-right outer, 103 */
+
+  /* Which of the four edges carries WCAG 1.4.11. It differs by theme, and
+     that is the point of naming it separately: in light the dark bottom-right
+     line is the one that reads against the page, in dark it is the light
+     top-left one. Without this role the gate would have to check whichever
+     token happened to be dark, which is how the dark bevel ended up lit from
+     below. 4.69:1 on the page, 3.85:1 on a panel. */
+  --pw-bevel-boundary: var(--pw-silver-700);
 
   /* What a glossed surface actually measures.
      The glare is a translucent white layer sitting between the label and the
@@ -137,15 +145,33 @@
   --pw-color-error: var(--pw-red-900);
   --pw-color-error-content: var(--pw-red-300);
 
-  /* The bevel re-pitches rather than inverting. The highlight is still the
-     lighter of the pair and still sits top-left; it is simply a lift out of
-     the dark face instead of a white edge on a silver one. Keeping the light
-     source in the same place across themes is what stops the dark kit
-     reading as an embossed negative of the light one. */
-  --pw-bevel-frame: var(--pw-silver-600);
-  --pw-bevel-light: var(--pw-silver-750);
-  --pw-bevel-shade: var(--pw-silver-950);
-  --pw-bevel-face:  var(--pw-silver-800);
+  /* ── The light source stays above-left ─────────────────────────────────
+     This was wrong, and it was the most serious thing in the kit, because
+     the bevel is the product.
+
+     The first version pointed --pw-bevel-frame at silver-600 so the outer
+     line would clear 3:1 against a dark page. That worked for contrast and
+     broke the physics: the bottom-right "shadow" came out at luma 133 on a
+     face of 50, which made it the brightest line on the control. The light
+     source flipped from above in light theme to below in dark, so a raised
+     control in dark and a sunken one in light shared a signature. The
+     toggle's own caption, that neither state is carried by colour, stopped
+     being true in dark.
+
+     The fix is not a new palette. It is moving the light edge to the corner
+     the light comes from. Every value below is a rung the ramp already had.
+     Luma now runs 26, 35, 50, 84, 138 bottom-right to top-left, which is the
+     same monotonic order as light's 103, 154, 213, 229, 255.
+
+     The 3:1 boundary moves with it, to --pw-bevel-boundary, which is why
+     that role exists. */
+  --pw-bevel-light: var(--pw-silver-600);   /* top-left outer,  138 */
+  --pw-bevel-face:  var(--pw-silver-750);   /* top-left inner,   84 */
+  --pw-bevel-shade: var(--pw-silver-900);   /* bottom-right inner, 35 */
+  --pw-bevel-frame: var(--pw-silver-950);   /* bottom-right outer, 26 */
+
+  /* The light edge carries it here. 4.29:1 on the page, 3.49:1 on a panel. */
+  --pw-bevel-boundary: var(--pw-silver-600);
 
   --pw-gloss-lit-base-200: var(--pw-silver-800);
   --pw-gloss-lit-primary:  var(--pw-blue-300);

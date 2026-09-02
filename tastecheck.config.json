@@ -39,8 +39,8 @@
 
       { "fg": "--pw-color-disabled-content", "bg": "--pw-color-base-200", "min": 3.0, "label": "disabled is quiet, not absent" },
 
-      { "fg": "--pw-bevel-frame", "bg": "--pw-color-base-100", "min": 3.0, "label": "the control boundary, against the page" },
-      { "fg": "--pw-bevel-frame", "bg": "--pw-color-base-200", "min": 3.0, "label": "the control boundary, against a panel" },
+      { "fg": "--pw-bevel-boundary", "bg": "--pw-color-base-100", "min": 3.0, "label": "the control boundary, against the page" },
+      { "fg": "--pw-bevel-boundary", "bg": "--pw-color-base-200", "min": 3.0, "label": "the control boundary, against a panel" },
 
       { "fg": "--pw-color-focus", "bg": "--pw-color-base-200", "min": 3.0, "label": "focus ring on the control it rings" },
       { "fg": "--pw-color-focus", "bg": "--pw-color-base-100", "min": 3.0, "label": "focus ring on the page it offsets onto" },

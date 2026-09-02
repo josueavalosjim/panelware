@@ -56,7 +56,7 @@
       <h2 class="demo-heading">Tabs</h2>
       <p class="demo-note">The active trigger sits a pixel lower and drops its bottom line, so it fuses with the panel.</p>
       <div class="demo-row">
-        <div class="demo-stack">
+        <div class="demo-tabs">
           <div class="pw-tab-list" role="tablist">
             <button class="pw-tab" role="tab" type="button" data-state="inactive" aria-selected="false">Output</button>
             <button class="pw-tab" role="tab" type="button" data-state="active" aria-selected="true">Equaliser</button>
@@ -96,18 +96,27 @@
       <p class="demo-note">Track sunken, thumb raised. The thumb never sinks: a sunken grip reads as dropped rather than held. The grip is 22 by 28 and its hit area is 44 by 44. Radix positions the thumb in the real component; these offsets stand in for it.</p>
       <div class="demo-row">
         <div class="demo-stack">
-          <span class="pw-slider">
-            <span class="pw-slider-track"><span class="pw-slider-range" style="width: 0%"></span></span>
-            <span class="pw-slider-thumb" style="left: calc(0% - (var(--pw-thumb-w) / 2))" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></span>
-          </span>
-          <span class="pw-slider">
-            <span class="pw-slider-track"><span class="pw-slider-range" style="width: 40%"></span></span>
-            <span class="pw-slider-thumb" style="left: calc(40% - (var(--pw-thumb-w) / 2))" role="slider" tabindex="0" aria-label="Balance" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"></span>
-          </span>
-          <span class="pw-slider" data-disabled>
-            <span class="pw-slider-track"><span class="pw-slider-range" style="width: 70%"></span></span>
-            <span class="pw-slider-thumb" style="left: calc(70% - (var(--pw-thumb-w) / 2))" role="slider" tabindex="-1" aria-label="Gain" aria-disabled="true" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"></span>
-          </span>
+          <label class="demo-field">
+            <span class="demo-field-label">Volume</span>
+            <span class="pw-slider">
+              <span class="pw-slider-track"><span class="pw-slider-range" style="width: 0%"></span></span>
+              <span class="pw-slider-thumb" style="left: 0" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></span>
+            </span>
+          </label>
+          <label class="demo-field">
+            <span class="demo-field-label">Balance</span>
+            <span class="pw-slider">
+              <span class="pw-slider-track"><span class="pw-slider-range" style="width: 40%"></span></span>
+              <span class="pw-slider-thumb" style="left: calc(0.4 * (100% - var(--pw-thumb-w)))" role="slider" tabindex="0" aria-label="Balance" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"></span>
+            </span>
+          </label>
+          <label class="demo-field">
+            <span class="demo-field-label">Gain</span>
+            <span class="pw-slider" data-disabled>
+              <span class="pw-slider-track"><span class="pw-slider-range" style="width: 70%"></span></span>
+              <span class="pw-slider-thumb" style="left: calc(0.7 * (100% - var(--pw-thumb-w)))" role="slider" tabindex="0" aria-label="Gain" aria-disabled="true" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"></span>
+            </span>
+          </label>
         </div>
       </div>
     </section>
@@ -124,25 +133,21 @@
 
     <section class="demo-section" id="lcd">
       <h2 class="demo-heading">Readout</h2>
-      <p class="demo-note">A sprite sheet stepped by whole pixels, painted through a mask so the ink stays a token. The hidden text beside each one is what a screen reader gets.</p>
+      <p class="demo-note">A sprite sheet stepped by whole pixels, painted through a mask so the ink stays a token. Each one is an image of text, so it carries its string as a label rather than as a live region. The last one scrolls and pauses on hover.</p>
       <div class="demo-row">
         <div class="demo-stack">
-          <output class="pw-lcd">
-            <span class="pw-sr-only">04:21</span>
+          <span class="pw-lcd" role="img" aria-label="04:21">
             <span class="pw-lcd-render" aria-hidden="true"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 4"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 12"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1"></span></span>
-          </output>
-          <output class="pw-lcd">
-            <span class="pw-sr-only">-12.5</span>
+          </span>
+          <span class="pw-lcd" role="img" aria-label="-12.5">
             <span class="pw-lcd-render" aria-hidden="true"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 11"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 13"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 5"></span></span>
-          </output>
-          <output class="pw-lcd">
-            <span class="pw-sr-only">PANELWARE</span>
+          </span>
+          <span class="pw-lcd" role="img" aria-label="PANELWARE">
             <span class="pw-lcd-render" aria-hidden="true"><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span></span>
-          </output>
-          <output class="pw-lcd pw-lcd-marquee">
-            <span class="pw-sr-only">Now playing: panelware 0.1.0</span>
+          </span>
+          <span class="pw-lcd pw-lcd-marquee" role="img" aria-label="Now playing: panelware 0.1.0">
             <span class="pw-lcd-render" aria-hidden="true"><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 14; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 24; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 6; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 1; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 14; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 24; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 6; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 1; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span></span>
-          </output>
+          </span>
         </div>
       </div>
     </section>
