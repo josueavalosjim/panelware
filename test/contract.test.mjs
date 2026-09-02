@@ -145,6 +145,38 @@ describe('the density axis', () => {
   });
 });
 
+describe('the focus ring', () => {
+  test('is two rings in opposite values, not one', () => {
+    /* A single ring is only as visible as the surface behind it allows, and
+       this kit puts controls on a title bar painted in the very accent the
+       ring is drawn with. --pw-color-focus on --pw-color-primary measured
+       1.00:1: a ring that was not there at all, in both themes. */
+    const reset = bare(read('css/reset.css'));
+    assert.match(reset, /--pw-focus-halo:/, 'no inner ring is set on focus');
+    assert.match(reset, /outline:[^;]*var\(--pw-color-focus\)/);
+    const bevel = bare(read('css/treatment/bevel.css'));
+    assert.match(bevel, /box-shadow: var\(--pw-elev\), var\(--pw-focus-halo\)/,
+      'the elevation slot does not compose the focus halo, so controls inside it show one ring');
+  });
+
+  test('the two halves are declared in every theme', () => {
+    /* Both, in both. A theme that declared only --pw-color-focus would fall
+       back to inheriting the other theme's companion and could land the same
+       value on the same accent again. */
+    const semantic = read('css/tokens/semantic.chrome.css');
+    for (const [name, selector] of [
+      ['light', ':root,\n[data-skin="chrome"]'],
+      ['dark', '[data-theme="dark"],'],
+    ]) {
+      const b = block(semantic, selector);
+      assert.ok(b.get('--pw-color-focus'), `${name} has no --pw-color-focus`);
+      assert.ok(b.get('--pw-color-focus-contrast'), `${name} has no --pw-color-focus-contrast`);
+      assert.notEqual(b.get('--pw-color-focus'), b.get('--pw-color-focus-contrast'),
+        `${name}'s two focus rings are the same colour`);
+    }
+  });
+});
+
 describe('the axes nest', () => {
   test('no axis block is anchored to :root', () => {
     /* Anchored, an axis only works on <html>: a consumer writing

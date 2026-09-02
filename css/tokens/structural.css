@@ -96,6 +96,13 @@
      density does not move. */
 
   --pw-focus-width:  2px;
+
+  /* The focus ring's inner half, off by default.
+     Declared here rather than left to an inline var() fallback so it has one
+     home and the gate can see it. A fully transparent shadow rather than
+     `none`, because `none` is not a legal entry inside a shadow list and the
+     bevel composes this alongside itself. */
+  --pw-focus-halo: 0 0 #0000;
   --pw-focus-offset: 2px;
 
   /* How far a pressed control travels. One pixel, which is what a real

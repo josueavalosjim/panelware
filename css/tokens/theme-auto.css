@@ -46,6 +46,7 @@
     --pw-color-primary-content: var(--pw-silver-950);
 
     --pw-color-focus: var(--pw-blue-300);
+    --pw-color-focus-contrast: var(--pw-silver-950);
     --pw-color-range: var(--pw-blue-300);
 
     --pw-color-lcd: var(--pw-phos-950);

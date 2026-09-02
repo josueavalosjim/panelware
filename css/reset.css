@@ -39,13 +39,29 @@
 
 /* The focus ring is declared once, here, for every control in the kit.
    :focus-visible rather than :focus, so a mouse press does not leave a ring
-   behind and a Tab does. The offset matters as much as the ring: without it
-   a 2px ring fuses with the bevel's own outer line and reads as a slightly
-   thicker border rather than as focus. */
+   behind and a Tab does.
+
+   Two rings, in opposite values, drawn adjacent rather than one ring with a
+   gap. A single ring is only ever as visible as the surface behind it
+   happens to allow, and this kit puts controls on a title bar painted in the
+   very accent the ring is drawn with, where it measured 1.00:1 and simply
+   was not there.
+
+   The inner ring is a box-shadow spread and the outer is the outline, so
+   together they form one 4px band whose two halves contrast with each other
+   at better than 9:1. On the page the outer ring carries it; on the accent
+   bar the inner one does; on anything else the boundary between them is
+   still a visible edge. That is what WCAG 2.4.13 is asking for, and it is
+   why the ring no longer needs an offset: the inner ring fills what the gap
+   used to. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
        .pw-slider-thumb, .pw-panel):focus-visible {
+  --pw-focus-halo: 0 0 0 var(--pw-focus-width) var(--pw-color-focus-contrast);
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
-  outline-offset: var(--pw-focus-offset);
+  outline-offset: var(--pw-focus-width);
+  /* For controls outside the shared elevation slot. Those inside it compose
+     the halo with their bevel instead, in a later layer. */
+  box-shadow: var(--pw-focus-halo);
 }
 
 /* The text a screen reader gets when the visible thing is a picture of text.

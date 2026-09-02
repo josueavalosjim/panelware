@@ -222,6 +222,16 @@
      page behind it, because an offset ring crosses that boundary and is
      only as visible as its worse half. 7.41:1 and 9.03:1. */
   --pw-color-focus: var(--pw-blue-800);
+  /* The other half of the ring, and it is not decoration.
+     A single-colour focus ring is only ever as good as the surface behind
+     it, and this kit puts buttons on a title bar painted in the accent it
+     draws the ring with: --pw-color-focus on --pw-color-primary measured
+     1.00:1, a ring that did not exist. Reported as keyboard navigation
+     failing on the blue bar, which is exactly what it was.
+     Two rings in opposite values, drawn adjacent, so whatever they land on
+     at least one separates from it and the boundary between them is always
+     visible. 10.86:1 against each other here. */
+  --pw-color-focus-contrast: var(--pw-silver-000);
 
   /* The filled part of a slider, against the track it sits in. Its own role
      rather than a second reference to primary, so a skin can separate a
@@ -293,6 +303,9 @@
   --pw-color-primary-content: var(--pw-silver-950);
 
   --pw-color-focus: var(--pw-blue-300);
+  /* Dark here, because dark's accent IS the light one: the same collision
+     exists in this theme with the values swapped. 9.48:1 against the ring. */
+  --pw-color-focus-contrast: var(--pw-silver-950);
   --pw-color-range: var(--pw-blue-300);
 
   /* Unchanged, and that is the decision. A lit display does not dim because
@@ -439,6 +452,13 @@
      density does not move. */
 
   --pw-focus-width:  2px;
+
+  /* The focus ring's inner half, off by default.
+     Declared here rather than left to an inline var() fallback so it has one
+     home and the gate can see it. A fully transparent shadow rather than
+     `none`, because `none` is not a legal entry inside a shadow list and the
+     bevel composes this alongside itself. */
+  --pw-focus-halo: 0 0 #0000;
   --pw-focus-offset: 2px;
 
   /* How far a pressed control travels. One pixel, which is what a real
@@ -722,13 +742,29 @@
 
 /* The focus ring is declared once, here, for every control in the kit.
    :focus-visible rather than :focus, so a mouse press does not leave a ring
-   behind and a Tab does. The offset matters as much as the ring: without it
-   a 2px ring fuses with the bevel's own outer line and reads as a slightly
-   thicker border rather than as focus. */
+   behind and a Tab does.
+
+   Two rings, in opposite values, drawn adjacent rather than one ring with a
+   gap. A single ring is only ever as visible as the surface behind it
+   happens to allow, and this kit puts controls on a title bar painted in the
+   very accent the ring is drawn with, where it measured 1.00:1 and simply
+   was not there.
+
+   The inner ring is a box-shadow spread and the outer is the outline, so
+   together they form one 4px band whose two halves contrast with each other
+   at better than 9:1. On the page the outer ring carries it; on the accent
+   bar the inner one does; on anything else the boundary between them is
+   still a visible edge. That is what WCAG 2.4.13 is asking for, and it is
+   why the ring no longer needs an offset: the inner ring fills what the gap
+   used to. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
        .pw-slider-thumb, .pw-panel):focus-visible {
+  --pw-focus-halo: 0 0 0 var(--pw-focus-width) var(--pw-color-focus-contrast);
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
-  outline-offset: var(--pw-focus-offset);
+  outline-offset: var(--pw-focus-width);
+  /* For controls outside the shared elevation slot. Those inside it compose
+     the halo with their bevel instead, in a later layer. */
+  box-shadow: var(--pw-focus-halo);
 }
 
 /* The text a screen reader gets when the visible thing is a picture of text.
@@ -856,7 +892,9 @@
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress) {
-    box-shadow: var(--pw-elev);
+    /* The bevel, plus the focus ring's inner half when there is one.
+       --pw-focus-halo is transparent by default and set on :focus-visible. */
+    box-shadow: var(--pw-elev), var(--pw-focus-halo);
     /* No border. The outer inset shadow IS the frame, which is 98.css's own
        arrangement: it sets border: none on its buttons and lets the four
        insets carry the whole edge.

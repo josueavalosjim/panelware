@@ -121,8 +121,22 @@ there is a rename that costs a major version.
 
 ## Contrast, and the one pair that is exempt
 
-Body text holds 4.5:1. Focus rings, control boundaries and the filled part of
-a slider hold 3:1.
+Body text holds 4.5:1. Control boundaries and the filled part of a slider
+hold 3:1.
+
+The focus indicator is **two rings in opposite values**, drawn adjacent, and
+that is not decoration. A single ring is only ever as visible as the surface
+behind it happens to allow, and this kit puts controls on a title bar painted
+in the very accent the ring is drawn with. `--pw-color-focus` on
+`--pw-color-primary` measured 1.00:1 in both themes: keyboard focus on a
+window's close button was invisible.
+
+Making the ring aware of what is behind it is not available to CSS. The ring
+is offset outward, so it lands on the parent's surface rather than the
+control's, and `currentColor` would give the control's own ink. Two rings
+sidestep the question rather than answering it: whatever they land on, one of
+the pair separates from it, and the two contrast with each other at better
+than 9:1 so the boundary between them is an edge on any ground.
 
 One of the bevel's four edges is the control boundary and holds 3:1, and
 which one differs by theme. In light it is the dark bottom-right line; in

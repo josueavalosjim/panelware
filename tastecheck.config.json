@@ -44,6 +44,8 @@
 
       { "fg": "--pw-color-focus", "bg": "--pw-color-base-200", "min": 3.0, "label": "focus ring on the control it rings" },
       { "fg": "--pw-color-focus", "bg": "--pw-color-base-100", "min": 3.0, "label": "focus ring on the page it offsets onto" },
+      { "fg": "--pw-color-focus-contrast", "bg": "--pw-color-primary", "min": 3.0, "label": "the ring's other half, on the accent bar where the first half vanishes" },
+      { "fg": "--pw-color-focus-contrast", "bg": "--pw-color-focus", "min": 3.0, "label": "the two halves against each other, which is what makes the pair work on any ground" },
 
       { "fg": "--pw-color-lcd-content", "bg": "--pw-color-lcd", "min": 4.5, "label": "the readout" },
       { "fg": "--pw-color-range", "bg": "--pw-color-base-300", "min": 3.0, "label": "the filled part of a slider" },

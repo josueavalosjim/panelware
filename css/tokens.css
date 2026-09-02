@@ -190,6 +190,16 @@
      page behind it, because an offset ring crosses that boundary and is
      only as visible as its worse half. 7.41:1 and 9.03:1. */
   --pw-color-focus: var(--pw-blue-800);
+  /* The other half of the ring, and it is not decoration.
+     A single-colour focus ring is only ever as good as the surface behind
+     it, and this kit puts buttons on a title bar painted in the accent it
+     draws the ring with: --pw-color-focus on --pw-color-primary measured
+     1.00:1, a ring that did not exist. Reported as keyboard navigation
+     failing on the blue bar, which is exactly what it was.
+     Two rings in opposite values, drawn adjacent, so whatever they land on
+     at least one separates from it and the boundary between them is always
+     visible. 10.86:1 against each other here. */
+  --pw-color-focus-contrast: var(--pw-silver-000);
 
   /* The filled part of a slider, against the track it sits in. Its own role
      rather than a second reference to primary, so a skin can separate a
@@ -261,6 +271,9 @@
   --pw-color-primary-content: var(--pw-silver-950);
 
   --pw-color-focus: var(--pw-blue-300);
+  /* Dark here, because dark's accent IS the light one: the same collision
+     exists in this theme with the values swapped. 9.48:1 against the ring. */
+  --pw-color-focus-contrast: var(--pw-silver-950);
   --pw-color-range: var(--pw-blue-300);
 
   /* Unchanged, and that is the decision. A lit display does not dim because
@@ -407,6 +420,13 @@
      density does not move. */
 
   --pw-focus-width:  2px;
+
+  /* The focus ring's inner half, off by default.
+     Declared here rather than left to an inline var() fallback so it has one
+     home and the gate can see it. A fully transparent shadow rather than
+     `none`, because `none` is not a legal entry inside a shadow list and the
+     bevel composes this alongside itself. */
+  --pw-focus-halo: 0 0 #0000;
   --pw-focus-offset: 2px;
 
   /* How far a pressed control travels. One pixel, which is what a real
