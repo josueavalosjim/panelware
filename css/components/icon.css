@@ -1,0 +1,71 @@
+/**
+ * ICON.
+ *
+ * One 16x16 sheet, stepped by whole pixels, applied as a mask so the ink is
+ * `currentColor`. That last part is the whole reason this is a mask rather
+ * than a background image: an icon inside a button takes the button's colour,
+ * including its disabled colour and its primary-content colour, without the
+ * component knowing an icon is there. A coloured PNG would need one file per
+ * state per theme.
+ *
+ * It also means forced-colors works with no special case. The system paints
+ * the text colour, and the icon is the text colour.
+ *
+ * ── The scale is a whole number, and the size does not follow density ─────
+ * The sheet is a pixel grid. A fractional scale puts cell edges between
+ * device pixels, which tears a glyph rather than softening it, so
+ * --pw-icon-scale is 1 or 2 and never 1.5.
+ *
+ * That is also why the icon stays 16px in compact density while the control
+ * around it drops from 44 to 32. The obvious move, scaling the icon by the
+ * same ratio, would be 0.727 of the grid. A 16px mark inside a 32px control
+ * is a proportion the whole 90s toolbar canon already used, so this costs
+ * nothing worth having.
+ */
+
+@layer pw.components {
+  :root,
+  [data-skin="chrome"],
+  [data-theme="light"] {
+    --pw-icon-w: 16px;
+    --pw-icon-h: 16px;
+    --pw-icon-cols: 8;
+    --pw-icon-rows: 3;
+    --pw-icon-scale: 1;
+    --pw-icon-sheet: url("../../assets/icons.svg");
+  }
+
+  .pw-icon {
+    display: inline-block;
+    flex: 0 0 auto;
+    /* Set per icon by the component, as plain integers. Never a px offset:
+       taste-check's treatments check flags a px literal in markup, and it
+       would be right, because every pixel dimension belongs in here. */
+    --pw-icon-x: 0;
+    --pw-icon-y: 0;
+    width: calc(var(--pw-icon-w) * var(--pw-icon-scale));
+    height: calc(var(--pw-icon-h) * var(--pw-icon-scale));
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: var(--pw-icon-sheet);
+    -webkit-mask-image: var(--pw-icon-sheet);
+    mask-size:
+      calc(var(--pw-icon-cols) * var(--pw-icon-w) * var(--pw-icon-scale))
+      calc(var(--pw-icon-rows) * var(--pw-icon-h) * var(--pw-icon-scale));
+    -webkit-mask-size:
+      calc(var(--pw-icon-cols) * var(--pw-icon-w) * var(--pw-icon-scale))
+      calc(var(--pw-icon-rows) * var(--pw-icon-h) * var(--pw-icon-scale));
+    mask-position:
+      calc(var(--pw-icon-x) * var(--pw-icon-w) * var(--pw-icon-scale) * -1)
+      calc(var(--pw-icon-y) * var(--pw-icon-h) * var(--pw-icon-scale) * -1);
+    -webkit-mask-position:
+      calc(var(--pw-icon-x) * var(--pw-icon-w) * var(--pw-icon-scale) * -1)
+      calc(var(--pw-icon-y) * var(--pw-icon-h) * var(--pw-icon-scale) * -1);
+  }
+
+  /* An icon on its own inside a control is the control's whole label, so the
+     control needs an accessible name from somewhere else. The Icon component
+     enforces that; this is here for anyone writing the markup by hand. */
+  .pw-icon[data-standalone] { margin: 0 auto; }
+}

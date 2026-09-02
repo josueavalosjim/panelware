@@ -36,10 +36,11 @@
     color: var(--pw-color-error-content);
   }
 
-  /* The glyph inherits the cell's ink rather than carrying its own colour,
-     so the pair that was measured is the pair that is painted. */
-  .pw-badge-glyph {
-    font-weight: 700;
-    color: currentColor;
+  /* The mark is an icon on the shared sheet, painted in currentColor, so the
+     pair that was measured is the pair that is painted and the badge does not
+     need to know an icon is there. */
+  .pw-badge .pw-icon {
+    /* A 16px mark next to 12px text sits a pixel high on the cap line. */
+    margin-block: -1px;
   }
 }

@@ -97,6 +97,21 @@ body {
   transform: translateX(-50%);
 }
 
+.demo-icons { gap: var(--pw-space-lg); }
+
+.demo-icon-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--pw-space-2xs);
+  min-width: 4rem;
+}
+
+.demo-icon-name {
+  font-size: var(--pw-text-micro);
+  opacity: 0.75;
+}
+
 .demo-field {
   display: flex;
   align-items: center;

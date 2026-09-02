@@ -33,6 +33,7 @@
 @import "./reset.css"               layer(pw.reset);
 @import "./treatment/bevel.css";
 @import "./treatment/gloss.css";
+@import "./components/icon.css";
 @import "./components/button.css";
 @import "./components/toggle.css";
 @import "./components/tabs.css";

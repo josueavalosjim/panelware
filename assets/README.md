@@ -45,3 +45,32 @@ of a colour.
 `--pw-lcd-scale` must stay a whole number. The sheet is a pixel grid, and a
 fractional scale puts cell edges between device pixels, which tears a glyph
 rather than softening it.
+
+## The icon sheet
+
+**`icons.svg`** — 128x48, seventeen 16x16 cells in an 8 x 3 grid, generated
+from `icon-font.mjs` the same way the readout sheets are, and applied the same
+way: as a `mask-image` painted in `currentColor`, so an icon inside a button
+takes the button's ink including its disabled and primary-content colours, and
+forced-colors works with no special case.
+
+**16x16 is the Windows toolbar and menu icon size** through 95, 2000 and XP,
+so it is the period-correct grid for the chrome this kit cites.
+
+**It is not Winamp's.** Strider's spec records Winamp's transport buttons at
+**23x18**, stacked in one bitmap with the pressed state directly below the
+normal one at (23,18). That number is recorded here and deliberately unused: a
+second grid would need a second set of size tokens, a second scale knob and a
+second sheet, to place five glyphs.
+
+`--pw-icon-scale` must stay a whole number, for the same reason
+`--pw-lcd-scale` must. It is also why an icon stays 16px in compact density
+while the control around it drops from 44 to 32: scaling by the same ratio
+would be 0.727 of the grid, and a 16px mark inside a 32px control is a
+proportion the whole 90s toolbar canon already used.
+
+Optical note, since it is the kind of thing that gets "corrected" later: play,
+pause and stop do not share a bounding box. A solid square reads heavier than
+a triangle that fills the same box, so the square is pulled in to 9x9 and the
+triangle is drawn tall and narrow. Ink areas are 49, 72 and 81 pixels, and
+that imbalance is what makes them look equal in a row.

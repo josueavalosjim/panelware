@@ -26,6 +26,7 @@ import { useState, type HTMLAttributes } from 'react';
 
 import { cx } from './classes.js';
 import { digitCell, glyphCell } from './charmap.js';
+import { Icon } from './icon.js';
 
 export interface ReadoutProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
   /** The string to display. Also its accessible name, unless label says otherwise. */
@@ -108,7 +109,9 @@ export function Readout({
           aria-label={paused ? resumeLabel : pauseLabel}
           onClick={() => setPaused((was) => !was)}
         >
-          <span aria-hidden="true">{paused ? '\u25B6' : '\u2016'}</span>
+          {/* Decorative: the button's own aria-label already says which
+              way it goes, and it changes with the state. */}
+          <Icon name={paused ? 'play' : 'pause'} decorative />
         </button>
       ) : null}
     </span>

@@ -67,20 +67,42 @@ describe('toggle', () => {
 });
 
 describe('badge', () => {
-  test('a status always renders a glyph AND a word', () => {
+  test('a status always renders a mark AND a word', () => {
     /* The single rule this component exists to enforce. A caller cannot
-       reduce a status to a coloured dot, because the glyph has a default and
-       the children carry the word. */
+       reduce a status to a coloured dot, because the mark has a default per
+       status and the children carry the word. There is no prop that removes
+       it. */
     const html = render(h(Badge, { status: 'success' }, 'Connected'));
     assert.match(html, /data-status="success"/);
-    assert.match(html, /class="pw-badge-glyph" aria-hidden="true">✓</);
+    assert.match(html, /class="pw-icon"/);
     assert.match(html, /Connected/);
   });
 
-  test('the glyph is hidden from assistive tech', () => {
+  test('each status gets a different mark, not just a different colour', () => {
+    /* Four badges that differed only in background would be colour carrying
+       the whole meaning, which is the failure this component exists to
+       avoid. The cells have to actually differ. */
+    const cell = (status) => {
+      const m = render(h(Badge, { status }, 'x')).match(/--pw-icon-x:(\d+);--pw-icon-y:(\d+)/);
+      return `${m[1]},${m[2]}`;
+    };
+    const cells = ['success', 'warning', 'error', 'neutral'].map(cell);
+    assert.equal(new Set(cells).size, 4, `marks repeat: ${cells.join(' ')}`);
+  });
+
+  test('the mark is hidden from assistive tech', () => {
     /* The word beside it already says this. "check Connected" is worse. */
     assert.match(render(h(Badge, { status: 'error' }, 'No device')),
       /aria-hidden="true"/);
+  });
+
+  test('the mark is a sheet cell, not a character from the reader\'s font', () => {
+    /* It used to be '✓', '!', '×' and '•' pulled from whatever font the
+       consumer's page was using, so the mark changed shape per platform and
+       had no pixel grid at all. */
+    const html = render(h(Badge, { status: 'success' }, 'Connected'));
+    assert.doesNotMatch(html, /[✓×•]/);
+    assert.match(html, /--pw-icon-x:/);
   });
 });
 

@@ -28,6 +28,11 @@ export type { DialogPanelProps } from './dialog.js';
 export { Slider } from './slider.js';
 export type { SliderProps } from './slider.js';
 
+export { Icon } from './icon.js';
+export type { IconProps } from './icon.js';
+export { ICON_NAMES } from './icons.js';
+export type { IconName } from './icons.js';
+
 export { Badge } from './badge.js';
 export type { BadgeProps, BadgeStatus } from './badge.js';
 

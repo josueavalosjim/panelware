@@ -11,14 +11,20 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 
 import { cx } from './classes.js';
+import { Icon } from './icon.js';
+import type { IconName } from './icons.js';
 
 export type BadgeStatus = 'success' | 'warning' | 'error' | 'neutral';
 
-const GLYPH: Record<BadgeStatus, string> = {
-  success: '✓',
-  warning: '!',
-  error: '×',
-  neutral: '•',
+/* Sheet cells, not characters. These were '✓', '!', '×' and '•' taken from
+   whatever font the consumer's page happened to be using, which meant the
+   mark changed shape per platform, had no pixel grid, and sat on a different
+   baseline in every stack. */
+const GLYPH: Record<BadgeStatus, IconName> = {
+  success: 'check',
+  warning: 'bang',
+  error: 'close',
+  neutral: 'dot',
 };
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -30,11 +36,9 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 export function Badge({ status = 'neutral', glyph, className, children, ...rest }: BadgeProps) {
   return (
     <span {...rest} className={cx('pw-badge', className)} data-status={status}>
-      {/* aria-hidden, because the word beside it already says this. A screen
+      {/* Decorative, because the word beside it already says this. A screen
           reader announcing "check Connected" is worse than "Connected". */}
-      <span className="pw-badge-glyph" aria-hidden="true">
-        {glyph ?? GLYPH[status]}
-      </span>
+      {glyph ?? <Icon name={GLYPH[status]} decorative />}
       {children}
     </span>
   );

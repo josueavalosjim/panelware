@@ -48,7 +48,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "sprites": "node scripts/build-sprites.mjs",
+    "sprites": "node scripts/build-sprites.mjs && node scripts/build-icons-index.mjs",
     "test": "npm run build && node --test \"test/**/*.test.mjs\"",
     "check": "taste-check",
     "check:runtime": "node scripts/runtime.mjs",

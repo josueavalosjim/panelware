@@ -64,7 +64,8 @@
       "css/tokens/motion.css",
       "css/tokens/theme-auto.css",
       "css/treatment/bevel.css",
-      "css/components/lcd.css"
+      "css/components/lcd.css",
+      "css/components/icon.css"
     ],
     "files": [
       "css/**/*.css",

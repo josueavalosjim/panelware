@@ -22,6 +22,9 @@ import {
   DIGIT_CELLS, DIGIT_H, DIGIT_W, digitRects,
   GLYPH_COLS, GLYPH_H, GLYPH_ORDER, GLYPH_ROWS, GLYPH_W, glyphRects,
 } from '../assets/lcd-font.mjs';
+import {
+  ICON_COLS, ICON_H, ICON_ORDER, ICON_ROWS, ICON_W, iconRects,
+} from '../assets/icon-font.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ASSETS = join(HERE, '..', 'assets');
@@ -61,9 +64,20 @@ export function glyphSheet() {
   return sheet(GLYPH_COLS * GLYPH_W, GLYPH_ROWS * GLYPH_H, body);
 }
 
+export function iconSheet() {
+  const body = ICON_ORDER.map((name, i) => {
+    const dx = (i % ICON_COLS) * ICON_W;
+    const dy = Math.floor(i / ICON_COLS) * ICON_H;
+    return iconRects(name).map((r) => rect(r, dx, dy)).join('');
+  });
+  return sheet(ICON_COLS * ICON_W, ICON_ROWS * ICON_H, body);
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   writeFileSync(join(ASSETS, 'lcd-digits.svg'), digitSheet());
   writeFileSync(join(ASSETS, 'lcd-glyphs.svg'), glyphSheet());
+  writeFileSync(join(ASSETS, 'icons.svg'), iconSheet());
   console.log(`lcd-digits.svg  ${DIGIT_CELLS.length * DIGIT_W}x${DIGIT_H}, ${DIGIT_CELLS.length} cells`);
   console.log(`lcd-glyphs.svg  ${GLYPH_COLS * GLYPH_W}x${GLYPH_ROWS * GLYPH_H}, ${GLYPH_ORDER.length} glyphs in ${GLYPH_COLS}x${GLYPH_ROWS}`);
+  console.log(`icons.svg       ${ICON_COLS * ICON_W}x${ICON_ROWS * ICON_H}, ${ICON_ORDER.length} icons in ${ICON_COLS}x${ICON_ROWS}`);
 }
