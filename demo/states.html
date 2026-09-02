@@ -101,6 +101,51 @@
       </div>
     </section>
 
+    <section class="demo-section" id="window">
+      <h2 class="demo-heading">Window chrome</h2>
+      <p class="demo-note">A title bar, its controls, and the chassis. The dialog uses the same bar, because a dialog is a window that happens to be modal. The bar does not pretend to drag: there is no window to move, and a handle that looks draggable and is not is the same failure as a button that looks pressable and is not.</p>
+      <div class="demo-row">
+        <div class="demo-stack">
+        <section class="pw-window">
+          <div class="pw-title-bar" data-gloss>
+            <h3 class="pw-title">Playlist</h3>
+            <div class="pw-title-controls">
+              <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 7; --pw-icon-y: 0"></span></button>
+              <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 1"></span></button>
+              <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 0"></span></button>
+            </div>
+          </div>
+          <div class="pw-window-body">
+            Controls only render when a handler is passed, so a window with
+            nothing to close has no close button rather than a dead one.
+          </div>
+        </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section" id="transport">
+      <h2 class="demo-heading">Transport and seek</h2>
+      <p class="demo-note">Icon-only is the one place the kit allows a mark without a word, and the component charges for it: every button requires a label, which becomes its accessible name. Live, this is a Radix Toolbar, so Tab enters the cluster once and the arrow keys move inside it.</p>
+      <div class="demo-row">
+        <div class="demo-stack">
+          <div class="pw-transport" role="toolbar" aria-label="Playback">
+            <button class="pw-transport-button" type="button" aria-label="Previous track"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 3; --pw-icon-y: 0"></span></button>
+            <button class="pw-transport-button" type="button" aria-label="Play"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 0"></span></button>
+            <button class="pw-transport-button" type="button" aria-label="Stop"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 2; --pw-icon-y: 0"></span></button>
+            <button class="pw-transport-button" type="button" aria-label="Next track"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 4; --pw-icon-y: 0"></span></button>
+            <button class="pw-transport-button" type="button" aria-label="Eject" disabled><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 5; --pw-icon-y: 0"></span></button>
+          </div>
+          <label class="demo-field">
+            <span class="demo-field-label">Buffered</span>
+            <span class="pw-progress" role="progressbar" aria-label="Buffered" aria-valuemin="0" aria-valuemax="210" aria-valuenow="58" aria-valuetext="28 percent buffered">
+              <span class="pw-progress-fill" style="transform: scaleX(0.28)"></span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </section>
+
     <section class="demo-section" id="slider">
       <h2 class="demo-heading">Slider</h2>
       <p class="demo-note">Track sunken, thumb raised. The thumb never sinks: a sunken grip reads as dropped rather than held. The grip is 22 by 28 and its hit area is 44 by 44. Radix positions the thumb in the real component; these offsets stand in for it.</p>

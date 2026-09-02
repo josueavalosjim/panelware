@@ -22,8 +22,14 @@ export type { ToggleProps } from './toggle.js';
 export { Tabs, TabList, Tab, TabPanel } from './tabs.js';
 export type { TabsProps, TabListProps, TabProps, TabPanelProps } from './tabs.js';
 
+export { Window } from './window.js';
+export type { WindowProps } from './window.js';
+
 export { Dialog, DialogTrigger, DialogPanel } from './dialog.js';
 export type { DialogPanelProps } from './dialog.js';
+
+export { Transport, TransportButton, Progress } from './transport.js';
+export type { TransportProps, TransportButtonProps, ProgressProps } from './transport.js';
 
 export { Slider } from './slider.js';
 export type { SliderProps } from './slider.js';

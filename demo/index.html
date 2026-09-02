@@ -46,8 +46,9 @@
     import { createElement as h, useState, StrictMode } from 'react';
     import { createRoot } from 'react-dom/client';
     import {
-      Badge, Button, Dialog, DialogPanel, DialogTrigger,
-      Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
+      Badge, Button, Dialog, DialogPanel, DialogTrigger, Icon,
+      Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
+      Transport, TransportButton, Window,
     } from '../dist/index.js';
 
     const Section = ({ id, title, note, children }) =>
@@ -60,6 +61,10 @@
       const [shuffle, setShuffle] = useState(false);
       const [repeat, setRepeat] = useState(true);
       const [volume, setVolume] = useState([40]);
+      const [playing, setPlaying] = useState(false);
+      const [position, setPosition] = useState([28]);
+      const [density, setDensity] = useState('comfortable');
+      const [theme, setTheme] = useState('light');
       const [gain, setGain] = useState([70]);
 
       return h('div', null,
@@ -126,6 +131,46 @@
             h('label', { className: 'demo-field' },
               h('span', { className: 'demo-field-label' }, 'Disabled'),
               h(Slider, { label: 'Balance', defaultValue: [30], max: 100, disabled: true })))),
+
+        h(Section, {
+          id: 'window', title: 'Window chrome',
+          note: 'A title bar, its controls, and the chassis. The dialog uses the same bar: a dialog is a window that happens to be modal. Controls only render when you pass a handler, so nothing here is a dead button.',
+        },
+          h('div', { className: 'demo-stack' },
+          h(Window, {
+            title: 'Playlist',
+            onMinimize: () => {}, onMaximize: () => {}, onClose: () => {},
+          },
+            h('p', { style: { margin: 0 } },
+              'The title bar does not pretend to drag. There is no window to move, and a handle that looks draggable and is not is the same failure as a button that looks pressable and is not.')))),
+
+        h(Section, {
+          id: 'transport', title: 'Transport and seek',
+          note: 'A Radix Toolbar, so Tab enters the cluster once and the arrow keys move inside it. Icon-only is the one exception the kit allows, and it is paid for: every button requires a label and it becomes the accessible name.',
+        },
+          h('div', { className: 'demo-stack' },
+            h(Transport, { label: 'Playback' },
+              h(TransportButton, { icon: 'prev', label: 'Previous track' }),
+              h(TransportButton, {
+                icon: playing ? 'pause' : 'play',
+                label: playing ? 'Pause' : 'Play',
+                onClick: () => setPlaying((p) => !p),
+              }),
+              h(TransportButton, { icon: 'stop', label: 'Stop', onClick: () => setPlaying(false) }),
+              h(TransportButton, { icon: 'next', label: 'Next track' }),
+              h(TransportButton, { icon: 'eject', label: 'Eject' })),
+            h('label', { className: 'demo-field' },
+              h('span', { className: 'demo-field-label' }, 'Seek'),
+              h(Slider, {
+                label: 'Position', value: position, onValueChange: setPosition, max: 210,
+                format: (v) => `${Math.floor(v / 60)} minutes ${v % 60} seconds`,
+              })),
+            h('label', { className: 'demo-field' },
+              h('span', { className: 'demo-field-label' }, 'Buffered'),
+              h(Progress, {
+                value: position[0] + 30, max: 210, label: 'Buffered',
+                format: (v, m) => `${Math.round((v / m) * 100)} percent buffered`,
+              })))),
 
         h(Section, {
           id: 'badge', title: 'Status badge',

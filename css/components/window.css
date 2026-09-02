@@ -1,0 +1,110 @@
+/**
+ * WINDOW CHROME.
+ *
+ * The title bar, its control cluster, and the chassis around them. Generalised
+ * out of the dialog rather than written beside it: a dialog IS a window that
+ * happens to be modal, and shipping two title bars would guarantee they drift.
+ *
+ * This plus the menu bar is what makes the kit read as an application rather
+ * than as a web page wearing an application's colours.
+ *
+ * ── The title bar is not a drag handle, and does not pretend to be ────────
+ * A real window's title bar moves the window. In a browser there is nothing
+ * to move, so this one is inert: no grab cursor, no pointer handlers, no
+ * :active state. A control that looks draggable and is not is the same
+ * failure as a button that looks pressable and is not, which the states page
+ * already had to be relabelled for.
+ *
+ * A consumer building an actual draggable window surface can add that; the
+ * kit does not fake it.
+ */
+
+@layer pw.components {
+  .pw-window {
+    --pw-elev: var(--pw-shadow-raised);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--pw-radius-box);
+    clip-path: var(--pw-clip-box);
+    font-family: var(--pw-font-ui);
+    color: var(--pw-color-base-content);
+  }
+
+  .pw-title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--pw-space-md);
+    padding: var(--pw-space-2xs) var(--pw-space-2xs) var(--pw-space-2xs) var(--pw-space-md);
+    background-color: var(--pw-color-primary);
+    color: var(--pw-color-primary-content);
+    border-radius: var(--pw-radius-control) var(--pw-radius-control) 0 0;
+  }
+
+  .pw-title {
+    margin: 0;
+    /* Not --pw-control-text: a title is a heading, and a heading that shrank
+       with the control density would stop being the largest thing in the bar
+       at exactly the size where the bar has least room to spare. */
+    font-size: var(--pw-text-subhead);
+    line-height: var(--pw-leading-ui);
+    font-weight: 600;
+    /* A long title truncates rather than wrapping the bar to two lines and
+       moving every control in it. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pw-title-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--pw-space-3xs);
+    flex: 0 0 auto;
+  }
+
+  .pw-title-button {
+    --pw-elev: var(--pw-shadow-raised);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Square, and the full control height, because it is a target before it
+       is a glyph. The 16px mark inside it is small on purpose. */
+    width: var(--pw-control-h);
+    height: var(--pw-control-h);
+    min-width: 0;
+    padding: 0;
+    border-radius: var(--pw-radius-control);
+    background-color: var(--pw-color-base-200);
+    color: var(--pw-color-base-content);
+    transition: transform var(--pw-duration-press) var(--pw-ease-press),
+                opacity var(--pw-duration-hover) var(--pw-ease-state);
+  }
+  .pw-title-button:hover { opacity: 0.92; }
+  .pw-title-button:active {
+    --pw-elev: var(--pw-shadow-sunken);
+    transform: translateY(var(--pw-press-travel));
+    opacity: 1;
+  }
+
+  .pw-window-body {
+    padding: var(--pw-panel-pad);
+    font-size: var(--pw-text-ui);
+    line-height: var(--pw-leading-body);
+    background-color: var(--pw-color-base-200);
+    border-radius: 0 0 var(--pw-radius-control) var(--pw-radius-control);
+    overflow-y: auto;
+  }
+
+  @media (forced-colors: active) {
+    /* The title bar's ground forces to Canvas and it carries no border, so
+       without this the window loses its header and the controls stop being
+       grouped with the title. */
+    .pw-title-bar { border-bottom: var(--pw-border) solid ButtonBorder; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-title-button { transition-duration: 1ms; }
+    .pw-title-button:active { transform: translateY(var(--pw-press-travel)); }
+  }
+}

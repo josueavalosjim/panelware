@@ -1,0 +1,99 @@
+/**
+ * TRANSPORT + SEEK.
+ *
+ * A toolbar of icon-only buttons, and a position bar.
+ *
+ * ── Why icon-only is allowed here and nowhere else ────────────────────────
+ * The badge component exists partly to enforce that a status is never a mark
+ * alone. This is the exception, and it is a narrow one: transport symbols are
+ * the most standardised iconography in consumer software, a play triangle has
+ * meant one thing since the reel-to-reel, and a row of five labelled buttons
+ * is not a transport, it is a menu.
+ *
+ * The exception is paid for in the component: every transport button requires
+ * a label prop, and it becomes the accessible name. Nothing here is unnamed,
+ * it is only unlabelled on screen.
+ *
+ * ── The seek bar is two components, not one ───────────────────────────────
+ * A position you can scrub is a slider. A position you can only watch is a
+ * progress bar. They look nearly identical and their semantics are opposite:
+ * one is role="slider" and focusable, the other is role="progressbar" and is
+ * not. Shipping one component with an `interactive` prop would put a focus
+ * ring on something a keyboard cannot use, or take it off something it can.
+ */
+
+@layer pw.components {
+  .pw-transport {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pw-space-3xs);
+  }
+
+  .pw-transport-button {
+    --pw-elev: var(--pw-shadow-raised);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--pw-control-h);
+    height: var(--pw-control-h);
+    min-width: 0;
+    padding: 0;
+    border-radius: var(--pw-radius-control);
+    background-color: var(--pw-color-base-200);
+    color: var(--pw-color-base-content);
+    transition: transform var(--pw-duration-press) var(--pw-ease-press),
+                opacity var(--pw-duration-hover) var(--pw-ease-state);
+  }
+  .pw-transport-button:hover { opacity: 0.92; }
+  .pw-transport-button:active {
+    --pw-elev: var(--pw-shadow-sunken);
+    transform: translateY(var(--pw-press-travel));
+    opacity: 1;
+  }
+  .pw-transport-button:disabled,
+  .pw-transport-button[aria-disabled="true"] {
+    color: var(--pw-color-disabled-content);
+    cursor: default;
+  }
+  .pw-transport-button:disabled:hover,
+  .pw-transport-button[aria-disabled="true"]:hover { opacity: 1; }
+  .pw-transport-button:disabled:active,
+  .pw-transport-button[aria-disabled="true"]:active { transform: none; }
+
+  /* The progress half of the seek pair. The slider half is the existing
+     .pw-slider, unchanged: a scrubbable position IS a slider and does not
+     need a second implementation. */
+  .pw-progress {
+    --pw-elev: var(--pw-shadow-sunken);
+    position: relative;
+    display: block;
+    width: 100%;
+    height: var(--pw-track-h);
+    background-color: var(--pw-color-base-300);
+    border-radius: var(--pw-radius-control);
+    overflow: hidden;
+  }
+
+  .pw-progress-fill {
+    display: block;
+    height: 100%;
+    background-color: var(--pw-color-range);
+    /* Width, which is a layout property, would be the obvious way to animate
+       this and would drop it off the compositor on every tick. transform on
+       a full-width bar costs nothing and reads identically. */
+    transform-origin: left center;
+    transition: transform var(--pw-duration-base) var(--pw-ease-state);
+  }
+
+  @media (forced-colors: active) {
+    .pw-progress-fill { background-color: Highlight; forced-color-adjust: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-transport-button { transition-duration: 1ms; }
+    .pw-transport-button:active { transform: translateY(var(--pw-press-travel)); }
+    /* The fill still moves to the new value, it just stops easing there.
+       Removing the transform would freeze the bar at zero. */
+    .pw-progress-fill { transition-duration: 1ms; }
+  }
+}

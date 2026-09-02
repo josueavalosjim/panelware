@@ -45,7 +45,8 @@
      level: :root, a container, or one component. */
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
-         .pw-tab-panel, .pw-panel-close, .pw-raised, .pw-sunken) {
+         .pw-tab-panel, .pw-title-button, .pw-window,
+         .pw-transport-button, .pw-progress, .pw-raised, .pw-sunken) {
     --pw-bevel-1:  calc(var(--pw-bevel-depth) * 1px);
     --pw-bevel-2:  calc(var(--pw-bevel-depth) * 2px);
     --pw-bevel-1n: calc(var(--pw-bevel-depth) * -1px);
@@ -103,7 +104,8 @@
      pseudo-elements instead. */
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
-         .pw-tab-panel, .pw-panel-close) {
+         .pw-tab-panel, .pw-title-button, .pw-window,
+         .pw-transport-button, .pw-progress) {
     box-shadow: var(--pw-elev);
     /* No border. The outer inset shadow IS the frame, which is 98.css's own
        arrangement: it sets border: none on its buttons and lets the four
@@ -132,7 +134,8 @@
   @media (forced-colors: active) {
     :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
            .pw-slider-track, .pw-slider-thumb, .pw-lcd,
-           .pw-tab-panel, .pw-panel-close) {
+           .pw-tab-panel, .pw-title-button, .pw-window,
+           .pw-transport-button, .pw-progress) {
       border: var(--pw-border) solid ButtonBorder;
     }
   }

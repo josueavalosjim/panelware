@@ -37,7 +37,9 @@
 @import "./components/button.css";
 @import "./components/toggle.css";
 @import "./components/tabs.css";
+@import "./components/window.css";
 @import "./components/dialog.css";
 @import "./components/slider.css";
+@import "./components/transport.css";
 @import "./components/badge.css";
 @import "./components/lcd.css";

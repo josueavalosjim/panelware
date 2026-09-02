@@ -50,42 +50,9 @@
     transform: translate(-50%, -50%);
   }
 
-  .pw-panel-title-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--pw-space-md);
-    padding: var(--pw-space-sm) var(--pw-space-sm) var(--pw-space-sm) var(--pw-space-md);
-    background-color: var(--pw-color-primary);
-    color: var(--pw-color-primary-content);
-    border-radius: var(--pw-radius-control) var(--pw-radius-control) 0 0;
-  }
-
-  .pw-panel-title {
-    margin: 0;
-    font-size: var(--pw-text-subhead);
-    line-height: var(--pw-leading-ui);
-    font-weight: 600;
-  }
-
-  .pw-panel-close {
-    --pw-elev: var(--pw-shadow-raised);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    /* Square, and 44 because it is a target before it is a glyph. The X
-       inside it is small; the box around it is not. */
-    width: var(--pw-control-h);
-    height: var(--pw-control-h);
-    min-width: 0;
-    border-radius: var(--pw-radius-control);
-    background-color: var(--pw-color-base-200);
-    color: var(--pw-color-base-content);
-  }
-  .pw-panel-close:active {
-    --pw-elev: var(--pw-shadow-sunken);
-    transform: translateY(var(--pw-press-travel));
-  }
+  /* The dialog's header IS the window's. See css/components/window.css: a
+     dialog is a window that happens to be modal, and two title bars would
+     drift. What is left here is only what modality adds. */
 
   .pw-panel-body {
     padding: var(--pw-panel-pad);
@@ -93,13 +60,6 @@
     line-height: var(--pw-leading-body);
     color: var(--pw-color-base-content);
     overflow-y: auto;
-  }
-
-  /* The title bar's blue ground forces to Canvas and it carries no border,
-     so in forced colors the dialog loses its header entirely and the close
-     button stops being grouped with the title. */
-  @media (forced-colors: active) {
-    .pw-panel-title-bar { border-bottom: var(--pw-border) solid ButtonBorder; }
   }
 
   @keyframes pw-fade {
@@ -121,6 +81,5 @@
        from-state at all. */
     .pw-overlay { animation-duration: 1ms; }
     .pw-panel   { animation-duration: 1ms; }
-    .pw-panel-close:active { transform: translateY(var(--pw-press-travel)); }
   }
 }

@@ -11,7 +11,7 @@
  * stopped being a reset.
  */
 
-:where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-panel-close,
+:where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-title-button,
        .pw-badge, .pw-slider, .pw-slider-track, .pw-slider-range,
        .pw-slider-thumb, .pw-lcd, .pw-lcd-render, .pw-lcd-cell,
        .pw-tab-list, .pw-tab-panel, .pw-overlay) {
@@ -22,7 +22,8 @@
    reset to the kit's own rather than inherited, because a button does not
    inherit font-family from its ancestors in any browser and inheriting the
    consumer's page font would make the kit look different in every app. */
-:where(.pw-button, .pw-toggle, .pw-tab, .pw-panel-close) {
+:where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button,
+       .pw-transport-button) {
   appearance: none;
   margin: 0;
   font-family: var(--pw-font-ui);
@@ -41,7 +42,7 @@
    behind and a Tab does. The offset matters as much as the ring: without it
    a 2px ring fuses with the bevel's own outer line and reads as a slightly
    thicker border rather than as focus. */
-:where(.pw-button, .pw-toggle, .pw-tab, .pw-panel-close,
+:where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
        .pw-slider-thumb, .pw-panel):focus-visible {
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
   outline-offset: var(--pw-focus-offset);

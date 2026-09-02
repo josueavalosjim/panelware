@@ -23,6 +23,7 @@ import { Dialog as RadixDialog } from 'radix-ui';
 import { useRef, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 
 import { cx } from './classes.js';
+import { Icon } from './icon.js';
 import { useOverflows } from './overflow.js';
 
 export const Dialog = RadixDialog.Root;
@@ -62,14 +63,15 @@ export function DialogPanel({
     <RadixDialog.Portal>
       <RadixDialog.Overlay className="pw-overlay" data-glass={glass ? '' : undefined} />
       <RadixDialog.Content {...rest} className={cx('pw-panel', className)}>
-        <div className="pw-panel-title-bar" data-gloss>
-          <RadixDialog.Title className="pw-panel-title">{title}</RadixDialog.Title>
-          <RadixDialog.Close className="pw-panel-close" aria-label={closeLabel}>
-            {/* aria-hidden: the button's own aria-label says "Close", and a
-                screen reader reading the multiplication sign as well would
-                announce the control twice. */}
-            <span aria-hidden="true">&#215;</span>
-          </RadixDialog.Close>
+        {/* The same title bar the Window uses. A dialog is a window that
+            happens to be modal; two of these would drift. */}
+        <div className="pw-title-bar" data-gloss="">
+          <RadixDialog.Title className="pw-title">{title}</RadixDialog.Title>
+          <div className="pw-title-controls">
+            <RadixDialog.Close className="pw-title-button" aria-label={closeLabel}>
+              <Icon name="close" decorative />
+            </RadixDialog.Close>
+          </div>
         </div>
         <div
           ref={body}
