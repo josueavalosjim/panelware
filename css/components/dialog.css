@@ -81,7 +81,6 @@
     border-radius: var(--pw-radius-control);
     background-color: var(--pw-color-base-200);
     color: var(--pw-color-base-content);
-    box-shadow: var(--pw-elev);
   }
   .pw-panel-close:active {
     --pw-elev: var(--pw-shadow-sunken);

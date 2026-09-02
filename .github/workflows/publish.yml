@@ -1,0 +1,77 @@
+name: publish
+
+# Tag a version and it ships. No npm token lives here: publishing runs over
+# OIDC against a trusted publisher configured on npmjs.com, so there is no
+# long-lived credential to leak and no 2FA prompt to answer.
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for OIDC. Without it, npm falls back to a token.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run check
+
+      # The suite passing is not proof the checks fire.
+      - name: the gate still fires
+        run: |
+          if npx taste-check --config test/fixture/fail.tastecheck.json; then
+            echo "the failing fixture passed, so the contrast check is not checking"
+            exit 1
+          fi
+
+      # A tag that disagrees with package.json publishes a version nobody can
+      # trace back to a commit. npm retires a version number permanently, so
+      # this has to be caught before the publish, not after.
+      - name: tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "tag v$tag does not match package.json $pkg"
+            exit 1
+          fi
+
+      # Every path in the exports map has to resolve to a file that is also in
+      # the files array. A stylesheet left out of files publishes a package
+      # whose documented import throws on install, and nothing before this
+      # step would have noticed.
+      - name: every exported path is in the tarball
+        run: |
+          npm pack --dry-run --json > /tmp/pack.json
+          node -e "
+            const pkg = require('./package.json');
+            const files = new Set(require('/tmp/pack.json')[0].files.map((f) => f.path));
+            const missing = Object.entries(pkg.exports)
+              .map(([k, v]) => [k, v.replace(/^\.\//, '')])
+              .filter(([, v]) => !v.includes('*') && !files.has(v));
+            if (missing.length) {
+              console.error('exported but not packed:', missing.map(([k]) => k).join(', '));
+              process.exit(1);
+            }
+            console.log('every exported path is in the tarball');
+          "
+
+      # Re-running a workflow, or tagging a version that already shipped,
+      # should be a no-op rather than a red run.
+      - name: publish unless this version is already on the registry
+        run: |
+          pkg="$(node -p "require('./package.json').name")"
+          ver="$(node -p "require('./package.json').version")"
+          if npm view "$pkg@$ver" version >/dev/null 2>&1; then
+            echo "$pkg@$ver is already published, nothing to do"
+            exit 0
+          fi
+          npm publish

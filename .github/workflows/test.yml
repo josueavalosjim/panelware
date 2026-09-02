@@ -1,0 +1,47 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - run: npm ci
+
+      # The contract: both themes declare the same token set, theme-auto has
+      # not drifted from the dark block, no bevel offset is a literal, and the
+      # committed sheets are what the font data draws.
+      - run: npm test
+
+      # Contrast from the declared tokens, plus the one-off value and unknown
+      # token checks. Reads files, needs nothing running, half a second.
+      - name: the palette still clears its floors
+        run: npm run check
+
+      # A gate nobody has watched fail is a gate nobody should believe. The
+      # fixture checks the bevel highlight against the 3:1 an edge would need,
+      # which it misses at 1.47:1 by design, so this is also where the
+      # exemption is recorded in a form the build would notice being deleted.
+      - name: the gate still fires
+        run: |
+          if npx taste-check --config test/fixture/fail.tastecheck.json; then
+            echo "the failing fixture passed, so the contrast check is not checking"
+            exit 1
+          fi
+
+      # A missing Chromium must not read as a clean run. scripts/runtime.mjs
+      # exits non-zero rather than skipping, so this needs no separate guard.
+      - name: contrast measured off the rendered page, in both themes
+        run: npm run check:runtime

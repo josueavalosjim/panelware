@@ -24,7 +24,7 @@
      The chrome itself. Neutral with a trace of warmth, so it reads as
      painted metal rather than as a grey UI. Ratios are against the ground
      each rung actually sits on in the semantic layer. */
-  --pw-silver-000: #ffffff;   /* bevel highlight. 1.83:1 on the face, and
+  --pw-silver-000: #ffffff;   /* bevel highlight. 1.47:1 on the face, and
                                  deliberately so: see --pw-bevel-light. */
   --pw-silver-100: #eceae4;   /* light page. Dark label: 13.10:1 on 900. */
   --pw-silver-200: #e5e3dc;   /* the light face with the gloss flattened in.

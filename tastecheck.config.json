@@ -1,0 +1,102 @@
+{
+  "$schema": "./node_modules/@josueavalosjim/taste-check/schema/config.schema.json",
+  "$comment": [
+    "A skeuomorphic kit fails accessibility in one specific place, and it is the bevel. The frame is what says where a control ends and the page begins, so WCAG 1.4.11 applies to it at 3:1 and it is checked here. Its white inner highlight is not checked, deliberately: it measures 1.47:1 on a silver face, it identifies nothing on its own, and raising it to 3:1 would mean a grey highlight, which is not a highlight. css/tokens/semantic.chrome.css explains that split where the two tokens are declared.",
+    "Every ratio in the token comments was produced by this parser. If a number here stops matching a number there, one of the two is wrong and it is worth finding out which.",
+    "Three themes, not two. theme-auto.css is a verbatim copy of the dark block under a media query, because CSS cannot say 'apply that block under this condition too' and this kit ships no build step. css.mjs skips @media unless a scope names it, so without the third theme those values would never be measured at all. test/contract.test.mjs holds the copy to the original value for value."
+  ],
+  "contrast": {
+    "tokens": [
+      "css/tokens/primitive.chrome.css",
+      "css/tokens/semantic.chrome.css",
+      "css/tokens/theme-auto.css"
+    ],
+    "themes": [
+      { "name": "chrome-light", "scopes": [":root"] },
+      {
+        "name": "chrome-dark",
+        "scopes": [":root", ":root[data-theme=\"dark\"]"]
+      },
+      {
+        "name": "chrome-dark-auto",
+        "scopes": [
+          ":root",
+          {
+            "selector": ":root:not([data-theme])",
+            "atRule": "media (prefers-color-scheme: dark)"
+          }
+        ]
+      }
+    ],
+    "pairs": [
+      { "fg": "--pw-color-base-content", "bg": "--pw-color-base-100", "min": 4.5, "label": "text on the page" },
+      { "fg": "--pw-color-base-content", "bg": "--pw-color-base-200", "min": 4.5, "label": "a control label" },
+      { "fg": "--pw-color-base-content", "bg": "--pw-color-base-300", "min": 4.5, "label": "text in a sunken well" },
+      { "fg": "--pw-color-base-content", "bg": "--pw-gloss-lit-base-200", "min": 4.5, "label": "a label over a glossed face" },
+
+      { "fg": "--pw-color-primary-content", "bg": "--pw-color-primary", "min": 4.5, "label": "the primary action's label" },
+      { "fg": "--pw-color-primary-content", "bg": "--pw-gloss-lit-primary", "min": 4.5, "label": "the same label once the gloss has lifted the face" },
+
+      { "fg": "--pw-color-disabled-content", "bg": "--pw-color-base-200", "min": 3.0, "label": "disabled is quiet, not absent" },
+
+      { "fg": "--pw-bevel-frame", "bg": "--pw-color-base-100", "min": 3.0, "label": "the control boundary, against the page" },
+      { "fg": "--pw-bevel-frame", "bg": "--pw-color-base-200", "min": 3.0, "label": "the control boundary, against a panel" },
+
+      { "fg": "--pw-color-focus", "bg": "--pw-color-base-200", "min": 3.0, "label": "focus ring on the control it rings" },
+      { "fg": "--pw-color-focus", "bg": "--pw-color-base-100", "min": 3.0, "label": "focus ring on the page it offsets onto" },
+
+      { "fg": "--pw-color-lcd-content", "bg": "--pw-color-lcd", "min": 4.5, "label": "the readout" },
+      { "fg": "--pw-color-range", "bg": "--pw-color-base-300", "min": 3.0, "label": "the filled part of a slider" },
+
+      { "fg": "--pw-color-success-content", "bg": "--pw-color-success", "min": 4.5 },
+      { "fg": "--pw-color-warning-content", "bg": "--pw-color-warning", "min": 4.5 },
+      { "fg": "--pw-color-error-content", "bg": "--pw-color-error", "min": 4.5 }
+    ]
+  },
+  "tokens": {
+    "$comment": "Scans the whole kit, not just markup. A var(--pw-typo) anywhere in a component file is the cheapest bug in this project to introduce and the most annoying to see: it renders as nothing at all, silently.",
+    "declaredIn": [
+      "css/tokens/primitive.chrome.css",
+      "css/tokens/semantic.chrome.css",
+      "css/tokens/structural.css",
+      "css/tokens/skin.chrome.css",
+      "css/tokens/motion.css",
+      "css/tokens/theme-auto.css",
+      "css/treatment/bevel.css",
+      "css/components/lcd.css"
+    ],
+    "files": [
+      "css/**/*.css",
+      "demo/*.html",
+      "demo/demo.css"
+    ]
+  },
+  "treatments": {
+    "$comment": "demo/states.html is the only markup in the repo. Prefixes rather than a list of class names, because the list would need editing on every component and a list nobody maintains approves everything by accident.",
+    "files": ["demo/states.html"],
+    "allowPrefixes": ["pw-", "demo-"],
+    "approvedValues": []
+  },
+  "runtime": {
+    "$comment": [
+      "url is overwritten by scripts/runtime.mjs with the absolute file:// URL of demo/states.html. taste-check hands runtime.url straight to page.goto with no resolution against this file's directory, so a portable relative path cannot be written here. No server is needed, because states.html has no JavaScript.",
+      "What this catches that the contrast block cannot: a colour that a component overrode, a background stack with something translucent in it, and a token that resolves to nothing. What it does NOT catch is the gloss. The glare is a sibling pseudo-element rather than an ancestor background, so it is not in the stack this composites, and no rendered-page check sees through it either. That is the whole reason --pw-gloss-lit-base-200 and --pw-gloss-lit-primary exist as pre-flattened opaque tokens in the contrast block above."
+    ],
+    "url": "about:blank",
+    "states": [
+      { "name": "light" },
+      {
+        "name": "dark",
+        "$comment": "after, not before. before runs ahead of the page's own scripts, which means ahead of the document existing, so document.documentElement is null and the attribute is never set. The check then measures the light palette and reports a clean pass for a theme it never entered. It did exactly that here before this line moved.",
+        "after": "document.documentElement.setAttribute('data-theme', 'dark')"
+      }
+    ],
+    "targets": [
+      { "selector": "#buttons .pw-button", "prop": "color", "min": 4.5, "label": "a control label as painted" },
+      { "selector": ".pw-tab-panel", "prop": "color", "min": 4.5 },
+      { "selector": ".pw-badge[data-status=\"error\"]", "prop": "color", "min": 4.5 },
+      { "selector": ".pw-lcd-cell", "prop": "backgroundColor", "min": 4.5, "againstParent": true, "label": "the readout ink against its own ground" },
+      { "selector": ".pw-slider-range", "prop": "backgroundColor", "min": 3.0, "againstParent": true }
+    ]
+  }
+}

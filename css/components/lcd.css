@@ -40,6 +40,12 @@
        at 27x39 and a glyph at 15x18. */
     --pw-lcd-scale: 3;
 
+    /* A default width for a scrolling readout. It is a token rather than a
+       number the caller writes inline, which is not pedantry: the demo set
+       width: 22rem on the element and the treatments check caught it as a
+       one-off value in markup, which is exactly what it was. */
+    --pw-lcd-marquee-w: 22rem;
+
     --pw-lcd-sheet-digits: url("../../assets/lcd-digits.svg");
     --pw-lcd-sheet-glyphs: url("../../assets/lcd-glyphs.svg");
   }
@@ -115,7 +121,7 @@
      scroll offset so it stays on the compositor. */
   .pw-lcd-marquee {
     overflow: hidden;
-    max-width: 100%;
+    width: min(var(--pw-lcd-marquee-w), 100%);
   }
   .pw-lcd-marquee > .pw-lcd-render {
     animation: pw-lcd-scroll var(--pw-duration-marquee) linear infinite;

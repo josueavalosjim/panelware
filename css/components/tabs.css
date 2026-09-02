@@ -56,8 +56,8 @@
   .pw-tab-panel {
     padding: var(--pw-panel-pad);
     background-color: var(--pw-color-base-200);
+    --pw-elev: var(--pw-shadow-sunken);
     border-radius: 0 var(--pw-radius-box) var(--pw-radius-box) var(--pw-radius-box);
-    box-shadow: var(--pw-shadow-sunken);
     color: var(--pw-color-base-content);
     font-family: var(--pw-font-ui);
     font-size: var(--pw-text-ui);

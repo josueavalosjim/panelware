@@ -1,0 +1,13 @@
+{
+  "$comment": [
+    "A gate nobody has watched fail is a gate nobody should believe. This config is expected to FAIL, and CI asserts that it does; if it ever passes, the contrast check has stopped checking and every green run above it means nothing.",
+    "The failing pair is not arbitrary. It is --pw-bevel-light against the face it sits on, at the 3:1 an edge would need, and it measures 1.47:1. That is the exact pair the real config deliberately does not check, because the white inner highlight of a bevel identifies nothing on its own and forcing it to 3:1 would make it grey. So this fixture does two jobs: it proves the gate fires, and it records why that pair is exempt in the one place nobody can quietly delete without the build going red."
+  ],
+  "contrast": {
+    "tokens": ["../../css/tokens/primitive.chrome.css", "../../css/tokens/semantic.chrome.css"],
+    "themes": [{ "name": "chrome-light", "scopes": [":root"] }],
+    "pairs": [
+      { "fg": "--pw-bevel-light", "bg": "--pw-color-base-200", "min": 3.0, "label": "expected to fail: the bevel highlight is decoration, not a boundary" }
+    ]
+  }
+}
