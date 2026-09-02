@@ -1,0 +1,52 @@
+{
+  "name": "@josueavalosjim/panelware",
+  "version": "0.0.0",
+  "description": "An accessible component kit with a chrome-and-LCD skin. Radix UI does the interaction; this does the surface. Stacked inset bevels, Web 2.0 gloss, and a sprite-sheet segment readout. Skins are data-attribute swaps, not separate installs. No runtime dependencies.",
+  "keywords": [
+    "accessibility",
+    "components",
+    "css",
+    "design-system",
+    "design-tokens",
+    "radix-ui",
+    "react",
+    "skeuomorphic",
+    "theme"
+  ],
+  "homepage": "https://github.com/josueavalosjim/panelware#readme",
+  "bugs": { "url": "https://github.com/josueavalosjim/panelware/issues" },
+  "repository": { "type": "git", "url": "git+https://github.com/josueavalosjim/panelware.git" },
+  "license": "MIT",
+  "author": "Josue Avalos Jimenez",
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "exports": {
+    "./css": "./css/panelware.css",
+    "./css/tokens": "./css/tokens/index.css",
+    "./css/theme-auto": "./css/tokens/theme-auto.css",
+    "./assets/*": "./assets/*",
+    "./package.json": "./package.json"
+  },
+  "files": ["css", "assets", "README.md", "LICENSE"],
+  "scripts": {
+    "sprites": "node scripts/build-sprites.mjs",
+    "test": "node --test \"test/**/*.test.mjs\"",
+    "check": "taste-check",
+    "check:runtime": "node scripts/runtime.mjs",
+    "release": "npm test && npm run check && npm version patch -m \"Release %s\" && git push --follow-tags"
+  },
+  "engines": { "node": ">=22" },
+  "publishConfig": { "access": "public" },
+  "dependencies": {},
+  "peerDependencies": {
+    "radix-ui": "^1.6",
+    "react": "^19"
+  },
+  "peerDependenciesMeta": {
+    "radix-ui": { "optional": true },
+    "react": { "optional": true }
+  },
+  "devDependencies": {
+    "@josueavalosjim/taste-check": "^0.12.0"
+  }
+}
