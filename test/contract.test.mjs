@@ -145,6 +145,26 @@ describe('the density axis', () => {
   });
 });
 
+describe('touch axes', () => {
+  test('a vertical slider hands the horizontal axis back to the browser', () => {
+    /* touch-action: none takes both axes. On a vertical slider the horizontal
+       one is not needed, and ten of these is wider than a phone, so the group
+       has to scroll sideways and cannot if every band swallows the gesture.
+       The mirror of the trap on a horizontal rail, where pan-y kills the
+       sideways drag: give the browser the axis the control does not use. */
+    const css = bare(read('css/components/slider.css'));
+    assert.match(css, /\[data-orientation="vertical"\][\s\S]{0,900}?touch-action: pan-x/);
+  });
+
+  test('a group wider than a phone can scroll', () => {
+    /* Ten bands at a 44px target is 476px. Narrowing the columns to fit
+       would put them under the target floor, and an equaliser that wraps is
+       not an equaliser. */
+    const css = bare(read('css/components/equalizer.css'));
+    assert.match(css, /\.pw-eq \{[^}]*overflow-x: auto/);
+  });
+});
+
 describe('the focus ring', () => {
   test('is two rings in opposite values, not one', () => {
     /* A single ring is only as visible as the surface behind it allows, and

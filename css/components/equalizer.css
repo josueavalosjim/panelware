@@ -24,6 +24,15 @@
     align-items: stretch;
     gap: var(--pw-eq-gap);
     padding: var(--pw-space-md) var(--pw-space-sm);
+    /* Ten bands at a 44px touch target is 476px, which is wider than a
+       phone. Scrolling the group sideways is the only answer that keeps
+       every band tappable: narrowing the columns to fit would put them under
+       the target floor, and an equaliser that wraps to two rows is not an
+       equaliser. The vertical sliders inside hand the horizontal axis back
+       to the browser so this actually scrolls under a finger. */
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
     background-color: var(--pw-color-base-300);
     border-radius: var(--pw-radius-box);
     clip-path: var(--pw-clip-box);

@@ -1672,6 +1672,18 @@
      Keep the group narrow, leave scrollable page either side of it, and say
      so in the docs. */
   .pw-slider[data-orientation="vertical"] {
+    /* pan-x, not none.
+       A vertical slider needs the vertical gesture and nothing else, so
+       handing horizontal panning back to the browser costs it nothing and
+       buys the container the ability to scroll sideways through it. That
+       matters because ten of these is wider than a phone, and the alternative
+       is a horizontal scroller a finger can only grab in the gaps between
+       bands.
+
+       This is the mirror of the trap on a horizontal rail, where pan-y is
+       what kills the sideways gesture. The rule is the same in both
+       directions: give the browser the axis the control does not use. */
+    touch-action: pan-x;
     flex-direction: column;
     width: var(--pw-control-h);
     min-width: var(--pw-control-h);
@@ -1889,6 +1901,15 @@
     align-items: stretch;
     gap: var(--pw-eq-gap);
     padding: var(--pw-space-md) var(--pw-space-sm);
+    /* Ten bands at a 44px touch target is 476px, which is wider than a
+       phone. Scrolling the group sideways is the only answer that keeps
+       every band tappable: narrowing the columns to fit would put them under
+       the target floor, and an equaliser that wraps to two rows is not an
+       equaliser. The vertical sliders inside hand the horizontal axis back
+       to the browser so this actually scrolls under a finger. */
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
     background-color: var(--pw-color-base-300);
     border-radius: var(--pw-radius-box);
     clip-path: var(--pw-clip-box);

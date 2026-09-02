@@ -69,6 +69,18 @@
      Keep the group narrow, leave scrollable page either side of it, and say
      so in the docs. */
   .pw-slider[data-orientation="vertical"] {
+    /* pan-x, not none.
+       A vertical slider needs the vertical gesture and nothing else, so
+       handing horizontal panning back to the browser costs it nothing and
+       buys the container the ability to scroll sideways through it. That
+       matters because ten of these is wider than a phone, and the alternative
+       is a horizontal scroller a finger can only grab in the gaps between
+       bands.
+
+       This is the mirror of the trap on a horizontal rail, where pan-y is
+       what kills the sideways gesture. The rule is the same in both
+       directions: give the browser the axis the control does not use. */
+    touch-action: pan-x;
     flex-direction: column;
     width: var(--pw-control-h);
     min-width: var(--pw-control-h);
