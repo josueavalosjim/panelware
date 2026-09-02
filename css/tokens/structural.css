@@ -145,6 +145,11 @@
      becomes the page. */
   --pw-list-h: 16rem;
 
+  /* A checkbox or radio box. Smaller than a control, because it is a mark
+     rather than a surface, and its touch target is a pseudo element sized
+     from --pw-control-h instead. */
+  --pw-box-size: 1.25rem;
+
   --pw-eq-height: 10rem;
   --pw-eq-gap:    var(--pw-space-2xs);
   /* Where the zero line sits, as a percentage down the well. Declared here

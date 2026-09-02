@@ -501,6 +501,11 @@
      becomes the page. */
   --pw-list-h: 16rem;
 
+  /* A checkbox or radio box. Smaller than a control, because it is a mark
+     rather than a surface, and its touch target is a pseudo element sized
+     from --pw-control-h instead. */
+  --pw-box-size: 1.25rem;
+
   --pw-eq-height: 10rem;
   --pw-eq-gap:    var(--pw-space-2xs);
   /* Where the zero line sits, as a percentage down the well. Declared here
@@ -766,7 +771,8 @@
    this one looked right and hid the gap. Setting it once here covers the
    next control added outside the slot too. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button,
-       .pw-transport-button, .pw-menubar-trigger) {
+       .pw-transport-button, .pw-menubar-trigger,
+       .pw-checkbox, .pw-radio, .pw-select) {
   appearance: none;
   border: 0;
   margin: 0;
@@ -799,7 +805,8 @@
    why the ring no longer needs an offset: the inner ring fills what the gap
    used to. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
-       .pw-menubar-trigger, .pw-slider-thumb, .pw-panel):focus-visible {
+       .pw-menubar-trigger, .pw-checkbox, .pw-radio, .pw-select,
+       .pw-slider-thumb, .pw-panel):focus-visible {
   --pw-focus-halo: 0 0 0 var(--pw-focus-width) var(--pw-color-focus-contrast);
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
   outline-offset: var(--pw-focus-width);
@@ -874,6 +881,7 @@
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
+         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
          .pw-raised, .pw-sunken) {
     --pw-bevel-1:  calc(var(--pw-bevel-depth) * 1px);
     --pw-bevel-2:  calc(var(--pw-bevel-depth) * 2px);
@@ -933,7 +941,8 @@
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
-         .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list) {
+         .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
+         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list) {
     /* The bevel, plus the focus ring's inner half when there is one.
        --pw-focus-halo is transparent by default and set on :focus-visible. */
     box-shadow: var(--pw-elev), var(--pw-focus-halo);
@@ -965,7 +974,8 @@
     :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-badge,
            .pw-slider-track, .pw-slider-thumb, .pw-lcd,
            .pw-tab-panel, .pw-title-button, .pw-window,
-           .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list) {
+           .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
+           .pw-checkbox, .pw-radio, .pw-select, .pw-select-list) {
       border: var(--pw-border) solid ButtonBorder;
     }
   }
@@ -2308,6 +2318,212 @@
 
   @media (forced-colors: active) {
     .pw-list-item[aria-selected="true"] {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+/**
+ * FORM CONTROLS: checkbox, radio, select, label.
+ *
+ * The kit had none of these, which is a larger hole than it sounds: they are
+ * the first thing anyone evaluating a design system looks for, and every peer
+ * leads with them.
+ *
+ * ── The radio is round, and that is a deliberate break ───────────────────
+ * Everything else here is square at a 2px radius, and that rule is held
+ * everywhere except this one control. The shape of a radio IS its meaning: it
+ * is the only thing distinguishing "choose one of these" from "choose any of
+ * these" before you have read a word or tried to click twice. A square radio
+ * beside a square checkbox removes the distinction and leaves the behaviour
+ * to be discovered.
+ *
+ * Windows drew them round from 3.1 onward and so does every platform since.
+ * This is a convention doing semantic work rather than decoration, which is
+ * the test for when the house rule bends.
+ *
+ * ── The combo box is sunken with a raised button ─────────────────────────
+ * A period combo box is a sunken field with a separate raised drop button on
+ * its right edge, not a flat box with an arrow floating in it. The two
+ * treatments are the whole reason it reads as a control you can open rather
+ * than a label with a decoration.
+ */
+
+@layer pw.components {
+  /* ── The row a control sits in ──────────────────────────────────────── */
+  .pw-field {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pw-control-gap);
+    min-height: var(--pw-control-h);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-control-text);
+    color: var(--pw-color-base-content);
+  }
+
+  .pw-label {
+    /* The whole row is the target, not the 16px box, which is what makes a
+       checkbox usable without aiming. */
+    cursor: pointer;
+    user-select: none;
+  }
+  .pw-field:has(:disabled) .pw-label,
+  .pw-field[data-disabled] .pw-label {
+    color: var(--pw-color-disabled-content);
+    cursor: default;
+  }
+
+  /* ── Checkbox and radio share a box ─────────────────────────────────── */
+  .pw-checkbox,
+  .pw-radio {
+    --pw-elev: var(--pw-shadow-sunken);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: var(--pw-box-size);
+    height: var(--pw-box-size);
+    padding: 0;
+    background-color: var(--pw-color-base-300);
+    color: var(--pw-color-base-content);
+    cursor: pointer;
+  }
+
+  .pw-checkbox { border-radius: var(--pw-radius-control); }
+  /* The one round thing in the kit. See the header. */
+  .pw-radio { border-radius: 50%; }
+
+  /* The box is smaller than a touch target, so the target is a pseudo
+     element centred on it. Same split as the slider grip and the burger on
+     the portfolio: the ink is small, the thing a finger hits is not. */
+  .pw-checkbox::after,
+  .pw-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--pw-control-h);
+    height: var(--pw-control-h);
+    transform: translate(-50%, -50%);
+  }
+
+  .pw-checkbox:disabled,
+  .pw-radio:disabled {
+    color: var(--pw-color-disabled-content);
+    cursor: default;
+  }
+
+  /* Radix renders the indicator only when the control is on, so the box is
+     genuinely empty rather than holding a hidden mark. */
+  .pw-box-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  /* A checkbox renders both its marks and this shows one. Keyed off the
+     data-state Radix writes rather than chosen in JS, so an uncontrolled
+     checkbox that starts indeterminate shows a dash instead of a tick. */
+  .pw-box-indicator[data-state="checked"] [data-mark="minus"],
+  .pw-box-indicator[data-state="indeterminate"] [data-mark="check"] {
+    display: none;
+  }
+
+  /* ── Select ─────────────────────────────────────────────────────────── */
+  .pw-select {
+    --pw-elev: var(--pw-shadow-sunken);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pw-control-gap);
+    min-height: var(--pw-control-h);
+    min-width: var(--pw-control-min-w);
+    /* No right padding: the drop button occupies that edge. */
+    padding: 0 0 0 var(--pw-control-pad-x);
+    background-color: var(--pw-color-base-100);
+    color: var(--pw-color-base-content);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-control-text);
+    border-radius: var(--pw-radius-control);
+    clip-path: var(--pw-clip-control);
+    cursor: default;
+    text-align: left;
+  }
+
+  .pw-select-value {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Raised against the sunken field: the two treatments are what make it
+     read as a button on a well rather than an arrow drawn on a box. */
+  .pw-select-button {
+    --pw-elev: var(--pw-shadow-raised);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    align-self: stretch;
+    width: var(--pw-control-h);
+    margin: var(--pw-bevel-2);
+    background-color: var(--pw-color-base-200);
+    border-radius: var(--pw-radius-control);
+    box-shadow: var(--pw-elev);
+    pointer-events: none;
+  }
+
+  .pw-select[data-state="open"] .pw-select-button {
+    --pw-elev: var(--pw-shadow-sunken);
+  }
+
+  .pw-select:disabled { color: var(--pw-color-disabled-content); }
+  .pw-select[data-placeholder] .pw-select-value { opacity: 0.7; }
+
+  /* The open list reuses the menu's surface, because it is one. */
+  .pw-select-list {
+    --pw-elev: var(--pw-shadow-raised);
+    min-width: var(--radix-select-trigger-width);
+    max-height: var(--radix-select-content-available-height);
+    padding: var(--pw-space-3xs) 0;
+    background-color: var(--pw-color-base-200);
+    border-radius: var(--pw-radius-control);
+    clip-path: var(--pw-clip-control);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-control-text);
+    color: var(--pw-color-base-content);
+  }
+
+  .pw-select-item {
+    display: flex;
+    align-items: center;
+    gap: var(--pw-control-gap);
+    min-height: var(--pw-control-h);
+    padding: 0 var(--pw-control-pad-x) 0 var(--pw-menu-gutter);
+    position: relative;
+    cursor: default;
+    user-select: none;
+    outline: none;
+  }
+  .pw-select-item[data-highlighted] {
+    background-color: var(--pw-color-primary);
+    color: var(--pw-color-primary-content);
+  }
+  .pw-select-item[data-disabled] { color: var(--pw-color-disabled-content); }
+
+  .pw-select-indicator {
+    position: absolute;
+    left: var(--pw-space-sm);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  @media (forced-colors: active) {
+    .pw-select-item[data-highlighted] {
       background-color: Highlight;
       color: HighlightText;
       forced-color-adjust: none;

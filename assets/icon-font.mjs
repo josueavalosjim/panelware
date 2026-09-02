@@ -240,6 +240,28 @@ const I = {
     '................',
   ],
 
+  /* dot is rounded rather than square, and it is the only mark in the set
+     that is. It serves the radio's bullet, the menu's radio item and the
+     neutral badge, and a square bullet inside a round radio reads as a
+     mistake: the roundness of a radio is the thing that says choose-one, so
+     the mark inside it cannot argue with the box around it.
+
+     Six pixels cannot be a circle. Knocking the corners off is what every
+     bitmap radio bullet since Windows 3.1 has done. */
+
+  /* Form marks.
+
+     minus is the indeterminate checkbox, and it is a separate glyph from
+     minimize rather than a reuse: minimize sits low in its cell because a
+     window's minimize glyph is a title bar dropping to the taskbar, and a
+     low dash in a checkbox reads as a mistake rather than as a third state.
+
+     caret-down is a filled triangle, not the chevron. Windows drew its
+     dropdown arrows as solid triangles, from Marlett onward, and a stroked
+     chevron in a combo box is the one detail that would date this kit
+     forward by fifteen years. Both marks exist in the set: the chevron is
+     for disclosure and navigation, the caret is for "this opens a list". */
+
   /* Status. These replace the text glyphs the badge shipped with, which were
      a check, a bang and a multiplication sign borrowed from the font: they
      changed shape with the reader's font stack and had no pixel grid at all. */
@@ -279,18 +301,54 @@ const I = {
     '................',
     '................',
   ],
+  minus: [
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '...##########...',
+    '...##########...',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+  ],
+  'caret-down': [
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '...##########...',
+    '....########....',
+    '.....######.....',
+    '......####......',
+    '.......##.......',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+  ],
   dot: [
     '................',
     '................',
     '................',
     '................',
     '................',
+    '......####......',
     '.....######.....',
     '.....######.....',
     '.....######.....',
     '.....######.....',
-    '.....######.....',
-    '.....######.....',
+    '......####......',
     '................',
     '................',
     '................',
@@ -303,7 +361,7 @@ const I = {
 export const ICON_ORDER = [
   'play', 'pause', 'stop', 'prev', 'next', 'eject', 'close', 'minimize',
   'maximize', 'restore', 'chevron-down', 'chevron-up', 'chevron-right',
-  'chevron-left', 'check', 'bang', 'dot',
+  'chevron-left', 'check', 'bang', 'dot', 'minus', 'caret-down',
 ];
 
 export const ICON_ROWS = Math.ceil(ICON_ORDER.length / ICON_COLS);

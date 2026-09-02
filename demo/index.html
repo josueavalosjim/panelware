@@ -51,6 +51,7 @@
       List, Menu, MenuCheckboxItem, MenuContent, MenuItem, MenuLabel, MenuRadioGroup,
       MenuRadioItem, MenuSeparator, MenuSub, MenuTrigger, Menubar,
       Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
+      Checkbox, Field, Radio, RadioGroup, Select, SelectItem,
       ToggleGroup, ToggleGroupItem, Transport, TransportButton, Window,
     } from '../dist/index.js';
 
@@ -182,7 +183,13 @@
         h('div', { className: 'demo-bar' },
           h(Axis, { label: 'Theme', value: themeAxis, options: ['light', 'dark'], onChange: setThemeAxis }),
           h(Axis, { label: 'Density', value: density, options: ['comfortable', 'compact'], onChange: setDensityAxis }),
-          h(Axis, { label: 'Skin', value: 'chrome', options: ['chrome'], onChange: () => {} })),
+          /* Skin is a combo box rather than a segmented control, because it
+             is the axis that grows: one today, two or three once a second
+             skin lands. A segmented control at five values is a toolbar. */
+          h('div', { className: 'demo-axis' },
+            h('span', { className: 'demo-axis-label' }, 'Skin'),
+            h(Select, { label: 'Skin', defaultValue: 'chrome' },
+              h(SelectItem, { value: 'chrome' }, 'Chrome')))),
 
         h(Section, {
           id: 'buttons', title: 'Button',
@@ -204,6 +211,47 @@
           h(Button, { disabled: true }, 'Unavailable'),
           h(Button, { asChild: true },
             h('a', { href: './states.html' }, 'asChild, as a link'))),
+
+        h(Section, {
+          id: 'field', title: 'Form controls',
+          note: 'The label is part of the target: clicking the words works, which is native behaviour a hand-rolled checkbox routinely loses. The radio is the one round thing in the kit, because the shape is what tells you it is a choose-one before you have read a word. The combo box is a sunken field with a raised drop button, which is what makes it read as something you can open.',
+          code: `import { Field, Checkbox, RadioGroup, Radio, Select, SelectItem }
+  from '@josueavalosjim/panelware';
+
+<Field label="Always on top">
+  <Checkbox checked={onTop} onCheckedChange={setOnTop} />
+</Field>
+
+// Indeterminate is a third state with its own mark, not a dimmer second one
+<Field label="Some tracks"><Checkbox checked="indeterminate" /></Field>
+
+<RadioGroup value={skin} onValueChange={setSkin}>
+  <Field label="Base"><Radio value="base" /></Field>
+  <Field label="Night"><Radio value="night" /></Field>
+</RadioGroup>
+
+<Select label="Output device" defaultValue="wave" placeholder="Choose one">
+  <SelectItem value="wave">DirectSound</SelectItem>
+  <SelectItem value="asio">ASIO</SelectItem>
+</Select>`,
+        },
+          h('div', { className: 'demo-stack' },
+            h(Field, { label: 'Always on top' },
+              h(Checkbox, { checked: alwaysOnTop, onCheckedChange: setAlwaysOnTop })),
+            h(Field, { label: 'Some tracks selected' },
+              h(Checkbox, { checked: 'indeterminate' })),
+            h(Field, { label: 'Unavailable' }, h(Checkbox, { disabled: true })),
+            h(RadioGroup, {
+              value: skin, onValueChange: setSkin,
+              style: { display: 'flex', flexDirection: 'column' },
+            },
+              h(Field, { label: 'Base' }, h(Radio, { value: 'base' })),
+              h(Field, { label: 'Night' }, h(Radio, { value: 'night' })),
+              h(Field, { label: 'Unavailable' }, h(Radio, { value: 'x', disabled: true }))),
+            h(Select, { label: 'Output device', defaultValue: 'wave' },
+              h(SelectItem, { value: 'wave' }, 'DirectSound'),
+              h(SelectItem, { value: 'asio' }, 'ASIO'),
+              h(SelectItem, { value: 'null', disabled: true }, 'Null output')))),
 
         h(Section, {
           id: 'toggle', title: 'Toggle',

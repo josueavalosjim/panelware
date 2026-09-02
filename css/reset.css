@@ -33,7 +33,8 @@
    this one looked right and hid the gap. Setting it once here covers the
    next control added outside the slot too. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button,
-       .pw-transport-button, .pw-menubar-trigger) {
+       .pw-transport-button, .pw-menubar-trigger,
+       .pw-checkbox, .pw-radio, .pw-select) {
   appearance: none;
   border: 0;
   margin: 0;
@@ -66,7 +67,8 @@
    why the ring no longer needs an offset: the inner ring fills what the gap
    used to. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
-       .pw-menubar-trigger, .pw-slider-thumb, .pw-panel):focus-visible {
+       .pw-menubar-trigger, .pw-checkbox, .pw-radio, .pw-select,
+       .pw-slider-thumb, .pw-panel):focus-visible {
   --pw-focus-halo: 0 0 0 var(--pw-focus-width) var(--pw-color-focus-contrast);
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
   outline-offset: var(--pw-focus-width);

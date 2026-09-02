@@ -7,7 +7,7 @@
  */
 
 export type IconName =
-  | 'play' | 'pause' | 'stop' | 'prev' | 'next' | 'eject' | 'close' | 'minimize' | 'maximize' | 'restore' | 'chevron-down' | 'chevron-up' | 'chevron-right' | 'chevron-left' | 'check' | 'bang' | 'dot';
+  | 'play' | 'pause' | 'stop' | 'prev' | 'next' | 'eject' | 'close' | 'minimize' | 'maximize' | 'restore' | 'chevron-down' | 'chevron-up' | 'chevron-right' | 'chevron-left' | 'check' | 'bang' | 'dot' | 'minus' | 'caret-down';
 
 export interface IconCell {
   x: number;
@@ -32,6 +32,8 @@ export const ICON_INDEX: Record<IconName, IconCell> = {
   'check': { x: 6, y: 1 },
   'bang': { x: 7, y: 1 },
   'dot': { x: 0, y: 2 },
+  'minus': { x: 1, y: 2 },
+  'caret-down': { x: 2, y: 2 },
 };
 
 export const ICON_NAMES: readonly IconName[] = [
@@ -52,4 +54,6 @@ export const ICON_NAMES: readonly IconName[] = [
   'check',
   'bang',
   'dot',
+  'minus',
+  'caret-down',
 ];

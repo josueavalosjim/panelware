@@ -959,6 +959,15 @@
      }
     },
     {
+     "name": "--pw-box-size",
+     "values": {
+      "both": {
+       "declared": "1.25rem",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-eq-height",
      "values": {
       "both": {

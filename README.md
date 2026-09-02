@@ -48,9 +48,20 @@ component would be verifying a shape that never ships.
 
 ## What is in it
 
-Button, toggle, tabs, dialog, single-thumb slider, status badge, and a segment
-readout. Two themes, `chrome` light and dark, swapped with `data-theme` on the
-root.
+Button, toggle, toggle group, tabs, dialog, window chrome, menu bar,
+transport, seek, slider, equaliser, list, status badge, icon, segment readout,
+and the form controls: checkbox, radio group, select, and the label they
+share.
+
+Two themes, `chrome` light and dark, and two densities, `comfortable` (44px
+targets) and `compact` (32px). Skin, theme and density are three independent
+attributes on any element, not just the root, so a dark toolbar inside a light
+page is one `data-theme` away.
+
+One deliberate break from the kit's own rules is worth knowing before you find
+it: **the radio is round**, and it is the only round thing here. The shape is
+what tells you a control is choose-one before you have read a word or clicked
+twice, which is a convention doing semantic work rather than decoration.
 
 There is an equaliser, and it is deliberately **not** a multi-thumb slider.
 

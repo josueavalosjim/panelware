@@ -81,9 +81,15 @@ describe('the reset', () => {
        reasons, so the gap was invisible until a control was added outside
        it: the menu bar triggers rendered as bevelled boxes on a bar whose
        whole point is being flat. */
+    /* Found by content rather than by which selector happens to close the
+       list. Anchoring on the last class in the :where() broke the moment the
+       form controls were added to it, which is a test that fails when the
+       code is fine. */
     const reset = bare(read('css/reset.css'));
-    const controls = reset.match(/:where\([^)]*\.pw-menubar-trigger\) \{[^}]*\}/)[0];
-    assert.match(controls, /appearance: none/);
-    assert.match(controls, /border: 0/);
+    const block = reset.split(/(?=:where\()/)
+      .find((b) => b.includes('appearance: none'));
+    assert.ok(block, 'no reset block strips native control chrome');
+    assert.match(block, /\.pw-menubar-trigger/);
+    assert.match(block, /border: 0/);
   });
 });

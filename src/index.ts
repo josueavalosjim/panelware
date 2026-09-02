@@ -31,6 +31,11 @@ export type { WindowProps } from './window.js';
 export { Dialog, DialogTrigger, DialogPanel } from './dialog.js';
 export type { DialogPanelProps } from './dialog.js';
 
+export { Field, Checkbox, RadioGroup, Radio, Select, SelectItem } from './field.js';
+export type {
+  FieldProps, CheckboxProps, RadioGroupProps, RadioProps, SelectProps, SelectItemProps,
+} from './field.js';
+
 export { List } from './list.js';
 export type { ListProps, ListRow } from './list.js';
 
