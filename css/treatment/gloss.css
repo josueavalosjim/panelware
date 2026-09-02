@@ -80,12 +80,28 @@
 
   /* A pressed control is sunken, and a sunken thing does not catch a
      highlight on its top edge. Killing the capsule and dimming the glare is
-     what makes the press read as depth rather than as a colour change. */
-  :where([data-gloss]):active::after,
+     what makes the press read as depth rather than as a colour change.
+
+     The element list is doing real work, and :active alone was a bug.
+     :active matches every ANCESTOR of the element being activated, not only
+     the element itself. The dialog's title bar carries the gloss and
+     contains the close button, so pressing the X put the title bar in
+     :active and dimmed the entire bar: the glare fell from 1 to 0.4 and the
+     highlight capsule went to 0. It reads as a change that is not attached
+     to the thing you pressed, because it is not.
+
+     It is not period behaviour either. An XP titlebar's gradient did not
+     move when you clicked its close button; only the button did.
+
+     So the rule is now what it always meant: the gloss dims on a control
+     that sinks. A title bar is not a control and does not sink, so it is
+     not in this list and never matches, whether the press lands on it or on
+     something inside it. */
+  :where(button, a[href], [role="button"], [role="tab"], [role="switch"])[data-gloss]:active::after,
   :where([data-gloss][data-state="on"])::after {
     opacity: 0;
   }
-  :where([data-gloss]):active::before,
+  :where(button, a[href], [role="button"], [role="tab"], [role="switch"])[data-gloss]:active::before,
   :where([data-gloss][data-state="on"])::before {
     opacity: calc(var(--pw-gloss-opacity) * 0.4);
   }

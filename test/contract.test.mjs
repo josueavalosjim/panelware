@@ -124,6 +124,33 @@ describe('the depth knob', () => {
   });
 });
 
+describe('state rules that could reach an ancestor', () => {
+  const gloss = read('css/treatment/gloss.css');
+
+  test('the gloss press-dim requires the glossed element to be a control', () => {
+    /* :active matches every ancestor of the element being activated, not
+       only the element itself. A bare [data-gloss]:active therefore fires on
+       any glossed CONTAINER whenever anything inside it is pressed.
+
+       That shipped. The dialog's title bar carries the gloss and holds the
+       close button, so pressing the X dimmed the whole bar, which reads as a
+       change unattached to the thing you pressed. It is not period behaviour
+       either: an XP titlebar's gradient did not move when its close button
+       was clicked.
+
+       The guard is on the selector because the selector is the fix. Every
+       :active rule in this file has to name what kind of element it applies
+       to, so a container can never satisfy it. */
+    const bare = [...bare_(gloss).matchAll(/([^{}]*):active[^{}]*\{/g)]
+      .map((m) => m[0].trim())
+      .filter((rule) => !/\b(?:button|a\[href\]|\[role=)/.test(rule));
+    assert.deepEqual(bare, [],
+      `a gloss :active rule does not restrict to a control, so it fires on ancestors too:\n${bare.join('\n')}`);
+  });
+});
+
+const bare_ = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
+
 describe('what a colour token is allowed to be', () => {
   const files = [
     'css/tokens/primitive.chrome.css',
