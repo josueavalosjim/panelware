@@ -17,6 +17,9 @@ export { Button } from './button.js';
 export type { ButtonProps } from './button.js';
 
 export { Toggle } from './toggle.js';
+
+export { ToggleGroup, ToggleGroupItem } from './toggle-group.js';
+export type { ToggleGroupProps, ToggleGroupItemProps } from './toggle-group.js';
 export type { ToggleProps } from './toggle.js';
 
 export { Tabs, TabList, Tab, TabPanel } from './tabs.js';

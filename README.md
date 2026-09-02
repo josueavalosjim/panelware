@@ -220,6 +220,49 @@ panel, and an audit will usually prefer it. WCAG requires neither. If you want
 the second, pass `aria-disabled` and handle the value yourself rather than
 `disabled`.
 
+## Writing a skin
+
+The kit's whole claim is that a skin is a set of token values rather than a
+fork, so here is the actual procedure. It is four files and no component
+changes; if you find yourself editing something under `css/components/`, the
+token you needed is missing and that is a bug worth reporting.
+
+**1. Ship a complete set, not a diff.** Copy `css/tokens/semantic.chrome.css`
+and `css/tokens/skin.chrome.css` and change the values. Every skin x theme
+block declares every token, and that is not tidiness: `[data-theme="dark"]`
+and `[data-skin="yours"]` are both (0,1,0), so a block that only carries
+differences loses a specificity tie to whichever came later in the bundle,
+silently, and only for the tokens it left out.
+
+**2. Use literals.** No `color-mix()`, no `oklch(from …)`. The contrast gate
+cannot parse either, an unparseable pair is skipped, and a skipped pair
+reports as a pass. This is the constraint most likely to be violated by
+someone helpful, because it is DaisyUI's idiom and what most autocomplete
+suggests.
+
+**3. Put your elevation in `--pw-elev`.** Components read that one slot and
+never `--pw-shadow-raised`. If your skin has no bevel, set
+`--pw-bevel-depth: 0` and every offset collapses to nothing, then assign
+whatever you do have — an outer glow, a hairline — to `--pw-elev`. The slot
+carries outer shadows as happily as insets.
+
+**4. Turn off what you do not want with tokens, not markup.**
+`--pw-gloss-opacity: 0` silences every `[data-gloss]` in every consumer's
+markup at once. Removing the rule instead would leave a dead attribute
+scattered through code you do not own.
+
+**Three hooks exist for skins that are not this one**, do nothing today, and
+are the reason a notched or textured skin is a token change rather than a
+rewrite: `--pw-clip-control` and `--pw-clip-box` for corner geometry a scalar
+radius cannot express, and `--pw-texture` with `--pw-texture-opacity` for a
+surface pattern.
+
+**Then check it.** Add your theme to `tastecheck.config.json`'s `themes` array
+and run `npm run check`. Every pair is measured against your values, and a
+token your skin forgot to declare is a hard failure rather than a silent
+fallback. `npm test` will also hold your blocks to declaring the same token
+set as every other, and will tell you if your bevel ends up lit from below.
+
 ## Motion
 
 Only `transform` and `opacity`. The bevel flip is not transitioned at all,
@@ -257,11 +300,24 @@ makes the rest of a page unusable.
 ## Development
 
 ```bash
-npm test              # the contract, and the sheets against their font data
+npm run generate      # sheets, icon index, stylesheet bundle, docs data
+npm run build         # generate, then tsc
+npm test              # compile and check, WITHOUT regenerating
 npm run check         # the palette gate: contrast, tokens, one-off values
 npm run check:runtime # the same, measured off the rendered page
-npm run sprites       # redraw the readout sheets from the font data
 ```
+
+`npm test` deliberately does not regenerate. Several tests compare a
+committed artifact against what its source produces, and running the
+generators first would rewrite the artifact immediately before the
+comparison, which is how every one of those tests silently stopped being able
+to fail for one commit.
+
+`demo/index.html` is the documentation: live components, a switcher for all
+three axes built out of the kit's own ToggleGroup, the copy-paste source for
+every example, the full token table, and every contrast pair with the ratio
+the gate measured. `demo/states.html` is the same components with no
+JavaScript at all.
 
 `npm run check` reads files and takes about half a second. `check:runtime`
 needs a Chromium and refuses to run without one, rather than skipping quietly.

@@ -81,3 +81,37 @@ describe('the shipped stylesheet', () => {
     }
   });
 });
+
+describe('the published reference data', () => {
+  /* demo/docs-data.json is generated from the same files the gate reads and
+     from the gate itself, so the token table and the contrast table in the
+     documentation cannot drift from the build. A hand-written token table is
+     a second copy of the contract that nothing checks; a hand-written
+     contrast table is worse, being a claim about accessibility with no
+     measurement behind it. */
+  test('is what the sources and the gate produce', async () => {
+    const { data } = await import('../scripts/build-docs-data.mjs');
+    const onDisk = JSON.parse(read('demo/docs-data.json'));
+    assert.deepEqual(onDisk, data);
+  });
+
+  test('publishes every pair the gate checks, and none of them failing', () => {
+    const onDisk = JSON.parse(read('demo/docs-data.json'));
+    const config = JSON.parse(read('tastecheck.config.json'));
+    const expected = config.contrast.pairs.length * config.contrast.themes.length;
+    assert.equal(onDisk.contrast.length, expected,
+      'the published table is not the whole table');
+    assert.deepEqual(onDisk.contrast.filter((r) => !r.pass), []);
+  });
+
+  test('resolves a semantic token through to a literal', () => {
+    /* A table showing var(--pw-silver-300) and stopping there has told the
+       reader the name of a thing rather than the thing. */
+    const onDisk = JSON.parse(read('demo/docs-data.json'));
+    const roles = onDisk.groups.find((g) => g.name === 'Colour roles');
+    const base = roles.tokens.find((t) => t.name === '--pw-color-base-200');
+    assert.match(base.values.light.declared, /^var\(/);
+    assert.match(base.values.light.resolved, /^#[0-9a-f]{6}$/i);
+    assert.notEqual(base.values.light.resolved, base.values.dark.resolved);
+  });
+});

@@ -1289,19 +1289,31 @@
      at 200% zoom can miss. The weight is the second, non-shape signal, and
      neither of them is colour. */
   /* Both attributes, because the CSS was keyed entirely off data-state and
-     the accessibility tree entirely off aria-pressed, with nothing binding
-     them. Radix emits both, so this holds under Radix; the kit also ships as
+     the accessibility tree entirely off aria-pressed or aria-checked, with
+     nothing binding them. Three spellings because a standalone toggle is a
+     button that is pressed and a toggle inside a group is a radio that is
+     checked, and the skin has no business caring which. Radix emits both, so this holds under Radix; the kit also ships as
      standalone CSS, and a consumer wiring it by hand got a button announced
      as pressed that rendered completely unpressed. The kit already pairs
      :disabled with [aria-disabled="true"] for the same reason. */
   .pw-toggle[data-state="on"],
-  .pw-toggle[aria-pressed="true"] {
+  .pw-toggle[aria-pressed="true"],
+  .pw-toggle[aria-checked="true"] {
     --pw-elev: var(--pw-shadow-sunken);
     background-color: var(--pw-color-base-300);
     font-weight: 600;
   }
 
   .pw-toggle:active { transform: translateY(var(--pw-press-travel)); }
+
+  /* A segmented control: several toggles as one choice. Gapped rather than
+     joined, because two bevelled buttons sharing an edge draw that edge
+     twice and it reads as a seam. */
+  .pw-toggle-group {
+    display: inline-flex;
+    align-items: stretch;
+    gap: var(--pw-space-3xs);
+  }
 
   .pw-toggle:disabled,
   .pw-toggle[aria-disabled="true"] {
@@ -1314,7 +1326,8 @@
      is left carrying it alone. */
   @media (forced-colors: active) {
     .pw-toggle[data-state="on"],
-    .pw-toggle[aria-pressed="true"] {
+    .pw-toggle[aria-pressed="true"],
+    .pw-toggle[aria-checked="true"] {
       background-color: Highlight;
       color: HighlightText;
       forced-color-adjust: none;

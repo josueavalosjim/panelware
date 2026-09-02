@@ -312,16 +312,23 @@ describe('visual state and ARIA state', () => {
        both so it held under Radix, but the kit also ships as standalone CSS,
        and a consumer wiring it by hand got a control announced as pressed
        that rendered completely unpressed. */
+    /* Three spellings for the toggle, not two. A standalone toggle is a
+       button that is pressed; the same toggle inside a ToggleGroup is a radio
+       that is checked. The skin has no business knowing which, so every rule
+       that styles one styles all of them. */
     const pairs = [
-      ['css/components/toggle.css', 'data-state="on"', 'aria-pressed="true"'],
-      ['css/components/tabs.css', 'data-state="active"', 'aria-selected="true"'],
+      ['css/components/toggle.css', 'data-state="on"',
+        ['aria-pressed="true"', 'aria-checked="true"']],
+      ['css/components/tabs.css', 'data-state="active"', ['aria-selected="true"']],
     ];
-    for (const [rel, dataAttr, ariaAttr] of pairs) {
+    for (const [rel, dataAttr, ariaAttrs] of pairs) {
       const css = bare(read(rel));
       const dataCount = css.split(`[${dataAttr}]`).length - 1;
-      const ariaCount = css.split(`[${ariaAttr}]`).length - 1;
-      assert.equal(ariaCount, dataCount,
-        `${rel} styles [${dataAttr}] ${dataCount} times but [${ariaAttr}] ${ariaCount} times`);
+      for (const ariaAttr of ariaAttrs) {
+        const ariaCount = css.split(`[${ariaAttr}]`).length - 1;
+        assert.equal(ariaCount, dataCount,
+          `${rel} styles [${dataAttr}] ${dataCount} times but [${ariaAttr}] ${ariaCount} times`);
+      }
     }
   });
 });

@@ -1,0 +1,106 @@
+/**
+ * Documentation chrome. Not part of the package.
+ *
+ * Everything here is prefixed demo- so it can never be mistaken for kit CSS,
+ * and it reads panelware's own tokens rather than declaring values, so the
+ * page follows whatever the switcher is set to along with the specimens on
+ * it. A docs page that hard-coded a light ground would show the dark kit on
+ * the wrong background and hide the mistakes it exists to surface.
+ */
+
+.demo-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--pw-space-lg);
+  margin-bottom: var(--pw-space-2xl);
+  padding: var(--pw-space-sm) 0;
+  background-color: var(--pw-color-base-100);
+  border-bottom: var(--pw-border) solid var(--pw-bevel-boundary);
+}
+
+.demo-axis {
+  display: flex;
+  align-items: center;
+  gap: var(--pw-space-sm);
+}
+
+.demo-axis-label {
+  font-size: var(--pw-text-micro);
+  opacity: 0.75;
+}
+
+/* The code beside each example. A disclosure rather than always-open,
+   because the specimen is the thing being read and the source is the thing
+   being fetched. */
+.demo-code {
+  margin-top: var(--pw-space-lg);
+}
+.demo-code summary {
+  cursor: pointer;
+  font-size: var(--pw-text-micro);
+  opacity: 0.75;
+  list-style: none;
+}
+.demo-code summary::-webkit-details-marker { display: none; }
+.demo-code summary::before { content: '+ '; }
+.demo-code[open] summary::before { content: '\2212 '; }
+
+.demo-pre {
+  margin: var(--pw-space-sm) 0 0;
+  padding: var(--pw-space-md);
+  overflow-x: auto;
+  background-color: var(--pw-color-base-300);
+  border-radius: var(--pw-radius-control);
+  box-shadow: var(--pw-shadow-sunken);
+  font-family: var(--pw-font-mono);
+  font-size: var(--pw-text-micro);
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+/* Tables. A design system's reference material is mostly rows, and rows on a
+   sunken plate is the one place this kit has to look like documentation
+   rather than like an application. */
+.demo-table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.demo-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--pw-text-micro);
+  font-variant-numeric: tabular-nums;
+}
+.demo-table th,
+.demo-table td {
+  padding: var(--pw-space-2xs) var(--pw-space-sm);
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: var(--pw-border) solid var(--pw-bevel-shade);
+}
+.demo-table th {
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  background-color: var(--pw-color-base-100);
+}
+.demo-table td.demo-num { text-align: right; }
+
+.demo-swatch {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: var(--pw-space-2xs);
+  vertical-align: -0.2em;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px var(--pw-bevel-boundary);
+}
+
+.demo-mono { font-family: var(--pw-font-mono); }
+.demo-pass { font-weight: 600; }
+.demo-fail { font-weight: 600; color: var(--pw-color-error-content); }

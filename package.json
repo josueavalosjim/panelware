@@ -47,7 +47,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "generate": "node scripts/build-sprites.mjs && node scripts/build-icons-index.mjs && node scripts/build-css.mjs",
+    "generate": "node scripts/build-sprites.mjs && node scripts/build-icons-index.mjs && node scripts/build-css.mjs && node scripts/build-docs-data.mjs",
     "build": "npm run generate && tsc",
     "test": "tsc && node --test \"test/**/*.test.mjs\"",
     "check": "taste-check",

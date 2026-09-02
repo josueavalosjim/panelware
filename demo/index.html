@@ -19,6 +19,7 @@
 -->
 <link rel="stylesheet" href="../css/panelware.css">
 <link rel="stylesheet" href="./demo.css">
+<link rel="stylesheet" href="./docs.css">
 <script type="importmap">
 {
   "imports": {
@@ -43,21 +44,94 @@
   <main class="demo-main" id="root"></main>
 
   <script type="module">
-    import { createElement as h, useState, StrictMode } from 'react';
+    import { createElement as h, useEffect, useState, StrictMode } from 'react';
     import { createRoot } from 'react-dom/client';
     import {
       Badge, Button, Dialog, DialogPanel, DialogTrigger, Equalizer, Icon,
       List, Menu, MenuCheckboxItem, MenuContent, MenuItem, MenuLabel, MenuRadioGroup,
       MenuRadioItem, MenuSeparator, MenuSub, MenuTrigger, Menubar,
       Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
-      Transport, TransportButton, Window,
+      ToggleGroup, ToggleGroupItem, Transport, TransportButton, Window,
     } from '../dist/index.js';
 
-    const Section = ({ id, title, note, children }) =>
+    const Section = ({ id, title, note, code, children }) =>
       h('section', { className: 'demo-section', id },
         h('h2', { className: 'demo-heading' }, title),
         h('p', { className: 'demo-note' }, note),
-        h('div', { className: 'demo-row' }, children));
+        h('div', { className: 'demo-row' }, children),
+        code ? h(Code, null, code) : null);
+
+    /* The three axes, driven by the kit's own components. A theme switcher
+       built out of something else would be a design system whose docs do not
+       use it. */
+    function Axis({ label, value, options, onChange }) {
+      /* A ToggleGroup, not Tabs. This was Tabs first, which meant a tablist
+         whose triggers carried aria-controls pointing at no tabpanel: an
+         orphaned pattern, and one this kit's own audit had already flagged
+         elsewhere. Tabs show one of several panels; a segmented control
+         chooses one of several values. */
+      return h('div', { className: 'demo-axis' },
+        h('span', { className: 'demo-axis-label', id: 'axis-' + label }, label),
+        h(ToggleGroup, {
+          label, value,
+          onValueChange: (v) => { if (v) onChange(v); },
+        }, options.map((o) => h(ToggleGroupItem, { key: o, value: o }, o))));
+    }
+
+    function Code({ children }) {
+      return h('details', { className: 'demo-code' },
+        h('summary', null, 'code'),
+        h('pre', { className: 'demo-pre' }, h('code', null, children)));
+    }
+
+    function TokenTable({ groups }) {
+      return h('div', null, groups.map((g) =>
+        h('div', { key: g.name },
+          h('h3', { className: 'demo-heading' }, g.name),
+          h('p', { className: 'demo-note demo-mono' }, g.file),
+          h('div', { className: 'demo-table-wrap' },
+            h('table', { className: 'demo-table' },
+              h('thead', null, h('tr', null,
+                h('th', null, 'Token'),
+                ...Object.keys(g.tokens[0].values).map((v) => h('th', { key: v }, v)))),
+              h('tbody', null, g.tokens.map((t) =>
+                h('tr', { key: t.name },
+                  h('td', { className: 'demo-mono' }, t.name),
+                  ...Object.keys(g.tokens[0].values).map((v) => {
+                    const cell = t.values[v];
+                    if (!cell) return h('td', { key: v }, '');
+                    const shown = cell.resolved ?? cell.declared;
+                    const isColour = /^#|^rgb|^oklch/.test(shown);
+                    return h('td', { key: v, className: 'demo-mono' },
+                      isColour ? h('span', {
+                        className: 'demo-swatch',
+                        style: { background: shown },
+                      }) : null,
+                      shown);
+                  })))))))));
+    }
+
+    function ContrastTable({ rows }) {
+      const themes = [...new Set(rows.map((r) => r.theme))];
+      return h('div', null, themes.map((theme) =>
+        h('div', { key: theme },
+          h('h3', { className: 'demo-heading' }, theme),
+          h('div', { className: 'demo-table-wrap' },
+            h('table', { className: 'demo-table' },
+              h('thead', null, h('tr', null,
+                h('th', null, 'Foreground'), h('th', null, 'Background'),
+                h('th', null, 'What it is'),
+                h('th', { className: 'demo-num' }, 'Measured'),
+                h('th', { className: 'demo-num' }, 'Floor'))),
+              h('tbody', null, rows.filter((r) => r.theme === theme).map((r, i) =>
+                h('tr', { key: i },
+                  h('td', { className: 'demo-mono' }, r.fg),
+                  h('td', { className: 'demo-mono' }, r.bg),
+                  h('td', null, r.note ?? ''),
+                  h('td', { className: 'demo-num ' + (r.pass ? 'demo-pass' : 'demo-fail') },
+                    r.ratio.toFixed(2) + ':1'),
+                  h('td', { className: 'demo-num' }, r.min.toFixed(1))))))))));
+    }
 
     function App() {
       const [shuffle, setShuffle] = useState(false);
@@ -65,12 +139,26 @@
       const [volume, setVolume] = useState([40]);
       const [playing, setPlaying] = useState(false);
       const [position, setPosition] = useState([28]);
-      const [density, setDensity] = useState('comfortable');
-      const [theme, setTheme] = useState('light');
       const [doubleSize, setDoubleSize] = useState(false);
       const [alwaysOnTop, setAlwaysOnTop] = useState(true);
       const [skin, setSkin] = useState('base');
       const [picked, setPicked] = useState('t3');
+      const [density, setDensityAxis] = useState('comfortable');
+      const [themeAxis, setThemeAxis] = useState('light');
+      const [docs, setDocs] = useState(null);
+
+      /* The switcher writes the attributes a consumer would write. It is not
+         a preview mode: the page is the kit, running under whatever the three
+         axes say. */
+      useEffect(() => {
+        const el = document.documentElement;
+        el.setAttribute('data-theme', themeAxis);
+        el.setAttribute('data-density', density);
+      }, [themeAxis, density]);
+
+      useEffect(() => {
+        fetch('./docs-data.json').then((r) => r.json()).then(setDocs).catch(() => {});
+      }, []);
       const [nowPlaying, setNowPlaying] = useState('t1');
       const tracks = [
         ['t1', 'DJ Mike Llama - Llama Whippin Intro', '0:05'],
@@ -91,9 +179,23 @@
       const [gain, setGain] = useState([70]);
 
       return h('div', null,
+        h('div', { className: 'demo-bar' },
+          h(Axis, { label: 'Theme', value: themeAxis, options: ['light', 'dark'], onChange: setThemeAxis }),
+          h(Axis, { label: 'Density', value: density, options: ['comfortable', 'compact'], onChange: setDensityAxis }),
+          h(Axis, { label: 'Skin', value: 'chrome', options: ['chrome'], onChange: () => {} })),
+
         h(Section, {
           id: 'buttons', title: 'Button',
           note: 'Press one. The bevel flips and the face drops a pixel; the gloss dims only on the control that sinks.',
+          code: `import { Button } from '@josueavalosjim/panelware';
+
+<Button>Open</Button>
+<Button variant="primary">Save changes</Button>
+<Button variant="primary" gloss>Glossed</Button>
+<Button disabled>Unavailable</Button>
+
+// asChild renders your element with the styling
+<Button asChild><a href="/somewhere">As a link</a></Button>`,
         },
           h(Button, { onClick: () => {} }, 'Open'),
           h(Button, { variant: 'primary' }, 'Save changes'),
@@ -106,6 +208,11 @@
         h(Section, {
           id: 'toggle', title: 'Toggle',
           note: 'On is sunken and heavier. Both the data state and the ARIA state change together, which is what the CSS keys off.',
+          code: `import { Toggle } from '@josueavalosjim/panelware';
+
+const [on, setOn] = useState(false);
+
+<Toggle pressed={on} onPressedChange={setOn}>Shuffle</Toggle>`,
         },
           h(Toggle, { pressed: repeat, onPressedChange: setRepeat }, 'Repeat'),
           h(Toggle, { pressed: shuffle, onPressedChange: setShuffle }, 'Shuffle'),
@@ -114,6 +221,16 @@
         h(Section, {
           id: 'tabs', title: 'Tabs',
           note: 'Tab enters the strip once; the arrow keys move selection. Radix supplies the roving tabindex and both aria references.',
+          code: `import { Tabs, TabList, Tab, TabPanel } from '@josueavalosjim/panelware';
+
+<Tabs defaultValue="eq">
+  <TabList>
+    <Tab value="out">Output</Tab>
+    <Tab value="eq">Equaliser</Tab>
+  </TabList>
+  <TabPanel value="out">Output device and sample rate.</TabPanel>
+  <TabPanel value="eq">Ten bands.</TabPanel>
+</Tabs>`,
         },
           h('div', { className: 'demo-tabs' },
             h(Tabs, { defaultValue: 'eq' },
@@ -129,6 +246,15 @@
         h(Section, {
           id: 'dialog', title: 'Dialog',
           note: 'Opens with focus inside it, traps Tab, closes on Escape, and returns focus to the trigger. All of that is Radix.',
+          code: `import { Dialog, DialogTrigger, DialogPanel, Button }
+  from '@josueavalosjim/panelware';
+
+<Dialog>
+  <DialogTrigger asChild><Button variant="primary">Preferences</Button></DialogTrigger>
+  <DialogPanel title="Preferences">
+    <p>Focus is trapped, Escape closes, focus returns to the trigger.</p>
+  </DialogPanel>
+</Dialog>`,
         },
           h(Dialog, null,
             h(DialogTrigger, { asChild: true },
@@ -140,6 +266,18 @@
         h(Section, {
           id: 'slider', title: 'Slider',
           note: 'Arrow keys, Home and End. Gain announces itself in decibels rather than as a bare number.',
+          code: `import { Slider } from '@josueavalosjim/panelware';
+
+const [value, setValue] = useState([40]);
+
+<Slider
+  label="Volume"
+  value={value}
+  onValueChange={setValue}
+  max={100}
+  // aria-valuenow alone is only adequate for a bare number
+  format={(v) => \`\${v - 50} decibels\`}
+/>`,
         },
           h('div', { className: 'demo-stack' },
             h('label', { className: 'demo-field' },
@@ -158,6 +296,13 @@
         h(Section, {
           id: 'window', title: 'Window chrome',
           note: 'A title bar, its controls, and the chassis. The dialog uses the same bar: a dialog is a window that happens to be modal. Controls only render when you pass a handler, so nothing here is a dead button.',
+          code: `import { Window } from '@josueavalosjim/panelware';
+
+// A control only renders when you pass its handler, so there are no dead
+// buttons in a window that cannot be minimised.
+<Window title="Playlist" onMinimize={min} onMaximize={max} onClose={close}>
+  <p>Body content.</p>
+</Window>`,
         },
           h('div', { className: 'demo-stack' },
           h(Window, {
@@ -170,6 +315,17 @@
         h(Section, {
           id: 'transport', title: 'Transport and seek',
           note: 'A Radix Toolbar, so Tab enters the cluster once and the arrow keys move inside it. Icon-only is the one exception the kit allows, and it is paid for: every button requires a label and it becomes the accessible name.',
+          code: `import { Transport, TransportButton, Progress }
+  from '@josueavalosjim/panelware';
+
+// A Radix Toolbar: one tab stop, arrow keys inside.
+<Transport label="Playback">
+  <TransportButton icon="prev" label="Previous track" />
+  <TransportButton icon="play" label="Play" onClick={play} />
+  <TransportButton icon="stop" label="Stop" onClick={stop} />
+</Transport>
+
+<Progress value={28} max={210} label="Buffered" />`,
         },
           h('div', { className: 'demo-stack' },
             h(Transport, { label: 'Playback' },
@@ -198,6 +354,17 @@
         h(Section, {
           id: 'list', title: 'Playlist',
           note: 'A listbox. Click a row or arrow through it; Enter or a double click plays. Selected and playing are separate states, because you scroll a selection past the playing track constantly. The playing row carries a mark and a weight, not only a colour: Winamp colour-codes its rows and that is the one thing here not taken from it.',
+          code: `import { List } from '@josueavalosjim/panelware';
+
+// selected and current are different states, and a row can hold both
+<List
+  label="Playlist"
+  rows={tracks}                       // { id, primary, secondary }[]
+  selected={picked}
+  onSelect={setPicked}
+  onActivate={setNowPlaying}
+  current={nowPlaying}
+/>`,
         },
           h('div', { className: 'demo-stack' },
             h(List, {
@@ -212,6 +379,19 @@
         h(Section, {
           id: 'menubar', title: 'Menu bar',
           note: 'Radix Menubar, so the bar is one tab stop and the arrow keys do the rest: between triggers, into a menu, through its items, into a submenu. Escape closes. Type a letter to jump. The bar itself is flat and a trigger inverts when its menu is open, which is what separates "this menu is showing" from "this button is pressed".',
+          code: `import { Menubar, Menu, MenuTrigger, MenuContent, MenuItem,
+  MenuCheckboxItem, MenuSeparator, MenuSub } from '@josueavalosjim/panelware';
+
+<Menubar>
+  <Menu value="file">
+    <MenuTrigger>File</MenuTrigger>
+    <MenuContent>
+      <MenuItem shortcut="Ctrl+L">Open file</MenuItem>
+      <MenuSeparator />
+      <MenuSub label="Open recent"><MenuItem>Echo</MenuItem></MenuSub>
+    </MenuContent>
+  </Menu>
+</Menubar>`,
         },
           h('div', { className: 'demo-stack' },
             h(Menubar, null,
@@ -258,6 +438,18 @@
         h(Section, {
           id: 'equalizer', title: 'Equaliser',
           note: 'Ten independent bands, not a multi-thumb slider. A multi-thumb slider is a range and re-sorts its thumbs, so driving one band would silently renumber it into another. Each band keeps its own name and value. Gain is announced in decibels, because a bare signed number is not something you can hear the sign of.',
+          code: `import { Equalizer } from '@josueavalosjim/panelware';
+
+// Independent bands, not a multi-thumb slider: a multi-thumb slider is a
+// range and re-sorts its thumbs, which would renumber a band mid-drag.
+<Equalizer
+  label="Equaliser"
+  min={-12}
+  max={12}
+  bands={bands}                       // { id, label, name, value }[]
+  onBandChange={(id, value) => set(id, value)}
+  format={(v, band) => \`\${band.name}, \${v} decibels\`}
+/>`,
         },
           h(Equalizer, {
             label: 'Equaliser',
@@ -272,6 +464,13 @@
         h(Section, {
           id: 'badge', title: 'Status badge',
           note: 'A glyph and a word, every time. There is no prop that reduces one to a coloured dot.',
+          code: `import { Badge } from '@josueavalosjim/panelware';
+
+// Every badge renders a mark AND a word. There is no prop that reduces one
+// to a coloured dot.
+<Badge status="success">Connected</Badge>
+<Badge status="warning">Buffering</Badge>
+<Badge status="error">No device</Badge>`,
         },
           h(Badge, { status: 'success' }, 'Connected'),
           h(Badge, { status: 'warning' }, 'Buffering'),
@@ -279,8 +478,26 @@
           h(Badge, null, 'Idle')),
 
         h(Section, {
+          id: 'tokens', title: 'Tokens',
+          note: 'The whole contract, generated from the same files the gate reads, so this table cannot drift from the build. A value shown as a colour is the literal a var() chain lands on; the declared value is usually another token.',
+        }, docs ? h(TokenTable, { groups: docs.groups }) : h('p', { className: 'demo-note' }, 'loading')),
+
+        h(Section, {
+          id: 'contrast', title: 'Measured contrast',
+          note: 'Every pair the gate checks, with the ratio it actually measured rather than the one the palette was designed for. These run on every build and the build fails if one drops under its floor. No other kit publishes this, and the only work was writing down numbers we already compute.',
+        }, docs ? h(ContrastTable, { rows: docs.contrast }) : h('p', { className: 'demo-note' }, 'loading')),
+
+        h(Section, {
           id: 'lcd', title: 'Readout',
           note: 'An image of text, so it carries its string as a name rather than as a live region. The marquee has a real pause button, because pausing on hover is not a mechanism a keyboard user has.',
+          code: `import { Readout } from '@josueavalosjim/panelware';
+
+<Readout value="04:21" />
+<Readout value="PANELWARE" mode="glyphs" />
+
+// A marquee ships a real pause control, because pausing on hover is not a
+// mechanism a keyboard or touch user has.
+<Readout value="NOW PLAYING - " mode="glyphs" marquee />`,
         },
           h('div', { className: 'demo-stack' },
             h(Readout, { value: String(volume[0]).padStart(2, '0') + ':' + String(gain[0]).padStart(2, '0') }),

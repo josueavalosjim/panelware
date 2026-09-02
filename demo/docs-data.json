@@ -1,0 +1,1932 @@
+{
+ "generated": "scripts/build-docs-data.mjs",
+ "groups": [
+  {
+   "name": "Colour roles",
+   "file": "css/tokens/semantic.chrome.css",
+   "tokens": [
+    {
+     "name": "--pw-color-base-100",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-100)",
+       "resolved": "#eceae4"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-900)",
+       "resolved": "#232320"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-base-200",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-300)",
+       "resolved": "#d8d5cd"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-850)",
+       "resolved": "#33322e"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-base-300",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-400)",
+       "resolved": "#c2bfb6"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-950)",
+       "resolved": "#1a1a18"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-base-content",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-950)",
+       "resolved": "#1a1a18"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-100)",
+       "resolved": "#eceae4"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-disabled-content",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-700)",
+       "resolved": "#6b675d"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-600)",
+       "resolved": "#8a857a"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-primary",
+     "values": {
+      "light": {
+       "declared": "var(--pw-blue-800)",
+       "resolved": "#003399"
+      },
+      "dark": {
+       "declared": "var(--pw-blue-300)",
+       "resolved": "#9dc0ff"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-primary-content",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-000)",
+       "resolved": "#ffffff"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-950)",
+       "resolved": "#1a1a18"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-focus",
+     "values": {
+      "light": {
+       "declared": "var(--pw-blue-800)",
+       "resolved": "#003399"
+      },
+      "dark": {
+       "declared": "var(--pw-blue-300)",
+       "resolved": "#9dc0ff"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-focus-contrast",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-000)",
+       "resolved": "#ffffff"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-950)",
+       "resolved": "#1a1a18"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-range",
+     "values": {
+      "light": {
+       "declared": "var(--pw-blue-800)",
+       "resolved": "#003399"
+      },
+      "dark": {
+       "declared": "var(--pw-blue-300)",
+       "resolved": "#9dc0ff"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-lcd",
+     "values": {
+      "light": {
+       "declared": "var(--pw-phos-950)",
+       "resolved": "#12201a"
+      },
+      "dark": {
+       "declared": "var(--pw-phos-950)",
+       "resolved": "#12201a"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-lcd-content",
+     "values": {
+      "light": {
+       "declared": "var(--pw-phos-300)",
+       "resolved": "#3ff08a"
+      },
+      "dark": {
+       "declared": "var(--pw-phos-300)",
+       "resolved": "#3ff08a"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-success",
+     "values": {
+      "light": {
+       "declared": "var(--pw-green-100)",
+       "resolved": "#d8ead6"
+      },
+      "dark": {
+       "declared": "var(--pw-green-900)",
+       "resolved": "#16301a"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-success-content",
+     "values": {
+      "light": {
+       "declared": "var(--pw-green-800)",
+       "resolved": "#0d5c0a"
+      },
+      "dark": {
+       "declared": "var(--pw-green-300)",
+       "resolved": "#7fdc86"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-warning",
+     "values": {
+      "light": {
+       "declared": "var(--pw-amber-100)",
+       "resolved": "#f7e9c2"
+      },
+      "dark": {
+       "declared": "var(--pw-amber-900)",
+       "resolved": "#332a10"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-warning-content",
+     "values": {
+      "light": {
+       "declared": "var(--pw-amber-800)",
+       "resolved": "#6b4e00"
+      },
+      "dark": {
+       "declared": "var(--pw-amber-300)",
+       "resolved": "#e6c463"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-error",
+     "values": {
+      "light": {
+       "declared": "var(--pw-red-100)",
+       "resolved": "#f2d6d3"
+      },
+      "dark": {
+       "declared": "var(--pw-red-900)",
+       "resolved": "#3a1a16"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-error-content",
+     "values": {
+      "light": {
+       "declared": "var(--pw-red-800)",
+       "resolved": "#8c1a10"
+      },
+      "dark": {
+       "declared": "var(--pw-red-300)",
+       "resolved": "#f0a09a"
+      }
+     }
+    },
+    {
+     "name": "--pw-bevel-light",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-000)",
+       "resolved": "#ffffff"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-600)",
+       "resolved": "#8a857a"
+      }
+     }
+    },
+    {
+     "name": "--pw-bevel-face",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-200)",
+       "resolved": "#e5e3dc"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-750)",
+       "resolved": "#56544d"
+      }
+     }
+    },
+    {
+     "name": "--pw-bevel-shade",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-500)",
+       "resolved": "#9a968b"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-900)",
+       "resolved": "#232320"
+      }
+     }
+    },
+    {
+     "name": "--pw-bevel-frame",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-700)",
+       "resolved": "#6b675d"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-950)",
+       "resolved": "#1a1a18"
+      }
+     }
+    },
+    {
+     "name": "--pw-bevel-boundary",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-700)",
+       "resolved": "#6b675d"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-600)",
+       "resolved": "#8a857a"
+      }
+     }
+    },
+    {
+     "name": "--pw-gloss-lit-base-200",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-200)",
+       "resolved": "#e5e3dc"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-800)",
+       "resolved": "#403f3a"
+      }
+     }
+    },
+    {
+     "name": "--pw-gloss-lit-primary",
+     "values": {
+      "light": {
+       "declared": "var(--pw-blue-700)",
+       "resolved": "#1b3fa8"
+      },
+      "dark": {
+       "declared": "var(--pw-blue-300)",
+       "resolved": "#9dc0ff"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-scrim",
+     "values": {
+      "light": {
+       "declared": "rgba(20, 20, 19, 0.45)",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "rgba(0, 0, 0, 0.62)",
+       "resolved": null
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Raw ramp",
+   "file": "css/tokens/primitive.chrome.css",
+   "tokens": [
+    {
+     "name": "--pw-silver-000",
+     "values": {
+      "both": {
+       "declared": "#ffffff",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-100",
+     "values": {
+      "both": {
+       "declared": "#eceae4",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-200",
+     "values": {
+      "both": {
+       "declared": "#e5e3dc",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-300",
+     "values": {
+      "both": {
+       "declared": "#d8d5cd",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-400",
+     "values": {
+      "both": {
+       "declared": "#c2bfb6",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-500",
+     "values": {
+      "both": {
+       "declared": "#9a968b",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-600",
+     "values": {
+      "both": {
+       "declared": "#8a857a",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-700",
+     "values": {
+      "both": {
+       "declared": "#6b675d",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-750",
+     "values": {
+      "both": {
+       "declared": "#56544d",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-800",
+     "values": {
+      "both": {
+       "declared": "#403f3a",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-850",
+     "values": {
+      "both": {
+       "declared": "#33322e",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-900",
+     "values": {
+      "both": {
+       "declared": "#232320",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-silver-950",
+     "values": {
+      "both": {
+       "declared": "#1a1a18",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-blue-300",
+     "values": {
+      "both": {
+       "declared": "#9dc0ff",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-blue-700",
+     "values": {
+      "both": {
+       "declared": "#1b3fa8",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-blue-800",
+     "values": {
+      "both": {
+       "declared": "#003399",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-phos-300",
+     "values": {
+      "both": {
+       "declared": "#3ff08a",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-phos-950",
+     "values": {
+      "both": {
+       "declared": "#12201a",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-green-100",
+     "values": {
+      "both": {
+       "declared": "#d8ead6",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-green-800",
+     "values": {
+      "both": {
+       "declared": "#0d5c0a",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-green-300",
+     "values": {
+      "both": {
+       "declared": "#7fdc86",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-green-900",
+     "values": {
+      "both": {
+       "declared": "#16301a",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-amber-100",
+     "values": {
+      "both": {
+       "declared": "#f7e9c2",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-amber-800",
+     "values": {
+      "both": {
+       "declared": "#6b4e00",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-amber-300",
+     "values": {
+      "both": {
+       "declared": "#e6c463",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-amber-900",
+     "values": {
+      "both": {
+       "declared": "#332a10",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-red-100",
+     "values": {
+      "both": {
+       "declared": "#f2d6d3",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-red-800",
+     "values": {
+      "both": {
+       "declared": "#8c1a10",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-red-300",
+     "values": {
+      "both": {
+       "declared": "#f0a09a",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-red-900",
+     "values": {
+      "both": {
+       "declared": "#3a1a16",
+       "resolved": null
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Structure",
+   "file": "css/tokens/structural.css",
+   "tokens": [
+    {
+     "name": "--pw-text-micro",
+     "values": {
+      "both": {
+       "declared": "0.75rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-text-ui",
+     "values": {
+      "both": {
+       "declared": "0.9375rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-text-subhead",
+     "values": {
+      "both": {
+       "declared": "1.1875rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-text-heading",
+     "values": {
+      "both": {
+       "declared": "1.5rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-text-display",
+     "values": {
+      "both": {
+       "declared": "1.875rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-leading-tight",
+     "values": {
+      "both": {
+       "declared": "1.1",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-leading-ui",
+     "values": {
+      "both": {
+       "declared": "1.2",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-leading-body",
+     "values": {
+      "both": {
+       "declared": "1.55",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-tracking-display",
+     "values": {
+      "both": {
+       "declared": "-0.02em",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-tracking-ui",
+     "values": {
+      "both": {
+       "declared": "0",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-font-ui",
+     "values": {
+      "both": {
+       "declared": "system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-font-mono",
+     "values": {
+      "both": {
+       "declared": "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-font-lcd",
+     "values": {
+      "both": {
+       "declared": "var(--pw-font-mono)",
+       "resolved": "ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
+      }
+     }
+    },
+    {
+     "name": "--pw-space-3xs",
+     "values": {
+      "both": {
+       "declared": "0.125rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-space-2xs",
+     "values": {
+      "both": {
+       "declared": "0.25rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-space-xs",
+     "values": {
+      "both": {
+       "declared": "0.375rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-space-sm",
+     "values": {
+      "both": {
+       "declared": "0.5rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-space-md",
+     "values": {
+      "both": {
+       "declared": "0.75rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-space-lg",
+     "values": {
+      "both": {
+       "declared": "1rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-space-xl",
+     "values": {
+      "both": {
+       "declared": "1.5rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-space-2xl",
+     "values": {
+      "both": {
+       "declared": "2rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-radius-control",
+     "values": {
+      "both": {
+       "declared": "2px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-radius-box",
+     "values": {
+      "both": {
+       "declared": "3px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-border",
+     "values": {
+      "both": {
+       "declared": "1px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-clip-control",
+     "values": {
+      "both": {
+       "declared": "none",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-clip-box",
+     "values": {
+      "both": {
+       "declared": "none",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-depth",
+     "values": {
+      "both": {
+       "declared": "1",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-texture",
+     "values": {
+      "both": {
+       "declared": "none",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-texture-opacity",
+     "values": {
+      "both": {
+       "declared": "0",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-focus-width",
+     "values": {
+      "both": {
+       "declared": "2px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-focus-halo",
+     "values": {
+      "both": {
+       "declared": "0 0 #0000",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-focus-offset",
+     "values": {
+      "both": {
+       "declared": "2px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-press-travel",
+     "values": {
+      "both": {
+       "declared": "1px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-dialog-w",
+     "values": {
+      "both": {
+       "declared": "28rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-fader-h",
+     "values": {
+      "both": {
+       "declared": "0.75rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-menu-gutter",
+     "values": {
+      "both": {
+       "declared": "2rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-list-h",
+     "values": {
+      "both": {
+       "declared": "16rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-eq-height",
+     "values": {
+      "both": {
+       "declared": "10rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-eq-gap",
+     "values": {
+      "both": {
+       "declared": "var(--pw-space-2xs)",
+       "resolved": "0.25rem"
+      }
+     }
+    },
+    {
+     "name": "--pw-eq-zero",
+     "values": {
+      "both": {
+       "declared": "50%",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-z-overlay",
+     "values": {
+      "both": {
+       "declared": "100",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-z-panel",
+     "values": {
+      "both": {
+       "declared": "101",
+       "resolved": null
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Density",
+   "file": "css/tokens/density.css",
+   "tokens": [
+    {
+     "name": "--pw-control-h",
+     "values": {
+      "comfortable": {
+       "declared": "2.75rem",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "2rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-control-min-w",
+     "values": {
+      "comfortable": {
+       "declared": "4.6875rem",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "3.75rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-control-pad-x",
+     "values": {
+      "comfortable": {
+       "declared": "var(--pw-space-md)",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "var(--pw-space-sm)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-control-gap",
+     "values": {
+      "comfortable": {
+       "declared": "var(--pw-space-sm)",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "var(--pw-space-xs)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-control-text",
+     "values": {
+      "comfortable": {
+       "declared": "var(--pw-text-ui)",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "var(--pw-text-micro)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-thumb-w",
+     "values": {
+      "comfortable": {
+       "declared": "1.375rem",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "1.125rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-thumb-h",
+     "values": {
+      "comfortable": {
+       "declared": "1.75rem",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "1.375rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-thumb-hit",
+     "values": {
+      "comfortable": {
+       "declared": "2.75rem",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "2rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-track-h",
+     "values": {
+      "comfortable": {
+       "declared": "0.5rem",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "0.375rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-badge-h",
+     "values": {
+      "comfortable": {
+       "declared": "1.5rem",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "1.25rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-panel-pad",
+     "values": {
+      "comfortable": {
+       "declared": "var(--pw-space-xl)",
+       "resolved": null
+      },
+      "compact": {
+       "declared": "var(--pw-space-lg)",
+       "resolved": null
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Skin knobs",
+   "file": "css/tokens/skin.chrome.css",
+   "tokens": [
+    {
+     "name": "--pw-bevel-depth",
+     "values": {
+      "light": {
+       "declared": "1",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "1",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-gloss-opacity",
+     "values": {
+      "light": {
+       "declared": "1",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "1",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-gloss-glare-alpha",
+     "values": {
+      "light": {
+       "declared": "0.35",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "0.16",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-gloss-cap-alpha",
+     "values": {
+      "light": {
+       "declared": "0.28",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "0.12",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-gloss-cap-height",
+     "values": {
+      "light": {
+       "declared": "46%",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "46%",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-glow-intensity",
+     "values": {
+      "light": {
+       "declared": "1",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "1",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-glow-radius",
+     "values": {
+      "light": {
+       "declared": "6px",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "6px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-glow-color",
+     "values": {
+      "light": {
+       "declared": "var(--pw-phos-300)",
+       "resolved": "#3ff08a"
+      },
+      "dark": {
+       "declared": "var(--pw-phos-300)",
+       "resolved": "#3ff08a"
+      }
+     }
+    },
+    {
+     "name": "--pw-glass-blur",
+     "values": {
+      "light": {
+       "declared": "0px",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "0px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-shadow-outer-color",
+     "values": {
+      "light": {
+       "declared": "rgba(20, 20, 19, 0.16)",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "rgba(0, 0, 0, 0.5)",
+       "resolved": null
+      }
+     }
+    }
+   ]
+  },
+  {
+   "name": "Motion",
+   "file": "css/tokens/motion.css",
+   "tokens": [
+    {
+     "name": "--pw-duration-snap",
+     "values": {
+      "both": {
+       "declared": "100ms",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-duration-fast",
+     "values": {
+      "both": {
+       "declared": "150ms",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-duration-base",
+     "values": {
+      "both": {
+       "declared": "200ms",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-duration-slow",
+     "values": {
+      "both": {
+       "declared": "300ms",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-ease-out",
+     "values": {
+      "both": {
+       "declared": "cubic-bezier(0.23, 1, 0.32, 1)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-ease-in",
+     "values": {
+      "both": {
+       "declared": "cubic-bezier(0.5, 0, 0.75, 0)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-ease-in-out",
+     "values": {
+      "both": {
+       "declared": "cubic-bezier(0.65, 0, 0.35, 1)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-duration-press",
+     "values": {
+      "both": {
+       "declared": "var(--pw-duration-snap)",
+       "resolved": "100ms"
+      }
+     }
+    },
+    {
+     "name": "--pw-duration-hover",
+     "values": {
+      "both": {
+       "declared": "var(--pw-duration-fast)",
+       "resolved": "150ms"
+      }
+     }
+    },
+    {
+     "name": "--pw-duration-enter",
+     "values": {
+      "both": {
+       "declared": "var(--pw-duration-base)",
+       "resolved": "200ms"
+      }
+     }
+    },
+    {
+     "name": "--pw-duration-exit",
+     "values": {
+      "both": {
+       "declared": "var(--pw-duration-fast)",
+       "resolved": "150ms"
+      }
+     }
+    },
+    {
+     "name": "--pw-ease-press",
+     "values": {
+      "both": {
+       "declared": "var(--pw-ease-out)",
+       "resolved": "cubic-bezier(0.23, 1, 0.32, 1)"
+      }
+     }
+    },
+    {
+     "name": "--pw-ease-enter",
+     "values": {
+      "both": {
+       "declared": "var(--pw-ease-out)",
+       "resolved": "cubic-bezier(0.23, 1, 0.32, 1)"
+      }
+     }
+    },
+    {
+     "name": "--pw-ease-exit",
+     "values": {
+      "both": {
+       "declared": "var(--pw-ease-in)",
+       "resolved": "cubic-bezier(0.5, 0, 0.75, 0)"
+      }
+     }
+    },
+    {
+     "name": "--pw-ease-state",
+     "values": {
+      "both": {
+       "declared": "var(--pw-ease-in-out)",
+       "resolved": "cubic-bezier(0.65, 0, 0.35, 1)"
+      }
+     }
+    },
+    {
+     "name": "--pw-duration-marquee",
+     "values": {
+      "both": {
+       "declared": "12s",
+       "resolved": null
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "contrast": [
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 14.49,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 11.88,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 9.48,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 13.57,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 10.86,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 9.04,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 3.85,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 4.69,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 3.85,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 7.41,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 9.03,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 10.86,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 10.86,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 5.91,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 6.53,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 6.41,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 6.75,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 13.1,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 10.67,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 14.49,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 8.77,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 9.48,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 9.48,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 3.49,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 4.29,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 3.49,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 6.98,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 8.57,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 9.48,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 9.48,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 9.48,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 8.48,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 8.41,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 7.62,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 13.1,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 10.67,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 14.49,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 8.77,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 9.48,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 9.48,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 3.49,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 4.29,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 3.49,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 6.98,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 8.57,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 9.48,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 9.48,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 9.48,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 8.48,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 8.41,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 7.62,
+   "min": 4.5,
+   "pass": true
+  }
+ ]
+}
