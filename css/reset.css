@@ -30,6 +30,10 @@
   line-height: var(--pw-leading-ui);
   letter-spacing: var(--pw-tracking-ui);
   cursor: pointer;
+  /* asChild exists so a button can be an anchor, and an anchor arrives with
+     an underline the kit never asked for. The colour is already handled by
+     the shared treatment; this is the other half. */
+  text-decoration: none;
 }
 
 /* The focus ring is declared once, here, for every control in the kit.

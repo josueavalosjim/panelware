@@ -207,6 +207,38 @@ describe('visual state and ARIA state', () => {
   });
 });
 
+describe('what Radix positions, the kit must not', () => {
+  test('the slider thumb does not position itself', () => {
+    /* Radix does not move the thumb. It wraps it in its own absolutely
+       positioned span and moves that. An absolute on the thumb as well
+       collapses the wrapper to 0x0, so the wrapper's translateX(-50%) has a
+       zero-width box to offset and the grip lands exactly half a thumb width
+       off the value it points at. Measured at 11px on a 22px thumb, and it
+       looked plausible: the thumb still moved with the value, just wrong.
+
+       position: relative is fine and is what is there, so the hit expander
+       has something to anchor to. absolute is the one that breaks it. */
+    const css = bare(read('css/components/slider.css'));
+    const rule = css.match(/\.pw-slider-thumb\s*\{[^}]*\}/);
+    assert.ok(rule, '.pw-slider-thumb rule not found');
+    assert.doesNotMatch(rule[0], /position:\s*absolute/,
+      '.pw-slider-thumb positions itself, which fights the wrapper Radix moves');
+  });
+
+  test('the readout tracks three scroll states, not two', () => {
+    /* A boolean cannot express "the viewer has not decided", so hover could
+       never be overridden and the resume button could not resume while the
+       pointer sat on the readout, which is where it is when you press it. */
+    const css = bare(read('css/components/lcd.css'));
+    assert.match(css, /\[data-scroll="paused"\]/);
+    assert.match(css, /\[data-scroll="running"\]/);
+    /* And the focus trap that made resume impossible must stay gone: the
+       pause control lives inside the marquee, so :focus-within held the
+       animation paused for as long as the button that resumes it had focus. */
+    assert.doesNotMatch(css, /\.pw-lcd-marquee:focus-within/);
+  });
+});
+
 describe('state rules that could reach an ancestor', () => {
   const gloss = read('css/treatment/gloss.css');
 

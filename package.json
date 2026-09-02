@@ -14,39 +14,71 @@
     "theme"
   ],
   "homepage": "https://github.com/josueavalosjim/panelware#readme",
-  "bugs": { "url": "https://github.com/josueavalosjim/panelware/issues" },
-  "repository": { "type": "git", "url": "git+https://github.com/josueavalosjim/panelware.git" },
+  "bugs": {
+    "url": "https://github.com/josueavalosjim/panelware/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josueavalosjim/panelware.git"
+  },
   "license": "MIT",
   "author": "Josue Avalos Jimenez",
   "type": "module",
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./css": "./css/panelware.css",
     "./css/tokens": "./css/tokens/index.css",
     "./css/theme-auto": "./css/tokens/theme-auto.css",
     "./assets/*": "./assets/*",
     "./package.json": "./package.json"
   },
-  "files": ["css", "assets", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "src",
+    "css",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "build": "tsc",
     "sprites": "node scripts/build-sprites.mjs",
-    "test": "node --test \"test/**/*.test.mjs\"",
+    "test": "npm run build && node --test \"test/**/*.test.mjs\"",
     "check": "taste-check",
     "check:runtime": "node scripts/runtime.mjs",
+    "prepublishOnly": "npm run build",
     "release": "npm test && npm run check && npm version patch -m \"Release %s\" && git push --follow-tags"
   },
-  "engines": { "node": ">=22" },
-  "publishConfig": { "access": "public" },
-  "dependencies": {},
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "radix-ui": "^1.6",
     "react": "^19"
   },
   "peerDependenciesMeta": {
-    "radix-ui": { "optional": true },
-    "react": { "optional": true }
+    "radix-ui": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "@josueavalosjim/taste-check": "^0.12.0"
+    "@josueavalosjim/taste-check": "^0.12.0",
+    "@types/react": "^19.2.18",
+    "radix-ui": "^1.6.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^5.9.3"
   }
 }

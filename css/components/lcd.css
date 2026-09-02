@@ -120,17 +120,79 @@
      table does not govern it, and it translates rather than animating a
      scroll offset so it stays on the compositor. */
   .pw-lcd-marquee {
-    overflow: hidden;
     width: min(var(--pw-lcd-marquee-w), 100%);
   }
-  .pw-lcd-marquee > .pw-lcd-render {
+
+  /* The clip lives here rather than on the readout, so the pause control
+     standing beside the scrolling copy is not clipped along with it. */
+  .pw-lcd-window {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .pw-lcd-marquee .pw-lcd-render {
     animation: pw-lcd-scroll var(--pw-duration-marquee) linear infinite;
   }
-  /* It pauses on hover and on focus-within, because a reader who needs
-     longer than one pass has no other way to get it. */
-  .pw-lcd-marquee:hover > .pw-lcd-render,
-  .pw-lcd-marquee:focus-within > .pw-lcd-render {
+
+  /* Hover is a convenience for a pointer. It is NOT the WCAG 2.2.2
+     mechanism, because a keyboard, switch or touch user cannot trigger it. */
+  .pw-lcd-marquee:hover .pw-lcd-render {
     animation-play-state: paused;
+  }
+
+  /* The mechanism. Set by the pause control, and it outranks hover in both
+     directions, which is the whole reason it is a three-state attribute
+     rather than a boolean.
+
+     There was a :focus-within here, meant to catch a keyboard user who had
+     tabbed to the control. It made the control unable to do its job: the
+     pause button lives inside the marquee, so pressing resume left focus on
+     the button, focus-within held the animation paused, and the resume button
+     could never resume. Removed rather than worked around, because with a
+     real control in the markup it was solving a problem that no longer
+     exists.
+
+     Hover had a quieter version of the same fault. A viewer who presses
+     resume while the pointer is still over the readout, which is every mouse
+     user who presses it, would see nothing happen until they moved away.
+     Untouched means hover applies; once the viewer has taken a decision, the
+     decision wins. Equal specificity to the hover rule, and later. */
+  .pw-lcd[data-scroll="paused"] .pw-lcd-render {
+    animation-play-state: paused;
+  }
+  .pw-lcd[data-scroll="running"] .pw-lcd-render {
+    animation-play-state: running;
+  }
+
+  /* The pause control. Same split as the slider grip: the ink is small, the
+     thing a finger hits is --pw-control-h. Its colours come from the readout
+     rather than the page, because it sits on the lit display. */
+  .pw-lcd-pause {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--pw-control-h);
+    height: var(--pw-control-h);
+    margin: calc(var(--pw-space-sm) * -1) calc(var(--pw-space-xs) * -1)
+            calc(var(--pw-space-sm) * -1) 0;
+    padding: 0;
+    appearance: none;
+    background: none;
+    border: 0;
+    border-radius: var(--pw-radius-control);
+    color: var(--pw-color-lcd-content);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-text-ui);
+    line-height: 1;
+    cursor: pointer;
+    transition: opacity var(--pw-duration-hover) var(--pw-ease-state);
+  }
+  .pw-lcd-pause:hover { opacity: 0.75; }
+  .pw-lcd-pause:focus-visible {
+    outline: var(--pw-focus-width) solid var(--pw-color-lcd-content);
+    outline-offset: calc(var(--pw-focus-offset) * -1);
   }
 
   @keyframes pw-lcd-scroll {
@@ -158,9 +220,10 @@
     /* Continuous motion stops outright rather than speeding up. A marquee at
        1ms is not a reduced marquee, it is a strobe. The selector is repeated
        from above at its own specificity, because the media query adds none. */
-    .pw-lcd-marquee > .pw-lcd-render {
+    .pw-lcd-marquee .pw-lcd-render {
       animation: none;
       transform: none;
     }
+    .pw-lcd-pause { transition-duration: 1ms; }
   }
 }

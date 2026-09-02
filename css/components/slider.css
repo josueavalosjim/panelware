@@ -39,17 +39,15 @@
   .pw-slider-thumb {
     --pw-elev: var(--pw-shadow-raised);
     display: block;
-    /* Radix positions the thumb itself, by writing an inline offset onto it.
-       All this does is establish how it sits vertically and give the hit
-       expander something to anchor to.
+    /* Static, deliberately. Radix does not position the thumb, it wraps it in
+       its own absolutely positioned span and moves that. An absolute on the
+       thumb as well collapses that wrapper to 0x0, so the wrapper's transform
+       has nothing to offset and the grip lands exactly half a thumb width off
+       the value it points at. Measured: 11px, on a 22px thumb.
 
-       Vertical centring is top plus a negative margin rather than a
-       translateY, because the grab state animates transform and the two
-       would overwrite each other: the thumb would drop half its height the
-       moment it was pressed. */
-    position: absolute;
-    top: 50%;
-    margin-top: calc(var(--pw-thumb-h) / -2);
+       position: relative rather than static, only so the hit expander has
+       something to anchor to. It does not move the box. */
+    position: relative;
     width: var(--pw-thumb-w);
     height: var(--pw-thumb-h);
     background-color: var(--pw-color-base-200);

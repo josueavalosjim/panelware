@@ -69,6 +69,14 @@ body {
   width: min(30rem, 100%);
 }
 
+/* Radix wraps the slider thumb in its own absolutely positioned span and
+   moves that. This stands in for it, so the static page renders the same DOM
+   the component does rather than a simpler one that happens to look right. */
+.demo-thumb-pos {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
 .demo-field {
   display: flex;
   align-items: center;

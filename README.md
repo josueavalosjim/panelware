@@ -38,11 +38,13 @@ a token change rather than a find and replace.
 
 ## Status
 
-The CSS layer is built and gated. The React components over Radix are not
-written yet, so today this is a stylesheet and a token contract rather than a
-component library. `demo/states.html` renders every component in every state
-with no JavaScript at all, which is also the standing proof that the CSS does
-not need React to work.
+The components are built and gated. `demo/index.html` runs them for real, and
+`demo/states.html` renders every component in every state with no JavaScript
+at all, which is the standing proof that the CSS does not need React.
+
+Those two pages render the same DOM, deliberately, and a check compares their
+geometry. A static page that positioned things more simply than the real
+component would be verifying a shape that never ships.
 
 ## What is in it
 
@@ -147,36 +149,44 @@ Colour is never the only carrier of a state. A pressed control moves a pixel
 and flips its bevel; a badge renders a glyph and a word rather than a coloured
 dot; a hover moves opacity.
 
-## What the React layer still owes
+## What Radix owns, and what this had to add
 
-The CSS assumes a component that does not exist yet, and an audit of the
-stand-in markup found the obligations it inherits. They are listed here so
-they are inherited rather than rediscovered.
+Radix supplies the tabs' roving tabindex, both aria references and the arrow
+keys; the dialog's focus trap, focus return and Escape; the slider's arrow
+keys, Home, End and value clamping. None of it is re-implemented.
 
-The readout's marquee must ship a real pause control. Right now it pauses on
-hover and stops entirely under `prefers-reduced-motion`, and neither is a
-mechanism a keyboard or switch user can operate, which WCAG 2.2.2 requires
-for anything moving for more than five seconds.
+One thing Radix does differently from what an audit usually asks for, worth
+knowing before you look for it: the dialog carries no `aria-modal`. Radix
+marks the rest of the page `aria-hidden` instead, which achieves the same
+containment with better support than `aria-modal` has ever had.
 
-The readout is an image of text and carries its string as `aria-label` on a
-`role="img"`, not as a live region. A value display that actually changes may
-opt into `<output>`, but it must not be the default: four readouts on a page
-defaulting to live means a clock announcing itself once a second over
-whatever the reader was doing, from four regions at once.
+Three things Radix does not cover, which this owns.
 
-Tabs need roving tabindex, `aria-controls`, `aria-labelledby` on the panel,
-`tabindex="0"` on the panel, and an arrow-key handler. The APG pattern is not
-optional and none of it is CSS's job.
+The marquee ships a real pause button. WCAG 2.2.2 asks for a mechanism to
+pause anything moving for more than five seconds, and pausing on hover is not
+one: a keyboard, switch or touch user cannot trigger it. The paused state is
+a three-value attribute rather than a boolean, because "running" and "nobody
+has decided" have to be different: a viewer who presses resume while the
+pointer is still over the readout, which is every mouse user who presses it,
+would otherwise see nothing happen.
 
-The dialog needs `aria-modal`, a focus trap, focus return, an Escape handler,
-and `inert` on the background. `.pw-panel-body` scrolls, so it needs
-`tabindex="0"` when it overflows or a keyboard user in Chrome cannot reach
-content below the fold.
+The dialog body takes a `tabIndex` when, and only when, it actually scrolls.
+Chrome does not make scroll containers focusable on its own, so a long dialog
+has content below the fold a keyboard user cannot reach. It is measured
+rather than set unconditionally, which would add a dead tab stop to every
+short dialog.
 
-The slider needs an arrow-key handler and `aria-valuetext` for any value that
-is not a bare percentage. A disabled thumb keeps `tabindex="0"` with
-`aria-disabled="true"`, so it stays discoverable; removing it from the tab
-sequence means a screen-reader user never learns the control is there.
+The slider takes a `format` function and turns it into `aria-valuetext`.
+`aria-valuenow` alone is adequate only for a bare number: a screen reader
+reading "70" for a gain in decibels has said nothing.
+
+One deliberate trade rather than an oversight. A disabled slider follows the
+platform and leaves the tab sequence, because that is what Radix's `disabled`
+does and what a disabled native control does. The alternative, `aria-disabled`
+with a read-only handler, keeps the control discoverable to someone tabbing a
+panel, and an audit will usually prefer it. WCAG requires neither. If you want
+the second, pass `aria-disabled` and handle the value yourself rather than
+`disabled`.
 
 ## Motion
 

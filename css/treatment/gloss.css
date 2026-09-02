@@ -45,7 +45,16 @@
        overflow: hidden. See the note in bevel.css: overflow would clip the
        second skin's outer glow along with the highlight. */
     border-radius: inherit;
-    z-index: 1;
+    /* Behind the content, not in front of it.
+       The host isolates, so -1 paints above its own background and below its
+       inline content. That covers a bare text node, which the previous
+       arrangement could not: it lifted the host's ELEMENT children to
+       z-index 2, so `<button data-gloss>Save</button>` put the highlight over
+       the word while `<button data-gloss><span>Save</span></button>` did not.
+       The fix there would have been to make every component wrap its children
+       in a span, which costs the button's own flex gap between an icon and a
+       label, for a layering problem the stacking context already solves. */
+    z-index: -1;
   }
 
   :where([data-gloss])::before {
@@ -69,22 +78,6 @@
     );
   }
 
-  /* A glossed control's label has to sit above both layers. The alternative
-     is a lower z-index on the pseudos, which does not work: they would then
-     fall behind the host's own background rather than behind its text, and
-     the gloss would disappear entirely. */
-  :where([data-gloss]) > * {
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Except the screen-reader mirror. This rule is zero specificity, but it
-     is in a later layer than the reset that makes .pw-sr-only absolute, and
-     layer order beats specificity outright. A hidden label inside a glossed
-     button therefore came back into flow and took a flex slot and a gap,
-     shifting the visible label. It stayed visually hidden, so nothing
-     leaked; it just moved everything next to it. */
-  :where([data-gloss]) > .pw-sr-only { position: absolute; }
 
   /* A pressed control is sunken, and a sunken thing does not catch a
      highlight on its top edge. Killing the capsule and dimming the glare is

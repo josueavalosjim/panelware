@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>panelware</title>
+<!--
+  The live page. Real React, real Radix, real interaction, and still no build
+  step: an import map points the bare specifiers at a CDN and panelware itself
+  comes from the compiled ../dist. The compiler output runs unmodified in the
+  browser because it is plain ESM.
+
+  states.html is the other half of this pair and is not redundant with it. It
+  has no JavaScript at all, which is what makes it the proof that the CSS
+  works without React, the target the contrast gate measures, and the place
+  every attribute-driven state can be seen at once. This page is where the
+  things only a running component can show live: the dialog's focus trap, the
+  slider's arrow keys, the marquee's pause control.
+-->
+<link rel="stylesheet" href="../css/panelware.css">
+<link rel="stylesheet" href="./demo.css">
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.2.8",
+    "react/jsx-runtime": "https://esm.sh/react@19.2.8/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@19.2.8",
+    "react-dom/client": "https://esm.sh/react-dom@19.2.8/client",
+    "radix-ui": "https://esm.sh/radix-ui@1.6.7?external=react,react-dom"
+  }
+}
+</script>
+</head>
+<body>
+  <header class="demo-header">
+    <h1 class="demo-title">panelware</h1>
+    <p class="demo-note">
+      The live components. Tab through them, press Escape in the dialog, drag
+      a slider with the arrow keys, stop the marquee with its own button.
+      <a class="demo-link" href="./states.html">Every state, without JavaScript</a>.
+    </p>
+  </header>
+  <main class="demo-main" id="root"></main>
+
+  <script type="module">
+    import { createElement as h, useState, StrictMode } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import {
+      Badge, Button, Dialog, DialogPanel, DialogTrigger,
+      Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
+    } from '../dist/index.js';
+
+    const Section = ({ id, title, note, children }) =>
+      h('section', { className: 'demo-section', id },
+        h('h2', { className: 'demo-heading' }, title),
+        h('p', { className: 'demo-note' }, note),
+        h('div', { className: 'demo-row' }, children));
+
+    function App() {
+      const [shuffle, setShuffle] = useState(false);
+      const [repeat, setRepeat] = useState(true);
+      const [volume, setVolume] = useState([40]);
+      const [gain, setGain] = useState([70]);
+
+      return h('div', null,
+        h(Section, {
+          id: 'buttons', title: 'Button',
+          note: 'Press one. The bevel flips and the face drops a pixel; the gloss dims only on the control that sinks.',
+        },
+          h(Button, { onClick: () => {} }, 'Open'),
+          h(Button, { variant: 'primary' }, 'Save changes'),
+          h(Button, { variant: 'primary', gloss: true }, 'Glossed'),
+          h(Button, { gloss: true }, 'Gloss on silver'),
+          h(Button, { disabled: true }, 'Unavailable'),
+          h(Button, { asChild: true },
+            h('a', { href: './states.html' }, 'asChild, as a link'))),
+
+        h(Section, {
+          id: 'toggle', title: 'Toggle',
+          note: 'On is sunken and heavier. Both the data state and the ARIA state change together, which is what the CSS keys off.',
+        },
+          h(Toggle, { pressed: repeat, onPressedChange: setRepeat }, 'Repeat'),
+          h(Toggle, { pressed: shuffle, onPressedChange: setShuffle }, 'Shuffle'),
+          h(Toggle, { disabled: true }, 'Crossfade')),
+
+        h(Section, {
+          id: 'tabs', title: 'Tabs',
+          note: 'Tab enters the strip once; the arrow keys move selection. Radix supplies the roving tabindex and both aria references.',
+        },
+          h('div', { className: 'demo-tabs' },
+            h(Tabs, { defaultValue: 'eq' },
+              h(TabList, null,
+                h(Tab, { value: 'out' }, 'Output'),
+                h(Tab, { value: 'eq' }, 'Equaliser'),
+                h(Tab, { value: 'list' }, 'Playlist')),
+              h(TabPanel, { value: 'out' }, 'Output device and sample rate.'),
+              h(TabPanel, { value: 'eq' },
+                'The panel and the active trigger share an edge. That fuse is the only thing separating a tab strip from a row of pressed buttons.'),
+              h(TabPanel, { value: 'list' }, 'Queue and history.')))),
+
+        h(Section, {
+          id: 'dialog', title: 'Dialog',
+          note: 'Opens with focus inside it, traps Tab, closes on Escape, and returns focus to the trigger. All of that is Radix.',
+        },
+          h(Dialog, null,
+            h(DialogTrigger, { asChild: true },
+              h(Button, { variant: 'primary' }, 'Preferences')),
+            h(DialogPanel, { title: 'Preferences' },
+              h('p', null, 'The title bar is the one place gloss is on by default. It is the Luna titlebar, and it is the single element where the highlight is the point rather than an option.'),
+              h('p', null, 'Press Escape, or Tab to the close button. Focus goes back to the trigger either way.')))),
+
+        h(Section, {
+          id: 'slider', title: 'Slider',
+          note: 'Arrow keys, Home and End. Gain announces itself in decibels rather than as a bare number.',
+        },
+          h('div', { className: 'demo-stack' },
+            h('label', { className: 'demo-field' },
+              h('span', { className: 'demo-field-label' }, 'Volume'),
+              h(Slider, { label: 'Volume', value: volume, onValueChange: setVolume, max: 100 })),
+            h('label', { className: 'demo-field' },
+              h('span', { className: 'demo-field-label' }, 'Gain'),
+              h(Slider, {
+                label: 'Gain', value: gain, onValueChange: setGain, max: 100,
+                format: (v) => `${v - 50} decibels`,
+              })),
+            h('label', { className: 'demo-field' },
+              h('span', { className: 'demo-field-label' }, 'Disabled'),
+              h(Slider, { label: 'Balance', defaultValue: [30], max: 100, disabled: true })))),
+
+        h(Section, {
+          id: 'badge', title: 'Status badge',
+          note: 'A glyph and a word, every time. There is no prop that reduces one to a coloured dot.',
+        },
+          h(Badge, { status: 'success' }, 'Connected'),
+          h(Badge, { status: 'warning' }, 'Buffering'),
+          h(Badge, { status: 'error' }, 'No device'),
+          h(Badge, null, 'Idle')),
+
+        h(Section, {
+          id: 'lcd', title: 'Readout',
+          note: 'An image of text, so it carries its string as a name rather than as a live region. The marquee has a real pause button, because pausing on hover is not a mechanism a keyboard user has.',
+        },
+          h('div', { className: 'demo-stack' },
+            h(Readout, { value: String(volume[0]).padStart(2, '0') + ':' + String(gain[0]).padStart(2, '0') }),
+            h(Readout, { value: '-12.5' }),
+            h(Readout, { value: 'PANELWARE', mode: 'glyphs' }),
+            h(Readout, { value: 'NOW PLAYING - PANELWARE 0.1.0 - ', mode: 'glyphs', marquee: true }))));
+    }
+
+    createRoot(document.getElementById('root')).render(h(StrictMode, null, h(App)));
+  </script>
+</body>
+</html>

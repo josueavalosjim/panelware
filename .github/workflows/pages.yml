@@ -1,0 +1,41 @@
+name: pages
+
+# The demo is the documentation, so it deploys with the code rather than being
+# a thing somebody remembers to update.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      # dist/ is gitignored, so the live page's imports would 404 without this.
+      - run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          # The whole repo root: demo/ imports ../dist and ../css, and css
+          # imports ../../assets. Uploading demo/ alone ships a page whose
+          # every relative path leaves the artifact.
+          path: .
+      - id: deploy
+        uses: actions/deploy-pages@v4
