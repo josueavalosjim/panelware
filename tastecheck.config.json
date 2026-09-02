@@ -15,7 +15,7 @@
       { "name": "chrome-light", "scopes": [":root"] },
       {
         "name": "chrome-dark",
-        "scopes": [":root", ":root[data-theme=\"dark\"]"]
+        "scopes": [":root", "[data-theme=\"dark\"]"]
       },
       {
         "name": "chrome-dark-auto",
@@ -59,6 +59,7 @@
       "css/tokens/primitive.chrome.css",
       "css/tokens/semantic.chrome.css",
       "css/tokens/structural.css",
+      "css/tokens/density.css",
       "css/tokens/skin.chrome.css",
       "css/tokens/motion.css",
       "css/tokens/theme-auto.css",

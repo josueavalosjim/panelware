@@ -31,6 +31,26 @@ body {
   font-weight: 600;
 }
 
+/* Says what the page is, in the one place someone landing on it will look.
+   Twice now this page has been read as a broken build rather than as a
+   deliberately inert one, which is a labelling failure and not a user error:
+   controls that look pressable and are not have to say so. */
+.demo-badge-static {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: var(--pw-space-sm);
+  padding: 0 var(--pw-space-sm);
+  border-radius: var(--pw-radius-control);
+  background-color: var(--pw-color-base-300);
+  color: var(--pw-color-base-content);
+  box-shadow: var(--pw-shadow-sunken);
+  font-size: var(--pw-text-micro);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.demo-link { color: inherit; }
+
 .demo-heading {
   margin: 0 0 var(--pw-space-2xs);
   font-size: var(--pw-text-subhead);

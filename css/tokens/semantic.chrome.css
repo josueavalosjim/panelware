@@ -35,8 +35,48 @@
  * gets measured against light numbers and reports a pass.
  */
 
+/*
+ * A note on why these selectors are not anchored to :root.
+ *
+ * They were, and it meant the axis only worked on <html>. A consumer writing
+ * <div data-theme="dark"> around one panel got nothing, because
+ * :root[data-theme="dark"] matches one element in the document and it is not
+ * that div. Scoped theming is table stakes for a design system, and all three
+ * axes here are meant to nest.
+ *
+ * Unanchored, each block declares its tokens on whatever element carries the
+ * attribute, and inheritance does the rest: a descendant's own declared value
+ * beats one inherited from further up, regardless of specificity. So a
+ * compact page with one comfortable toolbar inside it works, and so does the
+ * reverse.
+ *
+ * Specificity, checked, because the ties matter more than the wins:
+ *   :root                                    (0,1,0)
+ *   [data-theme="dark"]                      (0,1,0)  ties, later wins
+ *   [data-skin="chrome"][data-theme="dark"]  (0,2,0)  beats both
+ * Every skin x theme block is a COMPLETE declaration set, which is what makes
+ * the (0,1,0) tie safe rather than load-bearing.
+ */
+
+/*
+ * How a partially-specified subtree resolves, because this is the part that
+ * surprises people.
+ *
+ * Skin and theme are independent attributes. A subtree that names only one of
+ * them gets that one, plus the DEFAULT of the other. So <div data-skin="chrome">
+ * inside a dark page renders chrome-light, not chrome-dark: it asked for a
+ * skin, and chrome's default theme is light. Name both if you want both.
+ *
+ * The alternative was folding the two into one attribute the way DaisyUI does
+ * (data-theme="chrome-dark"), which removes the question entirely but also
+ * removes the ability to change skin and keep the theme. Two axes is the more
+ * useful shape for a kit whose whole thesis is that skins are swappable, so
+ * the resolution rule is documented instead of designed away.
+ */
 :root,
-:root[data-skin="chrome"] {
+[data-skin="chrome"],
+[data-theme="light"],
+[data-skin="chrome"][data-theme="light"] {
   /* Surfaces, lightest to deepest. base-100 is the page the kit sits on,
      base-200 is a control face, base-300 is anything sunk into the page. */
   --pw-color-base-100: var(--pw-silver-100);
@@ -118,8 +158,8 @@
   --pw-color-scrim: rgba(20, 20, 19, 0.45);
 }
 
-:root[data-theme="dark"],
-:root[data-skin="chrome"][data-theme="dark"] {
+[data-theme="dark"],
+[data-skin="chrome"][data-theme="dark"] {
   --pw-color-base-100: var(--pw-silver-900);
   --pw-color-base-200: var(--pw-silver-850);
   --pw-color-base-300: var(--pw-silver-950);

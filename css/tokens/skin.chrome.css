@@ -14,7 +14,9 @@
  */
 
 :root,
-:root[data-skin="chrome"] {
+[data-skin="chrome"],
+[data-theme="light"],
+[data-skin="chrome"][data-theme="light"] {
   /* Multiplies every bevel offset. 1 is the shipped depth. At 0 every offset
      computes to 0px with no blur and no spread, so the whole stack paints
      nothing. That only holds because every offset in bevel.css is a calc();
@@ -58,8 +60,8 @@
   --pw-shadow-outer-color: rgba(20, 20, 19, 0.16);
 }
 
-:root[data-theme="dark"],
-:root[data-skin="chrome"][data-theme="dark"] {
+[data-theme="dark"],
+[data-skin="chrome"][data-theme="dark"] {
   --pw-bevel-depth: 1;
 
   --pw-gloss-opacity: 1;

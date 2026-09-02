@@ -26,7 +26,7 @@
   appearance: none;
   margin: 0;
   font-family: var(--pw-font-ui);
-  font-size: var(--pw-text-ui);
+  font-size: var(--pw-control-text);
   line-height: var(--pw-leading-ui);
   letter-spacing: var(--pw-tracking-ui);
   cursor: pointer;

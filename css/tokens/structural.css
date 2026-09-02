@@ -91,17 +91,9 @@
      Knobs live with the tokens, not with the rules. Restyling is editing a
      knob; the component file is only opened to change structure.
 
-     44px is the house floor for anything a finger has to hit, and it is
-     stricter than the standard requires: WCAG 2.2 AA asks 24x24 (2.5.8) and
-     44x44 is AAA (2.5.5). Holding the higher number by default is the
-     decision, and it costs the period silhouette something — an XP command
-     button was 75x23. The 75 survives as --pw-control-min-w; the 23 does
-     not, because a kit whose default control cannot be tapped is not an
-     accessible kit with a nice skin, it is a skin. */
-  --pw-control-h:      2.75rem;     /* 44px */
-  --pw-control-min-w:  4.6875rem;   /* 75px, the XP command button width */
-  --pw-control-pad-x:  var(--pw-space-md);
-  --pw-control-gap:    var(--pw-space-sm);
+     Every knob that changes with density lives in density.css instead, so
+     each density block can state a complete set. What stays here is what
+     density does not move. */
 
   --pw-focus-width:  2px;
   --pw-focus-offset: 2px;
@@ -111,18 +103,17 @@
      with no colour change at all. */
   --pw-press-travel: 1px;
 
-  --pw-track-h:  0.5rem;
   /* The grip is 22x28 and the thing a finger hits is 44x44. They are
      different numbers on purpose, and the split is the house pattern: the
      burger menu on the portfolio draws 22px bars inside a --burger-hit of
      44px for exactly this reason. A 22x44 painted grip on an 8px track reads
      as a domino balanced on a wire; a 44px target you cannot see reads as
      nothing at all, which is the correct outcome. */
-  --pw-thumb-w:  1.375rem;
-  --pw-thumb-h:  1.75rem;
-  --pw-thumb-hit: var(--pw-control-h);
-  --pw-badge-h:  1.5rem;
-  --pw-panel-pad: var(--pw-space-xl);
+  /* Stated, not derived from --pw-control-h. A custom property that
+     references another resolves against the element the first is declared
+     on, so a derived hit area declared here would never re-derive when a
+     subtree changed its density: every compact control inside would keep the
+     comfortable target. Same trap that made --pw-bevel-depth inert. */
   --pw-dialog-w:  28rem;
 }
 
@@ -133,7 +124,6 @@
 @media (max-width: 30rem) {
   :root {
     --pw-dialog-w: calc(100vw - (var(--pw-space-lg) * 2));
-    --pw-panel-pad: var(--pw-space-lg);
     --pw-text-subhead: 1.0625rem;
   }
 }

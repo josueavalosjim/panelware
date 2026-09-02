@@ -69,8 +69,8 @@ describe('the theme contract', () => {
   const skin = read('css/tokens/skin.chrome.css');
   const auto = read('css/tokens/theme-auto.css');
 
-  const light = block(semantic, ':root,\n:root[data-skin="chrome"]');
-  const dark = block(semantic, ':root[data-theme="dark"]');
+  const light = block(semantic, ':root,\n[data-skin="chrome"]');
+  const dark = block(semantic, '[data-theme="dark"],');
 
   test('light and dark declare the identical token set', () => {
     /* Not "dark declares the differences". A skin x theme block that is only
@@ -94,11 +94,78 @@ describe('the theme contract', () => {
        block conditionally and this kit ships no build. Duplication that is
        checked is a different thing from duplication that is hoped for. */
     const autoBlock = block(auto, ':root:not([data-theme])');
-    const darkAll = new Map([...dark, ...block(skin, ':root[data-theme="dark"]')]);
+    const darkAll = new Map([...dark, ...block(skin, '[data-theme="dark"],')]);
     for (const [name, value] of darkAll) {
       assert.equal(autoBlock.get(name), value, `theme-auto drifted on ${name}`);
     }
     assert.deepEqual([...autoBlock.keys()].sort(), [...darkAll.keys()].sort());
+  });
+});
+
+describe('the density axis', () => {
+  const density = read('css/tokens/density.css');
+  const comfortable = block(density, ':root,\n[data-density="comfortable"]');
+  const compact = block(density, '[data-density="compact"]');
+
+  test('every density declares the identical token set', () => {
+    /* Same rule as the themes, same reason: a block that is only a diff
+       inherits whatever the previous one left behind, and the gap is silent. */
+    assert.deepEqual([...compact.keys()].sort(), [...comfortable.keys()].sort());
+  });
+
+  test('no density ships a target under the WCAG 2.2 AA floor', () => {
+    /* 24x24 is 2.5.8, and it is the one thing "user choice over everything"
+       does not get to opt out of: a mode that cannot be operated is not an
+       option. The references are denser than this and cannot be matched at
+       full fidelity, which is a real cost and the reason it is written down.
+       An XP command button was 75x23; Winamp's transport buttons were 23x18. */
+    const px = (v) => (v.endsWith('rem') ? parseFloat(v) * 16 : parseFloat(v));
+    for (const [name, b] of [['comfortable', comfortable], ['compact', compact]]) {
+      for (const token of ['--pw-control-h', '--pw-thumb-hit']) {
+        const value = b.get(token);
+        assert.ok(value, `${name} does not declare ${token}`);
+        assert.ok(px(value) >= 24,
+          `${name}'s ${token} is ${value}, under the 24px target floor`);
+      }
+    }
+  });
+
+  test('density values are stated, never derived from each other', () => {
+    /* A density token computed from another resolves against the element the
+       first is declared on, so a subtree override would never re-derive it
+       and every control inside would keep the outer density's target. Same
+       trap that made --pw-bevel-depth inert. */
+    for (const [, b] of [['comfortable', comfortable], ['compact', compact]]) {
+      for (const [name, value] of b) {
+        if (!name.startsWith('--pw-control-') && !name.startsWith('--pw-thumb')) continue;
+        assert.doesNotMatch(value, /var\(--pw-(?:control|thumb)/,
+          `${name} derives from another density token`);
+      }
+    }
+  });
+});
+
+describe('the axes nest', () => {
+  test('no axis block is anchored to :root', () => {
+    /* Anchored, an axis only works on <html>: a consumer writing
+       <div data-theme="dark"> around one panel gets nothing, because
+       :root[data-theme="dark"] matches one element and it is not that div.
+       Scoped theming is table stakes for a design system. */
+    for (const rel of ['css/tokens/semantic.chrome.css', 'css/tokens/skin.chrome.css',
+                       'css/tokens/density.css']) {
+      const css = bare(read(rel));
+      const anchored = [...css.matchAll(/:root\[data-(?:theme|skin|density)=/g)];
+      assert.deepEqual(anchored.map((m) => m[0]), [],
+        `${rel} anchors an axis to :root, so it will not work on a subtree`);
+    }
+  });
+
+  test('an explicit light subtree can win back from a dark ancestor', () => {
+    /* The light values used to live on a bare :root only, so a light subtree
+       inside a dark page matched nothing and stayed dark. One direction
+       worked and the other did not, which is worse than neither. */
+    const css = bare(read('css/tokens/semantic.chrome.css'));
+    assert.match(css, /\[data-theme="light"\]/);
   });
 });
 
@@ -122,8 +189,8 @@ describe('where the light comes from', () => {
   };
 
   for (const [name, selector] of [
-    ['light', ':root,\n:root[data-skin="chrome"]'],
-    ['dark', ':root[data-theme="dark"]'],
+    ['light', ':root,\n[data-skin="chrome"]'],
+    ['dark', '[data-theme="dark"],'],
   ]) {
     test(`${name} is lit from above and to the left`, () => {
       /* The four bevel inks plus the face have to run monotonically from the

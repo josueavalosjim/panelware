@@ -24,7 +24,8 @@
 
 @layer pw.components {
   :root,
-  :root[data-skin="chrome"] {
+  [data-skin="chrome"],
+  [data-theme="light"] {
     /* Geometry, from Strider's 1998 spec. See assets/README.md. */
     --pw-lcd-digit-w: 9px;
     --pw-lcd-digit-h: 13px;

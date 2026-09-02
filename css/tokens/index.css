@@ -10,5 +10,6 @@
 @import "./primitive.chrome.css";
 @import "./semantic.chrome.css";
 @import "./structural.css";
+@import "./density.css";
 @import "./skin.chrome.css";
 @import "./motion.css";

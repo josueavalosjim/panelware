@@ -62,7 +62,7 @@
     border-radius: 0 var(--pw-radius-box) var(--pw-radius-box) var(--pw-radius-box);
     color: var(--pw-color-base-content);
     font-family: var(--pw-font-ui);
-    font-size: var(--pw-text-ui);
+    font-size: var(--pw-control-text);
     line-height: var(--pw-leading-body);
   }
 
