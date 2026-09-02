@@ -45,4 +45,10 @@
      finish. It is exempt from the scale and it is NOT exempt from reduced
      motion, where it stops outright rather than speeding up. */
   --pw-duration-marquee: 12s;
+  /* Eight frames, so one revolution is 800ms and a frame holds for 100ms,
+     which is --pw-duration-snap and the point below which a step reads as
+     instant rather than as a step. Faster than this and the arc smears into
+     a ring; slower and it reads as a stutter rather than a spin. */
+  --pw-duration-spin: 800ms;
+  --pw-duration-spin-reduced: 2400ms;
 }

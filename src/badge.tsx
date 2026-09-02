@@ -22,7 +22,7 @@ export type BadgeStatus = 'success' | 'warning' | 'error' | 'neutral';
    baseline in every stack. */
 const GLYPH: Record<BadgeStatus, IconName> = {
   success: 'check',
-  warning: 'bang',
+  warning: 'exclamation',
   error: 'close',
   neutral: 'dot',
 };

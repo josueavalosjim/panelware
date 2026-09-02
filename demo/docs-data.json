@@ -1446,6 +1446,24 @@
        "resolved": null
       }
      }
+    },
+    {
+     "name": "--pw-duration-spin",
+     "values": {
+      "both": {
+       "declared": "800ms",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-duration-spin-reduced",
+     "values": {
+      "both": {
+       "declared": "2400ms",
+       "resolved": null
+      }
+     }
     }
    ]
   }

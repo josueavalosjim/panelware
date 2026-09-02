@@ -7,7 +7,7 @@
  */
 
 export type IconName =
-  | 'play' | 'pause' | 'stop' | 'prev' | 'next' | 'eject' | 'close' | 'minimize' | 'maximize' | 'restore' | 'chevron-down' | 'chevron-up' | 'chevron-right' | 'chevron-left' | 'check' | 'bang' | 'dot' | 'minus' | 'caret-down';
+  | 'play' | 'pause' | 'stop' | 'previous' | 'next' | 'eject' | 'close' | 'minimize' | 'maximize' | 'restore' | 'chevron-down' | 'chevron-up' | 'chevron-right' | 'chevron-left' | 'check' | 'exclamation' | 'dot' | 'minus' | 'plus' | 'caret-down' | 'search' | 'info' | 'question' | 'ellipsis' | 'spinner-1' | 'spinner-2' | 'spinner-3' | 'spinner-4' | 'spinner-5' | 'spinner-6' | 'spinner-7' | 'spinner-8';
 
 export interface IconCell {
   x: number;
@@ -18,7 +18,7 @@ export const ICON_INDEX: Record<IconName, IconCell> = {
   'play': { x: 0, y: 0 },
   'pause': { x: 1, y: 0 },
   'stop': { x: 2, y: 0 },
-  'prev': { x: 3, y: 0 },
+  'previous': { x: 3, y: 0 },
   'next': { x: 4, y: 0 },
   'eject': { x: 5, y: 0 },
   'close': { x: 6, y: 0 },
@@ -30,17 +30,30 @@ export const ICON_INDEX: Record<IconName, IconCell> = {
   'chevron-right': { x: 4, y: 1 },
   'chevron-left': { x: 5, y: 1 },
   'check': { x: 6, y: 1 },
-  'bang': { x: 7, y: 1 },
+  'exclamation': { x: 7, y: 1 },
   'dot': { x: 0, y: 2 },
   'minus': { x: 1, y: 2 },
-  'caret-down': { x: 2, y: 2 },
+  'plus': { x: 2, y: 2 },
+  'caret-down': { x: 3, y: 2 },
+  'search': { x: 4, y: 2 },
+  'info': { x: 5, y: 2 },
+  'question': { x: 6, y: 2 },
+  'ellipsis': { x: 7, y: 2 },
+  'spinner-1': { x: 0, y: 3 },
+  'spinner-2': { x: 1, y: 3 },
+  'spinner-3': { x: 2, y: 3 },
+  'spinner-4': { x: 3, y: 3 },
+  'spinner-5': { x: 4, y: 3 },
+  'spinner-6': { x: 5, y: 3 },
+  'spinner-7': { x: 6, y: 3 },
+  'spinner-8': { x: 7, y: 3 },
 };
 
 export const ICON_NAMES: readonly IconName[] = [
   'play',
   'pause',
   'stop',
-  'prev',
+  'previous',
   'next',
   'eject',
   'close',
@@ -52,8 +65,21 @@ export const ICON_NAMES: readonly IconName[] = [
   'chevron-right',
   'chevron-left',
   'check',
-  'bang',
+  'exclamation',
   'dot',
   'minus',
+  'plus',
   'caret-down',
+  'search',
+  'info',
+  'question',
+  'ellipsis',
+  'spinner-1',
+  'spinner-2',
+  'spinner-3',
+  'spinner-4',
+  'spinner-5',
+  'spinner-6',
+  'spinner-7',
+  'spinner-8',
 ];

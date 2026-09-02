@@ -78,7 +78,7 @@ rather than softening it.
 
 ## The icon sheet
 
-**`icons.svg`** — 128x48, seventeen 16x16 cells in an 8 x 3 grid, generated
+**`icons.svg`** — 128x64, thirty-two 16x16 cells in an 8 x 4 grid, generated
 from `icon-font.mjs` the same way the readout sheets are, and applied the same
 way: as a `mask-image` painted in `currentColor`, so an icon inside a button
 takes the button's ink including its disabled and primary-content colours, and
@@ -92,6 +92,40 @@ so it is the period-correct grid for the chrome this kit cites.
 normal one at (23,18). That number is recorded here and deliberately unused: a
 second grid would need a second set of size tokens, a second scale knob and a
 second sheet, to place five glyphs.
+
+## The names, and why they are these names
+
+Eleven icon sets were read before naming anything, and the two places this set
+disagreed with all of them have been changed.
+
+**`previous`, not `prev`.** One of the eleven abbreviated it. An icon name is
+something a consumer types into an autocomplete, and an abbreviation only one
+set uses is a name nobody guesses.
+
+**`exclamation`, not `bang`.** None of the eleven used `bang`. It is a
+typesetter's word for the glyph, not the word anyone searches for.
+
+**`minimize`, `maximize` and `restore` are window operations here**, and that
+is worth saying out loud because in most modern sets those three words mean
+something else: `minimize` and `maximize` are a viewport going full screen, and
+`restore` is an undo. These are the three Windows title-bar buttons, drawn as
+the title bar draws them.
+
+**No enclosed message-box marks.** The four Windows 95 message-box icons
+(information, warning, error, question) were on the list and are deliberately
+not here. They were 32x32 in the original, and at 16x16 a 2px enclosure on
+every side leaves an 8x8 glyph inside, which is a worse mark than the bare one
+sitting beside it in this sheet. `info`, `exclamation`, `close` and `question`
+already carry those four meanings. A real dialog icon wants 32x32, which is a
+second grid, refused here for the same reason Winamp's 23x18 was.
+
+**The spinner is eight cells, not one glyph rotated.** Only a quarter turn is
+exact on a square lattice. A 45 degree rotation resamples, and resampled pixel
+art tears rather than softening, so the eight positions are drawn. Frames 5 to
+8 are frames 1 to 4 turned 180 degrees, which is two exact quarter turns, so
+they are derived and cannot drift. Five of the eight markers are lit: three
+was the first attempt and read as scattered specks in a still frame, which is
+what a component renders before anything animates.
 
 ## Two constraints a consumer needs to know about
 
@@ -122,7 +156,7 @@ geometric shapes and familiar symbols that copyright does not reach.
 The check is a 3px stroke where the chevrons are 2px, and that is deliberate.
 Drawn at 2px it measured 20 ink pixels against close's 52 and read as a
 noticeably lighter mark in the same row. Five variants were rendered side by
-side with close and bang for reference before picking; the chosen one is 29.
+side with close and exclamation for reference before picking; the chosen one is 29.
 A tick is one bent stroke where an X is two crossing, so matching their ink
 exactly would make the tick look heavy, and matching their stroke width made
 it look thin.

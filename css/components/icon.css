@@ -41,7 +41,7 @@
     --pw-icon-w: 16px;
     --pw-icon-h: 16px;
     --pw-icon-cols: 8;
-    --pw-icon-rows: 3;
+    --pw-icon-rows: 4;
     --pw-icon-scale: 1;
     --pw-icon-sheet: url("../../assets/icons.svg");
   }
@@ -79,6 +79,61 @@
      control needs an accessible name from somewhere else. The Icon component
      enforces that; this is here for anyone writing the markup by hand. */
   .pw-icon[data-standalone] { margin: 0 auto; }
+
+
+  /* ── The spinner ─────────────────────────────────────────────────────────
+     Eight cells on the sheet's last row, stepped. The house rule is that only
+     transform and opacity animate, and this animates mask-position, so it is
+     a deliberate deviation rather than an oversight.
+
+     The reason the rule exists is compositing cost, and the alternative here
+     costs more than it saves: driving this with a transform means the sheet
+     on an inner element translated inside an outer one with overflow: hidden,
+     which is two elements, a clip this kit has refused everywhere else, and
+     the same number of paints. What actually happens is eight discrete
+     repaints of a 16x16 box per revolution, roughly ten a second. Rotating a
+     single glyph with transform WOULD obey the rule and is the thing that is
+     genuinely wrong: 45 degrees is not exact on a square lattice, so it
+     resamples, and resampled pixel art tears.
+
+     It reads the frames off the row the component already set rather than
+     naming row three here, so the animation cannot drift from the generated
+     index when the sheet grows again. */
+  .pw-spinner { display: inline-flex; align-items: center; }
+
+  .pw-spinner .pw-icon {
+    animation: pw-spin var(--pw-duration-spin) steps(8, end) infinite;
+  }
+
+  @keyframes pw-spin {
+    from {
+      mask-position: 0 calc(var(--pw-icon-y) * var(--pw-icon-h) * var(--pw-icon-scale) * -1);
+      -webkit-mask-position: 0 calc(var(--pw-icon-y) * var(--pw-icon-h) * var(--pw-icon-scale) * -1);
+    }
+
+    to {
+      mask-position:
+        calc(var(--pw-icon-cols) * var(--pw-icon-w) * var(--pw-icon-scale) * -1)
+        calc(var(--pw-icon-y) * var(--pw-icon-h) * var(--pw-icon-scale) * -1);
+      -webkit-mask-position:
+        calc(var(--pw-icon-cols) * var(--pw-icon-w) * var(--pw-icon-scale) * -1)
+        calc(var(--pw-icon-y) * var(--pw-icon-h) * var(--pw-icon-scale) * -1);
+    }
+  }
+
+  /* Slowed rather than stopped, and that is the one place this kit does not
+     cut continuous motion outright. A stopped spinner does not read as a
+     respected preference, it reads as a hung process, which is the single
+     message a busy indicator must never send. The label beside it is the
+     part that actually carries the meaning; this keeps the shape honest.
+
+     The selector is repeated in full because a media block adds no
+     specificity, so a shorter one here would lose to the rule above. */
+  @media (prefers-reduced-motion: reduce) {
+    .pw-spinner .pw-icon {
+      animation: pw-spin var(--pw-duration-spin-reduced) steps(8, end) infinite;
+    }
+  }
 
   @media (forced-colors: active) {
     /* Named per context rather than once, because the system paints a link,

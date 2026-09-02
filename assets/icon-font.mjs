@@ -96,7 +96,7 @@ const I = {
     '................',
     '................',
   ],
-  prev: [
+  previous: [
     '................',
     '................',
     '..##.......#....',
@@ -263,7 +263,7 @@ const I = {
      for disclosure and navigation, the caret is for "this opens a list". */
 
   /* Status. These replace the text glyphs the badge shipped with, which were
-     a check, a bang and a multiplication sign borrowed from the font: they
+     a check, a exclamation and a multiplication sign borrowed from the font: they
      changed shape with the reader's font stack and had no pixel grid at all. */
   check: [
     '................',
@@ -283,7 +283,7 @@ const I = {
     '................',
     '................',
   ],
-  bang: [
+  exclamation: [
     '................',
     '................',
     '.......##.......',
@@ -337,6 +337,190 @@ const I = {
     '................',
     '................',
   ],
+  /* ── The four marks the set was missing ─────────────────────────────────
+     search, question and info are the three affordances a component kit is
+     asked for that no existing glyph covered, and ellipsis is the overflow
+     mark a menu bar needs. */
+  /* The lens is 9x9 (x3-x11, y2-y10) rather than the wider oval two earlier
+     drafts produced, and the handle takes the remaining three rows, so the
+     whole mark fills the 12x12 live area exactly. Ink 44 against close's 52:
+     a ring is lighter than a filled X and matching them would fatten the
+     stroke past the set's 2px. */
+  search: [
+    '................',
+    '................',
+    '.....#####......',
+    '....##...##.....',
+    '...##.....##....',
+    '...##.....##....',
+    '...##.....##....',
+    '...##.....##....',
+    '...##.....##....',
+    '....##...##.....',
+    '.....#####......',
+    '..........##....',
+    '...........##...',
+    '............##..',
+    '................',
+    '................',
+  ],
+  /* The bowl is six wide and centred on the stem, which the first draft was
+     not: a bowl centred on itself sits half a pixel left of the stem below
+     it and reads as a leaning glyph. The dot is at y11-y12, the same rows as
+     exclamation's, so the two line up in a row. */
+  question: [
+    '................',
+    '................',
+    '.....######.....',
+    '....##....##....',
+    '..........##....',
+    '.........##.....',
+    '........##......',
+    '.......##.......',
+    '.......##.......',
+    '................',
+    '................',
+    '.......##.......',
+    '.......##.......',
+    '................',
+    '................',
+    '................',
+  ],
+  /* Ink 18, exactly exclamation's, because it IS exclamation upside down.
+     Drawn rather than derived so neither glyph owns the other's placement,
+     and there is a test that they mirror. */
+  info: [
+    '................',
+    '................',
+    '.......##.......',
+    '.......##.......',
+    '................',
+    '................',
+    '.......##.......',
+    '.......##.......',
+    '.......##.......',
+    '.......##.......',
+    '.......##.......',
+    '.......##.......',
+    '.......##.......',
+    '................',
+    '................',
+    '................',
+  ],
+  /* Deliberately lighter than minus: ink 12 against 20. Three separated dots
+     cannot carry a bar's ink inside a 12x12 live area without either closing
+     the gaps or spilling past it, and both are worse than being light. What
+     they DO share is the extent, x3 to x12 on rows y7 and y8, so the two sit
+     in a row looking like siblings rather than two unrelated marks. */
+  ellipsis: [
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '...##..##..##...',
+    '...##..##..##...',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+  ],
+
+  /* ── The spinner, as eight frames ───────────────────────────────────────
+     Not one glyph rotated by CSS. Only a 90 degree turn is exact on a square
+     lattice; 45 degrees resamples, and resampled pixel art tears rather than
+     softens. So the rotation is drawn: eight 2x2 markers on a
+     ring, five of them lit, and the animation steps between cells the same
+     way the readout steps between glyphs.
+
+     Five and not three, which is what this was drawn with first. Three lit
+     markers is a comet, and a comet is legible only while it is moving: a
+     still frame reads as scattered specks rather than as a ring, and the
+     component renders one still frame before anything animates. Five leaves
+     a three-position gap, which is the C that every spinner in every set
+     is, so the shape is finished at rest and the gap's position is what
+     carries the rotation. Ink is 20 a frame, the same as minus.
+
+     Only frames 1 to 4 are here. Frame k+4 is frame k turned 180 degrees,
+     which is two exact quarter turns, so the other four are derived below
+     and cannot drift from these. */
+  'spinner-1': [
+    '................',
+    '................',
+    '.......##.......',
+    '.......##.##....',
+    '..........##....',
+    '................',
+    '................',
+    '............##..',
+    '............##..',
+    '................',
+    '................',
+    '..........##....',
+    '.......##.##....',
+    '.......##.......',
+    '................',
+    '................',
+  ],
+  'spinner-2': [
+    '................',
+    '................',
+    '................',
+    '..........##....',
+    '..........##....',
+    '................',
+    '................',
+    '............##..',
+    '............##..',
+    '................',
+    '................',
+    '....##....##....',
+    '....##.##.##....',
+    '.......##.......',
+    '................',
+    '................',
+  ],
+  'spinner-3': [
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '................',
+    '..##........##..',
+    '..##........##..',
+    '................',
+    '................',
+    '....##....##....',
+    '....##.##.##....',
+    '.......##.......',
+    '................',
+    '................',
+  ],
+  'spinner-4': [
+    '................',
+    '................',
+    '................',
+    '....##..........',
+    '....##..........',
+    '................',
+    '................',
+    '..##............',
+    '..##............',
+    '................',
+    '................',
+    '....##....##....',
+    '....##.##.##....',
+    '.......##.......',
+    '................',
+    '................',
+  ],
   dot: [
     '................',
     '................',
@@ -359,9 +543,12 @@ const I = {
 
 /** Sheet order, left to right then top to bottom. */
 export const ICON_ORDER = [
-  'play', 'pause', 'stop', 'prev', 'next', 'eject', 'close', 'minimize',
+  'play', 'pause', 'stop', 'previous', 'next', 'eject', 'close', 'minimize',
   'maximize', 'restore', 'chevron-down', 'chevron-up', 'chevron-right',
-  'chevron-left', 'check', 'bang', 'dot', 'minus', 'caret-down',
+  'chevron-left', 'check', 'exclamation', 'dot', 'minus', 'plus',
+  'caret-down', 'search', 'info', 'question', 'ellipsis',
+  'spinner-1', 'spinner-2', 'spinner-3', 'spinner-4',
+  'spinner-5', 'spinner-6', 'spinner-7', 'spinner-8',
 ];
 
 export const ICON_ROWS = Math.ceil(ICON_ORDER.length / ICON_COLS);
@@ -384,7 +571,20 @@ const flipX = (r) => r.map((row) => [...row].reverse().join(''));
 I['chevron-left'] = rot90(I['chevron-down']);
 I['chevron-up'] = rot90(I['chevron-left']);
 I['chevron-right'] = rot90(I['chevron-up']);
-I.next = flipX(I.prev);
+I.next = flipX(I.previous);
+
+/* A plus is a minus and its own quarter turn, so it cannot end up with a
+   different stroke width or a different extent from the glyph it pairs with
+   in a tree view. */
+const union = (a, b) => a.map((row, y) => [...row]
+  .map((c, x) => (c === '#' || b[y][x] === '#' ? '#' : '.')).join(''));
+I.plus = union(I.minus, rot90(I.minus));
+
+/* Two quarter turns is 180 degrees, exact, and it is what makes the second
+   half of the spin the first half's opposite by construction rather than by
+   a careful hand. */
+const rot180 = (r) => rot90(rot90(r));
+for (const k of [1, 2, 3, 4]) I[`spinner-${k + 4}`] = rot180(I[`spinner-${k}`]);
 
 /** The rectangles an icon paints, in cell-local pixels, runs merged per row. */
 export function iconRects(name) {

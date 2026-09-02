@@ -63,6 +63,9 @@ export type { IconProps } from './icon.js';
 export { ICON_NAMES } from './icons.js';
 export type { IconName } from './icons.js';
 
+export { Spinner } from './spinner.js';
+export type { SpinnerProps } from './spinner.js';
+
 export { Badge } from './badge.js';
 export type { BadgeProps, BadgeStatus } from './badge.js';
 

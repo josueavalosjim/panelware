@@ -7,6 +7,7 @@ import { dirname, join } from 'node:path';
 import { describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { withGallery } from '../scripts/build-icon-gallery.mjs';
 import { ICON_COLS, ICON_H, ICON_NAMES, ICON_ORDER, ICON_ROWS, ICON_W, iconRects } from '../assets/icon-font.mjs';
 import { iconSheet } from '../scripts/build-sprites.mjs';
 import { iconsIndex } from '../scripts/build-icons-index.mjs';
@@ -117,17 +118,17 @@ describe('the drawings, not just the pipeline', () => {
     }
   });
 
-  test('next really is prev mirrored', () => {
+  test('next really is previous mirrored', () => {
     /* It was not. Every one of the twelve rows differed, the bar-to-triangle
        gap was 2px in one and 1px in the other, and the two shapes were 10
        and 9 pixels wide. */
-    assert.ok(same(flipX(grid('prev')), grid('next')));
+    assert.ok(same(flipX(grid('previous')), grid('next')));
   });
 
   test('a triangle that claims a two-pixel apex has an even height', () => {
     /* A shape symmetric about the middle of an odd number of rows has one
        middle row, so its point is one pixel wide however it is drawn. */
-    for (const name of ['play', 'prev', 'next']) {
+    for (const name of ['play', 'previous', 'next']) {
       const g = grid(name);
       const widths = g.map((row) => row.reduce((a, v) => a + v, 0));
       const widest = Math.max(...widths);
@@ -230,4 +231,84 @@ describe('a chevron points where its name says', () => {
       assert.ok(at.length <= 4, `${name}'s tip is ${at.length} pixels wide, so it is a flat edge, not a point`);
     });
   }
+  test('the spinner frames are one whole row, starting at its left edge', () => {
+    /* The animation walks mask-position across a row and reads the row off
+       --pw-icon-y, which the component sets. That is what keeps it from
+       naming a row number the generator owns, and it is only true while the
+       eight frames are consecutive and start at column zero. Reorder the
+       sheet without this and the spinner cycles through eject and close. */
+    const first = ICON_ORDER.indexOf('spinner-1');
+    assert.notEqual(first, -1);
+    assert.equal(first % ICON_COLS, 0, 'the spin does not start at a row edge');
+    assert.equal(ICON_COLS, 8, 'the step count in the CSS is 8');
+    for (let k = 1; k <= 8; k += 1) {
+      assert.equal(ICON_ORDER[first + k - 1], `spinner-${k}`, `frame ${k} is out of order`);
+    }
+  });
+
+  test('the second half of the spin is the first half turned around', () => {
+    /* Frames 5 to 8 are derived, so this is really asking whether the
+       derivation is the one claimed: a half turn, which is two exact quarter
+       turns on a square lattice. A 45 degree turn is not exact, which is why
+       there are eight drawn positions and not one rotated glyph. */
+    const grid = (n) => {
+      const g = Array.from({ length: ICON_H }, () => '.'.repeat(ICON_W).split(''));
+      for (const r of iconRects(n)) for (let i = 0; i < r.w; i += 1) g[r.y][r.x + i] = '#';
+      return g.map((r) => r.join(''));
+    };
+    const rot180 = (r) => r.map((row) => [...row].reverse().join('')).reverse();
+    for (let k = 1; k <= 4; k += 1) {
+      assert.deepEqual(grid(`spinner-${k + 4}`), rot180(grid(`spinner-${k}`)), `frame ${k + 4}`);
+    }
+  });
+
+  test('info is exclamation upside down', () => {
+    /* Both are drawn, so neither owns the other's placement, and this is the
+       thing that would silently stop being true if one were nudged: they
+       share a live area and a dot row, and an i whose stem is a pixel off an
+       exclamation's reads as a different weight in the same row. */
+    const bbox = (n) => {
+      const rs = iconRects(n);
+      const top = Math.min(...rs.map((r) => r.y));
+      const bottom = Math.max(...rs.map((r) => r.y));
+      const g = Array.from({ length: bottom - top + 1 }, () => '.'.repeat(ICON_W).split(''));
+      for (const r of rs) for (let i = 0; i < r.w; i += 1) g[r.y - top][r.x + i] = '#';
+      return g.map((r) => r.join(''));
+    };
+    assert.deepEqual(bbox('info'), [...bbox('exclamation')].reverse());
+  });
+
+  test('plus is minus and its own quarter turn', () => {
+    /* Derived, so the pair cannot end up with different stroke widths or
+       different extents, which is the whole reason they read as a pair in a
+       tree view. */
+    const xs = (n) => iconRects(n).flatMap((r) => [r.x, r.x + r.w - 1]);
+    const ys = (n) => iconRects(n).map((r) => r.y);
+    assert.equal(Math.min(...xs('plus')), Math.min(...xs('minus')));
+    assert.equal(Math.max(...xs('plus')), Math.max(...xs('minus')));
+    assert.equal(Math.max(...ys('plus')) - Math.min(...ys('plus')),
+      Math.max(...xs('plus')) - Math.min(...xs('plus')), 'plus is not square');
+  });
+
+  test('the demo gallery shows every icon, and is generated', () => {
+    /* It was hand-written and listed seventeen of nineteen. The miss is
+       silent: a gallery missing a glyph looks exactly like a complete one. */
+    const page = read('demo/states.html');
+    assert.equal(page, withGallery(page), 'demo/states.html has drifted, run npm run generate');
+    for (const name of ICON_ORDER) {
+      assert.ok(page.includes(`>${name}</span>`), `${name} is not in the gallery`);
+    }
+  });
+  test('the README states the sheet size it actually generates', () => {
+    /* It said 128x48 and seventeen cells while the sheet was 128x64 with
+       thirty-two, which is the third hand-kept copy of the icon set found
+       stale in one afternoon. The other two are now generated; this one is
+       prose, so it gets a guard instead. */
+    const doc = read('assets/README.md');
+    const w = ICON_COLS * ICON_W;
+    const h = ICON_ROWS * ICON_H;
+    assert.ok(doc.includes(`${w}x${h}`), `README does not say ${w}x${h}`);
+    const svg = read('assets/icons.svg');
+    assert.ok(svg.includes(`viewBox="0 0 ${w} ${h}"`), 'the sheet is not that size');
+  });
 });

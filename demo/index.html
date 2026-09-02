@@ -47,7 +47,7 @@
     import { createElement as h, useEffect, useState, StrictMode } from 'react';
     import { createRoot } from 'react-dom/client';
     import {
-      Badge, Button, Dialog, DialogPanel, DialogTrigger, Equalizer, Icon,
+      Badge, Spinner, Button, Dialog, DialogPanel, DialogTrigger, Equalizer, Icon,
       List, Menu, MenuCheckboxItem, MenuContent, MenuItem, MenuLabel, MenuRadioGroup,
       MenuRadioItem, MenuSeparator, MenuSub, MenuTrigger, Menubar,
       Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
@@ -368,7 +368,7 @@ const [value, setValue] = useState([40]);
 
 // A Radix Toolbar: one tab stop, arrow keys inside.
 <Transport label="Playback">
-  <TransportButton icon="prev" label="Previous track" />
+  <TransportButton icon="previous" label="Previous track" />
   <TransportButton icon="play" label="Play" onClick={play} />
   <TransportButton icon="stop" label="Stop" onClick={stop} />
 </Transport>
@@ -377,7 +377,7 @@ const [value, setValue] = useState([40]);
         },
           h('div', { className: 'demo-stack' },
             h(Transport, { label: 'Playback' },
-              h(TransportButton, { icon: 'prev', label: 'Previous track' }),
+              h(TransportButton, { icon: 'previous', label: 'Previous track' }),
               h(TransportButton, {
                 icon: playing ? 'pause' : 'play',
                 label: playing ? 'Pause' : 'Play',
@@ -524,6 +524,18 @@ const [value, setValue] = useState([40]);
           h(Badge, { status: 'warning' }, 'Buffering'),
           h(Badge, { status: 'error' }, 'No device'),
           h(Badge, null, 'Idle')),
+
+        h(Section, {
+          id: 'spinner', title: 'Spinner',
+          note: 'Eight cells on the sheet, stepped. Not one glyph rotated: only a quarter turn is exact on a pixel grid, so the other seven positions are drawn. Under reduced motion it slows rather than stops, because a stopped spinner reads as a hung process.',
+          code: `import { Spinner } from '@josueavalosjim/panelware';
+
+// The label is announced when it appears. Say what is loading, if you know.
+<Spinner />
+<Spinner label="Loading playlist" />`,
+        },
+          h(Spinner, null),
+          h(Spinner, { label: 'Loading playlist' })),
 
         h(Section, {
           id: 'tokens', title: 'Tokens',
