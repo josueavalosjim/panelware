@@ -458,6 +458,20 @@
      subtree changed its density: every compact control inside would keep the
      comfortable target. Same trap that made --pw-bevel-depth inert. */
   --pw-dialog-w:  28rem;
+
+  /* ── Stacking ──────────────────────────────────────────────────────────
+     Two numbers, and they are tokens because a consumer's page has its own
+     stacking order and this kit cannot know it.
+
+     A portalled dialog lands at the end of <body> and, with no z-index, sits
+     at auto: it beats earlier siblings but loses to any positioned element
+     anywhere with a positive z-index. A tab panel one section up the page
+     was painting over an open modal for exactly that reason.
+
+     Deliberately low, not 9999. A kit that grabs the top of the stack takes
+     it away from the application, and an app has better claim to it. */
+  --pw-z-overlay: 100;
+  --pw-z-panel:   101;
 }
 
 /* Reassign tokens at the breakpoint rather than duplicating component rules,
@@ -1222,6 +1236,18 @@
  */
 
 @layer pw.components {
+  /* A stacking context, so the fuse below is contained.
+     The active trigger and the panel use z-index to decide which of their
+     two overlapping edges is visible. Without a context those numbers are
+     global, and .pw-tab-panel { z-index: 1 } was painting over a portalled
+     modal dialog, which has no z-index of its own and therefore auto.
+     Containing them here means the fuse cannot reach outside the group no
+     matter what a consumer's page does. */
+  .pw-tabs {
+    position: relative;
+    z-index: 0;
+  }
+
   .pw-tab-list {
     display: flex;
     gap: var(--pw-space-3xs);
@@ -1422,6 +1448,7 @@
   .pw-overlay {
     position: fixed;
     inset: 0;
+    z-index: var(--pw-z-overlay);
     background-color: var(--pw-color-scrim);
     /* A flat scrim, and that is a decision rather than an omission.
        backdrop-filter is the documented jank primitive (shadcn-ui #327,
@@ -1439,6 +1466,7 @@
   .pw-panel {
     --pw-elev: var(--pw-shadow-raised);
     position: fixed;
+    z-index: var(--pw-z-panel);
     top: 50%;
     left: 50%;
     width: var(--pw-dialog-w);

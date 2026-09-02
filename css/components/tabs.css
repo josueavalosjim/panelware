@@ -8,6 +8,18 @@
  */
 
 @layer pw.components {
+  /* A stacking context, so the fuse below is contained.
+     The active trigger and the panel use z-index to decide which of their
+     two overlapping edges is visible. Without a context those numbers are
+     global, and .pw-tab-panel { z-index: 1 } was painting over a portalled
+     modal dialog, which has no z-index of its own and therefore auto.
+     Containing them here means the fuse cannot reach outside the group no
+     matter what a consumer's page does. */
+  .pw-tabs {
+    position: relative;
+    z-index: 0;
+  }
+
   .pw-tab-list {
     display: flex;
     gap: var(--pw-space-3xs);

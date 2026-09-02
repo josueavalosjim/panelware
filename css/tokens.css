@@ -426,6 +426,20 @@
      subtree changed its density: every compact control inside would keep the
      comfortable target. Same trap that made --pw-bevel-depth inert. */
   --pw-dialog-w:  28rem;
+
+  /* ── Stacking ──────────────────────────────────────────────────────────
+     Two numbers, and they are tokens because a consumer's page has its own
+     stacking order and this kit cannot know it.
+
+     A portalled dialog lands at the end of <body> and, with no z-index, sits
+     at auto: it beats earlier siblings but loses to any positioned element
+     anywhere with a positive z-index. A tab panel one section up the page
+     was painting over an open modal for exactly that reason.
+
+     Deliberately low, not 9999. A kit that grabs the top of the stack takes
+     it away from the application, and an app has better claim to it. */
+  --pw-z-overlay: 100;
+  --pw-z-panel:   101;
 }
 
 /* Reassign tokens at the breakpoint rather than duplicating component rules,
