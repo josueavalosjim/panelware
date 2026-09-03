@@ -129,9 +129,22 @@
   /* ── The bevel's four inks ───────────────────────────────────────────────
      Only one of these has a floor, and the split is the whole point.
 
-     --pw-bevel-frame is the outer line. It is what tells you where the
-     control ends and the page begins, so WCAG 1.4.11 applies to it and it
-     is held to 3:1 in the gate: 4.69:1 on the page, 3.85:1 on a panel.
+     --pw-bevel-frame is the bottom-right outer line. In THIS theme it is
+     also the edge that reads against the page, so it happens to measure
+     4.69:1 there and 3.85:1 on a panel, and it is the same silver-700 that
+     --pw-bevel-boundary points at.
+
+     That coincidence is light-only, and this comment used to state those two
+     numbers as though they were the token's, which is how they got read as a
+     promise. In dark the light source moves to the top-left corner and frame
+     drops to silver-950: measured 1.11:1 on the page and 1.36:1 on a panel.
+     Nothing in the gate holds frame to anything, in either theme. The floor
+     belongs to --pw-bevel-boundary, below, which is a separate role for
+     exactly this reason.
+
+     So frame is not a divider token. Reaching for it to draw a visible line
+     gets a line that works in light and disappears in dark, which is what
+     the demo stylesheet did until a painted-pixel audit measured it.
 
      --pw-bevel-light is the classic white top-left highlight, and on a
      silver face it measures 1.47:1. That is not a failure to fix. It is a

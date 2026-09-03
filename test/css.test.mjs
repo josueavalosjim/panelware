@@ -114,4 +114,48 @@ describe('the published reference data', () => {
     assert.match(base.values.light.resolved, /^#[0-9a-f]{6}$/i);
     assert.notEqual(base.values.light.resolved, base.values.dark.resolved);
   });
+  test('no lone visible line is drawn with a decorative bevel ink', () => {
+    /* Four of the five bevel inks are interior shading, and only
+       --pw-bevel-boundary carries WCAG 1.4.11. The catch is that in the light
+       theme --pw-bevel-frame resolves to the same silver-700 that boundary
+       does, so a line drawn with frame looks correct, measures 4.69:1, and
+       passes every review, right up until the dark theme moves frame to
+       silver-950 and the line drops to 1.11:1 against the page.
+
+       demo.css drew every section rule that way and nobody saw it, because
+       the failure exists in one theme only and only as an absence.
+
+       "Lone" is the whole rule, and it is not an exception carved out to let
+       an existing offender through. A single line in a decorative ink is
+       asking one shading tone to be seen against a surface, which is the
+       thing that stops working when the theme moves it. Two decorative inks
+       on opposite edges are a groove, where the signal is the step between
+       the two rather than either one against the ground, which is the bevel's
+       own logic at one pixel. The menu separator is that, and it holds in
+       both themes for the same reason the bevel does. */
+    const DECORATIVE = ['--pw-bevel-frame', '--pw-bevel-light', '--pw-bevel-shade', '--pw-bevel-face'];
+    const files = [];
+    const walk = (dir) => {
+      for (const e of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
+        if (e.isDirectory()) walk(join(dir, e.name));
+        else if (e.name.endsWith('.css')) files.push(join(dir, e.name));
+      }
+    };
+    walk('css');
+    walk('demo');
+    const bad = [];
+    for (const f of files) {
+      if (f.endsWith('panelware.css') || f.endsWith('tokens.css')) continue;
+      for (const block of read(f).split('}')) {
+        const hits = [];
+        for (const line of block.split('\n')) {
+          const decl = line.split('/*')[0];
+          if (!/^\s*(border|outline)[a-z-]*\s*:/.test(decl)) continue;
+          for (const t of DECORATIVE) if (decl.includes(t)) hits.push({ t, decl: decl.trim() });
+        }
+        if (hits.length === 1) bad.push(`${f}: ${hits[0].decl}`);
+      }
+    }
+    assert.deepEqual(bad, [], 'a decorative bevel ink is drawing a line on its own');
+  });
 });

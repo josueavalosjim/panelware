@@ -84,7 +84,11 @@ body {
 
 .demo-section {
   padding-top: var(--pw-space-xl);
-  border-top: var(--pw-border) solid var(--pw-bevel-frame);
+  /* --pw-bevel-boundary, not --pw-bevel-frame. frame is an interior shading
+     tone whose light-theme value happens to read against the page; in dark
+     it measured 1.11:1 here and the section rules were invisible. boundary
+     is the role that carries WCAG 1.4.11 in both themes. */
+  border-top: var(--pw-border) solid var(--pw-bevel-boundary);
 }
 .demo-section + .demo-section { margin-top: var(--pw-space-2xl); }
 
