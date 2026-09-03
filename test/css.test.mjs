@@ -237,4 +237,43 @@ describe('the published reference data', () => {
     assert.match(rule[0], /--pw-shadow-outer:\s*0 0 0 0 transparent/,
       'a segment still casts, so the row has two bottom edges');
   });
+  test('every control that can answer a press does', () => {
+    /* A colour audit reported five controls with no :active rule and called
+       all five a gap. Reading their rest states rather than their selectors
+       says otherwise, and the difference is the whole point of this test.
+
+       .pw-tab is raised at rest and sunken when selected, so it has a sink
+       available and was genuinely missing the press.
+
+       .pw-checkbox, .pw-radio and .pw-select are sunken AT REST. They are
+       wells you put a mark into, not buttons, so none of them can answer a
+       press by sinking: there is nowhere further down. Windows lightened the
+       well's face, which would make colour the only carrier of the state, so
+       they take the same pixel drop every other control uses. The select adds
+       the one flip it does have: its raised drop button sinks, which is the
+       same picture opening shows.
+
+       .pw-menubar-trigger is not in this list and must not be added to it. It
+       has no bevel at all and inverts when open, which its own comment gives
+       the reason for: a pressed button and an open menu are different states
+       and reading the same would be a lie about which. */
+    const press = [
+      ['css/components/tabs.css', /\.pw-tab:not\(\[data-state="active"\]\):not\(\[aria-selected="true"\]\):active/],
+      ['css/components/field.css', /\.pw-checkbox:active,\s*\n\s*\.pw-radio:active/],
+      ['css/components/field.css', /\.pw-select:active \.pw-select-button/],
+    ];
+    for (const [file, pattern] of press) {
+      assert.match(read(file).replace(/\/\*[\s\S]*?\*\//g, ''), pattern,
+        `${file} has no press rule matching ${pattern}`);
+    }
+    /* The selected tab is already translated by the fuse that lands its
+       bottom edge under the panel. A press on top of that is two pixels, and
+       the tab detaches from the panel it is supposed to be joined to. */
+    const tabs = read('css/components/tabs.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    for (const rule of tabs.match(/[^{}]*:active[^{}]*\{[^}]*\}/g) ?? []) {
+      if (!rule.includes('.pw-tab:') || rule.includes(':disabled') || rule.includes('[data-disabled]')) continue;
+      assert.match(rule, /:not\(\[data-state="active"\]\)/,
+        'a tab press rule does not exclude the selected tab, which is already translated');
+    }
+  });
 });

@@ -65,6 +65,20 @@
     z-index: 0;
   }
 
+  /* An unselected tab is raised, so it has a sink available and should use
+     it: it is the one control in this group that was genuinely missing a
+     press. The selected tab is excluded because it is already translated by
+     the fuse above, and :active would put a second pixel on top of the one
+     that lands its bottom edge under the panel. */
+  .pw-tab:not([data-state="active"]):not([aria-selected="true"]):active {
+    --pw-elev: var(--pw-shadow-sunken);
+    transform: translateY(var(--pw-press-travel));
+    opacity: 1;
+  }
+
+  .pw-tab:disabled:active,
+  .pw-tab[data-disabled]:active { transform: none; }
+
   .pw-tab-panel { position: relative; z-index: 1; }
 
   .pw-tab-panel {
@@ -89,6 +103,10 @@
 
   @media (prefers-reduced-motion: reduce) {
     .pw-tab { transition-duration: 1ms; }
+    .pw-tab:not([data-state="active"]):not([aria-selected="true"]):active {
+      transform: translateY(var(--pw-press-travel));
+    }
+  }
     /* Repeated at its own (0,2,0), or the active tab would spring back up
        and un-fuse from the panel under reduced motion. Both selectors, or
        the aria-only spelling loses its transform here. */
