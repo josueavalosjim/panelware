@@ -19,24 +19,32 @@
    is not using. */
 :root { --demo-measure: 64rem; }
 
-/* The horizontal gutter lives on the children, NOT on body, and that is a
-   bug fix rather than a preference.
+/* NOTHING on body but the background. Every inset lives on a child, and that
+   is a bug fix rather than a preference.
 
-   Radix's scroll lock writes padding-right to <body> when a dialog or a
-   select opens, to hold the page still where a classic scrollbar has just
-   been removed. The value it writes is the scrollbar's width, and with the
-   overlay scrollbars that macOS and iOS use that width is zero. So it wrote
-   0px over this rule's 24px and took both gutters with it. Measured at 700px
-   wide: opening the dialog moved the page's left edge from 24 to 0 and grew
-   it 48px wider, on every interaction that locks scroll. Above about 1072px
-   the max-width below absorbs it and nothing moves, which is why it was easy
-   to miss.
+   Radix's scroll lock is react-remove-scroll, and when a dialog or a select
+   opens it injects this, verbatim:
 
-   With the gutter on the children, Radix writes to a body that has no
-   horizontal padding of its own and there is nothing to clobber. */
+     body[data-scroll-locked] {
+       overflow: hidden !important;  overscroll-behavior: contain;
+       position: relative !important;
+       padding-left: 0px;  padding-top: 0px;  padding-right: 0px;
+       margin-left: 0;  margin-top: 0;  margin-right: 0px !important;
+     }
+
+   It is replacing the page's own insets with values it has computed to hold
+   the layout still where a classic scrollbar has just been taken away. On the
+   overlay scrollbars macOS and iOS use there is no scrollbar to compensate
+   for, so every one of those computes to zero and the page simply loses them.
+
+   Three paddings and two margins, not just the right one. A first pass here
+   moved only the horizontal gutter and the page still jumped upward by the
+   32px top padding, which is what the second screenshot showed. padding-bottom
+   and margin-bottom are the only two the rule does not touch, and relying on
+   that is not worth the ten characters it saves. */
 body {
   margin: 0;
-  padding: var(--pw-space-2xl) 0 6rem;
+  padding: 0;
   background-color: var(--pw-color-base-100);
   color: var(--pw-color-base-content);
   font-family: var(--pw-font-ui);
@@ -56,7 +64,11 @@ body {
   padding-inline: var(--pw-space-xl);
 }
 
-.demo-header { margin-bottom: var(--pw-space-2xl); }
+.demo-header {
+  margin-bottom: var(--pw-space-2xl);
+  padding-top: var(--pw-space-2xl);
+}
+.demo-main { padding-bottom: 6rem; }
 
 .demo-title {
   margin: 0;

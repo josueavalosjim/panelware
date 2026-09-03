@@ -88,22 +88,35 @@ one area; keep it narrow and leave scrollable page either side.
 
 ## One trap the primitives set for you
 
-Do not put horizontal padding on `<body>`.
+Put no padding and no margin on `<body>`. Put them on a child.
 
-Radix's scroll lock writes `padding-right` to `<body>` whenever a dialog or a
-select opens, so the page holds still where a classic scrollbar has just been
-removed. The value it writes is that scrollbar's width, and with the overlay
-scrollbars macOS and iOS use, that width is zero, so it writes `0px` over
-whatever was there. A page whose gutter lives on `<body>` loses that gutter
-for as long as the dialog is open.
+Radix locks scroll with `react-remove-scroll`, and the moment a dialog or a
+select opens it injects this:
 
-This demo had it. Measured at 700px wide, opening the dialog moved the page's
-left edge from 24 to 0 and made it 48px wider, on every interaction that locks
-scroll. Wider than about 1072px a `max-width` absorbed it and nothing appeared
-to move, which is why it went unnoticed.
+```css
+body[data-scroll-locked] {
+  overflow: hidden !important;  overscroll-behavior: contain;
+  position: relative !important;
+  padding-left: 0px;  padding-top: 0px;  padding-right: 0px;
+  margin-left: 0;  margin-top: 0;  margin-right: 0px !important;
+}
+```
 
-Put the gutter on a child of `<body>` and there is nothing to overwrite. There
-is a lint for it in this repo's own tests.
+Those zeroes are not a mistake. They are values computed to hold the layout
+still where a classic scrollbar has just been taken away, and they are correct
+when there is a scrollbar to make room for. With the overlay scrollbars that
+macOS and iOS use there is nothing to compensate for, every value computes to
+zero, and a page whose insets live on `<body>` loses them for as long as the
+popup is open.
+
+Three paddings and three margins. `padding-bottom` and `margin-bottom` are the
+only sides the rule leaves alone.
+
+This demo had 24px of horizontal and 32px of vertical padding on `<body>`.
+Opening the select moved the page up 32px and left 24px, and made it 48px
+wider. Above about 1072px a `max-width` absorbed the horizontal half, which is
+what made it look intermittent. There is a lint for it in this repo's own
+tests, because the failure only exists while something is open.
 
 ## The token contract
 

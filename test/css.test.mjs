@@ -158,20 +158,30 @@ describe('the published reference data', () => {
     }
     assert.deepEqual(bad, [], 'a decorative bevel ink is drawing a line on its own');
   });
-  test('nothing gives <body> a horizontal padding', () => {
-    /* Radix's scroll lock writes padding-right to <body> when a dialog or a
-       select opens, to hold the page still where a classic scrollbar has just
-       been taken away. The value it writes is that scrollbar's width, and on
-       the overlay scrollbars macOS and iOS use, the width is zero. So it
-       writes 0px over whatever the page had.
+  test('<body> carries no inset a scroll lock would take away', () => {
+    /* react-remove-scroll, which is what Radix locks scroll with, injects
+       this the moment a dialog or a select opens:
 
-       demo.css had 24px there. Measured at 700px wide, opening the dialog
-       moved the page's left edge from 24 to 0 and grew it 48px wider, on
-       every interaction that locks scroll. Above about 1072px a max-width
-       absorbed it and nothing moved, which is why it survived this long.
+         body[data-scroll-locked] {
+           padding-left: 0px; padding-top: 0px; padding-right: 0px;
+           margin-left: 0; margin-top: 0; margin-right: 0px !important;
+         }
 
-       The gutter belongs on a child. This is a lint rather than a note in the
-       README because the README cannot fail. */
+       It is replacing the page's insets with values computed to hold the
+       layout still where a classic scrollbar has just been removed. On the
+       overlay scrollbars macOS and iOS use there is no scrollbar to make room
+       for, so all of them compute to zero and the page loses its insets for
+       as long as the thing is open.
+
+       Three paddings and three margins. The first version of this lint
+       checked the horizontal padding only, because that is the half I had
+       understood, and the page still jumped 32px upward on its top padding
+       with the lint green. Bottom is the only side the rule leaves alone and
+       depending on that is not worth the characters.
+
+       This has to be a lint rather than a note, because the failure appears
+       only while a popup is open and only where a max-width is not already
+       absorbing it. */
     const files = [];
     const walk = (dir) => {
       for (const e of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
@@ -181,6 +191,7 @@ describe('the published reference data', () => {
     };
     walk('css');
     walk('demo');
+    const zero = (v) => v === '0' || /^0[a-z%]*$/.test(v);
     const bad = [];
     for (const f of files) {
       if (f.endsWith('panelware.css') || f.endsWith('tokens.css')) continue;
@@ -188,19 +199,24 @@ describe('the published reference data', () => {
       for (const m of css.matchAll(/(^|[},])\s*body\b[^{]*\{([^}]*)\}/g)) {
         for (const decl of m[2].split(';')) {
           const [prop, value] = decl.split(':').map((x) => (x ?? '').trim());
-          if (!/^padding(-(left|right|inline(-(start|end))?))?$/.test(prop)) continue;
-          const parts = value.split(/\s+/);
-          /* one value applies to all sides; two and three put the horizontal
-             in the second; four puts right second and left fourth */
-          const sides = prop === 'padding'
-            ? (parts.length === 1 ? [parts[0]] : [parts[1], parts[3] ?? parts[1]])
-            : parts;
-          const live = sides.filter(Boolean).filter((v) => v !== '0' && !/^0[a-z%]+$/.test(v));
-          if (live.length) bad.push(`${f}: body { ${prop}: ${value} }`);
+          if (!/^(padding|margin)(-(top|left|right|inline|block)(-(start|end))?)?$/.test(prop)) continue;
+          const v = value.split(/\s+/).filter(Boolean);
+          let sides;
+          if (/-(top|left|right)$/.test(prop)) sides = v;
+          else if (/-inline/.test(prop)) sides = v;
+          else if (/-block(-start)?$/.test(prop)) sides = [v[0]];
+          else if (/-block-end$/.test(prop)) sides = [];
+          /* shorthand: the bottom is the only side that survives, so drop it
+             and judge what is left */
+          else if (v.length === 1) sides = v;
+          else if (v.length === 2) sides = [v[0], v[1]];
+          else sides = [v[0], v[1], v[3] ?? v[1]];
+          if (sides.filter(Boolean).some((x) => !zero(x))) bad.push(`${f}: body { ${prop}: ${value} }`);
         }
       }
     }
-    assert.deepEqual(bad, [], 'a horizontal padding on <body> is what Radix\'s scroll lock overwrites');
+    assert.deepEqual(bad, [],
+      "an inset on <body> that react-remove-scroll will zero while a popup is open");
   });
 
   test('a toggle group segment casts no shadow', () => {
