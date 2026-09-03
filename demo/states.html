@@ -631,6 +631,49 @@
       </div>
     </section>
 
+    <section class="demo-section" id="field">
+      <h2 class="demo-heading">Form controls</h2>
+      <p class="demo-note">Checkbox, radio and combo box, in every state the attributes can reach. This page had none of them: they were added to the live page and never mirrored here, so their CSS had no proof it works without React and the runtime contrast gate, which reads this page, had never measured them.</p>
+      <div class="demo-row">
+        <div class="demo-stack">
+          <label class="pw-field">
+            <button type="button" role="checkbox" aria-checked="true" data-state="checked" value="on" class="pw-checkbox">
+              <span data-state="checked" class="pw-box-indicator">
+                <span data-mark="check" class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 1;"></span>
+                <span data-mark="minus" class="pw-icon" aria-hidden="true" style="--pw-icon-x: 1; --pw-icon-y: 2;"></span></span></button>
+            <span class="pw-label">Always on top</span></label>
+          <label class="pw-field">
+            <button type="button" role="checkbox" aria-checked="mixed" data-state="indeterminate" value="on" class="pw-checkbox">
+              <span data-state="indeterminate" class="pw-box-indicator">
+                <span data-mark="check" class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 1;"></span>
+                <span data-mark="minus" class="pw-icon" aria-hidden="true" style="--pw-icon-x: 1; --pw-icon-y: 2;"></span></span></button>
+            <span class="pw-label">Some tracks selected</span></label>
+          <label class="pw-field">
+            <button type="button" role="checkbox" aria-checked="false" data-state="unchecked" data-disabled="" disabled="" value="on" class="pw-checkbox"></button>
+            <span class="pw-label">Unavailable</span></label>
+          <div role="radiogroup" aria-required="false" class="pw-radio-group" tabindex="0">
+            <label class="pw-field">
+              <button type="button" role="radio" aria-checked="true" data-state="checked" value="base" class="pw-radio" tabindex="-1">
+                <span data-state="checked" class="pw-box-indicator">
+                  <span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 2;"></span></span></button>
+              <span class="pw-label">Base</span></label>
+            <label class="pw-field">
+              <button type="button" role="radio" aria-checked="false" data-state="unchecked" value="night" class="pw-radio" tabindex="-1"></button>
+              <span class="pw-label">Night</span></label>
+            <label class="pw-field">
+              <button type="button" role="radio" aria-checked="false" data-state="unchecked" data-disabled="" disabled="" value="x" class="pw-radio" tabindex="-1"></button>
+              <span class="pw-label">Unavailable</span></label>
+          </div>
+          <button type="button" role="combobox" aria-expanded="false" aria-autocomplete="none" data-state="closed" class="pw-select" aria-label="Output device">
+            <span class="pw-select-value">
+              <span>DirectSound</span></span>
+            <span class="pw-select-button">
+              <span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 3; --pw-icon-y: 2;"></span></span></button>
+        </div>
+      </div>
+
+    </section>
+
     <section class="demo-section" id="spinner">
       <h2 class="demo-heading">Spinner</h2>
       <p class="demo-note">Eight cells on the sheet, stepped. Not one glyph rotated: only a quarter turn is exact on a pixel grid, so the other seven positions are drawn.</p>

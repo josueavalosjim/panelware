@@ -136,6 +136,15 @@ body {
   min-width: 0;
 }
 
+/* The min-width belongs on the items, not only on the row. A flex item's
+   min-width is auto, which means it refuses to shrink below its content, so
+   the token table's 603px pushed the whole document to 1037px wide inside a
+   320px viewport. The row already had min-width: 0, which is the same fix
+   applied to the wrong element: the row was never the thing refusing to
+   shrink. With this, .demo-table-wrap's own max-width and overflow-x can do
+   what they were written to do. */
+.demo-row > * { min-width: 0; }
+
 /* The tab strip and its panel, with no gap between them. The stack's 16px
    gap sat between the two and made the fuse impossible, so the section that
    exists to demonstrate the fuse was the one place it could not happen. */

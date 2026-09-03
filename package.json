@@ -52,6 +52,10 @@
     "test": "tsc && node --test \"test/**/*.test.mjs\"",
     "check": "taste-check",
     "check:runtime": "node scripts/runtime.mjs",
+    "check:overflow": "node scripts/check-overflow.mjs",
+    "check:parity": "node scripts/check-parity.mjs",
+    "check:colour": "node scripts/check-colour.mjs",
+    "check:pages": "npm run check:overflow && npm run check:parity && npm run check:colour",
     "prepublishOnly": "npm run build",
     "release": "npm test && npm run check && npm version patch -m \"Release %s\" && git push --follow-tags",
     "serve": "node scripts/serve.mjs"

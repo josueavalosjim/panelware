@@ -45,3 +45,25 @@ jobs:
       # exits non-zero rather than skipping, so this needs no separate guard.
       - name: contrast measured off the rendered page, in both themes
         run: npm run check:runtime
+
+      # The three checks that need the pages rather than the files. They serve
+      # demo/ themselves on an ephemeral port, because demo/index.html boots
+      # React through an import map and ES modules do not load over file://:
+      # it came up with an empty <main>, and the first version of the overflow
+      # check reported clean at every width having measured nothing. Each one
+      # counts the controls it found before trusting a green result.
+      #
+      # index.html pulls React and Radix from esm.sh, so these need a network.
+      # That is the same bet the demo page itself makes.
+      - name: nothing scrolls sideways, 320 up
+        run: npm run check:overflow
+
+      # The static page is only proof of anything while it renders the same
+      # shapes as the live one.
+      - name: the two demo pages still agree
+        run: npm run check:parity
+
+      # Every colour actually painted, against the ground it actually lands
+      # on, rather than the twenty pairs somebody thought to configure.
+      - name: every painted pair clears its floor
+        run: npm run check:colour

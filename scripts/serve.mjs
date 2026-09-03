@@ -32,23 +32,50 @@ const TYPES = {
   '.map': 'application/json; charset=utf-8',
 };
 
-createServer((req, res) => {
-  const url = new URL(req.url, 'http://localhost');
-  let path = decodeURIComponent(url.pathname);
-  if (path === '/') path = '/demo/index.html';
-  /* normalize before joining, so ../ cannot walk out of the repo */
-  const file = join(ROOT, normalize(path).replace(/^(\.\.[/\\])+/, ''));
-  if (!file.startsWith(ROOT)) { res.writeHead(403).end('no'); return; }
-  let stat;
-  try { stat = statSync(file); } catch { res.writeHead(404).end('not found'); return; }
-  if (stat.isDirectory()) { res.writeHead(404).end('not found'); return; }
-  res.writeHead(200, {
-    'content-type': TYPES[extname(file)] ?? 'application/octet-stream',
-    'content-length': stat.size,
-    'cache-control': 'no-store, max-age=0',
+export function createDemoServer() {
+    return createServer((req, res) => {
+    const url = new URL(req.url, 'http://localhost');
+    let path = decodeURIComponent(url.pathname);
+    if (path === '/') path = '/demo/index.html';
+    /* normalize before joining, so ../ cannot walk out of the repo */
+    const file = join(ROOT, normalize(path).replace(/^(\.\.[/\\])+/, ''));
+    if (!file.startsWith(ROOT)) { res.writeHead(403).end('no'); return; }
+    let stat;
+    try { stat = statSync(file); } catch { res.writeHead(404).end('not found'); return; }
+    if (stat.isDirectory()) { res.writeHead(404).end('not found'); return; }
+    res.writeHead(200, {
+      'content-type': TYPES[extname(file)] ?? 'application/octet-stream',
+      'content-length': stat.size,
+      'cache-control': 'no-store, max-age=0',
   });
   createReadStream(file).pipe(res);
-}).listen(PORT, '127.0.0.1', () => {
-  console.log(`panelware demo  http://127.0.0.1:${PORT}/demo/index.html`);
-  console.log(`                http://127.0.0.1:${PORT}/demo/states.html`);
-});
+  });
+}
+
+/**
+ * Start on an ephemeral port and hand back the base URL.
+ *
+ * The checks use this rather than a fixed port so two of them can run at once,
+ * and rather than file:// because demo/index.html boots React through an
+ * import map and ES modules do not load over file://. It rendered zero
+ * controls there and every width-based check passed, having measured an empty
+ * document. See the liveness guard in check-overflow.mjs.
+ */
+export function startDemoServer(port = 0) {
+  return new Promise((resolve) => {
+    const server = createDemoServer();
+    server.listen(port, '127.0.0.1', () => {
+      const { port: actual } = server.address();
+      resolve({
+        url: `http://127.0.0.1:${actual}`,
+        close: () => new Promise((done) => server.close(done)),
+      });
+    });
+  });
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const { url } = await startDemoServer(PORT);
+  console.log(`panelware demo  ${url}/demo/index.html`);
+  console.log(`                ${url}/demo/states.html`);
+}
