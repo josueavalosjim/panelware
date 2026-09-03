@@ -360,6 +360,7 @@ npm run build         # generate, then tsc
 npm test              # compile and check, WITHOUT regenerating
 npm run check         # the palette gate: contrast, tokens, one-off values
 npm run check:runtime # the same, measured off the rendered page
+npm run serve         # the demo, on 4173, with Cache-Control: no-store
 ```
 
 `npm test` deliberately does not regenerate. Several tests compare a
@@ -376,6 +377,13 @@ JavaScript at all.
 
 `npm run check` reads files and takes about half a second. `check:runtime`
 needs a Chromium and refuses to run without one, rather than skipping quietly.
+
+Serve the demo with `npm run serve` rather than any other static server. The
+one thing it does that matters is send `Cache-Control: no-store`, and it was
+added after a fixed layout bug was reported as still broken: the file on disk
+was right, a fetch of the same URL returned the fix, and the browser was
+painting a stylesheet from before it. Nothing else in this repo can see that,
+because every other check reads the file or drives a fresh browser.
 
 Several tests guard things that fail silently rather than loudly: a theme
 missing a token, a bevel offset written as a literal, a `color-mix()` the gate
