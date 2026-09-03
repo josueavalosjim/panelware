@@ -86,6 +86,25 @@ captures vertical drag, which is also how a page scrolls, so the equaliser is
 a region a finger cannot scroll through. No arrangement gives both gestures to
 one area; keep it narrow and leave scrollable page either side.
 
+## One trap the primitives set for you
+
+Do not put horizontal padding on `<body>`.
+
+Radix's scroll lock writes `padding-right` to `<body>` whenever a dialog or a
+select opens, so the page holds still where a classic scrollbar has just been
+removed. The value it writes is that scrollbar's width, and with the overlay
+scrollbars macOS and iOS use, that width is zero, so it writes `0px` over
+whatever was there. A page whose gutter lives on `<body>` loses that gutter
+for as long as the dialog is open.
+
+This demo had it. Measured at 700px wide, opening the dialog moved the page's
+left edge from 24 to 0 and made it 48px wider, on every interaction that locks
+scroll. Wider than about 1072px a `max-width` absorbed it and nothing appeared
+to move, which is why it went unnoticed.
+
+Put the gutter on a child of `<body>` and there is nothing to overwrite. There
+is a lint for it in this repo's own tests.
+
 ## The token contract
 
 Five layers, in one cascade layer each, in this order:

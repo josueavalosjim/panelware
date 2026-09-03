@@ -158,4 +158,67 @@ describe('the published reference data', () => {
     }
     assert.deepEqual(bad, [], 'a decorative bevel ink is drawing a line on its own');
   });
+  test('nothing gives <body> a horizontal padding', () => {
+    /* Radix's scroll lock writes padding-right to <body> when a dialog or a
+       select opens, to hold the page still where a classic scrollbar has just
+       been taken away. The value it writes is that scrollbar's width, and on
+       the overlay scrollbars macOS and iOS use, the width is zero. So it
+       writes 0px over whatever the page had.
+
+       demo.css had 24px there. Measured at 700px wide, opening the dialog
+       moved the page's left edge from 24 to 0 and grew it 48px wider, on
+       every interaction that locks scroll. Above about 1072px a max-width
+       absorbed it and nothing moved, which is why it survived this long.
+
+       The gutter belongs on a child. This is a lint rather than a note in the
+       README because the README cannot fail. */
+    const files = [];
+    const walk = (dir) => {
+      for (const e of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
+        if (e.isDirectory()) walk(join(dir, e.name));
+        else if (e.name.endsWith('.css')) files.push(join(dir, e.name));
+      }
+    };
+    walk('css');
+    walk('demo');
+    const bad = [];
+    for (const f of files) {
+      if (f.endsWith('panelware.css') || f.endsWith('tokens.css')) continue;
+      const css = read(f).replace(/\/\*[\s\S]*?\*\//g, '');
+      for (const m of css.matchAll(/(^|[},])\s*body\b[^{]*\{([^}]*)\}/g)) {
+        for (const decl of m[2].split(';')) {
+          const [prop, value] = decl.split(':').map((x) => (x ?? '').trim());
+          if (!/^padding(-(left|right|inline(-(start|end))?))?$/.test(prop)) continue;
+          const parts = value.split(/\s+/);
+          /* one value applies to all sides; two and three put the horizontal
+             in the second; four puts right second and left fourth */
+          const sides = prop === 'padding'
+            ? (parts.length === 1 ? [parts[0]] : [parts[1], parts[3] ?? parts[1]])
+            : parts;
+          const live = sides.filter(Boolean).filter((v) => v !== '0' && !/^0[a-z%]+$/.test(v));
+          if (live.length) bad.push(`${f}: body { ${prop}: ${value} }`);
+        }
+      }
+    }
+    assert.deepEqual(bad, [], 'a horizontal padding on <body> is what Radix\'s scroll lock overwrites');
+  });
+
+  test('a toggle group segment casts no shadow', () => {
+    /* A raised surface casts and a sunken one does not, which is right for a
+       button on its own and wrong for a row that is one choice: the selected
+       segment is sunken and casts nothing, every other segment casts 0 1px
+       2px, and the row ends up with two different bottom edges. Measured, the
+       raised segments painted two pixels taller. Two pixels on a 44px control
+       is 4.5% and reads as nothing; on a 32px control in compact density it
+       is 6.25%, and that is where it was reported from.
+
+       Dropping the cast is the half that keeps the physics, since a hole in a
+       surface casts nothing. The alternative, giving the sunken segment a
+       shadow, would have made the selected one float. */
+    const css = read('css/components/toggle.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    const rule = css.match(/\.pw-toggle-group\s+\.pw-toggle\s*\{[^}]*\}/);
+    assert.ok(rule, 'no rule scopes a segment inside its group');
+    assert.match(rule[0], /--pw-shadow-outer:\s*0 0 0 0 transparent/,
+      'a segment still casts, so the row has two bottom edges');
+  });
 });

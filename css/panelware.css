@@ -1434,6 +1434,24 @@
     gap: var(--pw-space-3xs);
   }
 
+  /* No cast shadow on a segment, and this is a set-level rule rather than a
+     per-segment tweak.
+
+     A raised surface casts and a sunken one does not, which is right for a
+     button on its own and wrong for a row that is one choice. The selected
+     segment is sunken so it casts nothing, every other segment is raised so
+     it casts 0 1px 2px, and the row then has two different bottom edges.
+     Measured: the raised segments paint two pixels taller than the selected
+     one. Two pixels on a 44px control is 4.5% and reads as nothing; on a
+     32px control in compact density it is 6.25% and reads as a row that does
+     not line up, which is where it was reported from.
+
+     Dropping the cast rather than adding one to the selected segment is the
+     half that keeps the physics: a hole in a surface does not cast a shadow.
+     What the segments lose is 1px of lift they did not need, since the state
+     is carried by the bevel direction and the weight on the inside. */
+  .pw-toggle-group .pw-toggle { --pw-shadow-outer: 0 0 0 0 transparent; }
+
   .pw-toggle:disabled,
   .pw-toggle[aria-disabled="true"] {
     color: var(--pw-color-disabled-content);

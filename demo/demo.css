@@ -19,9 +19,24 @@
    is not using. */
 :root { --demo-measure: 64rem; }
 
+/* The horizontal gutter lives on the children, NOT on body, and that is a
+   bug fix rather than a preference.
+
+   Radix's scroll lock writes padding-right to <body> when a dialog or a
+   select opens, to hold the page still where a classic scrollbar has just
+   been removed. The value it writes is the scrollbar's width, and with the
+   overlay scrollbars that macOS and iOS use that width is zero. So it wrote
+   0px over this rule's 24px and took both gutters with it. Measured at 700px
+   wide: opening the dialog moved the page's left edge from 24 to 0 and grew
+   it 48px wider, on every interaction that locks scroll. Above about 1072px
+   the max-width below absorbs it and nothing moves, which is why it was easy
+   to miss.
+
+   With the gutter on the children, Radix writes to a body that has no
+   horizontal padding of its own and there is nothing to clobber. */
 body {
   margin: 0;
-  padding: var(--pw-space-2xl) var(--pw-space-xl) 6rem;
+  padding: var(--pw-space-2xl) 0 6rem;
   background-color: var(--pw-color-base-100);
   color: var(--pw-color-base-content);
   font-family: var(--pw-font-ui);
@@ -30,7 +45,16 @@ body {
 }
 
 .demo-header,
-.demo-main { max-width: var(--demo-measure); margin-inline: auto; }
+.demo-main {
+  /* Plain measure, no calc. The kit's box-sizing reset is scoped to its own
+     classes rather than applied to *, so these demo elements are content-box
+     and the gutter already sits outside the max-width. Adding the gutter to
+     it here made the measure 1072 instead of 1024, which is a layout change
+     smuggled in under a bug fix. */
+  max-width: var(--demo-measure);
+  margin-inline: auto;
+  padding-inline: var(--pw-space-xl);
+}
 
 .demo-header { margin-bottom: var(--pw-space-2xl); }
 
