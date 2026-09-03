@@ -53,7 +53,8 @@
     "check": "taste-check",
     "check:runtime": "node scripts/runtime.mjs",
     "prepublishOnly": "npm run build",
-    "release": "npm test && npm run check && npm version patch -m \"Release %s\" && git push --follow-tags"
+    "release": "npm test && npm run check && npm version patch -m \"Release %s\" && git push --follow-tags",
+    "serve": "node scripts/serve.mjs"
   },
   "engines": {
     "node": ">=22"
