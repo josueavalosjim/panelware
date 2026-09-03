@@ -81,11 +81,12 @@
   padding: var(--pw-space-2xs) var(--pw-space-sm);
   text-align: left;
   white-space: nowrap;
-  /* --pw-bevel-shade is an interior shading tone, and in dark it resolves to
-     the exact same value as --pw-color-base-100: these row rules measured
-     1.00:1 and were not there at all. boundary is heavier than a table rule
-     wants, and it is the only ink in the set that reads in both themes. */
-  border-bottom: var(--pw-border) solid var(--pw-bevel-boundary);
+  /* --pw-color-divider, the tier this audit added. It was --pw-bevel-shade,
+     an interior shading tone that in dark resolves to the same value as
+     --pw-color-base-100, so these rules measured 1.00:1 and were not there.
+     --pw-bevel-boundary reads in both themes and is a control edge, too
+     heavy for a row rule. This is the rung between them. */
+  border-bottom: var(--pw-border) solid var(--pw-color-divider);
 }
 .demo-table th {
   font-weight: 600;

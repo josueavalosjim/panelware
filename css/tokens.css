@@ -258,6 +258,38 @@
      below. 4.69:1 on the page, 3.85:1 on a panel. */
   --pw-bevel-boundary: var(--pw-silver-700);
 
+  /* ── The divider tier ────────────────────────────────────────────────────
+     A line that groups rather than bounds: a table row rule, a list
+     separator, a section break. It is NOT --pw-bevel-boundary, which is the
+     3:1 control edge and is heavier than any of those want, and it is not a
+     bevel ink either.
+
+     This role was added because a painted-pixel audit found the gap rather
+     than the other way round. Ranking every token by its worse theme against
+     the page, the set jumped from 1.24:1 to 4.29:1 with nothing between, so
+     anyone wanting a soft line had a choice of invisible or full boundary
+     weight. Two stylesheets in this repo took the third option and reached
+     for a bevel ink, which reads in light and vanishes in dark. That is not
+     a discipline problem, it is a missing rung.
+
+     Except the rung was not missing from the ramp, only from the roles.
+     Light takes silver-600 at 3.05:1 on the page and 2.50:1 on a control
+     face; dark takes silver-700 at 2.79:1 and 2.28:1. Both are values the
+     ramp already had.
+
+     The two are each other's swap, and that is structure rather than
+     coincidence: softer means one rung toward the page, and the themes walk
+     the ramp from opposite ends, so light's divider is dark's boundary and
+     dark's divider is light's. If a third theme is added, the divider is the
+     rung between its page and its boundary.
+
+     The gate holds this to 2:1, which is not a WCAG number and is not
+     claimed as one. 1.4.11 does not reach a grouping line, because removing
+     it identifies nothing and changes no state. 2:1 is this tier's own
+     contract: enough that the line is there in both themes, little enough
+     that it stays a grouping cue. */
+  --pw-color-divider: var(--pw-silver-600);
+
   /* What a glossed surface actually measures.
      The glare is a translucent white layer sitting between the label and the
      face, so a check that composites label-over-face never sees it and reads
@@ -328,6 +360,10 @@
 
   /* The light edge carries it here. 4.29:1 on the page, 3.49:1 on a panel. */
   --pw-bevel-boundary: var(--pw-silver-600);
+
+  /* One rung toward the page from the boundary, which here means darker.
+     2.79:1 on the page, 2.28:1 on a control face. */
+  --pw-color-divider: var(--pw-silver-700);
 
   --pw-gloss-lit-base-200: var(--pw-silver-800);
   --pw-gloss-lit-primary:  var(--pw-blue-300);

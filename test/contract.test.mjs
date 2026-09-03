@@ -271,6 +271,37 @@ describe('where the light comes from', () => {
       }
     });
   }
+
+  const cr = (a, b) => {
+    const [hi, lo] = a > b ? [a, b] : [b, a];
+    return (hi + 0.05) / (lo + 0.05);
+  };
+
+  for (const [name, selector] of [
+    ['light', ':root,\n[data-skin="chrome"]'],
+    ['dark', '[data-theme="dark"],'],
+  ]) {
+    test(`the ${name} divider is its own tier, between the face and the boundary`, () => {
+      /* The role exists because a painted-pixel audit found a gap in the set,
+         so the thing worth guarding is the gap staying filled rather than the
+         token merely existing. Pointed at a face value it goes invisible,
+         which is the bug it was added to fix. Pointed at the boundary it
+         collapses into the control edge and the gap reopens with an extra
+         name standing in front of it.
+
+         Both directions, both themes, measured against the page. The gate
+         holds the 2:1 floor; only this says the tier is distinct. */
+      const b = block_(semantic, selector);
+      const page = lumaOf(b, '--pw-color-base-100');
+      const face = cr(lumaOf(b, '--pw-color-base-200'), page);
+      const divider = cr(lumaOf(b, '--pw-color-divider'), page);
+      const boundary = cr(lumaOf(b, '--pw-bevel-boundary'), page);
+      assert.ok(divider > face,
+        `divider ${divider.toFixed(2)}:1 is no stronger than a control face ${face.toFixed(2)}:1`);
+      assert.ok(divider < boundary,
+        `divider ${divider.toFixed(2)}:1 is as strong as the boundary ${boundary.toFixed(2)}:1`);
+    });
+  }
 });
 
 describe('the depth knob', () => {

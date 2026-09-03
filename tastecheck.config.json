@@ -12,10 +12,18 @@
       "css/tokens/theme-auto.css"
     ],
     "themes": [
-      { "name": "chrome-light", "scopes": [":root"] },
+      {
+        "name": "chrome-light",
+        "scopes": [
+          ":root"
+        ]
+      },
       {
         "name": "chrome-dark",
-        "scopes": [":root", "[data-theme=\"dark\"]"]
+        "scopes": [
+          ":root",
+          "[data-theme=\"dark\"]"
+        ]
       },
       {
         "name": "chrome-dark-auto",
@@ -29,30 +37,123 @@
       }
     ],
     "pairs": [
-      { "fg": "--pw-color-base-content", "bg": "--pw-color-base-100", "min": 4.5, "label": "text on the page" },
-      { "fg": "--pw-color-base-content", "bg": "--pw-color-base-200", "min": 4.5, "label": "a control label" },
-      { "fg": "--pw-color-base-content", "bg": "--pw-color-base-300", "min": 4.5, "label": "text in a sunken well" },
-      { "fg": "--pw-color-base-content", "bg": "--pw-gloss-lit-base-200", "min": 4.5, "label": "a label over a glossed face" },
-
-      { "fg": "--pw-color-primary-content", "bg": "--pw-color-primary", "min": 4.5, "label": "the primary action's label" },
-      { "fg": "--pw-color-primary-content", "bg": "--pw-gloss-lit-primary", "min": 4.5, "label": "the same label once the gloss has lifted the face" },
-
-      { "fg": "--pw-color-disabled-content", "bg": "--pw-color-base-200", "min": 3.0, "label": "disabled is quiet, not absent" },
-
-      { "fg": "--pw-bevel-boundary", "bg": "--pw-color-base-100", "min": 3.0, "label": "the control boundary, against the page" },
-      { "fg": "--pw-bevel-boundary", "bg": "--pw-color-base-200", "min": 3.0, "label": "the control boundary, against a panel" },
-
-      { "fg": "--pw-color-focus", "bg": "--pw-color-base-200", "min": 3.0, "label": "focus ring on the control it rings" },
-      { "fg": "--pw-color-focus", "bg": "--pw-color-base-100", "min": 3.0, "label": "focus ring on the page it offsets onto" },
-      { "fg": "--pw-color-focus-contrast", "bg": "--pw-color-primary", "min": 3.0, "label": "the ring's other half, on the accent bar where the first half vanishes" },
-      { "fg": "--pw-color-focus-contrast", "bg": "--pw-color-focus", "min": 3.0, "label": "the two halves against each other, which is what makes the pair work on any ground" },
-
-      { "fg": "--pw-color-lcd-content", "bg": "--pw-color-lcd", "min": 4.5, "label": "the readout" },
-      { "fg": "--pw-color-range", "bg": "--pw-color-base-300", "min": 3.0, "label": "the filled part of a slider" },
-
-      { "fg": "--pw-color-success-content", "bg": "--pw-color-success", "min": 4.5 },
-      { "fg": "--pw-color-warning-content", "bg": "--pw-color-warning", "min": 4.5 },
-      { "fg": "--pw-color-error-content", "bg": "--pw-color-error", "min": 4.5 }
+      {
+        "fg": "--pw-color-base-content",
+        "bg": "--pw-color-base-100",
+        "min": 4.5,
+        "label": "text on the page"
+      },
+      {
+        "fg": "--pw-color-base-content",
+        "bg": "--pw-color-base-200",
+        "min": 4.5,
+        "label": "a control label"
+      },
+      {
+        "fg": "--pw-color-base-content",
+        "bg": "--pw-color-base-300",
+        "min": 4.5,
+        "label": "text in a sunken well"
+      },
+      {
+        "fg": "--pw-color-base-content",
+        "bg": "--pw-gloss-lit-base-200",
+        "min": 4.5,
+        "label": "a label over a glossed face"
+      },
+      {
+        "fg": "--pw-color-primary-content",
+        "bg": "--pw-color-primary",
+        "min": 4.5,
+        "label": "the primary action's label"
+      },
+      {
+        "fg": "--pw-color-primary-content",
+        "bg": "--pw-gloss-lit-primary",
+        "min": 4.5,
+        "label": "the same label once the gloss has lifted the face"
+      },
+      {
+        "fg": "--pw-color-disabled-content",
+        "bg": "--pw-color-base-200",
+        "min": 3.0,
+        "label": "disabled is quiet, not absent"
+      },
+      {
+        "fg": "--pw-bevel-boundary",
+        "bg": "--pw-color-base-100",
+        "min": 3.0,
+        "label": "the control boundary, against the page"
+      },
+      {
+        "fg": "--pw-bevel-boundary",
+        "bg": "--pw-color-base-200",
+        "min": 3.0,
+        "label": "the control boundary, against a panel"
+      },
+      {
+        "fg": "--pw-color-divider",
+        "bg": "--pw-color-base-100",
+        "min": 2,
+        "label": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor"
+      },
+      {
+        "fg": "--pw-color-divider",
+        "bg": "--pw-color-base-200",
+        "min": 2,
+        "label": "the same line drawn inside a panel"
+      },
+      {
+        "fg": "--pw-color-focus",
+        "bg": "--pw-color-base-200",
+        "min": 3.0,
+        "label": "focus ring on the control it rings"
+      },
+      {
+        "fg": "--pw-color-focus",
+        "bg": "--pw-color-base-100",
+        "min": 3.0,
+        "label": "focus ring on the page it offsets onto"
+      },
+      {
+        "fg": "--pw-color-focus-contrast",
+        "bg": "--pw-color-primary",
+        "min": 3.0,
+        "label": "the ring's other half, on the accent bar where the first half vanishes"
+      },
+      {
+        "fg": "--pw-color-focus-contrast",
+        "bg": "--pw-color-focus",
+        "min": 3.0,
+        "label": "the two halves against each other, which is what makes the pair work on any ground"
+      },
+      {
+        "fg": "--pw-color-lcd-content",
+        "bg": "--pw-color-lcd",
+        "min": 4.5,
+        "label": "the readout"
+      },
+      {
+        "fg": "--pw-color-range",
+        "bg": "--pw-color-base-300",
+        "min": 3.0,
+        "label": "the filled part of a slider"
+      },
+      {
+        "fg": "--pw-color-success-content",
+        "bg": "--pw-color-success",
+        "min": 4.5
+      },
+      {
+        "fg": "--pw-color-warning-content",
+        "bg": "--pw-color-warning",
+        "min": 4.5
+      },
+      {
+        "fg": "--pw-color-error-content",
+        "bg": "--pw-color-error",
+        "min": 4.5
+      }
     ]
   },
   "tokens": {
@@ -67,10 +168,12 @@
       "css/tokens/theme-auto.css",
       "css/treatment/bevel.css",
       "css/components/lcd.css",
-            "css/components/icon.css",
+      "css/components/icon.css",
       "demo/demo.css"
     ],
-    "allowPrefixes": ["--radix-"],
+    "allowPrefixes": [
+      "--radix-"
+    ],
     "files": [
       "css/**/*.css",
       "demo/*.html",
@@ -79,8 +182,13 @@
   },
   "treatments": {
     "$comment": "demo/states.html is the only markup in the repo. Prefixes rather than a list of class names, because the list would need editing on every component and a list nobody maintains approves everything by accident.",
-    "files": ["demo/states.html"],
-    "allowPrefixes": ["pw-", "demo-"],
+    "files": [
+      "demo/states.html"
+    ],
+    "allowPrefixes": [
+      "pw-",
+      "demo-"
+    ],
     "approvedValues": []
   },
   "runtime": {
@@ -90,7 +198,9 @@
     ],
     "url": "about:blank",
     "states": [
-      { "name": "light" },
+      {
+        "name": "light"
+      },
       {
         "name": "dark",
         "$comment": "after, not before. before runs ahead of the page's own scripts, which means ahead of the document existing, so document.documentElement is null and the attribute is never set. The check then measures the light palette and reports a clean pass for a theme it never entered. It did exactly that here before this line moved.",
@@ -98,11 +208,35 @@
       }
     ],
     "targets": [
-      { "selector": "#buttons .pw-button", "prop": "color", "min": 4.5, "label": "a control label as painted" },
-      { "selector": ".pw-tab-panel", "prop": "color", "min": 4.5 },
-      { "selector": ".pw-badge[data-status=\"error\"]", "prop": "color", "min": 4.5 },
-      { "selector": ".pw-lcd-cell", "prop": "backgroundColor", "min": 4.5, "againstParent": true, "label": "the readout ink against its own ground" },
-      { "selector": ".pw-slider-range", "prop": "backgroundColor", "min": 3.0, "againstParent": true }
+      {
+        "selector": "#buttons .pw-button",
+        "prop": "color",
+        "min": 4.5,
+        "label": "a control label as painted"
+      },
+      {
+        "selector": ".pw-tab-panel",
+        "prop": "color",
+        "min": 4.5
+      },
+      {
+        "selector": ".pw-badge[data-status=\"error\"]",
+        "prop": "color",
+        "min": 4.5
+      },
+      {
+        "selector": ".pw-lcd-cell",
+        "prop": "backgroundColor",
+        "min": 4.5,
+        "againstParent": true,
+        "label": "the readout ink against its own ground"
+      },
+      {
+        "selector": ".pw-slider-range",
+        "prop": "backgroundColor",
+        "min": 3.0,
+        "againstParent": true
+      }
     ]
   }
 }

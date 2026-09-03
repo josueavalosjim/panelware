@@ -84,11 +84,11 @@ body {
 
 .demo-section {
   padding-top: var(--pw-space-xl);
-  /* --pw-bevel-boundary, not --pw-bevel-frame. frame is an interior shading
-     tone whose light-theme value happens to read against the page; in dark
-     it measured 1.11:1 here and the section rules were invisible. boundary
-     is the role that carries WCAG 1.4.11 in both themes. */
-  border-top: var(--pw-border) solid var(--pw-bevel-boundary);
+  /* A section break groups, it does not bound a control, so this is
+     --pw-color-divider and not --pw-bevel-boundary. It was --pw-bevel-frame,
+     an interior shading tone that reads against the light page by
+     coincidence and measured 1.11:1 against the dark one. */
+  border-top: var(--pw-border) solid var(--pw-color-divider);
 }
 .demo-section + .demo-section { margin-top: var(--pw-space-2xl); }
 

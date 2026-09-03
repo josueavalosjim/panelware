@@ -180,6 +180,18 @@ line on the control, so a raised control in dark and a sunken one in light
 shared a signature. Only the ordering of the five values says it, so there is
 a test for the ordering.
 
+`--pw-color-divider` is the tier below that: a line that groups rather than
+bounds, for a table rule or a section break. It exists because an audit
+measured every token against the ground it actually lands on and found a hole.
+Ranked by their weaker theme against the page, the set went from 1.24:1
+straight to 4.29:1, so a soft line had a choice of invisible or full control
+weight, and two stylesheets here had taken a third option and reached for a
+bevel ink, which reads in light and vanishes in dark. The rung was in the ramp
+already; only the role was missing. Light takes 3.05:1 on the page, dark
+2.79:1, and the gate holds the tier to 2:1, which is this tier's own contract
+rather than a WCAG number: 1.4.11 does not reach a line whose removal
+identifies nothing.
+
 The bevel's white inner highlight does not hold 3:1. It measures 1.47:1, and
 that is deliberate. It is a shading cue on an interior edge, it identifies
 nothing on its own, the control stays fully identifiable without it, and
