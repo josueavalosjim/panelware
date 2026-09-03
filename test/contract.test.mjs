@@ -482,3 +482,32 @@ describe('what would block the second skin', () => {
     }
   });
 });
+describe('the release', () => {
+  test('the changelog leads with the version being shipped', () => {
+    /* publish.yml already refuses a tag that disagrees with package.json, so
+       the version cannot ship untraceable. What it cannot see is a changelog
+       whose top entry describes the version before it, which publishes real
+       code under somebody else's notes and fails no check anywhere. */
+    const pkg = JSON.parse(read('package.json'));
+    const top = read('CHANGELOG.md').match(/^## (.+)$/m);
+    assert.ok(top, 'CHANGELOG.md has no version heading');
+    assert.equal(top[1].trim(), pkg.version,
+      `the changelog leads with ${top[1].trim()} and package.json says ${pkg.version}`);
+  });
+
+  test('every exported path is a file that ships', () => {
+    /* A stylesheet left out of the files array publishes a package whose own
+       documented import throws on install. publish.yml checks this against a
+       real npm pack, which is the authority; this is the same question asked
+       early enough to be cheap. */
+    const pkg = JSON.parse(read('package.json'));
+    const shipped = new Set(pkg.files);
+    for (const [name, entry] of Object.entries(pkg.exports)) {
+      for (const target of typeof entry === 'string' ? [entry] : Object.values(entry)) {
+        const top = target.replace(/^\.\//, '').split('/')[0];
+        assert.ok(shipped.has(top) || top === 'package.json',
+          `exports["${name}"] points into ${top}, which files does not include`);
+      }
+    }
+  });
+});
