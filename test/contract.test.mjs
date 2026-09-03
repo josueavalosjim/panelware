@@ -17,6 +17,8 @@ import { dirname, join } from 'node:path';
 import { describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { exportedPaths, missingFromPack, packedFiles } from '../scripts/check-exports.mjs';
+
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
 
@@ -495,19 +497,32 @@ describe('the release', () => {
       `the changelog leads with ${top[1].trim()} and package.json says ${pkg.version}`);
   });
 
+  test('the exports map is walked into, not over', () => {
+    /* The bug this replaces: publish.yml did v.replace() over the values of
+       the exports map, and "." is a conditional object rather than a string,
+       so it threw a TypeError on the very first entry. It failed the first
+       real release having never checked a single path, and no test could have
+       caught it, because it lived as an inline script in a YAML file.
+
+       So the assertion is not only "nothing is missing", which an empty list
+       satisfies. It is that the conditional entry is descended into and its
+       leaves come back. */
+    const pkg = JSON.parse(read('package.json'));
+    const paths = exportedPaths(pkg);
+    assert.ok(paths.length >= Object.keys(pkg.exports).length,
+      'fewer paths than entries, so a conditional export was skipped rather than walked');
+    assert.ok(paths.some(([name, path]) => name === '.' && path === 'dist/index.js'),
+      'the conditional "." entry did not yield its import target');
+    assert.ok(paths.every(([, path]) => !path.startsWith('./')),
+      'a path kept its leading ./ and would never match a packed file');
+  });
+
   test('every exported path is a file that ships', () => {
     /* A stylesheet left out of the files array publishes a package whose own
-       documented import throws on install. publish.yml checks this against a
-       real npm pack, which is the authority; this is the same question asked
-       early enough to be cheap. */
+       documented import throws on install. This asks npm what it would pack
+       rather than reading the files array, because the two are not the same
+       question: files is a pattern list and the tarball is the answer. */
     const pkg = JSON.parse(read('package.json'));
-    const shipped = new Set(pkg.files);
-    for (const [name, entry] of Object.entries(pkg.exports)) {
-      for (const target of typeof entry === 'string' ? [entry] : Object.values(entry)) {
-        const top = target.replace(/^\.\//, '').split('/')[0];
-        assert.ok(shipped.has(top) || top === 'package.json',
-          `exports["${name}"] points into ${top}, which files does not include`);
-      }
-    }
+    assert.deepEqual(missingFromPack(pkg, packedFiles()).map(([n]) => n), []);
   });
 });

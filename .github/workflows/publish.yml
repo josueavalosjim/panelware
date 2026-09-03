@@ -44,25 +44,14 @@ jobs:
             exit 1
           fi
 
-      # Every path in the exports map has to resolve to a file that is also in
-      # the files array. A stylesheet left out of files publishes a package
-      # whose documented import throws on install, and nothing before this
-      # step would have noticed.
-      - name: every exported path is in the tarball
-        run: |
-          npm pack --dry-run --json > /tmp/pack.json
-          node -e "
-            const pkg = require('./package.json');
-            const files = new Set(require('/tmp/pack.json')[0].files.map((f) => f.path));
-            const missing = Object.entries(pkg.exports)
-              .map(([k, v]) => [k, v.replace(/^\.\//, '')])
-              .filter(([, v]) => !v.includes('*') && !files.has(v));
-            if (missing.length) {
-              console.error('exported but not packed:', missing.map(([k]) => k).join(', '));
-              process.exit(1);
-            }
-            console.log('every exported path is in the tarball');
-          "
+      # Every path in the exports map has to resolve to a file npm would
+      # actually pack. This was an inline script here and it was broken from
+      # the day it was written: it called .replace() on the values of the
+      # exports map, and "." is a conditional object rather than a string, so
+      # it threw on the first entry and failed the first real release having
+      # checked nothing. An inline script cannot have a test on it, which is
+      # why it is a repo script now and why npm test runs it too.
+      - run: npm run check:exports
 
       # Re-running a workflow, or tagging a version that already shipped,
       # should be a no-op rather than a red run.
