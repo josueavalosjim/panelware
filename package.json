@@ -1,6 +1,6 @@
 {
   "name": "@josueavalosjim/panelware",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An accessible component kit with a chrome-and-LCD skin. Radix UI does the interaction; this does the surface. Stacked inset bevels, Web 2.0 gloss, and a sprite-sheet segment readout. Skins are data-attribute swaps, not separate installs. No runtime dependencies.",
   "keywords": [
     "accessibility",
@@ -56,8 +56,9 @@
     "check:overflow": "node scripts/check-overflow.mjs",
     "check:parity": "node scripts/check-parity.mjs",
     "check:colour": "node scripts/check-colour.mjs",
+    "check:cssom": "node scripts/check-cssom.mjs",
     "check:exports": "node scripts/check-exports.mjs",
-    "check:pages": "npm run check:overflow && npm run check:parity && npm run check:colour",
+    "check:pages": "npm run check:overflow && npm run check:parity && npm run check:colour && npm run check:cssom",
     "prepublishOnly": "npm run build",
     "release": "npm test && npm run check && npm run check:runtime && npm run check:pages && npm version minor -m \"Release %s\" && git push --follow-tags",
     "serve": "node scripts/serve.mjs"

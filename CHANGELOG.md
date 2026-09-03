@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.1.1
+
+The stylesheet shipped in 0.1.0 was broken, and most of the kit was unstyled.
+
+One extra `}` in `tabs.css` closed `@layer pw.components` early and orphaned
+every rule after it. Eleven rules reached the browser's CSSOM instead of 289.
+The window chrome, the transport, the seek bar, the list, the menu bar, the
+equaliser, the form controls, the readout and the badge all rendered with no
+rules behind them. Anyone who installed 0.1.0 got a stylesheet that parses to
+almost nothing.
+
+I introduced it while repairing a malformed media query in the same file, and
+every check in the repo went green over it. The tests match selectors as text
+and the text was present. `taste-check` reads declarations and the
+declarations were fine. The colour check measures what is painted, and an
+unstyled element still paints something. The parity check compares the two
+demo pages, and both were broken identically, so they agreed with each other.
+Nothing in the toolchain parsed the CSS, which is the product.
+
+Two checks now do. Every stylesheet has to close every block it opens, which
+is cheap enough to run on every commit and catches exactly this. And every
+class the kit renders has to match a rule the browser actually kept, which
+catches the ways a parser drops a rule that brace counting cannot see.
+
+The second one found two more the day it was written. `demo/states.html` built
+its dialog title bar out of three class names that no stylesheet defines, so
+that title bar had been unstyled since it was written, and it drew its close
+mark as a text glyph rather than the sprite icon, which is the exact thing the
+badge stopped doing months ago. And `.pw-radio-group`, which the component
+emits on every radio group, had no rule anywhere.
+
 ## 0.1.0
 
 First release. An accessible component kit with a chrome and LCD skin: Radix UI

@@ -276,4 +276,51 @@ describe('the published reference data', () => {
         'a tab press rule does not exclude the selected tab, which is already translated');
     }
   });
+  test('every stylesheet closes every block it opens', () => {
+    /* An extra } in one component file closed @layer pw.components early and
+       orphaned every rule after it. Eleven rules reached the CSSOM instead of
+       289: the whole window chrome, the transport, the list, the menu bar and
+       the form controls stopped being styled, and it shipped that way in
+       0.1.0.
+
+       Nothing here could see it. The tests match selectors as text and the
+       text was present. taste-check reads declarations and the declarations
+       were fine. The colour check measures what is painted and unstyled
+       elements still paint something. The parity check compares the two demo
+       pages and both were broken identically, so they agreed.
+
+       CSS is the product here and nothing in the toolchain parsed it. This is
+       the cheapest possible version of parsing it, and it is the one that
+       catches the failure that actually happened. */
+    const files = [];
+    const walk = (dir) => {
+      for (const e of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
+        if (e.isDirectory()) walk(join(dir, e.name));
+        else if (e.name.endsWith('.css')) files.push(join(dir, e.name));
+      }
+    };
+    walk('css');
+    walk('demo');
+    for (const file of files) {
+      const css = read(file);
+      let depth = 0;
+      let comment = false;
+      let negativeAt = null;
+      let line = 1;
+      for (let i = 0; i < css.length; i += 1) {
+        if (css[i] === '\n') line += 1;
+        if (!comment && css[i] === '/' && css[i + 1] === '*') { comment = true; i += 1; continue; }
+        if (comment && css[i] === '*' && css[i + 1] === '/') { comment = false; i += 1; continue; }
+        if (comment) continue;
+        if (css[i] === '{') depth += 1;
+        else if (css[i] === '}') {
+          depth -= 1;
+          if (depth < 0 && negativeAt === null) negativeAt = line;
+        }
+      }
+      assert.equal(negativeAt, null, `${file} closes a block it never opened, at line ${negativeAt}`);
+      assert.equal(depth, 0, `${file} leaves ${depth} block(s) open`);
+      assert.equal(comment, false, `${file} leaves a comment unclosed`);
+    }
+  });
 });

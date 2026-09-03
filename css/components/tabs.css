@@ -106,7 +106,7 @@
     .pw-tab:not([data-state="active"]):not([aria-selected="true"]):active {
       transform: translateY(var(--pw-press-travel));
     }
-  }
+
     /* Repeated at its own (0,2,0), or the active tab would spring back up
        and un-fuse from the panel under reduced motion. Both selectors, or
        the aria-only spelling loses its transform here. */

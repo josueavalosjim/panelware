@@ -67,3 +67,11 @@ jobs:
       # on, rather than the twenty pairs somebody thought to configure.
       - name: every painted pair clears its floor
         run: npm run check:colour
+
+      # Every class the kit renders has to match a rule the browser kept. One
+      # extra } closed a layer early in 0.1.0 and orphaned every rule after
+      # it: eleven rules reached the CSSOM instead of 289, and nothing else
+      # here could see it, because the text was in the file and both demo
+      # pages were broken identically so they still agreed with each other.
+      - name: the browser kept the stylesheet
+        run: npm run check:cssom
