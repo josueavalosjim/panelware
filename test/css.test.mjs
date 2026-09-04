@@ -387,4 +387,28 @@ describe('the published reference data', () => {
       }
     }
   });
+  test('no preset moves the elevation model', () => {
+    /* A preset may move knobs. The deck preset sets --pw-gloss-opacity to 0,
+       and being able to do that without a class or a codemod is the whole
+       reason gloss is a token.
+
+       --pw-bevel-depth is the exception, because it is not a decoration: at 0
+       the entire stacked-inset treatment collapses and the controls lose their
+       edges, which is what separates the cyber skin from the chrome one. A
+       preset that set it would be a different skin wearing a preset's name,
+       and the taxonomy would stop meaning anything the first time somebody
+       did it.
+
+       Written down in the preset file and the README before this existed.
+       Prose does not fail a build. */
+    const dir = join(ROOT, 'css', 'tokens', 'presets');
+    const files = readdirSync(dir).filter((f) => f.endsWith('.css'));
+    assert.ok(files.length, 'no presets found, so this checked nothing');
+    for (const file of files) {
+      const bare = read(join('css', 'tokens', 'presets', file))
+        .replace(/\/\*[\s\S]*?\*\//g, '');
+      assert.doesNotMatch(bare, /--pw-bevel-depth\s*:/,
+        `${file} moves --pw-bevel-depth, which makes it a skin rather than a preset`);
+    }
+  });
 });

@@ -1097,8 +1097,9 @@
   --pw-gloss-lit-primary: var(--pw-ice-800);
   --pw-color-scrim: rgba(20, 24, 33, 0.62);
 
-  --pw-bevel-depth: 1;
-
+  /* No --pw-bevel-depth here. It inherits chrome's 1, and a preset that set
+     it would be collapsing the elevation model rather than tuning a
+     decoration. It did declare it, redundantly, until the check went in. */
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
   --pw-gloss-cap-alpha: 0;
@@ -1147,8 +1148,6 @@
   --pw-gloss-lit-base-200: var(--pw-pewter-800);
   --pw-gloss-lit-primary: var(--pw-ice-300);
   --pw-color-scrim: rgba(0, 0, 0, 0.66);
-
-  --pw-bevel-depth: 1;
 
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
