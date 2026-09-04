@@ -1,0 +1,57 @@
+/**
+ * SKIN — the cyber skin's own knobs.
+ *
+ * The same ten tokens skin.chrome.css declares, because a skin that declares
+ * fewer makes the missing ones a fact about the consumer's markup rather than
+ * a fact about the skin. Turning gloss off by not shipping the rule would
+ * leave every [data-gloss] in the wild as a dead attribute; setting the
+ * opacity to 0 silences all of them at once and keeps the markup honest.
+ *
+ * Two of these are the whole point of the file. --pw-bevel-depth: 0 collapses
+ * the entire chrome treatment to nothing, which is the claim the depth knob
+ * was built to make and had never been asked to keep. --pw-gloss-opacity: 0
+ * does the same for the Web 2.0 highlight. What replaces them is one hairline
+ * per control, in css/treatment/glow.css.
+ */
+
+[data-skin="cyber"],
+[data-skin="cyber"][data-theme="light"] {
+  /* Zero, and every offset in bevel.css is a calc() of it, so the stacked
+     insets compute to 0px with no blur and no spread and paint nothing. */
+  --pw-bevel-depth: 0;
+
+  /* Off, everywhere, without touching a line of markup. */
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  /* The readout still glows, and it is the only thing that does. A HUD where
+     every control glows is a HUD where the glow means nothing, which is the
+     same mistake as gloss on every surface. */
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 8px;
+  --pw-glow-color: var(--pw-phos-300);
+
+  --pw-glass-blur: 0px;
+
+  /* No cast shadow: nothing here is a physical object sitting on a surface. */
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+}
+
+[data-skin="cyber"][data-theme="dark"] {
+  --pw-bevel-depth: 0;
+
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 8px;
+  --pw-glow-color: var(--pw-phos-300);
+
+  --pw-glass-blur: 0px;
+
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+}

@@ -323,4 +323,36 @@ describe('the published reference data', () => {
       assert.equal(comment, false, `${file} leaves a comment unclosed`);
     }
   });
+  test('both skins fill the shared slot for the same components', () => {
+    /* bevel.css and glow.css each declare --pw-shadow-raised and
+       --pw-shadow-sunken for a list of components. If the lists drift, a
+       component reaches the slot under one skin and not the other, and it is
+       flat in exactly one skin with nothing anywhere reporting it: the
+       stylesheet parses, the component renders, and only a screenshot in the
+       skin nobody was looking at shows the missing edge. */
+    const listOf = (file) => {
+      const css = read(file).replace(/\/\*[\s\S]*?\*\//g, '');
+      const m = css.match(/:where\(([^)]*?pw-select-list[^)]*)\)/);
+      assert.ok(m, `${file} has no shared-slot selector list`);
+      return m[1].replace(/\s+/g, ' ').split(',').map((x) => x.trim()).filter(Boolean).sort();
+    };
+    const bevel = listOf('css/treatment/bevel.css');
+    const glow = listOf('css/treatment/glow.css');
+    assert.ok(bevel.length >= 20, `only ${bevel.length} components in the slot`);
+    assert.deepEqual(glow, bevel, 'the two skins fill the slot for different components');
+  });
+
+  test('the cyber skin turns the chrome treatment off rather than avoiding it', () => {
+    /* The claim the depth knob has always made is that the whole bevel
+       collapses at 0, and until a second skin existed nothing had asked it to.
+       Both knobs are set explicitly rather than left to inherit: a skin that
+       declares only its differences inherits the other one's decisions for
+       everything it forgot. */
+    const cyber = read('css/tokens/skin.cyber.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    for (const [token, value] of [['--pw-bevel-depth', '0'], ['--pw-gloss-opacity', '0']]) {
+      const found = [...cyber.matchAll(new RegExp(`${token}:\\s*([^;]+);`, 'g'))].map((m) => m[1].trim());
+      assert.equal(found.length, 2, `${token} is not declared in both cyber themes`);
+      assert.deepEqual([...new Set(found)], [value], `${token} is ${found.join(' / ')}, not ${value}`);
+    }
+  });
 });

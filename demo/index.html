@@ -146,6 +146,7 @@
       const [picked, setPicked] = useState('t3');
       const [density, setDensityAxis] = useState('comfortable');
       const [themeAxis, setThemeAxis] = useState('light');
+      const [skinAxis, setSkinAxis] = useState('chrome');
       const [docs, setDocs] = useState(null);
 
       /* The switcher writes the attributes a consumer would write. It is not
@@ -155,7 +156,8 @@
         const el = document.documentElement;
         el.setAttribute('data-theme', themeAxis);
         el.setAttribute('data-density', density);
-      }, [themeAxis, density]);
+        el.setAttribute('data-skin', skinAxis);
+      }, [themeAxis, density, skinAxis]);
 
       useEffect(() => {
         fetch('./docs-data.json').then((r) => r.json()).then(setDocs).catch(() => {});
@@ -188,8 +190,9 @@
              skin lands. A segmented control at five values is a toolbar. */
           h('div', { className: 'demo-axis' },
             h('span', { className: 'demo-axis-label' }, 'Skin'),
-            h(Select, { label: 'Skin', defaultValue: 'chrome' },
-              h(SelectItem, { value: 'chrome' }, 'Chrome')))),
+            h(Select, { label: 'Skin', value: skinAxis, onValueChange: setSkinAxis },
+              h(SelectItem, { value: 'chrome' }, 'Chrome'),
+              h(SelectItem, { value: 'cyber' }, 'Cyber')))),
 
         h(Section, {
           id: 'buttons', title: 'Button',

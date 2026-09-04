@@ -52,27 +52,30 @@ const failures = [];
 let checked = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
-    for (const theme of ['light', 'dark']) {
+    for (const skin of ['chrome', 'cyber']) {
+      for (const theme of ['light', 'dark']) {
       await p.goto(`${base}/${page}`);
       await p.settle(page.includes('index') ? 1800 : 900);
       await p.evaluate(`document.documentElement.dataset.theme = ${JSON.stringify(theme)}`);
+      await p.evaluate(`document.documentElement.dataset.skin = ${JSON.stringify(skin)}`);
       await p.settle(300);
 
       const alive = await p.evaluate(`document.querySelectorAll('.pw-button, .pw-toggle').length`);
       if (alive < 4) {
-        failures.push(`${page} (${theme}) rendered ${alive} controls, so axe scanned nothing`);
+        failures.push(`${page} (${skin}-${theme}) rendered ${alive} controls, so axe scanned nothing`);
         continue;
       }
       await p.evaluate(AXE);
       const violations = await p.evaluate(RUN);
       checked += 1;
       for (const v of violations) {
-        failures.push(`${v.impact}: ${v.id} — ${v.help}  [${page}, ${theme}]`);
+        failures.push(`${v.impact}: ${v.id} — ${v.help}  [${page}, ${skin}-${theme}]`);
         for (const n of v.nodes) failures.push(`      ${n.target}${n.summary ? `\n        ${n.summary}` : ''}`);
+      }
       }
     }
   }
 });
 
-report('a11y', failures, `${checked} page/theme combinations scanned by axe ${
+report('a11y', failures, `${checked} page/skin/theme combinations scanned by axe ${
   JSON.parse(readFileSync(new URL('../node_modules/axe-core/package.json', import.meta.url), 'utf8')).version}`);

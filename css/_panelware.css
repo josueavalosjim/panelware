@@ -33,6 +33,10 @@
 @import "./reset.css"               layer(pw.reset);
 @import "./treatment/bevel.css";
 @import "./treatment/gloss.css";
+/* The second skin's elevation. After bevel and gloss, because it replaces
+   what they put in the shared slot and one attribute of specificity is all
+   that separates them. */
+@import "./treatment/glow.css";
 @import "./components/icon.css";
 @import "./components/button.css";
 @import "./components/toggle.css";

@@ -1,0 +1,70 @@
+/**
+ * TREATMENT — the cyber skin's elevation.
+ *
+ * This file is the answer to the question the token contract was built to ask:
+ * can a second skin replace the treatment without touching a component? Nothing
+ * below names a component's behaviour, only its surface.
+ *
+ * --pw-elev is the slot, and it was named for a role rather than for a bevel
+ * precisely so this file could put something else in it. The chrome skin fills
+ * it with four stacked inset shadows; this fills it with one hairline. Both are
+ * box-shadow, both land in the same declaration in bevel.css, and no component
+ * knows which it got.
+ *
+ * Specificity is doing the work. bevel.css declares the pair inside a bare
+ * :where(), which is (0,0,0) on purpose so a component can override it with one
+ * class. One attribute selector in front is (0,1,0) and wins, so this needs no
+ * !important and no duplicated component rules.
+ *
+ * The selector list below is bevel.css's DERIVATION list, copied, which is the
+ * one that declares the raised and sunken pair. It is two entries longer than
+ * the shared slot that reads them, because .pw-raised and .pw-sunken are the
+ * documented escape hatches for a consumer's own surfaces and they have to
+ * mean something under both skins. Copying the shorter list left them on
+ * chrome's bevel while everything around them went flat.
+ *
+ * test/css.test.mjs fails if the two disagree: a surface that reached the slot
+ * in one skin and not the other is flat in exactly one skin, and nothing else
+ * would say so.
+ */
+
+@layer pw.treatment {
+  [data-skin="cyber"] :where(.pw-button,
+         .pw-toggle,
+         .pw-tab,
+         .pw-panel,
+         .pw-badge,
+         .pw-slider-track,
+         .pw-slider-thumb,
+         .pw-lcd,
+         .pw-tab-panel,
+         .pw-title-button,
+         .pw-window,
+         .pw-transport-button,
+         .pw-progress,
+         .pw-eq,
+         .pw-menu,
+         .pw-list,
+         .pw-checkbox,
+         .pw-radio,
+         .pw-select,
+         .pw-select-list,
+         .pw-raised,
+         .pw-sunken) {
+    /* One hairline in the boundary ink, which carries WCAG 1.4.11 in this skin
+       exactly as chrome's outer line did: 3.83:1 on the page and 3.30:1 on a
+       control in light, 4.85:1 and 3.72:1 in dark. Chrome spent four inks on an
+       edge because it was imitating moulded plastic. This is imitating a
+       screen, and a screen's edge is one line. */
+    --pw-shadow-raised: inset 0 0 0 1px var(--pw-bevel-boundary);
+
+    /* Sunken keeps the hairline and adds an inner shadow, so the difference
+       between the two states is depth rather than a colour swap. That matters
+       most on the toggle, where the sunken face is what says "on": the rule
+       that no state is carried by colour alone does not stop applying because
+       the skin changed. */
+    --pw-shadow-sunken:
+      inset 0 0 0 1px var(--pw-bevel-boundary),
+      inset 0 2px 6px -2px var(--pw-color-scrim);
+  }
+}

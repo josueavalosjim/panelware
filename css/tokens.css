@@ -701,6 +701,219 @@
   --pw-shadow-outer-color: rgba(0, 0, 0, 0.5);
 }
 
+/* The second skin. Every one of these declares the identical token set its
+   chrome counterpart does, and the contract test holds them to it: a skin that
+   declared only its differences would inherit the other one's decisions for
+   everything it forgot, silently and correctly-looking. */
+/**
+ * PRIMITIVE — the cyber skin's raw ramp.
+ *
+ * Never referenced outside tokens/. Every rung exists because a semantic role
+ * in semantic.cyber.css points at it, and the ratios in that file's comments
+ * were computed from these values before either file was written.
+ *
+ * Cool greys rather than neutral ones, because a blue cast is what separates a
+ * HUD from a document. Cyan is the only hue doing structural work; the status
+ * hues are there because the badge needs four of them and for no other reason.
+ */
+
+:root {
+  --pw-slate-000: #ffffff;
+  --pw-slate-050: #eef3f6;   /* light page, and dark's ink */
+  --pw-slate-100: #dde7ed;   /* light control face */
+  --pw-slate-200: #c9d8e1;   /* light well */
+  --pw-slate-300: #b8cad6;
+  --pw-slate-400: #8ea3b0;   /* light divider, 2.34:1 on the page */
+  --pw-slate-500: #5c7383;   /* boundary in BOTH themes, and disabled ink */
+  --pw-slate-700: #4a626f;   /* dark divider, 2.95:1 on the page */
+  --pw-slate-850: #151f27;   /* dark control face */
+  --pw-slate-900: #0b1116;   /* dark page */
+  --pw-slate-950: #05090c;   /* dark well, and light's ink */
+
+  --pw-cyan-300: #3fd8f0;    /* dark primary, 9.85:1 on the dark page */
+  --pw-cyan-800: #0a4f63;    /* light primary, 7.35:1 on the light page */
+
+  --pw-mint-100: #d6f2e2;
+  --pw-mint-300: #5ff0a8;
+  --pw-mint-800: #0a5133;
+  --pw-mint-900: #0d2a1c;
+  --pw-amber-100: #f8ecc9;
+  --pw-amber-300: #f5c542;
+  --pw-amber-800: #6b4a05;
+  --pw-amber-900: #2e2408;
+  --pw-rose-100: #fadfe3;
+  --pw-rose-300: #ff8095;
+  --pw-rose-800: #8a1226;
+  --pw-rose-900: #2e0f14;
+}
+
+/**
+ * SEMANTIC — the cyber skin's colour roles.
+ *
+ * The identical twenty-seven roles semantic.chrome.css declares, including the
+ * five bevel inks that this skin's depth of 0 means nothing paints through the
+ * bevel stack. They are declared anyway, because three component files still
+ * read a bevel ink directly and because the contract test holds every skin and
+ * theme to the same token set: a block that only declares its differences is a
+ * block that silently inherits somebody else's decisions.
+ *
+ * Every pair the gate checks was computed before this file was written rather
+ * than adjusted until it passed. Both themes clear all twenty at their floors.
+ *
+ * The direction is a HUD rather than a chassis. Cyan carries the primary role
+ * in both themes, the ground is near-black with a blue cast in dark and a cool
+ * paper in light, and the readout keeps its phosphor green because a segment
+ * display is the one place in this kit that is imitating a real object.
+ */
+
+[data-skin="cyber"],
+[data-skin="cyber"][data-theme="light"] {
+  /* Surfaces, lightest to deepest. Cool rather than neutral: a HUD printed on
+     paper is still a HUD. */
+  --pw-color-base-100: var(--pw-slate-050);
+  --pw-color-base-200: var(--pw-slate-100);
+  --pw-color-base-300: var(--pw-slate-200);
+  --pw-color-base-content: var(--pw-slate-950);
+  --pw-color-disabled-content: var(--pw-slate-500);
+
+  --pw-color-primary: var(--pw-cyan-800);
+  --pw-color-primary-content: var(--pw-slate-000);
+  --pw-color-focus: var(--pw-cyan-800);
+  --pw-color-focus-contrast: var(--pw-slate-000);
+  --pw-color-range: var(--pw-cyan-800);
+
+  /* The readout does not follow the theme. A segment display is a physical
+     object with its own backlight, and a light-themed LCD is a calculator. */
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+
+  --pw-color-success: var(--pw-mint-100);
+  --pw-color-success-content: var(--pw-mint-800);
+  --pw-color-warning: var(--pw-amber-100);
+  --pw-color-warning-content: var(--pw-amber-800);
+  --pw-color-error: var(--pw-rose-100);
+  --pw-color-error-content: var(--pw-rose-800);
+
+  /* The five bevel inks, declared and unused by the bevel: depth 0 collapses
+     that stack entirely. --pw-bevel-boundary is the exception and is doing
+     real work, because css/treatment/glow.css draws this skin's one hairline
+     with it and 1.4.11 applies to that hairline exactly as it applied to
+     chrome's outer line. 3.83:1 on the page, 3.30:1 on a control. */
+  --pw-bevel-light: var(--pw-slate-000);
+  --pw-bevel-face: var(--pw-slate-100);
+  --pw-bevel-shade: var(--pw-slate-300);
+  --pw-bevel-frame: var(--pw-slate-400);
+  --pw-bevel-boundary: var(--pw-slate-500);
+
+  --pw-color-divider: var(--pw-slate-400);
+
+  /* Nothing is glossed here, so the pre-flattened companions are the faces
+     themselves. They stay declared: a consumer who writes [data-gloss] gets a
+     silent no-op rather than an unresolved token. */
+  --pw-gloss-lit-base-200: var(--pw-slate-100);
+  --pw-gloss-lit-primary: var(--pw-cyan-800);
+
+  --pw-color-scrim: rgba(6, 14, 20, 0.62);
+}
+
+[data-skin="cyber"][data-theme="dark"] {
+  --pw-color-base-100: var(--pw-slate-900);
+  --pw-color-base-200: var(--pw-slate-850);
+  --pw-color-base-300: var(--pw-slate-950);
+  --pw-color-base-content: var(--pw-slate-050);
+  --pw-color-disabled-content: var(--pw-slate-500);
+
+  --pw-color-primary: var(--pw-cyan-300);
+  --pw-color-primary-content: var(--pw-slate-950);
+  --pw-color-focus: var(--pw-cyan-300);
+  --pw-color-focus-contrast: var(--pw-slate-950);
+  --pw-color-range: var(--pw-cyan-300);
+
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+
+  --pw-color-success: var(--pw-mint-900);
+  --pw-color-success-content: var(--pw-mint-300);
+  --pw-color-warning: var(--pw-amber-900);
+  --pw-color-warning-content: var(--pw-amber-300);
+  --pw-color-error: var(--pw-rose-900);
+  --pw-color-error-content: var(--pw-rose-300);
+
+  /* Same inversion the chrome skin makes, for the same reason: whichever ink
+     reads against the ground carries the boundary, and here that is the pale
+     one. 4.85:1 on the page, 3.72:1 on a control. */
+  --pw-bevel-light: var(--pw-slate-700);
+  --pw-bevel-face: var(--pw-slate-850);
+  --pw-bevel-shade: var(--pw-slate-900);
+  --pw-bevel-frame: var(--pw-slate-950);
+  --pw-bevel-boundary: var(--pw-slate-500);
+
+  --pw-color-divider: var(--pw-slate-700);
+
+  --pw-gloss-lit-base-200: var(--pw-slate-850);
+  --pw-gloss-lit-primary: var(--pw-cyan-300);
+
+  --pw-color-scrim: rgba(0, 0, 0, 0.66);
+}
+
+/**
+ * SKIN — the cyber skin's own knobs.
+ *
+ * The same ten tokens skin.chrome.css declares, because a skin that declares
+ * fewer makes the missing ones a fact about the consumer's markup rather than
+ * a fact about the skin. Turning gloss off by not shipping the rule would
+ * leave every [data-gloss] in the wild as a dead attribute; setting the
+ * opacity to 0 silences all of them at once and keeps the markup honest.
+ *
+ * Two of these are the whole point of the file. --pw-bevel-depth: 0 collapses
+ * the entire chrome treatment to nothing, which is the claim the depth knob
+ * was built to make and had never been asked to keep. --pw-gloss-opacity: 0
+ * does the same for the Web 2.0 highlight. What replaces them is one hairline
+ * per control, in css/treatment/glow.css.
+ */
+
+[data-skin="cyber"],
+[data-skin="cyber"][data-theme="light"] {
+  /* Zero, and every offset in bevel.css is a calc() of it, so the stacked
+     insets compute to 0px with no blur and no spread and paint nothing. */
+  --pw-bevel-depth: 0;
+
+  /* Off, everywhere, without touching a line of markup. */
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  /* The readout still glows, and it is the only thing that does. A HUD where
+     every control glows is a HUD where the glow means nothing, which is the
+     same mistake as gloss on every surface. */
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 8px;
+  --pw-glow-color: var(--pw-phos-300);
+
+  --pw-glass-blur: 0px;
+
+  /* No cast shadow: nothing here is a physical object sitting on a surface. */
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+}
+
+[data-skin="cyber"][data-theme="dark"] {
+  --pw-bevel-depth: 0;
+
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 8px;
+  --pw-glow-color: var(--pw-phos-300);
+
+  --pw-glass-blur: 0px;
+
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+}
+
 /**
  * MOTION — a locked scale, and open role assignments.
  *

@@ -9,7 +9,9 @@
     "tokens": [
       "css/tokens/primitive.chrome.css",
       "css/tokens/semantic.chrome.css",
-      "css/tokens/theme-auto.css"
+      "css/tokens/theme-auto.css",
+      "css/tokens/primitive.cyber.css",
+      "css/tokens/semantic.cyber.css"
     ],
     "themes": [
       {
@@ -33,6 +35,21 @@
             "selector": ":root:not([data-theme])",
             "atRule": "media (prefers-color-scheme: dark)"
           }
+        ]
+      },
+      {
+        "name": "cyber-light",
+        "scopes": [
+          ":root",
+          "[data-skin=\"cyber\"]"
+        ]
+      },
+      {
+        "name": "cyber-dark",
+        "scopes": [
+          ":root",
+          "[data-skin=\"cyber\"]",
+          "[data-skin=\"cyber\"][data-theme=\"dark\"]"
         ]
       }
     ],
@@ -169,7 +186,10 @@
       "css/treatment/bevel.css",
       "css/components/lcd.css",
       "css/components/icon.css",
-      "demo/demo.css"
+      "demo/demo.css",
+      "css/tokens/primitive.cyber.css",
+      "css/tokens/semantic.cyber.css",
+      "css/tokens/skin.cyber.css"
     ],
     "allowPrefixes": [
       "--radix-"

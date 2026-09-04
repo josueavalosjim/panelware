@@ -12,4 +12,11 @@
 @import "./structural.css";
 @import "./density.css";
 @import "./skin.chrome.css";
+/* The second skin. Every one of these declares the identical token set its
+   chrome counterpart does, and the contract test holds them to it: a skin that
+   declared only its differences would inherit the other one's decisions for
+   everything it forgot, silently and correctly-looking. */
+@import "./primitive.cyber.css";
+@import "./semantic.cyber.css";
+@import "./skin.cyber.css";
 @import "./motion.css";

@@ -1,0 +1,41 @@
+/**
+ * PRIMITIVE — the cyber skin's raw ramp.
+ *
+ * Never referenced outside tokens/. Every rung exists because a semantic role
+ * in semantic.cyber.css points at it, and the ratios in that file's comments
+ * were computed from these values before either file was written.
+ *
+ * Cool greys rather than neutral ones, because a blue cast is what separates a
+ * HUD from a document. Cyan is the only hue doing structural work; the status
+ * hues are there because the badge needs four of them and for no other reason.
+ */
+
+:root {
+  --pw-slate-000: #ffffff;
+  --pw-slate-050: #eef3f6;   /* light page, and dark's ink */
+  --pw-slate-100: #dde7ed;   /* light control face */
+  --pw-slate-200: #c9d8e1;   /* light well */
+  --pw-slate-300: #b8cad6;
+  --pw-slate-400: #8ea3b0;   /* light divider, 2.34:1 on the page */
+  --pw-slate-500: #5c7383;   /* boundary in BOTH themes, and disabled ink */
+  --pw-slate-700: #4a626f;   /* dark divider, 2.95:1 on the page */
+  --pw-slate-850: #151f27;   /* dark control face */
+  --pw-slate-900: #0b1116;   /* dark page */
+  --pw-slate-950: #05090c;   /* dark well, and light's ink */
+
+  --pw-cyan-300: #3fd8f0;    /* dark primary, 9.85:1 on the dark page */
+  --pw-cyan-800: #0a4f63;    /* light primary, 7.35:1 on the light page */
+
+  --pw-mint-100: #d6f2e2;
+  --pw-mint-300: #5ff0a8;
+  --pw-mint-800: #0a5133;
+  --pw-mint-900: #0d2a1c;
+  --pw-amber-100: #f8ecc9;
+  --pw-amber-300: #f5c542;
+  --pw-amber-800: #6b4a05;
+  --pw-amber-900: #2e2408;
+  --pw-rose-100: #fadfe3;
+  --pw-rose-300: #ff8095;
+  --pw-rose-800: #8a1226;
+  --pw-rose-900: #2e0f14;
+}

@@ -63,6 +63,28 @@ const MEASURE = `(() => {
     return out.a === 1 ? out : null;
   };
 
+  /* The divider's own value, read off the page rather than looked up by name.
+     Keyed on the name it only worked for the skin whose token table happens to
+     be generated, and every other skin's grouping lines were then held to the
+     control-boundary floor they were designed not to meet. The role travels
+     with the value; ask the page what the value is. */
+  /* Normalised, because the two sides arrive in different notations: a
+     computed border colour is rgb(), and a custom property resolves to
+     whatever the token file wrote, which here is a hex. Comparing the raw
+     strings never matched and every skin's divider was quietly held to the
+     control-boundary floor. */
+  const norm = (v) => {
+    const t = String(v).trim();
+    if (t.startsWith('#')) {
+      const h = t.length === 4 ? '#' + [...t.slice(1)].map((c) => c + c).join('') : t;
+      return h.toLowerCase().slice(0, 7);
+    }
+    const c = parse(t);
+    return c ? hex(c) : '';
+  };
+  const dividerInk = norm(getComputedStyle(document.documentElement)
+    .getPropertyValue('--pw-color-divider'));
+
   const rows = [];
   for (const el of document.querySelectorAll('*')) {
     const r = el.getBoundingClientRect();
@@ -98,7 +120,10 @@ const MEASURE = `(() => {
       if (c['border' + side + 'Style'] === 'none') continue;
       const bc = parse(c['border' + side + 'Color']);
       if (!bc || bc.a < 0.99) continue;
-      rows.push({ kind: 'border', id, disabled, fg: hex(bc), bg: hex(bg), text: '' });
+      rows.push({
+        kind: 'border', id, disabled, fg: hex(bc), bg: hex(bg), text: '',
+        grouping: dividerInk !== '' && hex(bc) === dividerInk,
+      });
       break;
     }
   }
@@ -109,8 +134,13 @@ const MEASURE = `(() => {
    hex nobody can grep for. Several tokens share a value inside one theme, so
    this is a list and not a name. */
 const docs = JSON.parse(readFileSync(join(ROOT, 'demo', 'docs-data.json'), 'utf8'));
-const namesFor = (theme) => {
+/* The docs table is generated from the chrome files only, so cyber's values
+   have no names to map back to. A hex with no token name still reports its
+   ratio and its element, which is what a failure needs; the name is a
+   convenience and it is honest for it to be missing rather than wrong. */
+const namesFor = (theme, skin) => {
   const by = new Map();
+  if (skin !== 'chrome') return () => [];
   for (const g of docs.groups) {
     for (const t of g.tokens) {
       const v = t.values?.[theme]?.resolved;
@@ -135,7 +165,9 @@ const ratio = (a, b) => {
 };
 
 const floorFor = (row, tokens) => {
-  if (row.kind === 'border') return tokens.includes('--pw-color-divider') ? 2 : 3;
+  if (row.kind === 'border') {
+    return row.grouping || tokens.includes('--pw-color-divider') ? 2 : 3;
+  }
   if (row.disabled) return 3;
   return row.large ? 3 : 4.5;
 };
@@ -144,17 +176,19 @@ const failures = [];
 let scanned = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
-    for (const theme of ['light', 'dark']) {
+    for (const skin of ['chrome', 'cyber']) {
+      for (const theme of ['light', 'dark']) {
       await p.goto(`${base}/${page}`);
       await p.settle(page.includes('index') ? 1700 : 800);
       await p.evaluate(`document.documentElement.dataset.theme = ${JSON.stringify(theme)}`);
+      await p.evaluate(`document.documentElement.dataset.skin = ${JSON.stringify(skin)}`);
       await p.settle(400);
       const alive = await p.evaluate(`document.querySelectorAll('.pw-button, .pw-toggle').length`);
       if (alive < 4) {
-        failures.push(`${page} (${theme}) rendered ${alive} controls, so nothing was measured`);
+        failures.push(`${page} (${skin}-${theme}) rendered ${alive} controls, so nothing was measured`);
         continue;
       }
-      const name = namesFor(theme);
+      const name = namesFor(theme, skin);
       const rows = await p.evaluate(MEASURE);
       scanned += rows.length;
       const seen = new Set();
@@ -168,11 +202,12 @@ await withDemo(async (p, base) => {
         const key = `${theme}|${row.kind}|${fgName}|${bgName}`;
         if (seen.has(key)) continue;
         seen.add(key);
-        failures.push(`${got}:1 needs ${min}  ${theme} ${row.kind}  ${fgName} on ${bgName}\n` +
+        failures.push(`${got}:1 needs ${min}  ${skin}-${theme} ${row.kind}  ${fgName} on ${bgName}\n` +
           `      ${row.id}${row.text ? `  "${row.text}"` : ''}  [${page}]`);
+      }
       }
     }
   }
 }, { width: 1200, height: 900 });
 
-report('colour', failures, `${scanned} painted pairs across 2 pages x 2 themes`);
+report('colour', failures, `${scanned} painted pairs across 2 pages x 2 skins x 2 themes`);

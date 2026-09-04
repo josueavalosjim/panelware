@@ -1649,7 +1649,7 @@
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
-   "ratio": 6.41,
+   "ratio": 6.84,
    "min": 4.5,
    "pass": true
   },
@@ -1829,7 +1829,7 @@
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
-   "ratio": 8.41,
+   "ratio": 9.44,
    "min": 4.5,
    "pass": true
   },
@@ -2009,7 +2009,7 @@
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
-   "ratio": 8.41,
+   "ratio": 9.44,
    "min": 4.5,
    "pass": true
   },
@@ -2019,6 +2019,366 @@
    "bg": "--pw-color-error",
    "note": "",
    "ratio": 7.62,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 17.88,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 15.92,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 13.7,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 15.92,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 9.09,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 9.09,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 3.95,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 4.44,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 3.95,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-100",
+   "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
+   "ratio": 2.34,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-200",
+   "note": "the same line drawn inside a panel",
+   "ratio": 2.09,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 7.24,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 8.13,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 9.09,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 9.09,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 6.23,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 7.89,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 6.84,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 7.62,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 16.99,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 14.94,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 17.88,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 14.94,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 11.7,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 11.7,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 3.37,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 3.83,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 3.37,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-100",
+   "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
+   "ratio": 2.95,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-200",
+   "note": "the same line drawn inside a panel",
+   "ratio": 2.6,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 9.78,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 11.11,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 11.7,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 11.7,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 11.7,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 10.63,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 9.44,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 7.34,
    "min": 4.5,
    "pass": true
   }
