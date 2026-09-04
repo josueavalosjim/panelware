@@ -75,3 +75,15 @@ jobs:
       # pages were broken identically so they still agreed with each other.
       - name: the browser kept the stylesheet
         run: npm run check:cssom
+
+      # axe over every component in every state, both themes. The kit measured
+      # contrast exhaustively and accessibility not at all until this: the ARIA
+      # coverage was seventeen string assertions, which check that a component
+      # emits an attribute and cannot check whether the result is usable. It
+      # found role="img" wrapped around the marquee's pause button on its first
+      # run, which made a focusable control invisible to a screen reader.
+      #
+      # Colour rules are off. taste-check already measures contrast against the
+      # ground each token lands on, which is the stricter question.
+      - name: axe finds nothing
+        run: npm run check:a11y

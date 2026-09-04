@@ -394,7 +394,7 @@ npm run build         # generate, then tsc
 npm test              # compile and check, WITHOUT regenerating
 npm run check         # the palette gate: contrast, tokens, one-off values
 npm run check:runtime # the same, measured off the rendered page
-npm run check:pages   # overflow at 320 up, static/live parity, every painted pair
+npm run check:pages   # overflow, parity, painted pairs, CSSOM coverage, axe
 npm run serve         # the demo, on 4173, with Cache-Control: no-store
 ```
 
@@ -413,10 +413,11 @@ JavaScript at all.
 `npm run check` reads files and takes about half a second. `check:runtime`
 needs a Chromium and refuses to run without one, rather than skipping quietly.
 
-`check:pages` is the three checks that need the pages rather than the files:
+`check:pages` is the five checks that need the pages rather than the files:
 nothing scrolls sideways at 320 and up, the static and live pages still render
-the same shapes, and every colour actually painted clears its floor against
-the ground it actually lands on. They serve `demo/` themselves on an ephemeral
+the same shapes, every colour actually painted clears its floor against the
+ground it actually lands on, every class the kit renders matches a rule the
+browser kept, and axe finds nothing across both pages in both themes. They serve `demo/` themselves on an ephemeral
 port and each counts the controls it found before trusting a green result,
 because a page that never rendered passes every check that measures it.
 

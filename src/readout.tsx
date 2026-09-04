@@ -83,14 +83,21 @@ export function Readout({
     <span
       {...rest}
       className={cx('pw-lcd', marquee && 'pw-lcd-marquee', className)}
-      role="img"
-      aria-label={label ?? value}
       data-scroll={paused === null ? undefined : paused ? 'paused' : 'running'}
     >
+      {/* role="img" sits on the thing that IS the image, never on the box that
+          also holds the pause control.
+
+          It was on the host, and axe was right to call it: role="img" makes an
+          element a leaf for assistive technology, its whole subtree replaced by
+          the label. The pause button was inside that subtree, so a keyboard
+          user could Tab to a control a screen reader user could not find at
+          all. demo/states.html hid it, because the button is disabled there
+          and a disabled button is not focusable. */}
       {marquee ? (
         /* The scrolling copy gets its own clipping box. Clipping on the host
            instead would swallow the pause control standing beside it. */
-        <span className="pw-lcd-window">
+        <span className="pw-lcd-window" role="img" aria-label={label ?? value}>
           <span className="pw-lcd-render" aria-hidden="true">
             {cells('a')}
             {/* A second copy, so the -50% translate loops seamlessly rather
@@ -99,7 +106,9 @@ export function Readout({
           </span>
         </span>
       ) : (
-        <span className="pw-lcd-render" aria-hidden="true">{cells('a')}</span>
+        <span className="pw-lcd-render" role="img" aria-label={label ?? value}>
+          {cells('a')}
+        </span>
       )}
       {marquee ? (
         <button
