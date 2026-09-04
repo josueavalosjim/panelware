@@ -182,6 +182,29 @@ describe('the focus ring', () => {
       'the elevation slot does not compose the focus halo, so controls inside it show one ring');
   });
 
+  test('nothing draws it without asking whether focus is visible', () => {
+    /* The rule this catches: .pw-list-item[data-active] drew the focus
+       outline with no condition at all, and List seeds its active row in the
+       state initialiser so aria-activedescendant has somewhere to point from
+       the first render. Every list on the page therefore painted a 2px focus
+       ring on a row before anyone had touched anything, three files away from
+       reset.css stating the opposite as this kit's own rule.
+
+       Nothing else could see it. axe does not mind a ring, the contrast gate
+       measures it happily, and both demo pages were wrong in the same way so
+       parity agreed with itself.
+
+       The bundle rather than the sources, because it is what a browser gets
+       and one scan covers every component file. */
+    const css = bare(read('css/panelware.css'));
+    const unconditioned = [];
+    for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      if (!/outline:[^;]*var\(--pw-color-focus/.test(body)) continue;
+      if (!/:focus-visible/.test(selector)) unconditioned.push(selector.trim().replace(/\s+/g, ' '));
+    }
+    assert.deepEqual(unconditioned, []);
+  });
+
   test('the two halves are declared in every theme', () => {
     /* Both, in both. A theme that declared only --pw-color-focus would fall
        back to inheriting the other theme's companion and could land the same

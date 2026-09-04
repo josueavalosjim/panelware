@@ -33,6 +33,28 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### Every List painted a focus ring at mount
+
+`.pw-list-item[data-active]` drew the focus outline with no condition on it,
+and `List` seeds its active row in the state initialiser so
+`aria-activedescendant` has a row to point at from the first render. Between
+them, every list on the page carried a 2px focus ring before anyone had
+touched anything. `reset.css` states the opposite as this kit's own rule,
+three files away.
+
+The ring is conditioned on the list having visible focus now. The condition
+sits on the container because the container is what takes focus: `.pw-list`
+carries the tabindex and the `aria-activedescendant`, and the rows are not
+focusable at all.
+
+Nothing could see it. axe does not mind a ring, the contrast gate measures one
+happily, and both demo pages were wrong in the same way so parity agreed with
+itself. Two guards now, and both were watched failing: a test that scans the
+bundle for any focus outline drawn without a `:focus-visible` condition, and a
+browser check asserting the ring is absent at rest and present once the list
+has keyboard focus. The second half matters as much as the first, since
+deleting the rule outright fixes the complaint and removes the feature.
+
 ### A Window was not a region
 
 `<Window>` rendered a `<section>` with an `<h2>` inside it and no

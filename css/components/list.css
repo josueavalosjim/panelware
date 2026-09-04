@@ -59,12 +59,23 @@
 
   /* The row the keyboard is on, which is not necessarily the selected one.
      A quieter band, so moving through a list does not look like selecting
-     every row on the way. */
-  .pw-list-item[data-active] {
+     every row on the way.
+
+     Only while the list itself has visible focus, and that condition is not
+     decoration. [data-active] is seeded at mount so aria-activedescendant has
+     a row to point at from the first render, and painting it unconditionally
+     put a 2px focus ring on a row of every list on the page before anyone had
+     touched anything. reset.css states the opposite as this kit's own rule,
+     three files away, and this was the one place breaking it.
+
+     The condition sits on the container because the container is what takes
+     focus: .pw-list carries tabindex and aria-activedescendant, and the rows
+     are not focusable at all, so :focus-visible can never match a row. */
+  .pw-list:focus-visible .pw-list-item[data-active] {
     outline: var(--pw-focus-width) solid var(--pw-color-focus);
     outline-offset: calc(var(--pw-focus-width) * -1);
   }
-  .pw-list-item[aria-selected="true"][data-active] {
+  .pw-list:focus-visible .pw-list-item[aria-selected="true"][data-active] {
     outline-color: var(--pw-color-focus-contrast);
   }
 

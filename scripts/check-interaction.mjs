@@ -21,9 +21,10 @@
  * renders statically and every formatted slider in the demo was controlled.
  * The kit demonstrated only the arrangement in which the bug cannot appear.
  *
- * This runs against demo/index.html only. states.html is the proof the CSS
- * needs no JavaScript, which makes it the wrong page to ask what happens when
- * you press a key.
+ * The slider rows run against demo/index.html only. states.html is the proof
+ * the CSS needs no JavaScript, which makes it the wrong page to ask what
+ * happens when you press a key. The focus-ring rows run against both, because
+ * that one is a CSS rule and the static page had it wrong too.
  */
 import { report, withDemo } from './browser.mjs';
 
@@ -52,6 +53,8 @@ const focus = (label) => `(() => {
  * fix wraps onValueChange to keep an internal copy of the value, and a
  * controlled slider only moves at all if the caller's handler still runs.
  */
+const PAGES = ['demo/states.html', 'demo/index.html'];
+
 const SLIDERS = [
   { label: 'Treble', mode: 'uncontrolled' },
   { label: 'Gain', mode: 'controlled' },
@@ -124,4 +127,73 @@ await withDemo(async (p, base) => {
   }
 }, { width: 1100, height: 900 });
 
-report('interaction', failures, `${scanned} sliders driven from the keyboard`);
+/**
+ * A focus ring belongs to focus.
+ *
+ * .pw-list-item[data-active] drew an outline with no condition on it, and
+ * List seeds its active row in the state initialiser so aria-activedescendant
+ * has somewhere to point from the first render. Between them, every list on
+ * the page painted a 2px focus ring on a row before anyone had touched
+ * anything. reset.css states the opposite as this kit's own rule three files
+ * away, and nothing could see the contradiction: axe does not mind, contrast
+ * does not mind, and both demo pages were wrong in the same way so parity
+ * agreed with itself.
+ *
+ * Both directions, because deleting the rule passes the half of this that
+ * matters least. The ring has to be absent at rest AND present when the list
+ * has keyboard focus, or the fix is just a removed feature.
+ *
+ * On the modality: :focus-visible is the browser's own judgement about
+ * whether focus arrived by keyboard, and it cannot be faked from script. A
+ * Tab keystroke puts the page in keyboard modality, and moving focus after
+ * that is treated as a keyboard arrival. Tabbing all the way down to the list
+ * would work too and would take thirty keystrokes to prove the same thing.
+ */
+const RING = `(() => {
+  const row = document.querySelector('.pw-list-item[data-active]');
+  if (!row) return null;
+  const s = getComputedStyle(row);
+  return { drawn: s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0, style: s.outlineStyle };
+})()`;
+
+let rings = 0;
+await withDemo(async (p, base) => {
+  for (const page of PAGES) {
+    await p.goto(`${base}/${page}`);
+    await p.settle(page.includes('index') ? 1800 : 900);
+
+    const atRest = await p.evaluate(RING);
+    if (!atRest) {
+      failures.push(`${page}: no .pw-list-item[data-active], so the focus ring was never checked`);
+      continue;
+    }
+    if (atRest.drawn) {
+      failures.push(`${page}: the active row paints a ${atRest.style} focus ring at mount, ` +
+        'with nothing focused and nobody having touched the page');
+    }
+
+    /* Keyboard modality first, then focus. A click would move focus without
+       :focus-visible, which is the whole point of the rule. */
+    await p.key('Tab');
+    const took = await p.evaluate(`(() => {
+      const l = document.querySelector('.pw-list');
+      if (!l) return false;
+      l.focus();
+      return document.activeElement === l;
+    })()`);
+    if (!took) {
+      failures.push(`${page}: .pw-list did not take focus, so the rest of this proves nothing`);
+      continue;
+    }
+    await p.settle(80);
+    const focused = await p.evaluate(RING);
+    rings += 1;
+    if (!focused.drawn) {
+      failures.push(`${page}: the list has keyboard focus and the active row paints no ring, ` +
+        'so there is nothing showing which row the arrow keys are on');
+    }
+  }
+}, { width: 1100, height: 900 });
+
+report('interaction', failures,
+  `${scanned} sliders driven from the keyboard, ${rings} lists focused`);

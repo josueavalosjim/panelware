@@ -467,12 +467,14 @@ attributes back would not do it, because `aria-labelledby` pointing at an id
 that is not on the page looks perfectly correct in the markup and resolves to
 no name at all.
 
-`check:interaction` is the newest and the narrowest. Everything else measures
-a component at rest, which is how an uncontrolled slider shipped announcing
-the value it mounted with on every arrow press: `aria-valuenow` moved, the
-formatted `aria-valuetext` did not, and `aria-valuetext` is the one a screen
-reader reads. It drives the live page from the keyboard and asserts the text
-follows the value rather than the presses.
+`check:interaction` is the newest. Everything else measures a component at
+rest, which is how an uncontrolled slider shipped announcing the value it
+mounted with on every arrow press: `aria-valuenow` moved, the formatted
+`aria-valuetext` did not, and `aria-valuetext` is the one a screen reader
+reads. It drives the pages from the keyboard and asserts that the text follows
+the value rather than the presses, and that a list's focus ring is absent at
+rest and present once the list has focus. Both halves, because deleting a rule
+satisfies the first half of that and removes the feature.
 
 Parity counts one thing more. A shape it names and cannot find is a failure
 rather than a match: it compared sizes as strings, an element that is not on
