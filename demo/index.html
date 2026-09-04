@@ -219,8 +219,17 @@
         },
           h(Button, { onClick: () => {} }, 'Open'),
           h(Button, { variant: 'primary' }, 'Save changes'),
-          h(Button, { variant: 'primary', gloss: true }, 'Glossed'),
-          h(Button, { gloss: true }, 'Gloss on silver'),
+          /* Same two buttons, same gloss prop, relabelled per skin. Under
+             cyber they are still marked [data-gloss] and the skin's opacity
+             of 0 silences them, which is the whole reason gloss is a token
+             and not a class: the markup stays honest and no consumer has to
+             delete an attribute when they change skin. Calling them
+             "Glossed" while they are not is the same lie the section note
+             was telling one line above. */
+          h(Button, { variant: 'primary', gloss: true },
+            skinAxis === 'cyber' ? 'data-gloss, silenced' : 'Glossed'),
+          h(Button, { gloss: true },
+            skinAxis === 'cyber' ? 'data-gloss, on a face' : 'Gloss on silver'),
           h(Button, { disabled: true }, 'Unavailable'),
           h(Button, { asChild: true },
             h('a', { href: './states.html' }, 'asChild, as a link'))),
