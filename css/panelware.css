@@ -1509,6 +1509,14 @@
        would be right, because every pixel dimension belongs in here. */
     --pw-icon-x: 0;
     --pw-icon-y: 0;
+    /* Empty cell columns either side of this glyph's ink, set per icon by the
+       component. Zero here means "no correction", which is the right answer
+       for every icon that is not sitting inline beside a word. Declared rather
+       than left to a fallback so the gate can see them: a var() with no
+       declaration anywhere is the cheapest bug in this project to introduce
+       and it renders as nothing at all. */
+    --pw-icon-ink-l: 0;
+    --pw-icon-ink-r: 0;
     width: calc(var(--pw-icon-w) * var(--pw-icon-scale));
     height: calc(var(--pw-icon-h) * var(--pw-icon-scale));
     background-color: currentColor;
