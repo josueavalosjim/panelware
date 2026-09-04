@@ -185,6 +185,12 @@
 
   --pw-color-primary: var(--pw-blue-800);
   --pw-color-primary-content: var(--pw-silver-000);
+  /* The title bar's own role, and it needs one. It borrowed
+     --pw-color-primary until a third skin wanted a near-black bar:
+     Luna's title bar IS the accent, and a 1997 player's is the darkest
+     thing on the chassis. One token cannot be both. */
+  --pw-color-titlebar: var(--pw-blue-800);
+  --pw-color-titlebar-content: var(--pw-silver-000);
 
   /* The focus ring. Held to 3:1 against BOTH the control it rings and the
      page behind it, because an offset ring crosses that boundary and is
@@ -314,6 +320,8 @@
 
   --pw-color-primary: var(--pw-blue-300);
   --pw-color-primary-content: var(--pw-silver-950);
+  --pw-color-titlebar: var(--pw-blue-300);
+  --pw-color-titlebar-content: var(--pw-silver-950);
 
   --pw-color-focus: var(--pw-blue-300);
   /* Dark here, because dark's accent IS the light one: the same collision
@@ -778,6 +786,12 @@
 
   --pw-color-primary: var(--pw-cyan-800);
   --pw-color-primary-content: var(--pw-slate-000);
+  /* The title bar's own role, and it needs one. It borrowed
+     --pw-color-primary until a third skin wanted a near-black bar:
+     Luna's title bar IS the accent, and a 1997 player's is the darkest
+     thing on the chassis. One token cannot be both. */
+  --pw-color-titlebar: var(--pw-cyan-800);
+  --pw-color-titlebar-content: var(--pw-slate-000);
   --pw-color-focus: var(--pw-cyan-800);
   --pw-color-focus-contrast: var(--pw-slate-000);
   --pw-color-range: var(--pw-cyan-800);
@@ -825,6 +839,8 @@
 
   --pw-color-primary: var(--pw-cyan-300);
   --pw-color-primary-content: var(--pw-slate-950);
+  --pw-color-titlebar: var(--pw-cyan-300);
+  --pw-color-titlebar-content: var(--pw-slate-950);
   --pw-color-focus: var(--pw-cyan-300);
   --pw-color-focus-contrast: var(--pw-slate-950);
   --pw-color-range: var(--pw-cyan-300);
@@ -920,7 +936,7 @@
 /**
  * PRIMITIVE — the winamp-lineage skin's raw ramp.
  *
- * Never referenced outside tokens/. A grey-violet chassis rather than a
+ * Never referenced outside tokens/. A blue-slate chassis rather than a
  * neutral one, because that cast is what separates a 1997 media player from a
  * 1995 dialog box, and it is the thing people actually remember about the
  * base skin.
@@ -933,18 +949,19 @@
 
 :root {
   --pw-pewter-000: #ffffff;
-  --pw-pewter-050: #dedee8;   /* light page */
-  --pw-pewter-100: #cbcbd8;   /* light control face */
-  --pw-pewter-200: #b4b4c4;   /* light well */
-  --pw-pewter-400: #8a8a9c;   /* light divider, 2.54:1 on the page */
-  --pw-pewter-500: #6d6d84;   /* dark divider, same 2.54:1 on its own page */
-  --pw-pewter-600: #5f5f70;   /* light boundary and disabled ink */
-  --pw-pewter-700: #9a9ab0;   /* dark boundary and disabled ink */
-  --pw-pewter-800: #3d3d4e;   /* dark control face */
-  --pw-pewter-900: #31313f;   /* dark page */
-  --pw-pewter-950: #1c1c25;   /* dark well */
-  --pw-pewter-990: #16161f;   /* light ink */
-  --pw-pewter-010: #e6e6f0;   /* dark ink */
+  --pw-pewter-050: #dde3ec;   /* light page */
+  --pw-pewter-100: #c9d2df;   /* light control face */
+  --pw-pewter-200: #b0bccd;   /* light well */
+  --pw-pewter-400: #8794a8;   /* light divider, 2.54:1 on the page */
+  --pw-pewter-500: #707d91;   /* dark divider, same 2.54:1 on its own page */
+  --pw-pewter-600: #5a6478;   /* light boundary and disabled ink */
+  --pw-pewter-700: #98a2b3;   /* dark boundary and disabled ink */
+  --pw-pewter-800: #3b4252;   /* dark control face */
+  --pw-pewter-900: #2e3440;   /* dark page */
+  --pw-pewter-950: #1b1f27;   /* dark well */
+  --pw-pewter-990: #141821;   /* light ink, and dark's primary ink */
+  --pw-pewter-995: #14171d;   /* the dark title bar, darker than its own page */   /* light ink */
+  --pw-pewter-010: #e5eaf2;   /* dark ink */
 
   --pw-ice-300: #4fd2ff;      /* dark primary, 9.03:1 on the dark page */
   --pw-ice-800: #1c4f70;      /* light primary */
@@ -968,28 +985,29 @@
 /**
  * SEMANTIC — the winamp-lineage skin's colour roles.
  *
- * The identical twenty-seven roles the other two skins declare. This one is a
- * palette variant rather than a new treatment: it takes the same stacked bevel
- * chrome does, and differs only in these values, which is what a Winamp skin
- * always was. Thousands of them shipped on one chassis.
+ * A palette variant: it takes the same stacked bevel chrome does and differs
+ * only in these values, which is what a Winamp skin always was.
  *
- * The interesting result is that it needed no new token. Three hues carry
- * information here where chrome and cyber each use one, and the contract
- * already had three places to put them: --pw-color-primary for the metadata
- * ice, --pw-color-range for the gold on the faders, and --pw-color-lcd-content
- * for the phosphor. primary and range had been the same value in both existing
- * skins, so nothing had ever tested that they are genuinely separate roles.
+ * Re-hued once already. The first version was grey-violet and read as a design
+ * system in dark mode rather than as a media player; the chassis is blue-slate
+ * now, the displays are black, and the title bar is the darkest thing on it
+ * rather than the brightest.
  *
- * Every pair was computed before the file was written. Both themes clear all
- * twenty; the dark divider was the only miss, at 1.79:1 against a 2:1 tier,
- * and moved one rung.
+ * That title bar is the second contract gap this skin found. It had been
+ * painted with --pw-color-primary, which is right for Luna, where the title bar
+ * IS the accent, and wrong for a 1997 player, where it is nearly black. One
+ * token could not be both, and the button fill was reading the same value, so
+ * the bar came out bright cyan. --pw-color-titlebar exists now and the other
+ * two skins point it at what they were already using.
+ *
+ * Every pair computed before the file was written; both themes clear all
+ * twenty-one, the new one included.
  */
 
 [data-skin="winamp"],
 [data-skin="winamp"][data-theme="light"] {
-  /* A light theme for a skin that never had one. The chassis lightens and the
-     displays do not: a segment readout is a backlit object, and the base skin's
-     black-and-phosphor panels are the one part that would be wrong to invert. */
+  /* A light theme for a skin that never had one. The chassis lightens; the
+     displays do not, because a segment readout is a backlit object. */
 
   --pw-color-base-100: var(--pw-pewter-050);
   --pw-color-base-200: var(--pw-pewter-100);
@@ -998,6 +1016,8 @@
   --pw-color-disabled-content: var(--pw-pewter-600);
   --pw-color-primary: var(--pw-ice-800);
   --pw-color-primary-content: var(--pw-pewter-000);
+  --pw-color-titlebar: var(--pw-pewter-900);
+  --pw-color-titlebar-content: var(--pw-pewter-010);
   --pw-color-focus: var(--pw-ice-800);
   --pw-color-focus-contrast: var(--pw-pewter-000);
   --pw-color-range: var(--pw-gold-800);
@@ -1017,11 +1037,12 @@
   --pw-color-divider: var(--pw-pewter-400);
   --pw-gloss-lit-base-200: var(--pw-pewter-100);
   --pw-gloss-lit-primary: var(--pw-ice-800);
-  --pw-color-scrim: rgba(28, 28, 37, 0.62);
+  --pw-color-scrim: rgba(20, 24, 33, 0.62);
 }
 
 [data-skin="winamp"][data-theme="dark"] {
-  /* The base skin as it shipped: grey-violet chassis, black displays. */
+  /* The base skin's own register: blue-slate chassis, black displays, and a
+     title bar darker than the page it sits on. */
 
   --pw-color-base-100: var(--pw-pewter-900);
   --pw-color-base-200: var(--pw-pewter-800);
@@ -1030,6 +1051,8 @@
   --pw-color-disabled-content: var(--pw-pewter-700);
   --pw-color-primary: var(--pw-ice-300);
   --pw-color-primary-content: var(--pw-pewter-990);
+  --pw-color-titlebar: var(--pw-pewter-995);
+  --pw-color-titlebar-content: var(--pw-pewter-010);
   --pw-color-focus: var(--pw-ice-300);
   --pw-color-focus-contrast: var(--pw-pewter-990);
   --pw-color-range: var(--pw-gold-300);
@@ -1044,7 +1067,7 @@
   --pw-bevel-light: var(--pw-pewter-700);
   --pw-bevel-face: var(--pw-pewter-800);
   --pw-bevel-shade: var(--pw-pewter-950);
-  --pw-bevel-frame: var(--pw-pewter-990);
+  --pw-bevel-frame: var(--pw-pewter-995);
   --pw-bevel-boundary: var(--pw-pewter-700);
   --pw-color-divider: var(--pw-pewter-500);
   --pw-gloss-lit-base-200: var(--pw-pewter-800);

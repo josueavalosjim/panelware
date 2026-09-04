@@ -29,6 +29,12 @@
 
   --pw-color-primary: var(--pw-cyan-800);
   --pw-color-primary-content: var(--pw-slate-000);
+  /* The title bar's own role, and it needs one. It borrowed
+     --pw-color-primary until a third skin wanted a near-black bar:
+     Luna's title bar IS the accent, and a 1997 player's is the darkest
+     thing on the chassis. One token cannot be both. */
+  --pw-color-titlebar: var(--pw-cyan-800);
+  --pw-color-titlebar-content: var(--pw-slate-000);
   --pw-color-focus: var(--pw-cyan-800);
   --pw-color-focus-contrast: var(--pw-slate-000);
   --pw-color-range: var(--pw-cyan-800);
@@ -76,6 +82,8 @@
 
   --pw-color-primary: var(--pw-cyan-300);
   --pw-color-primary-content: var(--pw-slate-950);
+  --pw-color-titlebar: var(--pw-cyan-300);
+  --pw-color-titlebar-content: var(--pw-slate-950);
   --pw-color-focus: var(--pw-cyan-300);
   --pw-color-focus-contrast: var(--pw-slate-950);
   --pw-color-range: var(--pw-cyan-300);

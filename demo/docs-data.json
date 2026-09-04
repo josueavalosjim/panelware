@@ -97,6 +97,32 @@
      }
     },
     {
+     "name": "--pw-color-titlebar",
+     "values": {
+      "light": {
+       "declared": "var(--pw-blue-800)",
+       "resolved": "#003399"
+      },
+      "dark": {
+       "declared": "var(--pw-blue-300)",
+       "resolved": "#9dc0ff"
+      }
+     }
+    },
+    {
+     "name": "--pw-color-titlebar-content",
+     "values": {
+      "light": {
+       "declared": "var(--pw-silver-000)",
+       "resolved": "#ffffff"
+      },
+      "dark": {
+       "declared": "var(--pw-silver-950)",
+       "resolved": "#1a1a18"
+      }
+     }
+    },
+    {
      "name": "--pw-color-focus",
      "values": {
       "light": {
@@ -1529,6 +1555,15 @@
   },
   {
    "theme": "chrome-light",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 10.86,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
    "fg": "--pw-color-primary-content",
    "bg": "--pw-gloss-lit-primary",
    "note": "the same label once the gloss has lifted the face",
@@ -1709,6 +1744,15 @@
   },
   {
    "theme": "chrome-dark",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 9.48,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
    "fg": "--pw-color-primary-content",
    "bg": "--pw-gloss-lit-primary",
    "note": "the same label once the gloss has lifted the face",
@@ -1883,6 +1927,15 @@
    "fg": "--pw-color-primary-content",
    "bg": "--pw-color-primary",
    "note": "the primary action's label",
+   "ratio": 9.48,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
    "ratio": 9.48,
    "min": 4.5,
    "pass": true
@@ -2069,6 +2122,15 @@
   },
   {
    "theme": "cyber-light",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 9.09,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
    "fg": "--pw-color-primary-content",
    "bg": "--pw-gloss-lit-primary",
    "note": "the same label once the gloss has lifted the face",
@@ -2249,6 +2311,15 @@
   },
   {
    "theme": "cyber-dark",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 11.7,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
    "fg": "--pw-color-primary-content",
    "bg": "--pw-gloss-lit-primary",
    "note": "the same label once the gloss has lifted the face",
@@ -2387,7 +2458,7 @@
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-100",
    "note": "text on the page",
-   "ratio": 13.45,
+   "ratio": 13.76,
    "min": 4.5,
    "pass": true
   },
@@ -2396,7 +2467,7 @@
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-200",
    "note": "a control label",
-   "ratio": 11.19,
+   "ratio": 11.64,
    "min": 4.5,
    "pass": true
   },
@@ -2405,7 +2476,7 @@
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-300",
    "note": "text in a sunken well",
-   "ratio": 8.78,
+   "ratio": 9.24,
    "min": 4.5,
    "pass": true
   },
@@ -2414,7 +2485,7 @@
    "fg": "--pw-color-base-content",
    "bg": "--pw-gloss-lit-base-200",
    "note": "a label over a glossed face",
-   "ratio": 11.19,
+   "ratio": 11.64,
    "min": 4.5,
    "pass": true
   },
@@ -2424,6 +2495,15 @@
    "bg": "--pw-color-primary",
    "note": "the primary action's label",
    "ratio": 8.74,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 10.34,
    "min": 4.5,
    "pass": true
   },
@@ -2441,7 +2521,7 @@
    "fg": "--pw-color-disabled-content",
    "bg": "--pw-color-base-200",
    "note": "disabled is quiet, not absent",
-   "ratio": 3.89,
+   "ratio": 3.9,
    "min": 3,
    "pass": true
   },
@@ -2450,7 +2530,7 @@
    "fg": "--pw-bevel-boundary",
    "bg": "--pw-color-base-100",
    "note": "the control boundary, against the page",
-   "ratio": 4.68,
+   "ratio": 4.61,
    "min": 3,
    "pass": true
   },
@@ -2459,7 +2539,7 @@
    "fg": "--pw-bevel-boundary",
    "bg": "--pw-color-base-200",
    "note": "the control boundary, against a panel",
-   "ratio": 3.89,
+   "ratio": 3.9,
    "min": 3,
    "pass": true
   },
@@ -2468,7 +2548,7 @@
    "fg": "--pw-color-divider",
    "bg": "--pw-color-base-100",
    "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
-   "ratio": 2.54,
+   "ratio": 2.38,
    "min": 2,
    "pass": true
   },
@@ -2477,7 +2557,7 @@
    "fg": "--pw-color-divider",
    "bg": "--pw-color-base-200",
    "note": "the same line drawn inside a panel",
-   "ratio": 2.11,
+   "ratio": 2.02,
    "min": 2,
    "pass": true
   },
@@ -2486,7 +2566,7 @@
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-200",
    "note": "focus ring on the control it rings",
-   "ratio": 5.44,
+   "ratio": 5.73,
    "min": 3,
    "pass": true
   },
@@ -2495,7 +2575,7 @@
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-100",
    "note": "focus ring on the page it offsets onto",
-   "ratio": 6.55,
+   "ratio": 6.78,
    "min": 3,
    "pass": true
   },
@@ -2531,7 +2611,7 @@
    "fg": "--pw-color-range",
    "bg": "--pw-color-base-300",
    "note": "the filled part of a slider",
-   "ratio": 3.35,
+   "ratio": 3.56,
    "min": 3,
    "pass": true
   },
@@ -2567,7 +2647,7 @@
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-100",
    "note": "text on the page",
-   "ratio": 10.32,
+   "ratio": 10.34,
    "min": 4.5,
    "pass": true
   },
@@ -2576,7 +2656,7 @@
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-200",
    "note": "a control label",
-   "ratio": 8.57,
+   "ratio": 8.33,
    "min": 4.5,
    "pass": true
   },
@@ -2585,7 +2665,7 @@
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-300",
    "note": "text in a sunken well",
-   "ratio": 13.64,
+   "ratio": 13.67,
    "min": 4.5,
    "pass": true
   },
@@ -2594,7 +2674,7 @@
    "fg": "--pw-color-base-content",
    "bg": "--pw-gloss-lit-base-200",
    "note": "a label over a glossed face",
-   "ratio": 8.57,
+   "ratio": 8.33,
    "min": 4.5,
    "pass": true
   },
@@ -2603,7 +2683,16 @@
    "fg": "--pw-color-primary-content",
    "bg": "--pw-color-primary",
    "note": "the primary action's label",
-   "ratio": 10.26,
+   "ratio": 10.15,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 14.86,
    "min": 4.5,
    "pass": true
   },
@@ -2612,7 +2701,7 @@
    "fg": "--pw-color-primary-content",
    "bg": "--pw-gloss-lit-primary",
    "note": "the same label once the gloss has lifted the face",
-   "ratio": 10.26,
+   "ratio": 10.15,
    "min": 4.5,
    "pass": true
   },
@@ -2621,7 +2710,7 @@
    "fg": "--pw-color-disabled-content",
    "bg": "--pw-color-base-200",
    "note": "disabled is quiet, not absent",
-   "ratio": 3.86,
+   "ratio": 3.91,
    "min": 3,
    "pass": true
   },
@@ -2630,7 +2719,7 @@
    "fg": "--pw-bevel-boundary",
    "bg": "--pw-color-base-100",
    "note": "the control boundary, against the page",
-   "ratio": 4.64,
+   "ratio": 4.85,
    "min": 3,
    "pass": true
   },
@@ -2639,7 +2728,7 @@
    "fg": "--pw-bevel-boundary",
    "bg": "--pw-color-base-200",
    "note": "the control boundary, against a panel",
-   "ratio": 3.86,
+   "ratio": 3.91,
    "min": 3,
    "pass": true
   },
@@ -2648,7 +2737,7 @@
    "fg": "--pw-color-divider",
    "bg": "--pw-color-base-100",
    "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
-   "ratio": 2.54,
+   "ratio": 2.99,
    "min": 2,
    "pass": true
   },
@@ -2657,7 +2746,7 @@
    "fg": "--pw-color-divider",
    "bg": "--pw-color-base-200",
    "note": "the same line drawn inside a panel",
-   "ratio": 2.11,
+   "ratio": 2.41,
    "min": 2,
    "pass": true
   },
@@ -2666,7 +2755,7 @@
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-200",
    "note": "focus ring on the control it rings",
-   "ratio": 6.07,
+   "ratio": 5.75,
    "min": 3,
    "pass": true
   },
@@ -2675,7 +2764,7 @@
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-100",
    "note": "focus ring on the page it offsets onto",
-   "ratio": 7.31,
+   "ratio": 7.13,
    "min": 3,
    "pass": true
   },
@@ -2684,7 +2773,7 @@
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-primary",
    "note": "the ring's other half, on the accent bar where the first half vanishes",
-   "ratio": 10.26,
+   "ratio": 10.15,
    "min": 3,
    "pass": true
   },
@@ -2693,7 +2782,7 @@
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-focus",
    "note": "the two halves against each other, which is what makes the pair work on any ground",
-   "ratio": 10.26,
+   "ratio": 10.15,
    "min": 3,
    "pass": true
   },
@@ -2711,7 +2800,7 @@
    "fg": "--pw-color-range",
    "bg": "--pw-color-base-300",
    "note": "the filled part of a slider",
-   "ratio": 11.71,
+   "ratio": 11.43,
    "min": 3,
    "pass": true
   },

@@ -44,6 +44,11 @@
 
     --pw-color-primary: var(--pw-blue-300);
     --pw-color-primary-content: var(--pw-silver-950);
+    /* The title bar's own role, added when a third skin wanted a near-black
+       bar. This block is the dark theme value for value, so it carries it too
+       or the contract test says so, which is exactly what it did. */
+    --pw-color-titlebar: var(--pw-blue-300);
+    --pw-color-titlebar-content: var(--pw-silver-950);
 
     --pw-color-focus: var(--pw-blue-300);
     --pw-color-focus-contrast: var(--pw-silver-950);

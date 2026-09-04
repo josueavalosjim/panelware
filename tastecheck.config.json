@@ -102,6 +102,12 @@
         "label": "the primary action's label"
       },
       {
+        "fg": "--pw-color-titlebar-content",
+        "bg": "--pw-color-titlebar",
+        "min": 4.5,
+        "label": "a window title against its own bar"
+      },
+      {
         "fg": "--pw-color-primary-content",
         "bg": "--pw-gloss-lit-primary",
         "min": 4.5,

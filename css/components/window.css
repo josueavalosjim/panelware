@@ -36,8 +36,13 @@
     justify-content: space-between;
     gap: var(--pw-space-md);
     padding: var(--pw-space-2xs) var(--pw-space-2xs) var(--pw-space-2xs) var(--pw-space-md);
-    background-color: var(--pw-color-primary);
-    color: var(--pw-color-primary-content);
+    /* Its own role, not primary. Luna's title bar is the accent and a 1997
+       player's is the darkest thing on the chassis; one token cannot be both,
+       and while it was primary the button fill and the bar were locked
+       together. Both existing skins point titlebar at what they already had,
+       so neither changed. */
+    background-color: var(--pw-color-titlebar);
+    color: var(--pw-color-titlebar-content);
     border-radius: var(--pw-radius-control) var(--pw-radius-control) 0 0;
   }
 

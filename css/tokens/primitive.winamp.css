@@ -1,7 +1,7 @@
 /**
  * PRIMITIVE — the winamp-lineage skin's raw ramp.
  *
- * Never referenced outside tokens/. A grey-violet chassis rather than a
+ * Never referenced outside tokens/. A blue-slate chassis rather than a
  * neutral one, because that cast is what separates a 1997 media player from a
  * 1995 dialog box, and it is the thing people actually remember about the
  * base skin.
@@ -14,18 +14,19 @@
 
 :root {
   --pw-pewter-000: #ffffff;
-  --pw-pewter-050: #dedee8;   /* light page */
-  --pw-pewter-100: #cbcbd8;   /* light control face */
-  --pw-pewter-200: #b4b4c4;   /* light well */
-  --pw-pewter-400: #8a8a9c;   /* light divider, 2.54:1 on the page */
-  --pw-pewter-500: #6d6d84;   /* dark divider, same 2.54:1 on its own page */
-  --pw-pewter-600: #5f5f70;   /* light boundary and disabled ink */
-  --pw-pewter-700: #9a9ab0;   /* dark boundary and disabled ink */
-  --pw-pewter-800: #3d3d4e;   /* dark control face */
-  --pw-pewter-900: #31313f;   /* dark page */
-  --pw-pewter-950: #1c1c25;   /* dark well */
-  --pw-pewter-990: #16161f;   /* light ink */
-  --pw-pewter-010: #e6e6f0;   /* dark ink */
+  --pw-pewter-050: #dde3ec;   /* light page */
+  --pw-pewter-100: #c9d2df;   /* light control face */
+  --pw-pewter-200: #b0bccd;   /* light well */
+  --pw-pewter-400: #8794a8;   /* light divider, 2.54:1 on the page */
+  --pw-pewter-500: #707d91;   /* dark divider, same 2.54:1 on its own page */
+  --pw-pewter-600: #5a6478;   /* light boundary and disabled ink */
+  --pw-pewter-700: #98a2b3;   /* dark boundary and disabled ink */
+  --pw-pewter-800: #3b4252;   /* dark control face */
+  --pw-pewter-900: #2e3440;   /* dark page */
+  --pw-pewter-950: #1b1f27;   /* dark well */
+  --pw-pewter-990: #141821;   /* light ink, and dark's primary ink */
+  --pw-pewter-995: #14171d;   /* the dark title bar, darker than its own page */   /* light ink */
+  --pw-pewter-010: #e5eaf2;   /* dark ink */
 
   --pw-ice-300: #4fd2ff;      /* dark primary, 9.03:1 on the dark page */
   --pw-ice-800: #1c4f70;      /* light primary */

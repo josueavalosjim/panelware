@@ -95,6 +95,12 @@
 
   --pw-color-primary: var(--pw-blue-800);
   --pw-color-primary-content: var(--pw-silver-000);
+  /* The title bar's own role, and it needs one. It borrowed
+     --pw-color-primary until a third skin wanted a near-black bar:
+     Luna's title bar IS the accent, and a 1997 player's is the darkest
+     thing on the chassis. One token cannot be both. */
+  --pw-color-titlebar: var(--pw-blue-800);
+  --pw-color-titlebar-content: var(--pw-silver-000);
 
   /* The focus ring. Held to 3:1 against BOTH the control it rings and the
      page behind it, because an offset ring crosses that boundary and is
@@ -224,6 +230,8 @@
 
   --pw-color-primary: var(--pw-blue-300);
   --pw-color-primary-content: var(--pw-silver-950);
+  --pw-color-titlebar: var(--pw-blue-300);
+  --pw-color-titlebar-content: var(--pw-silver-950);
 
   --pw-color-focus: var(--pw-blue-300);
   /* Dark here, because dark's accent IS the light one: the same collision
