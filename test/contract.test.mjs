@@ -525,4 +525,25 @@ describe('the release', () => {
     const pkg = JSON.parse(read('package.json'));
     assert.deepEqual(missingFromPack(pkg, packedFiles()).map(([n]) => n), []);
   });
+  test('the README describes the module system the package actually has', () => {
+    /* The README now documents two errors a consumer will hit: a CommonJS
+       require gets ERR_PACKAGE_PATH_NOT_EXPORTED, and importing without the
+       optional peers gets ERR_MODULE_NOT_FOUND for react. Both are true
+       because of three lines in package.json, and if any of them changes the
+       documentation becomes a lie that nothing else would notice.
+
+       This does not assert the package SHOULD be ESM only. It asserts that
+       the README and package.json still agree about whether it is. */
+    const pkg = JSON.parse(read('package.json'));
+    const doc = read('README.md');
+    const esmOnly = pkg.type === 'module' && !('require' in (pkg.exports['.'] ?? {}));
+    assert.equal(esmOnly, doc.includes('The package is ESM only'),
+      esmOnly
+        ? 'the package is ESM only and the README no longer says so'
+        : 'the package now has a require condition and the README still says ESM only');
+    const optional = Object.keys(pkg.peerDependenciesMeta ?? {})
+      .filter((k) => pkg.peerDependenciesMeta[k].optional);
+    assert.deepEqual(optional.sort(), ['radix-ui', 'react'],
+      'the README explains a missing-peer error that depends on these being optional');
+  });
 });

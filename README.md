@@ -36,6 +36,40 @@ One class per element. No treatment classes in the markup, and nothing to
 memorise: a component is styled by the class it already has, and restyling is
 a token change rather than a find and replace.
 
+That is the whole CSS-only install. The stylesheet has no dependencies and no
+build step, and nothing above this line involves React.
+
+## Two things about the JavaScript entry
+
+**The React layer is a peer, and it is not installed for you.** `react` and
+`radix-ui` are optional peers so the stylesheet can be used on its own, which
+means importing the module without them gives you this:
+
+```
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'react'
+  imported from node_modules/@josueavalosjim/panelware/dist/button.js
+```
+
+That is the package working as intended and saying so badly. Install the peers
+if you want the components:
+
+```bash
+npm i react@^19 radix-ui@^1.6
+```
+
+**The package is ESM only.** `"type": "module"`, and the `.` export declares
+`types` and `import` with no `require` condition, so a CommonJS consumer gets:
+
+```
+Error [ERR_PACKAGE_PATH_NOT_EXPORTED]
+```
+
+There is no CJS build and there is not going to be one in v1. The React layer
+targets React 19, which is ESM in every environment worth supporting, and a
+second build exists to be forgotten and drift. The CSS entries are plain files
+and are unaffected by any of this: `@josueavalosjim/panelware/css` works from
+a bundler, a `<link>`, or an `@import`, with or without React.
+
 ## Status
 
 The components are built and gated. `demo/index.html` runs them for real, and
