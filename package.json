@@ -59,8 +59,9 @@
     "check:colour": "node scripts/check-colour.mjs",
     "check:cssom": "node scripts/check-cssom.mjs",
     "check:a11y": "node scripts/check-a11y.mjs",
+    "check:interaction": "node scripts/check-interaction.mjs",
     "check:exports": "node scripts/check-exports.mjs",
-    "check:pages": "npm run check:overflow && npm run check:parity && npm run check:colour && npm run check:cssom && npm run check:a11y",
+    "check:pages": "npm run check:overflow && npm run check:parity && npm run check:colour && npm run check:cssom && npm run check:a11y && npm run check:interaction",
     "prepublishOnly": "npm run build",
     "release": "npm test && npm run check && npm run check:gate && npm run check:runtime && npm run check:pages && npm run check:exports && npm version ${LEVEL:-patch} -m \"Release %s\" && git push --follow-tags",
     "serve": "node scripts/serve.mjs"

@@ -11,6 +11,19 @@
  * "70" for a gain in decibels or a position in a track has told the listener
  * nothing, and aria-valuetext is the attribute that fixes it.
  *
+ * The formatted text has to follow the live value, not the initial one. This
+ * read rest.value ?? rest.defaultValue, which is correct for a controlled
+ * slider and frozen for an uncontrolled one: defaultValue never changes, so
+ * Radix moved aria-valuenow on every arrow press while aria-valuetext stayed
+ * at the value the slider mounted with. aria-valuetext WINS over
+ * aria-valuenow in every screen reader, so an uncontrolled slider with a
+ * format announced the same wrong number all the way across the track.
+ *
+ * It survived because every formatted slider in the demo is controlled and
+ * the test rendered one statically, which is the one arrangement where the
+ * bug cannot show. Nothing was wrong with the component under test; the test
+ * never moved it.
+ *
  * A note on disabled, because it is a real trade and not an oversight. Radix
  * follows the platform: a disabled control leaves the tab sequence. That
  * means a screen-reader user tabbing a panel never learns the control is
@@ -20,7 +33,7 @@
  * in the README rather than choosing quietly.
  */
 import { Slider as RadixSlider } from 'radix-ui';
-import type { ComponentPropsWithoutRef } from 'react';
+import { type ComponentPropsWithoutRef, useState } from 'react';
 
 import { cx, flag } from './classes.js';
 
@@ -33,12 +46,24 @@ export interface SliderProps
   gloss?: boolean;
 }
 
-export function Slider({ label, format, gloss, className, ...rest }: SliderProps) {
-  const value = rest.value ?? rest.defaultValue ?? [0];
-  const current = value[0] ?? 0;
+export function Slider({
+  label, format, gloss, className, onValueChange, ...rest
+}: SliderProps) {
+  /* Only ever read when the slider is uncontrolled. A controlled one is told
+     its value by the caller, and reading anything else here would let the two
+     disagree for a frame. */
+  const [uncontrolled, setUncontrolled] = useState(() => rest.defaultValue ?? [0]);
+  const current = (rest.value ?? uncontrolled)[0] ?? 0;
 
   return (
-    <RadixSlider.Root {...rest} className={cx('pw-slider', className)}>
+    <RadixSlider.Root
+      {...rest}
+      onValueChange={(next) => {
+        setUncontrolled(next);
+        onValueChange?.(next);
+      }}
+      className={cx('pw-slider', className)}
+    >
       <RadixSlider.Track className="pw-slider-track">
         <RadixSlider.Range className="pw-slider-range" />
       </RadixSlider.Track>

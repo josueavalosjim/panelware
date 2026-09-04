@@ -29,6 +29,12 @@ export function requireBrowser() {
   process.exit(1);
 }
 
+/** Virtual key codes for the keys these checks press. */
+const KEYS = {
+  ArrowRight: 39, ArrowLeft: 37, ArrowDown: 40, ArrowUp: 38,
+  Enter: 13, Escape: 27, Tab: 9, Home: 36, End: 35, ' ': 32,
+};
+
 /** A page with a real viewport, torn down whatever the body does. */
 export async function withPage(fn, { width = 1100, height = 900, settle = 900 } = {}) {
   requireBrowser();
@@ -41,6 +47,19 @@ export async function withPage(fn, { width = 1100, height = 900, settle = 900 } 
       width: w, height: h, deviceScaleFactor: 1, mobile: false,
     });
     page.settle = (ms = settle) => page.evaluate(`new Promise((r) => setTimeout(r, ${ms}))`);
+    /* A real key event, not element.dispatchEvent. Radix listens on the DOM
+       and reads the event's key, but a synthetic event from page script does
+       not move focus, does not repeat, and is trusted by nothing. Checks that
+       want to see a component AFTER an interaction, which is most of the
+       states a kit like this has, need the browser to deliver the keystroke. */
+    page.key = async (key, code = KEYS[key] ?? 0) => {
+      for (const type of ['keyDown', 'keyUp']) {
+        await page.send('Input.dispatchKeyEvent', {
+          type, key, code: key, windowsVirtualKeyCode: code, nativeVirtualKeyCode: code,
+        });
+      }
+      return page.settle(60);
+    };
     return await fn(page);
   } finally {
     await page.close();

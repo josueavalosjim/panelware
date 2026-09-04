@@ -104,3 +104,13 @@ jobs:
       # ground each token lands on, which is the stricter question.
       - name: axe finds nothing
         run: npm run check:a11y
+
+      # Everything above measures a component at rest. Server rendering cannot
+      # press a key and the static page has no JavaScript to react to one, so
+      # an attribute that is right at mount and wrong from the first
+      # interaction had nothing looking at it. One had escaped: an uncontrolled
+      # Slider's aria-valuetext froze at the value it mounted with while Radix
+      # moved aria-valuenow, and aria-valuetext is the one a screen reader
+      # reads.
+      - name: the components still tell the truth after you use them
+        run: npm run check:interaction

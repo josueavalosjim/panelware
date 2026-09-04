@@ -429,7 +429,7 @@ npm test              # compile and check, WITHOUT regenerating
 npm run check         # the palette gate: contrast, tokens, one-off values
 npm run check:gate    # the fixture that must fail, so the gate above is real
 npm run check:runtime # the same, measured off the rendered page
-npm run check:pages   # overflow, parity, painted pairs, CSSOM coverage, axe
+npm run check:pages   # overflow, parity, colour, CSSOM, axe, interaction
 npm run serve         # the demo, on 4173, with Cache-Control: no-store
 ```
 
@@ -448,13 +448,21 @@ JavaScript at all.
 `npm run check` reads files and takes about half a second. `check:runtime`
 needs a Chromium and refuses to run without one, rather than skipping quietly.
 
-`check:pages` is the five checks that need the pages rather than the files:
+`check:pages` is the six checks that need the pages rather than the files:
 nothing scrolls sideways at 320 and up, the static and live pages still render
 the same shapes, every colour actually painted clears its floor against the
 ground it actually lands on, every class the kit renders matches a rule the
-browser kept, and axe finds nothing across both pages in both themes. They serve `demo/` themselves on an ephemeral
+browser kept, axe finds nothing across both pages in both themes, and the
+components still tell the truth after a keypress. They serve `demo/` themselves on an ephemeral
 port and each counts the controls it found before trusting a green result,
 because a page that never rendered passes every check that measures it.
+
+`check:interaction` is the newest and the narrowest. Everything else measures
+a component at rest, which is how an uncontrolled slider shipped announcing
+the value it mounted with on every arrow press: `aria-valuenow` moved, the
+formatted `aria-valuetext` did not, and `aria-valuetext` is the one a screen
+reader reads. It drives the live page from the keyboard and asserts the text
+follows the value rather than the presses.
 
 Parity counts one thing more. A shape it names and cannot find is a failure
 rather than a match: it compared sizes as strings, an element that is not on

@@ -361,7 +361,7 @@ const [on, setOn] = useState(false);
         h(Section, {
           skin: skinAxis,
           id: 'slider', title: 'Slider',
-          note: 'Arrow keys, Home and End. Gain announces itself in decibels rather than as a bare number.',
+          note: 'Arrow keys, Home and End. Gain announces itself in decibels rather than as a bare number, and Treble does the same without the caller holding any state: format follows the live value whether or not you control it.',
           code: `import { Slider } from '@josueavalosjim/panelware';
 
 const [value, setValue] = useState([40]);
@@ -373,7 +373,11 @@ const [value, setValue] = useState([40]);
   max={100}
   // aria-valuenow alone is only adequate for a bare number
   format={(v) => \`\${v - 50} decibels\`}
-/>`,
+/>
+
+// Uncontrolled works too, and the announced text still tracks the thumb.
+<Slider label="Treble" defaultValue={[60]} max={100}
+  format={(v) => \`\${v - 50} decibels\`} />`,
         },
           h('div', { className: 'demo-stack' },
             h('label', { className: 'demo-field' },
@@ -383,6 +387,12 @@ const [value, setValue] = useState([40]);
               h('span', { className: 'demo-field-label' }, 'Gain'),
               h(Slider, {
                 label: 'Gain', value: gain, onValueChange: setGain, max: 100,
+                format: (v) => `${v - 50} decibels`,
+              })),
+            h('label', { className: 'demo-field' },
+              h('span', { className: 'demo-field-label' }, 'Treble'),
+              h(Slider, {
+                label: 'Treble', defaultValue: [60], max: 100,
                 format: (v) => `${v - 50} decibels`,
               })),
             h('label', { className: 'demo-field' },
