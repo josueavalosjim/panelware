@@ -19,4 +19,10 @@
 @import "./primitive.cyber.css";
 @import "./semantic.cyber.css";
 @import "./skin.cyber.css";
+/* A third skin, and a palette variant rather than a new treatment: it takes
+   the same bevel chrome does, because glow.css is scoped to cyber and every
+   other skin falls through to bevel.css's bare :where(). No treatment file. */
+@import "./primitive.winamp.css";
+@import "./semantic.winamp.css";
+@import "./skin.winamp.css";
 @import "./motion.css";

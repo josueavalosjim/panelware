@@ -11,7 +11,9 @@
       "css/tokens/semantic.chrome.css",
       "css/tokens/theme-auto.css",
       "css/tokens/primitive.cyber.css",
-      "css/tokens/semantic.cyber.css"
+      "css/tokens/semantic.cyber.css",
+      "css/tokens/primitive.winamp.css",
+      "css/tokens/semantic.winamp.css"
     ],
     "themes": [
       {
@@ -50,6 +52,21 @@
           ":root",
           "[data-skin=\"cyber\"]",
           "[data-skin=\"cyber\"][data-theme=\"dark\"]"
+        ]
+      },
+      {
+        "name": "winamp-light",
+        "scopes": [
+          ":root",
+          "[data-skin=\"winamp\"]"
+        ]
+      },
+      {
+        "name": "winamp-dark",
+        "scopes": [
+          ":root",
+          "[data-skin=\"winamp\"]",
+          "[data-skin=\"winamp\"][data-theme=\"dark\"]"
         ]
       }
     ],
@@ -189,7 +206,10 @@
       "demo/demo.css",
       "css/tokens/primitive.cyber.css",
       "css/tokens/semantic.cyber.css",
-      "css/tokens/skin.cyber.css"
+      "css/tokens/skin.cyber.css",
+      "css/tokens/primitive.winamp.css",
+      "css/tokens/semantic.winamp.css",
+      "css/tokens/skin.winamp.css"
     ],
     "allowPrefixes": [
       "--radix-"
@@ -234,6 +254,14 @@
       {
         "name": "cyber-dark",
         "after": "document.documentElement.setAttribute('data-skin', 'cyber'); document.documentElement.setAttribute('data-theme', 'dark')"
+      },
+      {
+        "name": "winamp-light",
+        "after": "document.documentElement.setAttribute('data-skin', 'winamp')"
+      },
+      {
+        "name": "winamp-dark",
+        "after": "document.documentElement.setAttribute('data-skin', 'winamp'); document.documentElement.setAttribute('data-theme', 'dark')"
       }
     ],
     "targets": [

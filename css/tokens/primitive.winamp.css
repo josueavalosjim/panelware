@@ -1,0 +1,47 @@
+/**
+ * PRIMITIVE — the winamp-lineage skin's raw ramp.
+ *
+ * Never referenced outside tokens/. A grey-violet chassis rather than a
+ * neutral one, because that cast is what separates a 1997 media player from a
+ * 1995 dialog box, and it is the thing people actually remember about the
+ * base skin.
+ *
+ * Three hues do information work here, which is one more than either other
+ * skin uses: ice for metadata, gold for the faders, phosphor for the readout.
+ * That was the open question this skin was built to answer, and the contract
+ * already had somewhere to put all three.
+ */
+
+:root {
+  --pw-pewter-000: #ffffff;
+  --pw-pewter-050: #dedee8;   /* light page */
+  --pw-pewter-100: #cbcbd8;   /* light control face */
+  --pw-pewter-200: #b4b4c4;   /* light well */
+  --pw-pewter-400: #8a8a9c;   /* light divider, 2.54:1 on the page */
+  --pw-pewter-500: #6d6d84;   /* dark divider, same 2.54:1 on its own page */
+  --pw-pewter-600: #5f5f70;   /* light boundary and disabled ink */
+  --pw-pewter-700: #9a9ab0;   /* dark boundary and disabled ink */
+  --pw-pewter-800: #3d3d4e;   /* dark control face */
+  --pw-pewter-900: #31313f;   /* dark page */
+  --pw-pewter-950: #1c1c25;   /* dark well */
+  --pw-pewter-990: #16161f;   /* light ink */
+  --pw-pewter-010: #e6e6f0;   /* dark ink */
+
+  --pw-ice-300: #4fd2ff;      /* dark primary, 9.03:1 on the dark page */
+  --pw-ice-800: #1c4f70;      /* light primary */
+
+  --pw-gold-300: #ffd23f;     /* the faders, and dark's warning ink */
+  --pw-gold-800: #7a5300;     /* light's fader */
+
+  --pw-wa-mint-100: #cfeddc;
+  --pw-wa-mint-300: #5ff0a8;
+  --pw-wa-mint-800: #0a5133;
+  --pw-wa-mint-900: #153322;
+  --pw-wa-gold-100: #f6e6c0;
+  --pw-wa-gold-800: #6b4a05;
+  --pw-wa-gold-900: #332708;
+  --pw-wa-rose-100: #f7d9de;
+  --pw-wa-rose-300: #ff8095;
+  --pw-wa-rose-800: #8a1226;
+  --pw-wa-rose-900: #331116;
+}

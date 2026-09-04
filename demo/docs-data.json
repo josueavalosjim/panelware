@@ -2381,6 +2381,366 @@
    "ratio": 7.34,
    "min": 4.5,
    "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 13.45,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 11.19,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 8.78,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 11.19,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 8.74,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 8.74,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 3.89,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 4.68,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 3.89,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-100",
+   "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
+   "ratio": 2.54,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-200",
+   "note": "the same line drawn inside a panel",
+   "ratio": 2.11,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 5.44,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 6.55,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 8.74,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 8.74,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 3.35,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 7.51,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 6.52,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 7.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 10.32,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 8.57,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 13.64,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 8.57,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 10.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 10.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 3.86,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 4.64,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 3.86,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-100",
+   "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
+   "ratio": 2.54,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-200",
+   "note": "the same line drawn inside a panel",
+   "ratio": 2.11,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 6.07,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 7.31,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 10.26,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 10.26,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 11.71,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 9.5,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 10.14,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "winamp-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 7.12,
+   "min": 4.5,
+   "pass": true
   }
  ]
 }

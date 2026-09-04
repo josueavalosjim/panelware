@@ -914,6 +914,192 @@
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 }
 
+/* A third skin, and a palette variant rather than a new treatment: it takes
+   the same bevel chrome does, because glow.css is scoped to cyber and every
+   other skin falls through to bevel.css's bare :where(). No treatment file. */
+/**
+ * PRIMITIVE — the winamp-lineage skin's raw ramp.
+ *
+ * Never referenced outside tokens/. A grey-violet chassis rather than a
+ * neutral one, because that cast is what separates a 1997 media player from a
+ * 1995 dialog box, and it is the thing people actually remember about the
+ * base skin.
+ *
+ * Three hues do information work here, which is one more than either other
+ * skin uses: ice for metadata, gold for the faders, phosphor for the readout.
+ * That was the open question this skin was built to answer, and the contract
+ * already had somewhere to put all three.
+ */
+
+:root {
+  --pw-pewter-000: #ffffff;
+  --pw-pewter-050: #dedee8;   /* light page */
+  --pw-pewter-100: #cbcbd8;   /* light control face */
+  --pw-pewter-200: #b4b4c4;   /* light well */
+  --pw-pewter-400: #8a8a9c;   /* light divider, 2.54:1 on the page */
+  --pw-pewter-500: #6d6d84;   /* dark divider, same 2.54:1 on its own page */
+  --pw-pewter-600: #5f5f70;   /* light boundary and disabled ink */
+  --pw-pewter-700: #9a9ab0;   /* dark boundary and disabled ink */
+  --pw-pewter-800: #3d3d4e;   /* dark control face */
+  --pw-pewter-900: #31313f;   /* dark page */
+  --pw-pewter-950: #1c1c25;   /* dark well */
+  --pw-pewter-990: #16161f;   /* light ink */
+  --pw-pewter-010: #e6e6f0;   /* dark ink */
+
+  --pw-ice-300: #4fd2ff;      /* dark primary, 9.03:1 on the dark page */
+  --pw-ice-800: #1c4f70;      /* light primary */
+
+  --pw-gold-300: #ffd23f;     /* the faders, and dark's warning ink */
+  --pw-gold-800: #7a5300;     /* light's fader */
+
+  --pw-wa-mint-100: #cfeddc;
+  --pw-wa-mint-300: #5ff0a8;
+  --pw-wa-mint-800: #0a5133;
+  --pw-wa-mint-900: #153322;
+  --pw-wa-gold-100: #f6e6c0;
+  --pw-wa-gold-800: #6b4a05;
+  --pw-wa-gold-900: #332708;
+  --pw-wa-rose-100: #f7d9de;
+  --pw-wa-rose-300: #ff8095;
+  --pw-wa-rose-800: #8a1226;
+  --pw-wa-rose-900: #331116;
+}
+
+/**
+ * SEMANTIC — the winamp-lineage skin's colour roles.
+ *
+ * The identical twenty-seven roles the other two skins declare. This one is a
+ * palette variant rather than a new treatment: it takes the same stacked bevel
+ * chrome does, and differs only in these values, which is what a Winamp skin
+ * always was. Thousands of them shipped on one chassis.
+ *
+ * The interesting result is that it needed no new token. Three hues carry
+ * information here where chrome and cyber each use one, and the contract
+ * already had three places to put them: --pw-color-primary for the metadata
+ * ice, --pw-color-range for the gold on the faders, and --pw-color-lcd-content
+ * for the phosphor. primary and range had been the same value in both existing
+ * skins, so nothing had ever tested that they are genuinely separate roles.
+ *
+ * Every pair was computed before the file was written. Both themes clear all
+ * twenty; the dark divider was the only miss, at 1.79:1 against a 2:1 tier,
+ * and moved one rung.
+ */
+
+[data-skin="winamp"],
+[data-skin="winamp"][data-theme="light"] {
+  /* A light theme for a skin that never had one. The chassis lightens and the
+     displays do not: a segment readout is a backlit object, and the base skin's
+     black-and-phosphor panels are the one part that would be wrong to invert. */
+
+  --pw-color-base-100: var(--pw-pewter-050);
+  --pw-color-base-200: var(--pw-pewter-100);
+  --pw-color-base-300: var(--pw-pewter-200);
+  --pw-color-base-content: var(--pw-pewter-990);
+  --pw-color-disabled-content: var(--pw-pewter-600);
+  --pw-color-primary: var(--pw-ice-800);
+  --pw-color-primary-content: var(--pw-pewter-000);
+  --pw-color-focus: var(--pw-ice-800);
+  --pw-color-focus-contrast: var(--pw-pewter-000);
+  --pw-color-range: var(--pw-gold-800);
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+  --pw-color-success: var(--pw-wa-mint-100);
+  --pw-color-success-content: var(--pw-wa-mint-800);
+  --pw-color-warning: var(--pw-wa-gold-100);
+  --pw-color-warning-content: var(--pw-wa-gold-800);
+  --pw-color-error: var(--pw-wa-rose-100);
+  --pw-color-error-content: var(--pw-wa-rose-800);
+  --pw-bevel-light: var(--pw-pewter-000);
+  --pw-bevel-face: var(--pw-pewter-100);
+  --pw-bevel-shade: var(--pw-pewter-400);
+  --pw-bevel-frame: var(--pw-pewter-600);
+  --pw-bevel-boundary: var(--pw-pewter-600);
+  --pw-color-divider: var(--pw-pewter-400);
+  --pw-gloss-lit-base-200: var(--pw-pewter-100);
+  --pw-gloss-lit-primary: var(--pw-ice-800);
+  --pw-color-scrim: rgba(28, 28, 37, 0.62);
+}
+
+[data-skin="winamp"][data-theme="dark"] {
+  /* The base skin as it shipped: grey-violet chassis, black displays. */
+
+  --pw-color-base-100: var(--pw-pewter-900);
+  --pw-color-base-200: var(--pw-pewter-800);
+  --pw-color-base-300: var(--pw-pewter-950);
+  --pw-color-base-content: var(--pw-pewter-010);
+  --pw-color-disabled-content: var(--pw-pewter-700);
+  --pw-color-primary: var(--pw-ice-300);
+  --pw-color-primary-content: var(--pw-pewter-990);
+  --pw-color-focus: var(--pw-ice-300);
+  --pw-color-focus-contrast: var(--pw-pewter-990);
+  --pw-color-range: var(--pw-gold-300);
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+  --pw-color-success: var(--pw-wa-mint-900);
+  --pw-color-success-content: var(--pw-wa-mint-300);
+  --pw-color-warning: var(--pw-wa-gold-900);
+  --pw-color-warning-content: var(--pw-gold-300);
+  --pw-color-error: var(--pw-wa-rose-900);
+  --pw-color-error-content: var(--pw-wa-rose-300);
+  --pw-bevel-light: var(--pw-pewter-700);
+  --pw-bevel-face: var(--pw-pewter-800);
+  --pw-bevel-shade: var(--pw-pewter-950);
+  --pw-bevel-frame: var(--pw-pewter-990);
+  --pw-bevel-boundary: var(--pw-pewter-700);
+  --pw-color-divider: var(--pw-pewter-500);
+  --pw-gloss-lit-base-200: var(--pw-pewter-800);
+  --pw-gloss-lit-primary: var(--pw-ice-300);
+  --pw-color-scrim: rgba(0, 0, 0, 0.66);
+}
+
+/**
+ * SKIN — the winamp-lineage skin's knobs.
+ *
+ * The same ten every skin declares, and the combination is the point: full
+ * bevel depth with the gloss at zero.
+ *
+ * Chrome is bevel 1, gloss 1. Cyber is bevel 0, gloss 0. This is bevel 1,
+ * gloss 0, and until it existed nothing had proved those two were independent
+ * knobs rather than one "how much chrome" switch with a fancy name. A 1997
+ * media player is heavily bevelled and has no Web 2.0 highlight anywhere on
+ * it, because the highlight had not been invented yet.
+ */
+
+[data-skin="winamp"],
+[data-skin="winamp"][data-theme="light"] {
+  --pw-bevel-depth: 1;
+
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 6px;
+  --pw-glow-color: var(--pw-phos-300);
+
+  --pw-glass-blur: 0px;
+
+  --pw-shadow-outer-color: rgba(28, 28, 37, 0.22);
+}
+
+[data-skin="winamp"][data-theme="dark"] {
+  --pw-bevel-depth: 1;
+
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 6px;
+  --pw-glow-color: var(--pw-phos-300);
+
+  --pw-glass-blur: 0px;
+
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0.55);
+}
+
 /**
  * MOTION — a locked scale, and open role assignments.
  *
