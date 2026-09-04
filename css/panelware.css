@@ -3011,6 +3011,24 @@
  */
 
 @layer pw.components {
+
+  /* The mark is pulled in by its own empty cell, so what the eye measures is
+     ink to word rather than box to word.
+
+     Every icon is a 16x16 cell and almost none of them fill it: the check is
+     12 pixels of ink with 2 either side, the exclamation is 2 with 7. With one
+     gap value for all of them the badges measured identically and read nothing
+     alike, 10px of inset before the check against 15 before the exclamation
+     and a 6px gap after one against 11 after the other. Reported as
+     inconsistent padding, which it was, just not in the padding.
+
+     The bearings come from the sheet through the Icon component rather than
+     from a list here, so a redrawn glyph brings its own correction and a new
+     one needs no rule. */
+  .pw-badge .pw-icon {
+    margin-left: calc(var(--pw-icon-ink-l, 0) * -1px * var(--pw-icon-scale));
+    margin-right: calc(var(--pw-icon-ink-r, 0) * -1px * var(--pw-icon-scale));
+  }
   .pw-badge {
     --pw-elev: var(--pw-shadow-sunken);
     display: inline-flex;

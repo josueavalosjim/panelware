@@ -35,9 +35,20 @@ describe('the icon sheet', () => {
   });
 
   test('the index agrees with the sheet, cell for cell', () => {
+    /* deepEqual on the whole entry rather than on its coordinates, so a field
+       added to the index has to be accounted for here rather than silently
+       riding along. It caught the ink bearings the day they were added, which
+       is the behaviour worth keeping. */
     ICON_ORDER.forEach((name, i) => {
-      assert.deepEqual(ICON_INDEX[name],
-        { x: i % ICON_COLS, y: Math.floor(i / ICON_COLS) }, name);
+      const rects = iconRects(name);
+      const left = Math.min(...rects.map((r) => r.x));
+      const right = Math.max(...rects.map((r) => r.x + r.w));
+      assert.deepEqual(ICON_INDEX[name], {
+        x: i % ICON_COLS,
+        y: Math.floor(i / ICON_COLS),
+        l: left,
+        r: ICON_W - right,
+      }, name);
     });
     assert.deepEqual([...INDEX_NAMES], [...ICON_ORDER]);
   });
@@ -310,5 +321,40 @@ describe('a chevron points where its name says', () => {
     assert.ok(doc.includes(`${w}x${h}`), `README does not say ${w}x${h}`);
     const svg = read('assets/icons.svg');
     assert.ok(svg.includes(`viewBox="0 0 ${w} ${h}"`), 'the sheet is not that size');
+  });
+  test('the index carries each glyph\'s ink bearings, measured not guessed', () => {
+    /* Every icon is a 16x16 cell and almost none fill it. The check is 12
+       pixels of ink with 2 either side; the exclamation is 2 with 7. A badge
+       laying them out with one gap value measured identically and read nothing
+       alike: 10px of inset before the check against 15 before the exclamation.
+
+       The bearings are generated from the same rects the sheet is drawn from,
+       so a redrawn glyph brings its own correction. This checks they are the
+       real measurement rather than a copied number. */
+    for (const name of ICON_ORDER) {
+      const cell = ICON_INDEX[name];
+      const rects = iconRects(name);
+      assert.ok(rects.length, `${name} draws nothing`);
+      const left = Math.min(...rects.map((r) => r.x));
+      const right = Math.max(...rects.map((r) => r.x + r.w));
+      assert.equal(cell.l, left, `${name} left bearing`);
+      assert.equal(cell.r, ICON_W - right, `${name} right bearing`);
+      assert.ok(cell.l + cell.r < ICON_W, `${name} bearings cover the whole cell`);
+    }
+  });
+
+  test('the badge subtracts the bearing so the optical gap is even', () => {
+    /* Verified in a browser at the time: all four badges went from 10/6, 15/11,
+       11/7 and 13/9 pixels of edge-to-ink and ink-to-word to exactly 8 and 4.
+       The rule reads the bearings off the element rather than naming glyphs,
+       so a new mark needs no rule and a redrawn one needs no edit. */
+    const css = read('css/components/badge.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    const rule = css.match(/\.pw-badge \.pw-icon\s*\{[^}]*\}/);
+    assert.ok(rule, 'the badge does not compensate for its mark\'s bearings');
+    assert.match(rule[0], /margin-left:\s*calc\([^)]*--pw-icon-ink-l/);
+    assert.match(rule[0], /margin-right:\s*calc\([^)]*--pw-icon-ink-r/);
+    /* Scaled, or the correction is wrong at --pw-icon-scale: 2. */
+    assert.match(rule[0], /--pw-icon-scale/);
+    assert.match(read('src/icon.tsx'), /--pw-icon-ink-l/);
   });
 });

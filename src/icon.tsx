@@ -38,6 +38,12 @@ export function Icon({ name, label, decorative, className, ...rest }: IconProps)
       style={{
         ['--pw-icon-x' as string]: cell.x,
         ['--pw-icon-y' as string]: cell.y,
+        /* Unitless, because the stylesheet owns every pixel dimension and
+           taste-check's treatments check would flag a px literal arriving
+           through markup. A component that wants an even optical gap beside
+           a word multiplies these; one that does not, ignores them. */
+        ['--pw-icon-ink-l' as string]: cell.l,
+        ['--pw-icon-ink-r' as string]: cell.r,
       }}
     />
   );

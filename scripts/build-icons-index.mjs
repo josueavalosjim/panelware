@@ -19,14 +19,39 @@ import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { ICON_COLS, ICON_ORDER } from '../assets/icon-font.mjs';
+import { ICON_COLS, ICON_ORDER, ICON_W, iconRects } from '../assets/icon-font.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+
+/**
+ * How much empty cell sits either side of a glyph's ink.
+ *
+ * Every icon is a 16x16 cell and almost none of them fill it. The check is 12
+ * pixels of ink with 2 either side; the exclamation is 2 with 7. Laid out with
+ * one gap value they are mechanically identical and optically nothing alike:
+ * measured in the badge row, the same 8px padding and 4px gap produced a 10px
+ * inset before the check and 15px before the exclamation, and a 6px gap after
+ * one against 11px after the other.
+ *
+ * The sheet already knows this, so it may as well say it. A component placing
+ * a mark beside a word can subtract the bearing and get an even optical gap
+ * without hard-coding anything about which mark it was given.
+ */
+function bearings(name) {
+  const rects = iconRects(name);
+  if (!rects.length) return { l: 0, r: 0 };
+  const left = Math.min(...rects.map((r) => r.x));
+  const right = Math.max(...rects.map((r) => r.x + r.w));
+  return { l: left, r: ICON_W - right };
+}
 
 export function iconsIndex() {
   const union = ICON_ORDER.map((n) => `'${n}'`).join(' | ');
   const entries = ICON_ORDER
-    .map((n, i) => `  '${n}': { x: ${i % ICON_COLS}, y: ${Math.floor(i / ICON_COLS)} },`)
+    .map((n, i) => {
+      const b = bearings(n);
+      return `  '${n}': { x: ${i % ICON_COLS}, y: ${Math.floor(i / ICON_COLS)}, l: ${b.l}, r: ${b.r} },`;
+    })
     .join('\n');
   const names = ICON_ORDER.map((n) => `  '${n}',`).join('\n');
 
@@ -44,6 +69,9 @@ export type IconName =
 export interface IconCell {
   x: number;
   y: number;
+  /** Empty cell columns to the left of the ink, and to the right. */
+  l: number;
+  r: number;
 }
 
 export const ICON_INDEX: Record<IconName, IconCell> = {
