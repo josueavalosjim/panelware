@@ -55,10 +55,16 @@
       ToggleGroup, ToggleGroupItem, Transport, TransportButton, Window,
     } from '../dist/index.js';
 
-    const Section = ({ id, title, note, code, children }) =>
+    /* `note` may be a string or a map keyed by skin. Most notes describe
+       behaviour and read the same under any skin; a few describe the
+       treatment, and those were describing chrome's while the cyber skin was
+       on screen. "The bevel flips and the face drops a pixel" above a control
+       with no bevel is a docs page arguing with itself. */
+    const Section = ({ id, title, note, code, children, skin }) =>
       h('section', { className: 'demo-section', id },
         h('h2', { className: 'demo-heading' }, title),
-        h('p', { className: 'demo-note' }, note),
+        h('p', { className: 'demo-note' },
+          typeof note === 'string' ? note : (note[skin] ?? note.chrome)),
         h('div', { className: 'demo-row' }, children),
         code ? h(Code, null, code) : null);
 
@@ -195,8 +201,12 @@
               h(SelectItem, { value: 'cyber' }, 'Cyber')))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'buttons', title: 'Button',
-          note: 'Press one. The bevel flips and the face drops a pixel; the gloss dims only on the control that sinks.',
+          note: {
+            chrome: 'Press one. The bevel flips and the face drops a pixel; the gloss dims only on the control that sinks.',
+            cyber: 'Press one. The face drops a pixel and the hairline stays put. There is no bevel to flip and no gloss to dim: this skin sets both knobs to zero and the treatment collapses without a component knowing.',
+          },
           code: `import { Button } from '@josueavalosjim/panelware';
 
 <Button>Open</Button>
@@ -216,6 +226,7 @@
             h('a', { href: './states.html' }, 'asChild, as a link'))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'field', title: 'Form controls',
           note: 'The label is part of the target: clicking the words works, which is native behaviour a hand-rolled checkbox routinely loses. The radio is the one round thing in the kit, because the shape is what tells you it is a choose-one before you have read a word. The combo box is a sunken field with a raised drop button, which is what makes it read as something you can open.',
           code: `import { Field, Checkbox, RadioGroup, Radio, Select, SelectItem }
@@ -257,8 +268,12 @@
               h(SelectItem, { value: 'null', disabled: true }, 'Null output')))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'toggle', title: 'Toggle',
-          note: 'On is sunken and heavier. Both the data state and the ARIA state change together, which is what the CSS keys off.',
+          note: {
+            chrome: 'On is sunken and heavier. Both the data state and the ARIA state change together, which is what the CSS keys off.',
+            cyber: 'On is recessed and heavier. The inner shadow replaces the flipped bevel, so the state is still carried by depth and weight rather than by colour alone.',
+          },
           code: `import { Toggle } from '@josueavalosjim/panelware';
 
 const [on, setOn] = useState(false);
@@ -270,6 +285,7 @@ const [on, setOn] = useState(false);
           h(Toggle, { disabled: true }, 'Crossfade')),
 
         h(Section, {
+          skin: skinAxis,
           id: 'tabs', title: 'Tabs',
           note: 'Tab enters the strip once; the arrow keys move selection. Radix supplies the roving tabindex and both aria references.',
           code: `import { Tabs, TabList, Tab, TabPanel } from '@josueavalosjim/panelware';
@@ -295,6 +311,7 @@ const [on, setOn] = useState(false);
               h(TabPanel, { value: 'list' }, 'Queue and history.')))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'dialog', title: 'Dialog',
           note: 'Opens with focus inside it, traps Tab, closes on Escape, and returns focus to the trigger. All of that is Radix.',
           code: `import { Dialog, DialogTrigger, DialogPanel, Button }
@@ -315,6 +332,7 @@ const [on, setOn] = useState(false);
               h('p', null, 'Press Escape, or Tab to the close button. Focus goes back to the trigger either way.')))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'slider', title: 'Slider',
           note: 'Arrow keys, Home and End. Gain announces itself in decibels rather than as a bare number.',
           code: `import { Slider } from '@josueavalosjim/panelware';
@@ -345,6 +363,7 @@ const [value, setValue] = useState([40]);
               h(Slider, { label: 'Balance', defaultValue: [30], max: 100, disabled: true })))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'window', title: 'Window chrome',
           note: 'A title bar, its controls, and the chassis. The dialog uses the same bar: a dialog is a window that happens to be modal. Controls only render when you pass a handler, so nothing here is a dead button.',
           code: `import { Window } from '@josueavalosjim/panelware';
@@ -364,6 +383,7 @@ const [value, setValue] = useState([40]);
               'The title bar does not pretend to drag. There is no window to move, and a handle that looks draggable and is not is the same failure as a button that looks pressable and is not.')))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'transport', title: 'Transport and seek',
           note: 'A Radix Toolbar, so Tab enters the cluster once and the arrow keys move inside it. Icon-only is the one exception the kit allows, and it is paid for: every button requires a label and it becomes the accessible name.',
           code: `import { Transport, TransportButton, Progress }
@@ -403,6 +423,7 @@ const [value, setValue] = useState([40]);
               })))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'list', title: 'Playlist',
           note: 'A listbox. Click a row or arrow through it; Enter or a double click plays. Selected and playing are separate states, because you scroll a selection past the playing track constantly. The playing row carries a mark and a weight, not only a colour: Winamp colour-codes its rows and that is the one thing here not taken from it.',
           code: `import { List } from '@josueavalosjim/panelware';
@@ -428,6 +449,7 @@ const [value, setValue] = useState([40]);
             }))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'menubar', title: 'Menu bar',
           note: 'Radix Menubar, so the bar is one tab stop and the arrow keys do the rest: between triggers, into a menu, through its items, into a submenu. Escape closes. Type a letter to jump. The bar itself is flat and a trigger inverts when its menu is open, which is what separates "this menu is showing" from "this button is pressed".',
           code: `import { Menubar, Menu, MenuTrigger, MenuContent, MenuItem,
@@ -487,6 +509,7 @@ const [value, setValue] = useState([40]);
                   h(MenuItem, null, 'About panelware')))))),
 
         h(Section, {
+          skin: skinAxis,
           id: 'equalizer', title: 'Equaliser',
           note: 'Ten independent bands, not a multi-thumb slider. A multi-thumb slider is a range and re-sorts its thumbs, so driving one band would silently renumber it into another. Each band keeps its own name and value. Gain is announced in decibels, because a bare signed number is not something you can hear the sign of.',
           code: `import { Equalizer } from '@josueavalosjim/panelware';
@@ -513,6 +536,7 @@ const [value, setValue] = useState([40]);
           })),
 
         h(Section, {
+          skin: skinAxis,
           id: 'badge', title: 'Status badge',
           note: 'A glyph and a word, every time. There is no prop that reduces one to a coloured dot.',
           code: `import { Badge } from '@josueavalosjim/panelware';
@@ -529,6 +553,7 @@ const [value, setValue] = useState([40]);
           h(Badge, null, 'Idle')),
 
         h(Section, {
+          skin: skinAxis,
           id: 'spinner', title: 'Spinner',
           note: 'Eight cells on the sheet, stepped. Not one glyph rotated: only a quarter turn is exact on a pixel grid, so the other seven positions are drawn. Under reduced motion it slows rather than stops, because a stopped spinner reads as a hung process.',
           code: `import { Spinner } from '@josueavalosjim/panelware';
@@ -541,16 +566,19 @@ const [value, setValue] = useState([40]);
           h(Spinner, { label: 'Loading playlist' })),
 
         h(Section, {
+          skin: skinAxis,
           id: 'tokens', title: 'Tokens',
           note: 'The whole contract, generated from the same files the gate reads, so this table cannot drift from the build. A value shown as a colour is the literal a var() chain lands on; the declared value is usually another token.',
         }, docs ? h(TokenTable, { groups: docs.groups }) : h('p', { className: 'demo-note' }, 'loading')),
 
         h(Section, {
+          skin: skinAxis,
           id: 'contrast', title: 'Measured contrast',
           note: 'Every pair the gate checks, with the ratio it actually measured rather than the one the palette was designed for. These run on every build and the build fails if one drops under its floor. No other kit publishes this, and the only work was writing down numbers we already compute.',
         }, docs ? h(ContrastTable, { rows: docs.contrast }) : h('p', { className: 'demo-note' }, 'loading')),
 
         h(Section, {
+          skin: skinAxis,
           id: 'lcd', title: 'Readout',
           note: 'An image of text, so it carries its string as a name rather than as a live region. The marquee has a real pause button, because pausing on hover is not a mechanism a keyboard user has.',
           code: `import { Readout } from '@josueavalosjim/panelware';

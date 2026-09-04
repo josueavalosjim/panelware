@@ -225,6 +225,15 @@
         "name": "dark",
         "$comment": "after, not before. before runs ahead of the page's own scripts, which means ahead of the document existing, so document.documentElement is null and the attribute is never set. The check then measures the light palette and reports a clean pass for a theme it never entered. It did exactly that here before this line moved.",
         "after": "document.documentElement.setAttribute('data-theme', 'dark')"
+      },
+      {
+        "name": "cyber-light",
+        "$comment": "The second skin, measured off the rendered page rather than only from the declared tokens. The contrast block reads the token files and would pass a skin whose components never actually receive its values; this reads what the browser painted.",
+        "after": "document.documentElement.setAttribute('data-skin', 'cyber')"
+      },
+      {
+        "name": "cyber-dark",
+        "after": "document.documentElement.setAttribute('data-skin', 'cyber'); document.documentElement.setAttribute('data-theme', 'dark')"
       }
     ],
     "targets": [
