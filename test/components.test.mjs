@@ -16,7 +16,7 @@ import { renderToStaticMarkup as render } from 'react-dom/server';
 import { describe, test } from 'node:test';
 
 import {
-  Badge, Button, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
+  Badge, Button, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle, Window,
 } from '../dist/index.js';
 
 describe('button', () => {
@@ -212,5 +212,62 @@ describe('tabs', () => {
       h(TabList, null, h(Tab, { value: 'a' }, 'A'), h(Tab, { value: 'b' }, 'B')),
       h(TabPanel, { value: 'a' }, 'panel a')));
     assert.match(html, /tabindex="-1"/);
+  });
+});
+
+describe('window', () => {
+  /* The name of the region is the whole point of these. A <section> with no
+     accessible name is not an unlabelled region, it is not a region: the
+     browser drops it to role="generic". check-a11y measures the computed name
+     in a real browser, which is the assertion that matters; these are the
+     cheap half that runs without one, and they check the wiring that name
+     depends on. */
+  const idOf = (html) => html.match(/aria-labelledby="([^"]+)"/)?.[1];
+
+  test('the section is named by its own title', () => {
+    const html = render(h(Window, { title: 'Playlist' }, 'body'));
+    const id = idOf(html);
+    assert.ok(id, 'no aria-labelledby, so the section is not a region at all');
+    assert.match(html, new RegExp(`<h2 class="pw-title" id="${id}">Playlist</h2>`));
+  });
+
+  test('the id it points at is on the page', () => {
+    /* aria-labelledby pointing at nothing reads as correct markup and
+       resolves to no name, which is the failure this cannot be allowed to
+       pass. */
+    const html = render(h(Window, { title: 'Playlist' }, 'body'));
+    assert.ok(html.includes(`id="${idOf(html)}"`));
+  });
+
+  test('two windows on a page do not share one id', () => {
+    const html = render(h('div', null,
+      h(Window, { title: 'One' }, 'a'),
+      h(Window, { title: 'Two' }, 'b')));
+    const ids = [...html.matchAll(/aria-labelledby="([^"]+)"/g)].map((m) => m[1]);
+    assert.equal(ids.length, 2);
+    assert.notEqual(ids[0], ids[1], 'both sections point at the same heading');
+  });
+
+  test('a caller who names it another way is not overridden', () => {
+    /* aria-labelledby sits before the spread for this. A component that
+       insisted on its own name would make a window inside a labelled dialog
+       announce the wrong one. */
+    const html = render(h(Window, { title: 'Playlist', 'aria-labelledby': 'mine' }, 'b'));
+    assert.match(html, /aria-labelledby="mine"/);
+  });
+
+  test('the heading level is the caller\'s, and 2 when they do not say', () => {
+    /* Hard-coded h2 is right under a page h1 and wrong everywhere else, and a
+       component that can be placed anywhere cannot know. */
+    assert.match(render(h(Window, { title: 'x' }, 'b')), /<h2 class="pw-title"/);
+    assert.match(render(h(Window, { title: 'x', titleLevel: 4 }, 'b')), /<h4 class="pw-title"/);
+  });
+
+  test('a control renders only when it has somewhere to go', () => {
+    const bare = render(h(Window, { title: 'x' }, 'b'));
+    assert.doesNotMatch(bare, /pw-title-button/);
+    const full = render(h(Window, { title: 'x', onClose: () => {} }, 'b'));
+    assert.match(full, /aria-label="Close"/);
+    assert.doesNotMatch(full, /aria-label="Minimise"/);
   });
 });

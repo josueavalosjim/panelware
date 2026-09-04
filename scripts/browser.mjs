@@ -60,6 +60,29 @@ export async function withPage(fn, { width = 1100, height = 900, settle = 900 } 
       }
       return page.settle(60);
     };
+    /* What the browser itself computed, rather than what the markup implies.
+       An accessible name is the end of a long resolution: aria-labelledby to
+       an id that has to exist, then aria-label, then content, then nothing.
+       Reading the attributes back only proves the attributes are there. This
+       is the one measurement that answers whether a screen reader would say
+       anything, and it found a <section> the kit believed was a named region
+       sitting in the tree as role="generic" with no name at all. */
+    page.ax = async (selector) => {
+      await page.send('Accessibility.enable');
+      const { root } = await page.send('DOM.getDocument', { depth: -1 });
+      const { nodeIds } = await page.send('DOM.querySelectorAll', {
+        nodeId: root.nodeId, selector,
+      });
+      const out = [];
+      for (const nodeId of nodeIds) {
+        const { nodes } = await page.send('Accessibility.getPartialAXTree', {
+          nodeId, fetchRelatives: false,
+        });
+        const n = nodes.find((x) => x.backendDOMNodeId !== undefined) ?? nodes[0];
+        out.push({ role: n?.role?.value ?? null, name: n?.name?.value ?? '', ignored: !!n?.ignored });
+      }
+      return out;
+    };
     return await fn(page);
   } finally {
     await page.close();

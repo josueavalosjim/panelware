@@ -1,5 +1,80 @@
 # Changelog
 
+## 0.1.3
+
+Two gates that reported green without having looked.
+
+The parity check compared the shapes on `demo/states.html` and
+`demo/index.html` as strings, and an element that is not on the page measured
+as nothing. Two nothings agreed, so a component deleted from both pages left
+the check green while it claimed to be comparing it. Deleting the badge from
+both pages is now two failures rather than a pass. Its only liveness test was
+a single slider sentinel, which is now the same control count the other four
+page checks use, and its report line was an expression that could only ever
+print `all`, so it never said how many shapes it had compared. The comparison
+is a pure function with tests on it now, because that is where the bug was and
+a page-driving check cannot be tested by driving pages.
+
+A tag push ran `npm test` and the palette check and nothing else. Overflow,
+parity, colour, CSSOM and axe gated `main` and pull requests only, so a release
+could ship with a red axe run. The publish workflow calls the test workflow now
+rather than restating a shorter version of it, because a second list is a list
+that drifts, and what had drifted off the first one was every check that needs
+a browser.
+
+`prepublishOnly` regenerates the stylesheet bundle, the token sheet, the icon
+index and the docs data after every check has finished, which made the bytes in
+the tarball the one artifact nothing had verified. That is structurally how
+0.1.0 shipped broken, moved one step later. CI builds first and asserts the
+committed files are byte-identical to what the generators produce, so that
+rebuild is a no-op that has been proved to be one.
+
+The fixture that must fail, which is what certifies the contrast gate measures
+anything, was in both workflows and in neither the release script nor anyone's
+hands. It is `npm run check:gate` now and runs in all three.
+
+### A Window was not a region
+
+`<Window>` rendered a `<section>` with an `<h2>` inside it and no
+`aria-labelledby`, and a heading inside an element does not name the element.
+A `<section>` with no accessible name is not an unlabelled region: it is not a
+region. The browser's accessibility tree gave the whole window
+`role="generic"` with an empty name, while the prop doc one line above
+promised "an unlabelled region". It was not even that.
+
+The section is named by its own title bar now. The title's heading level is a
+prop, `titleLevel`, defaulting to the 2 it was hard-coded to: a component that
+can be placed anywhere cannot know its own level, and the demo's windows sit
+under section headings, so they are 3s.
+
+axe had nothing to say about this and never will, because a nameless section
+is not a landmark it can find fault with. So `check:a11y` reads the computed
+role and name out of the browser's accessibility tree for the elements the kit
+claims are named regions, which is the only measurement that answers whether a
+screen reader would say anything. `<Window>` had no unit tests at all; it has
+six now, covering the wiring that name depends on.
+
+### An uncontrolled Slider announced the wrong number
+
+`Slider` computed its `aria-valuetext` from `value ?? defaultValue`. That is
+right for a controlled slider and frozen for an uncontrolled one, because
+`defaultValue` never changes: Radix moved `aria-valuenow` on every arrow press
+while the formatted text stayed at the value the slider mounted with. This is
+not a degraded announcement but a wrong one, since `aria-valuetext` wins over
+`aria-valuenow` in every screen reader. Measured before the fix, three presses
+took a slider from 70 to 73 while it kept announcing "20 decibels".
+
+The component keeps its own copy of the value now and reads the caller's when
+there is one. `format` follows the thumb in both control modes.
+
+It survived a suite that asserts on `aria-valuetext`, because that test
+renders statically and every formatted slider in the demo was controlled: the
+kit demonstrated only the arrangement in which the bug cannot appear. The demo
+shows the uncontrolled one now, and `npm run check:interaction` drives both
+from the keyboard. It is the sixth page check and the first that presses a
+key, which is a gap rather than a feature: `browser.mjs` had no input
+primitive, so no check here had ever seen a component after it was used.
+
 ## 0.1.2
 
 Documentation only. No code changed, and the release exists because npm renders

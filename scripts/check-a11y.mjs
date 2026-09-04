@@ -51,6 +51,8 @@ const RUN = `axe.run(document, {
 /* Every look the kit ships, as a skin and an optional preset. Not a cross
    product: a preset is nested inside its skin, so pairing one with another
    skin is not a combination that exists. */
+const PAGES = ['demo/states.html', 'demo/index.html'];
+
 const LOOKS = [
   { skin: 'chrome' },
   { skin: 'chrome', preset: 'deck' },
@@ -60,7 +62,7 @@ const LOOKS = [
 const failures = [];
 let checked = 0;
 await withDemo(async (p, base) => {
-  for (const page of ['demo/states.html', 'demo/index.html']) {
+  for (const page of PAGES) {
     for (const look of LOOKS) {
       const skin = look.preset ? `${look.skin}+${look.preset}` : look.skin;
       for (const theme of ['light', 'dark']) {
@@ -89,5 +91,54 @@ await withDemo(async (p, base) => {
   }
 });
 
+/**
+ * The names axe cannot ask about.
+ *
+ * A <section> with no accessible name is not a landmark that axe can find
+ * fault with. It is not a landmark at all: the browser drops it to
+ * role="generic" and there is nothing left to report. So the rule that would
+ * catch this does not exist, and the only way to see it is to ask the browser
+ * what it computed. <Window> shipped that way while its own prop doc promised
+ * "an unlabelled region", and it was not even that.
+ *
+ * Reading the attributes back would not do. An accessible name is the end of
+ * a resolution that can fail at every step, and aria-labelledby pointing at
+ * an id that is not on the page looks perfectly correct in the markup.
+ *
+ * Names do not vary by theme or skin, so this runs once per page rather than
+ * twelve times.
+ */
+const NAMED = [
+  { selector: '.pw-window', role: 'region', why: 'a window is a region or it is nothing' },
+  { selector: '.pw-eq', role: 'group', why: 'ten bands that belong to each other' },
+  { selector: '.pw-list', role: 'listbox', why: 'a listbox with no name is an unnamed choice' },
+];
+
+let named = 0;
+await withDemo(async (p, base) => {
+  for (const page of PAGES) {
+    await p.goto(`${base}/${page}`);
+    await p.settle(page.includes('index') ? 1800 : 900);
+    for (const { selector, role, why } of NAMED) {
+      const found = await p.ax(selector);
+      if (!found.length) {
+        failures.push(`${page}: no ${selector} on the page, so its name was never checked`);
+        continue;
+      }
+      for (const got of found) {
+        named += 1;
+        if (got.role !== role) {
+          failures.push(`${page} ${selector}: the browser computed role="${got.role}", not "${role}" ` +
+            `(${why})`);
+        } else if (!got.name.trim()) {
+          failures.push(`${page} ${selector}: role="${got.role}" with no accessible name, ` +
+            `so a screen reader announces nothing for it (${why})`);
+        }
+      }
+    }
+  }
+});
+
 report('a11y', failures, `${checked} page/look/theme combinations scanned by axe ${
-  JSON.parse(readFileSync(new URL('../node_modules/axe-core/package.json', import.meta.url), 'utf8')).version}`);
+  JSON.parse(readFileSync(new URL('../node_modules/axe-core/package.json', import.meta.url), 'utf8')).version
+}, and ${named} accessible names the browser computed`);

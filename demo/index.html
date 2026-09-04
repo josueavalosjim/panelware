@@ -402,18 +402,21 @@ const [value, setValue] = useState([40]);
         h(Section, {
           skin: skinAxis,
           id: 'window', title: 'Window chrome',
-          note: 'A title bar, its controls, and the chassis. The dialog uses the same bar: a dialog is a window that happens to be modal. Controls only render when you pass a handler, so nothing here is a dead button.',
+          note: 'A title bar, its controls, and the chassis. The dialog uses the same bar: a dialog is a window that happens to be modal. Controls only render when you pass a handler, so nothing here is a dead button. The section is named by its own title, which is what makes it a region rather than a div: a heading inside an element does not name the element.',
           code: `import { Window } from '@josueavalosjim/panelware';
 
 // A control only renders when you pass its handler, so there are no dead
 // buttons in a window that cannot be minimised.
-<Window title="Playlist" onMinimize={min} onMaximize={max} onClose={close}>
+// titleLevel is the heading the title renders at, and 2 when you leave it.
+// It sits under this page's section headings, so here it is a 3.
+<Window title="Playlist" titleLevel={3}
+  onMinimize={min} onMaximize={max} onClose={close}>
   <p>Body content.</p>
 </Window>`,
         },
           h('div', { className: 'demo-stack' },
           h(Window, {
-            title: 'Playlist',
+            title: 'Playlist', titleLevel: 3,
             onMinimize: () => {}, onMaximize: () => {}, onClose: () => {},
           },
             h('p', { style: { margin: 0 } },

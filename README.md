@@ -457,6 +457,16 @@ components still tell the truth after a keypress. They serve `demo/` themselves 
 port and each counts the controls it found before trusting a green result,
 because a page that never rendered passes every check that measures it.
 
+`check:a11y` does one thing axe cannot. A `<section>` with no accessible name
+is not a landmark axe can fault, because it is not a landmark: the browser
+drops it to `role="generic"` and there is nothing left to report. `<Window>`
+shipped that way while its own prop doc promised "an unlabelled region". So
+the check reads the computed role and name out of the browser's accessibility
+tree for the elements the kit claims are named regions. Reading the
+attributes back would not do it, because `aria-labelledby` pointing at an id
+that is not on the page looks perfectly correct in the markup and resolves to
+no name at all.
+
 `check:interaction` is the newest and the narrowest. Everything else measures
 a component at rest, which is how an uncontrolled slider shipped announcing
 the value it mounted with on every arrow press: `aria-valuenow` moved, the
