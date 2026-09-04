@@ -159,13 +159,13 @@ A skin is a treatment. A preset is a palette inside one.
 `data-theme`, `data-density` and `data-skin` are orthogonal: every combination
 of them means something, and each is an attribute you can set on any element
 rather than only on the root. `data-preset` is not orthogonal, and it is
-deliberately not a fourth axis. Winamp is a palette for the chrome skin; asking
+deliberately not a fourth axis. The deck preset is a palette for the chrome skin; asking
 for it under the cyberpunk skin is not a combination that exists.
 
 So a preset is scoped under its skin:
 
 ```css
-[data-skin="chrome"][data-preset="winamp"] { /* ... */ }
+[data-skin="chrome"][data-preset="deck"] { /* ... */ }
 ```
 
 which means an incoherent pairing simply matches nothing and the page falls
@@ -184,7 +184,7 @@ a different skin wearing a preset's name. Nothing enforces that yet.
 
 The line between the two is whether a treatment file is involved. The cyber
 skin ships `css/treatment/glow.css` and replaces what goes in the elevation
-slot. The winamp preset ships no CSS at all beyond its own values: it takes the
+slot. The deck preset ships no CSS at all beyond its own values: it takes the
 stacked bevel by simply not being cyber. A preset is one file, and that file is
 the whole of it, ramp and roles and any knob it wants moved.
 
