@@ -427,6 +427,7 @@ npm run generate      # sheets, icon index, stylesheet bundle, docs data
 npm run build         # generate, then tsc
 npm test              # compile and check, WITHOUT regenerating
 npm run check         # the palette gate: contrast, tokens, one-off values
+npm run check:gate    # the fixture that must fail, so the gate above is real
 npm run check:runtime # the same, measured off the rendered page
 npm run check:pages   # overflow, parity, painted pairs, CSSOM coverage, axe
 npm run serve         # the demo, on 4173, with Cache-Control: no-store
@@ -454,6 +455,12 @@ ground it actually lands on, every class the kit renders matches a rule the
 browser kept, and axe finds nothing across both pages in both themes. They serve `demo/` themselves on an ephemeral
 port and each counts the controls it found before trusting a green result,
 because a page that never rendered passes every check that measures it.
+
+Parity counts one thing more. A shape it names and cannot find is a failure
+rather than a match: it compared sizes as strings, an element that is not on
+the page measured as nothing, and two nothings agreed, so a component deleted
+from both demo pages left the check green while it claimed to be comparing
+it.
 
 Serve the demo with `npm run serve` rather than any other static server. The
 one thing it does that matters is send `Cache-Control: no-store`, and it was

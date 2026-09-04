@@ -18,6 +18,7 @@ import { describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { exportedPaths, missingFromPack, packedFiles } from '../scripts/check-exports.mjs';
+import { disagreements, scannedLine } from '../scripts/check-parity.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
@@ -583,5 +584,59 @@ describe('the names this kit ships', () => {
       }
     }
     assert.deepEqual(offenders, []);
+  });
+});
+
+describe('what the parity check calls a disagreement', () => {
+  /* The hole this closes: box() returned null for an element that is not on
+     the page, and the comparison was JSON.stringify(a) !== JSON.stringify(b),
+     so a shape missing from BOTH demo pages compared "null" against "null"
+     and agreed. Deleting the badge from both pages left the check green while
+     it claimed to be comparing the badge.
+
+     Testing the comparison rather than the run is the whole point. Driving
+     two pages in a browser to prove a string equality is slow and would not
+     have caught this anyway: the bug was in the pure part. */
+  const page = (shapes, probes = { hitAt15: true }) => ({ controls: 8, shapes, probes });
+
+  test('a shape on neither page fails rather than matching itself', () => {
+    const got = disagreements(page({ badge: null }), page({ badge: null }));
+    assert.deepEqual(got, ['badge is on neither page, so nothing compared it']);
+  });
+
+  test('a shape on one page names the page it is missing from', () => {
+    assert.deepEqual(disagreements(page({ badge: '90x22' }), page({ badge: null })),
+      ['badge is missing from index.html']);
+    assert.deepEqual(disagreements(page({ badge: null }), page({ badge: '90x22' })),
+      ['badge is missing from states.html']);
+  });
+
+  test('shapes that differ still report both sides', () => {
+    assert.deepEqual(disagreements(page({ badge: '90x22' }), page({ badge: '90x24' })),
+      ['badge: states.html "90x22", index.html "90x24"']);
+  });
+
+  test('probes are compared, not only sizes', () => {
+    const a = { controls: 8, shapes: { badge: '90x22' }, probes: { hitAt15: true } };
+    const b = { controls: 8, shapes: { badge: '90x22' }, probes: { hitAt15: false } };
+    assert.deepEqual(disagreements(a, b), ['hitAt15: states.html true, index.html false']);
+  });
+
+  test('a page that never rendered says so once, not seventeen times', () => {
+    /* index.html boots React from esm.sh. With no network it loads, throws in
+       a module nobody is listening to, and leaves an empty <main> behind:
+       every shape then reads as missing, which is a true statement that hides
+       the one useful one. */
+    const dead = { controls: 0, shapes: { badge: null, button: null }, probes: null };
+    const got = disagreements(page({ badge: '90x22', button: '80x24' }), dead);
+    assert.equal(got.length, 1);
+    assert.match(got[0], /^index\.html rendered 0 controls/);
+  });
+
+  test('a green run reports how many shapes it compared', () => {
+    /* The old line was Object.keys(JSON.parse('{}')).length || 'all', which
+       always evaluated to 'all' and had never reported a count. */
+    assert.equal(scannedLine(page({ badge: '90x22', button: '80x24' })),
+      '3 shared shapes across 2 pages');
   });
 });

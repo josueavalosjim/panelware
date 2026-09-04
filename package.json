@@ -52,6 +52,7 @@
     "build": "npm run generate && tsc",
     "test": "tsc && node --test \"test/**/*.test.mjs\"",
     "check": "taste-check",
+    "check:gate": "node scripts/check-gate.mjs",
     "check:runtime": "node scripts/runtime.mjs",
     "check:overflow": "node scripts/check-overflow.mjs",
     "check:parity": "node scripts/check-parity.mjs",
@@ -61,7 +62,7 @@
     "check:exports": "node scripts/check-exports.mjs",
     "check:pages": "npm run check:overflow && npm run check:parity && npm run check:colour && npm run check:cssom && npm run check:a11y",
     "prepublishOnly": "npm run build",
-    "release": "npm test && npm run check && npm run check:runtime && npm run check:pages && npm run check:exports && npm version ${LEVEL:-patch} -m \"Release %s\" && git push --follow-tags",
+    "release": "npm test && npm run check && npm run check:gate && npm run check:runtime && npm run check:pages && npm run check:exports && npm version ${LEVEL:-patch} -m \"Release %s\" && git push --follow-tags",
     "serve": "node scripts/serve.mjs"
   },
   "engines": {

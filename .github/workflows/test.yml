@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  # publish.yml calls this, so a tag runs the same gate a pull request does
+  # rather than a shorter list somebody kept in step with this one by hand.
+  workflow_call:
 
 jobs:
   test:
@@ -20,6 +23,24 @@ jobs:
 
       - run: npm ci
 
+      # prepublishOnly runs `npm run build` again after every check below has
+      # finished, so without this the generated bundles in the tarball are the
+      # one artifact nothing verified. Building first and asserting no diff
+      # makes that rebuild a no-op that has been proved to be one, and every
+      # check below then measures the exact bytes that ship.
+      #
+      # The order is load-bearing. Several tests compare a committed artifact
+      # against what its source produces, and regenerating before them would
+      # normally rewrite the file immediately before the comparison, which is
+      # the trap `npm test` exists not to fall into. It is safe here only
+      # because the diff has already established the two are identical.
+      #
+      # It also gives demo/index.html its dist/ for the page checks, which
+      # until now they got as a side effect of tsc inside npm test.
+      - run: npm run build
+      - name: the committed bundles are what the generators produce
+        run: git diff --exit-code -- css/ src/icons.ts demo/docs-data.json
+
       # The contract: both themes declare the same token set, theme-auto has
       # not drifted from the dark block, no bevel offset is a literal, and the
       # committed sheets are what the font data draws.
@@ -35,11 +56,7 @@ jobs:
       # which it misses at 1.47:1 by design, so this is also where the
       # exemption is recorded in a form the build would notice being deleted.
       - name: the gate still fires
-        run: |
-          if npx taste-check --config test/fixture/fail.tastecheck.json; then
-            echo "the failing fixture passed, so the contrast check is not checking"
-            exit 1
-          fi
+        run: npm run check:gate
 
       # A missing Chromium must not read as a clean run. scripts/runtime.mjs
       # exits non-zero rather than skipping, so this needs no separate guard.
