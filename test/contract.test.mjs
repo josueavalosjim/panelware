@@ -12,7 +12,7 @@
  */
 import assert from 'node:assert/strict';
 import { luminance, parseColor } from '@josueavalosjim/taste-check';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -545,5 +545,43 @@ describe('the release', () => {
       .filter((k) => pkg.peerDependenciesMeta[k].optional);
     assert.deepEqual(optional.sort(), ['radix-ui', 'react'],
       'the README explains a missing-peer error that depends on these being optional');
+  });
+});
+describe('the names this kit ships', () => {
+  test('no trademark is used as an identifier', () => {
+    /* HANDOFF.md set this rule before the first commit and a preset broke it
+       anyway: the winamp palette shipped under that name for four commits.
+       Citing a trademark as prior art is what everybody in this genre does and
+       is fine, and NES.css referencing Nintendo is the precedent. Using one as
+       the thing a consumer types is not.
+
+       So the test is about identifiers, not about prose. A skin name, a preset
+       name, an attribute value, a file name, a token name. The README may say
+       whatever it likes about where the look came from. */
+    const MARKS = ['winamp', 'aqua', 'aero', 'luna', 'nintendo', 'playstation'];
+    const offenders = [];
+
+    const files = [];
+    const walk = (dir) => {
+      for (const e of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
+        if (e.isDirectory()) { walk(join(dir, e.name)); continue; }
+        files.push(join(dir, e.name));
+      }
+    };
+    walk('css');
+    walk('src');
+    for (const f of files) {
+      for (const mark of MARKS) {
+        if (f.toLowerCase().includes(mark)) offenders.push(`${f} is named after ${mark}`);
+      }
+      if (!f.endsWith('.css') && !f.endsWith('.ts') && !f.endsWith('.tsx')) continue;
+      const bare = read(f).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+      for (const mark of MARKS) {
+        /* an attribute value, a token name, or a class */
+        const re = new RegExp(`(--pw-[\\w-]*${mark}|["'=]${mark}["']|\\.pw-[\\w-]*${mark})`, 'i');
+        if (re.test(bare)) offenders.push(`${f} uses "${mark}" as an identifier`);
+      }
+    }
+    assert.deepEqual(offenders, []);
   });
 });

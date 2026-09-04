@@ -157,7 +157,7 @@
       /* Presets are nested under a skin, so the list is per skin and the
          picker resets when the skin changes rather than leaving a value
          selected that no longer means anything. */
-      const PRESETS = { chrome: ['default', 'winamp'], cyber: ['default'] };
+      const PRESETS = { chrome: ['default', 'deck'], cyber: ['default'] };
       const [docs, setDocs] = useState(null);
 
       /* The switcher writes the attributes a consumer would write. It is not
@@ -215,7 +215,7 @@
                 h('span', { className: 'demo-axis-label' }, 'Preset'),
                 h(Select, { label: 'Preset', value: presetAxis, onValueChange: setPresetAxis },
                   ...PRESETS[skinAxis].map((v) =>
-                    h(SelectItem, { value: v, key: v }, v === 'default' ? 'Default' : 'Winamp'))))
+                    h(SelectItem, { value: v, key: v }, v === 'default' ? 'Default' : 'Deck'))))
             : null),
 
         h(Section, {

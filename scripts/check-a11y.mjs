@@ -53,7 +53,7 @@ const RUN = `axe.run(document, {
    skin is not a combination that exists. */
 const LOOKS = [
   { skin: 'chrome' },
-  { skin: 'chrome', preset: 'winamp' },
+  { skin: 'chrome', preset: 'deck' },
   { skin: 'cyber' },
 ];
 

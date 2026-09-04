@@ -1,9 +1,35 @@
 /**
- * PRESET — winamp, on the chrome skin.
+ * PRESET — deck, on the chrome skin.
+ *
+ * A late-nineties audio deck: blue-slate chassis, black display panels,
+ * phosphor readout, gold faders, cyan metadata. Winamp's base skin is the
+ * reference and is cited as one in the README, the way NES.css cites Nintendo.
+ * It is not the name, because a trademark is not a name to ship.
  *
  * A preset is one file, and this is the whole of one: a ramp, the colour roles
  * that point at it, and any knob it wants moved. Nothing else in the repo has
  * to know it exists.
+ *
+ * ── Yes, a preset may move knobs, and this one turns gloss off ────────────
+ * The reasonable objection is that if a preset can change a treatment's knobs
+ * then the line between preset and skin is not where this file says it is.
+ *
+ * The line holds, and it is about who owns the treatment rather than who may
+ * tune it. A skin ships a file in css/treatment/ and decides what goes in the
+ * elevation slot. A preset ships none and moves values the treatment already
+ * reads. --pw-gloss-opacity is a token precisely so this is possible without
+ * a class or a codemod: setting it to 0 silences every [data-gloss] in a
+ * consumer's markup at once and leaves the markup honest.
+ *
+ * And it is the right call here on period grounds. The Web 2.0 highlight is a
+ * 2005-and-after artefact; chrome's default palette is Luna, from 2001, which
+ * is close enough to carry it, and a 1997 media player predates it entirely.
+ * Full bevel depth, no gloss.
+ *
+ * The one thing a preset should not do is move --pw-bevel-depth, because that
+ * is the elevation model rather than a decoration, and a preset that set it to
+ * 0 would be a different skin wearing a preset's name. Nothing enforces that
+ * yet; it is a rule this file is stating rather than a check.
  *
  * ── Preset is nested inside skin, not a fourth axis ───────────────────────
  * Theme, density and skin are orthogonal: every combination of them means
@@ -13,7 +39,7 @@
  * for and should not be.
  *
  * Scoping it under its skin costs nothing and answers it for free:
- * [data-skin="chrome"][data-preset="winamp"] simply does not match under any
+ * [data-skin="chrome"][data-preset="deck"] simply does not match under any
  * other skin, and the page falls back to that skin's own palette rather than
  * to something incoherent.
  *
@@ -54,21 +80,21 @@
   --pw-gold-300: #ffd23f;     /* the faders, and dark's warning ink */
   --pw-gold-800: #7a5300;     /* light's fader */
 
-  --pw-wa-mint-100: #cfeddc;
-  --pw-wa-mint-300: #5ff0a8;
-  --pw-wa-mint-800: #0a5133;
-  --pw-wa-mint-900: #153322;
-  --pw-wa-gold-100: #f6e6c0;
-  --pw-wa-gold-800: #6b4a05;
-  --pw-wa-gold-900: #332708;
-  --pw-wa-rose-100: #f7d9de;
-  --pw-wa-rose-300: #ff8095;
-  --pw-wa-rose-800: #8a1226;
-  --pw-wa-rose-900: #331116;
+  --pw-deck-mint-100: #cfeddc;
+  --pw-deck-mint-300: #5ff0a8;
+  --pw-deck-mint-800: #0a5133;
+  --pw-deck-mint-900: #153322;
+  --pw-deck-gold-100: #f6e6c0;
+  --pw-deck-gold-800: #6b4a05;
+  --pw-deck-gold-900: #332708;
+  --pw-deck-rose-100: #f7d9de;
+  --pw-deck-rose-300: #ff8095;
+  --pw-deck-rose-800: #8a1226;
+  --pw-deck-rose-900: #331116;
 }
 
-[data-skin="chrome"][data-preset="winamp"],
-[data-skin="chrome"][data-preset="winamp"][data-theme="light"] {
+[data-skin="chrome"][data-preset="deck"],
+[data-skin="chrome"][data-preset="deck"][data-theme="light"] {
 
   /* A light theme for a skin that never had one. The chassis lightens; the
      displays do not, because a segment readout is a backlit object. */
@@ -87,12 +113,12 @@
   --pw-color-range: var(--pw-gold-800);
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
-  --pw-color-success: var(--pw-wa-mint-100);
-  --pw-color-success-content: var(--pw-wa-mint-800);
-  --pw-color-warning: var(--pw-wa-gold-100);
-  --pw-color-warning-content: var(--pw-wa-gold-800);
-  --pw-color-error: var(--pw-wa-rose-100);
-  --pw-color-error-content: var(--pw-wa-rose-800);
+  --pw-color-success: var(--pw-deck-mint-100);
+  --pw-color-success-content: var(--pw-deck-mint-800);
+  --pw-color-warning: var(--pw-deck-gold-100);
+  --pw-color-warning-content: var(--pw-deck-gold-800);
+  --pw-color-error: var(--pw-deck-rose-100);
+  --pw-color-error-content: var(--pw-deck-rose-800);
   --pw-bevel-light: var(--pw-pewter-000);
   --pw-bevel-face: var(--pw-pewter-100);
   --pw-bevel-shade: var(--pw-pewter-400);
@@ -120,7 +146,7 @@
   --pw-shadow-outer-color: rgba(28, 28, 37, 0.22);
 }
 
-[data-skin="chrome"][data-preset="winamp"][data-theme="dark"] {
+[data-skin="chrome"][data-preset="deck"][data-theme="dark"] {
 
   /* The base skin's own register: blue-slate chassis, black displays, and a
      title bar darker than the page it sits on. */
@@ -139,12 +165,12 @@
   --pw-color-range: var(--pw-gold-300);
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
-  --pw-color-success: var(--pw-wa-mint-900);
-  --pw-color-success-content: var(--pw-wa-mint-300);
-  --pw-color-warning: var(--pw-wa-gold-900);
+  --pw-color-success: var(--pw-deck-mint-900);
+  --pw-color-success-content: var(--pw-deck-mint-300);
+  --pw-color-warning: var(--pw-deck-gold-900);
   --pw-color-warning-content: var(--pw-gold-300);
-  --pw-color-error: var(--pw-wa-rose-900);
-  --pw-color-error-content: var(--pw-wa-rose-300);
+  --pw-color-error: var(--pw-deck-rose-900);
+  --pw-color-error-content: var(--pw-deck-rose-300);
   --pw-bevel-light: var(--pw-pewter-700);
   --pw-bevel-face: var(--pw-pewter-800);
   --pw-bevel-shade: var(--pw-pewter-950);

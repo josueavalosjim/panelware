@@ -12,7 +12,7 @@
       "css/tokens/theme-auto.css",
       "css/tokens/primitive.cyber.css",
       "css/tokens/semantic.cyber.css",
-      "css/tokens/presets/winamp.css"
+      "css/tokens/presets/deck.css"
     ],
     "themes": [
       {
@@ -54,18 +54,18 @@
         ]
       },
       {
-        "name": "chrome-winamp-light",
+        "name": "chrome-deck-light",
         "scopes": [
           ":root",
-          "[data-skin=\"chrome\"][data-preset=\"winamp\"]"
+          "[data-skin=\"chrome\"][data-preset=\"deck\"]"
         ]
       },
       {
-        "name": "chrome-winamp-dark",
+        "name": "chrome-deck-dark",
         "scopes": [
           ":root",
-          "[data-skin=\"chrome\"][data-preset=\"winamp\"]",
-          "[data-skin=\"chrome\"][data-preset=\"winamp\"][data-theme=\"dark\"]"
+          "[data-skin=\"chrome\"][data-preset=\"deck\"]",
+          "[data-skin=\"chrome\"][data-preset=\"deck\"][data-theme=\"dark\"]"
         ]
       }
     ],
@@ -212,7 +212,7 @@
       "css/tokens/primitive.cyber.css",
       "css/tokens/semantic.cyber.css",
       "css/tokens/skin.cyber.css",
-      "css/tokens/presets/winamp.css"
+      "css/tokens/presets/deck.css"
     ],
     "allowPrefixes": [
       "--radix-"
@@ -259,12 +259,12 @@
         "after": "document.documentElement.setAttribute('data-skin', 'cyber'); document.documentElement.setAttribute('data-theme', 'dark')"
       },
       {
-        "name": "chrome-winamp-light",
-        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'winamp')"
+        "name": "chrome-deck-light",
+        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'deck')"
       },
       {
-        "name": "chrome-winamp-dark",
-        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'winamp'); document.documentElement.setAttribute('data-theme', 'dark')"
+        "name": "chrome-deck-dark",
+        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'deck'); document.documentElement.setAttribute('data-theme', 'dark')"
       }
     ],
     "targets": [

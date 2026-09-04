@@ -172,6 +172,16 @@ which means an incoherent pairing simply matches nothing and the page falls
 back to that skin's own palette. No validation, no runtime check, no way to ask
 for something that should not render.
 
+A preset may move a knob, not only a colour. The `deck` preset sets
+`--pw-gloss-opacity` to 0, which silences every `[data-gloss]` in a consumer's
+markup at once and leaves the markup honest, because the Web 2.0 highlight is a
+2005-and-after artefact and a late-nineties audio deck predates it. That is what
+the knob being a token rather than a class buys.
+
+What a preset should not move is `--pw-bevel-depth`, because that is the
+elevation model rather than a decoration, and a preset that set it to 0 would be
+a different skin wearing a preset's name. Nothing enforces that yet.
+
 The line between the two is whether a treatment file is involved. The cyber
 skin ships `css/treatment/glow.css` and replaces what goes in the elevation
 slot. The winamp preset ships no CSS at all beyond its own values: it takes the
