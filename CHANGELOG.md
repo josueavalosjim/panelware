@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.1.2
+
+Documentation only. No code changed, and the release exists because npm renders
+the README from the latest published version, so prose that is not published is
+prose nobody reads.
+
+The README now covers the two errors a consumer meets first and neither of
+which it mentioned before. Importing the module without the optional peers
+gives `ERR_MODULE_NOT_FOUND` for react, which is the package working as
+designed and saying so badly. Requiring it gives
+`ERR_PACKAGE_PATH_NOT_EXPORTED`, because the package is ESM only and there is
+no CJS build coming in v1. Both are quoted with the exact text a search box
+would be given, and both were re-verified against the published 0.1.1 rather
+than the working tree.
+
+A test holds the README and package.json to agreeing about which module system
+this is. It does not assert the package should stay ESM only: a CJS build in
+future fails it as a reminder to update the prose, not as a veto.
+
 ## 0.1.1
 
 The stylesheet shipped in 0.1.0 was broken, and most of the kit was unstyled.
