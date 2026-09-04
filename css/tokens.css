@@ -930,24 +930,45 @@
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 }
 
-/* A third skin, and a palette variant rather than a new treatment: it takes
-   the same bevel chrome does, because glow.css is scoped to cyber and every
-   other skin falls through to bevel.css's bare :where(). No treatment file. */
+/* Presets: palettes within a skin, scoped under the skin they belong to, so
+   an incoherent pairing matches nothing rather than rendering. One file each,
+   imported after every skin so a preset's themed blocks are decided on
+   specificity rather than on this list's order. */
 /**
- * PRIMITIVE — the winamp-lineage skin's raw ramp.
+ * PRESET — winamp, on the chrome skin.
  *
- * Never referenced outside tokens/. A blue-slate chassis rather than a
- * neutral one, because that cast is what separates a 1997 media player from a
- * 1995 dialog box, and it is the thing people actually remember about the
- * base skin.
+ * A preset is one file, and this is the whole of one: a ramp, the colour roles
+ * that point at it, and any knob it wants moved. Nothing else in the repo has
+ * to know it exists.
  *
- * Three hues do information work here, which is one more than either other
- * skin uses: ice for metadata, gold for the faders, phosphor for the readout.
- * That was the open question this skin was built to answer, and the contract
- * already had somewhere to put all three.
+ * ── Preset is nested inside skin, not a fourth axis ───────────────────────
+ * Theme, density and skin are orthogonal: every combination of them means
+ * something. A preset is not. "Winamp" under the cyberpunk skin is nonsense,
+ * and expressing that as a fourth independent attribute would mean either
+ * validating combinations at runtime or shipping palettes that can be asked
+ * for and should not be.
+ *
+ * Scoping it under its skin costs nothing and answers it for free:
+ * [data-skin="chrome"][data-preset="winamp"] simply does not match under any
+ * other skin, and the page falls back to that skin's own palette rather than
+ * to something incoherent.
+ *
+ * The specificity is deliberate too. Chrome's own light block reaches (0,2,0)
+ * on [data-skin="chrome"][data-theme="light"], so a preset that only reached
+ * (0,2,0) would be decided by import order. Every block here carries the
+ * preset attribute as well, which puts the themed ones at (0,3,0) and settles
+ * it on specificity rather than on the order of a list somebody may reorder.
+ *
+ * ── What makes this a preset and not a skin ───────────────────────────────
+ * It ships no treatment. glow.css is scoped to the cyber skin and everything
+ * else falls through to bevel.css, so this takes the stacked bevel by simply
+ * not being cyber. That is the line: a preset changes values, a skin changes
+ * the treatment file. Winamp needed nothing in css/treatment/ and cyber needed
+ * a file of its own.
  */
 
 :root {
+
   --pw-pewter-000: #ffffff;
   --pw-pewter-050: #dde3ec;   /* light page */
   --pw-pewter-100: #c9d2df;   /* light control face */
@@ -982,30 +1003,9 @@
   --pw-wa-rose-900: #331116;
 }
 
-/**
- * SEMANTIC — the winamp-lineage skin's colour roles.
- *
- * A palette variant: it takes the same stacked bevel chrome does and differs
- * only in these values, which is what a Winamp skin always was.
- *
- * Re-hued once already. The first version was grey-violet and read as a design
- * system in dark mode rather than as a media player; the chassis is blue-slate
- * now, the displays are black, and the title bar is the darkest thing on it
- * rather than the brightest.
- *
- * That title bar is the second contract gap this skin found. It had been
- * painted with --pw-color-primary, which is right for Luna, where the title bar
- * IS the accent, and wrong for a 1997 player, where it is nearly black. One
- * token could not be both, and the button fill was reading the same value, so
- * the bar came out bright cyan. --pw-color-titlebar exists now and the other
- * two skins point it at what they were already using.
- *
- * Every pair computed before the file was written; both themes clear all
- * twenty-one, the new one included.
- */
+[data-skin="chrome"][data-preset="winamp"],
+[data-skin="chrome"][data-preset="winamp"][data-theme="light"] {
 
-[data-skin="winamp"],
-[data-skin="winamp"][data-theme="light"] {
   /* A light theme for a skin that never had one. The chassis lightens; the
      displays do not, because a segment readout is a backlit object. */
 
@@ -1038,9 +1038,25 @@
   --pw-gloss-lit-base-200: var(--pw-pewter-100);
   --pw-gloss-lit-primary: var(--pw-ice-800);
   --pw-color-scrim: rgba(20, 24, 33, 0.62);
+
+  --pw-bevel-depth: 1;
+
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 6px;
+  --pw-glow-color: var(--pw-phos-300);
+
+  --pw-glass-blur: 0px;
+
+  --pw-shadow-outer-color: rgba(28, 28, 37, 0.22);
 }
 
-[data-skin="winamp"][data-theme="dark"] {
+[data-skin="chrome"][data-preset="winamp"][data-theme="dark"] {
+
   /* The base skin's own register: blue-slate chassis, black displays, and a
      title bar darker than the page it sits on. */
 
@@ -1073,40 +1089,7 @@
   --pw-gloss-lit-base-200: var(--pw-pewter-800);
   --pw-gloss-lit-primary: var(--pw-ice-300);
   --pw-color-scrim: rgba(0, 0, 0, 0.66);
-}
 
-/**
- * SKIN — the winamp-lineage skin's knobs.
- *
- * The same ten every skin declares, and the combination is the point: full
- * bevel depth with the gloss at zero.
- *
- * Chrome is bevel 1, gloss 1. Cyber is bevel 0, gloss 0. This is bevel 1,
- * gloss 0, and until it existed nothing had proved those two were independent
- * knobs rather than one "how much chrome" switch with a fancy name. A 1997
- * media player is heavily bevelled and has no Web 2.0 highlight anywhere on
- * it, because the highlight had not been invented yet.
- */
-
-[data-skin="winamp"],
-[data-skin="winamp"][data-theme="light"] {
-  --pw-bevel-depth: 1;
-
-  --pw-gloss-opacity: 0;
-  --pw-gloss-glare-alpha: 0;
-  --pw-gloss-cap-alpha: 0;
-  --pw-gloss-cap-height: 0%;
-
-  --pw-glow-intensity: 1;
-  --pw-glow-radius: 6px;
-  --pw-glow-color: var(--pw-phos-300);
-
-  --pw-glass-blur: 0px;
-
-  --pw-shadow-outer-color: rgba(28, 28, 37, 0.22);
-}
-
-[data-skin="winamp"][data-theme="dark"] {
   --pw-bevel-depth: 1;
 
   --pw-gloss-opacity: 0;

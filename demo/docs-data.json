@@ -2454,7 +2454,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-100",
    "note": "text on the page",
@@ -2463,7 +2463,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-200",
    "note": "a control label",
@@ -2472,7 +2472,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-300",
    "note": "text in a sunken well",
@@ -2481,7 +2481,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-base-content",
    "bg": "--pw-gloss-lit-base-200",
    "note": "a label over a glossed face",
@@ -2490,7 +2490,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-primary-content",
    "bg": "--pw-color-primary",
    "note": "the primary action's label",
@@ -2499,7 +2499,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-titlebar-content",
    "bg": "--pw-color-titlebar",
    "note": "a window title against its own bar",
@@ -2508,7 +2508,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-primary-content",
    "bg": "--pw-gloss-lit-primary",
    "note": "the same label once the gloss has lifted the face",
@@ -2517,7 +2517,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-disabled-content",
    "bg": "--pw-color-base-200",
    "note": "disabled is quiet, not absent",
@@ -2526,7 +2526,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-bevel-boundary",
    "bg": "--pw-color-base-100",
    "note": "the control boundary, against the page",
@@ -2535,7 +2535,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-bevel-boundary",
    "bg": "--pw-color-base-200",
    "note": "the control boundary, against a panel",
@@ -2544,7 +2544,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-divider",
    "bg": "--pw-color-base-100",
    "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
@@ -2553,7 +2553,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-divider",
    "bg": "--pw-color-base-200",
    "note": "the same line drawn inside a panel",
@@ -2562,7 +2562,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-200",
    "note": "focus ring on the control it rings",
@@ -2571,7 +2571,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-100",
    "note": "focus ring on the page it offsets onto",
@@ -2580,7 +2580,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-primary",
    "note": "the ring's other half, on the accent bar where the first half vanishes",
@@ -2589,7 +2589,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-focus",
    "note": "the two halves against each other, which is what makes the pair work on any ground",
@@ -2598,7 +2598,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
@@ -2607,7 +2607,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-range",
    "bg": "--pw-color-base-300",
    "note": "the filled part of a slider",
@@ -2616,7 +2616,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-success-content",
    "bg": "--pw-color-success",
    "note": "",
@@ -2625,7 +2625,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
@@ -2634,7 +2634,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-light",
+   "theme": "chrome-winamp-light",
    "fg": "--pw-color-error-content",
    "bg": "--pw-color-error",
    "note": "",
@@ -2643,7 +2643,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-100",
    "note": "text on the page",
@@ -2652,7 +2652,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-200",
    "note": "a control label",
@@ -2661,7 +2661,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-300",
    "note": "text in a sunken well",
@@ -2670,7 +2670,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-base-content",
    "bg": "--pw-gloss-lit-base-200",
    "note": "a label over a glossed face",
@@ -2679,7 +2679,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-primary-content",
    "bg": "--pw-color-primary",
    "note": "the primary action's label",
@@ -2688,7 +2688,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-titlebar-content",
    "bg": "--pw-color-titlebar",
    "note": "a window title against its own bar",
@@ -2697,7 +2697,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-primary-content",
    "bg": "--pw-gloss-lit-primary",
    "note": "the same label once the gloss has lifted the face",
@@ -2706,7 +2706,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-disabled-content",
    "bg": "--pw-color-base-200",
    "note": "disabled is quiet, not absent",
@@ -2715,7 +2715,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-bevel-boundary",
    "bg": "--pw-color-base-100",
    "note": "the control boundary, against the page",
@@ -2724,7 +2724,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-bevel-boundary",
    "bg": "--pw-color-base-200",
    "note": "the control boundary, against a panel",
@@ -2733,7 +2733,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-divider",
    "bg": "--pw-color-base-100",
    "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
@@ -2742,7 +2742,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-divider",
    "bg": "--pw-color-base-200",
    "note": "the same line drawn inside a panel",
@@ -2751,7 +2751,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-200",
    "note": "focus ring on the control it rings",
@@ -2760,7 +2760,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-100",
    "note": "focus ring on the page it offsets onto",
@@ -2769,7 +2769,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-primary",
    "note": "the ring's other half, on the accent bar where the first half vanishes",
@@ -2778,7 +2778,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-focus",
    "note": "the two halves against each other, which is what makes the pair work on any ground",
@@ -2787,7 +2787,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
@@ -2796,7 +2796,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-range",
    "bg": "--pw-color-base-300",
    "note": "the filled part of a slider",
@@ -2805,7 +2805,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-success-content",
    "bg": "--pw-color-success",
    "note": "",
@@ -2814,7 +2814,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
@@ -2823,7 +2823,7 @@
    "pass": true
   },
   {
-   "theme": "winamp-dark",
+   "theme": "chrome-winamp-dark",
    "fg": "--pw-color-error-content",
    "bg": "--pw-color-error",
    "note": "",

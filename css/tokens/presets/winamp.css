@@ -1,0 +1,173 @@
+/**
+ * PRESET — winamp, on the chrome skin.
+ *
+ * A preset is one file, and this is the whole of one: a ramp, the colour roles
+ * that point at it, and any knob it wants moved. Nothing else in the repo has
+ * to know it exists.
+ *
+ * ── Preset is nested inside skin, not a fourth axis ───────────────────────
+ * Theme, density and skin are orthogonal: every combination of them means
+ * something. A preset is not. "Winamp" under the cyberpunk skin is nonsense,
+ * and expressing that as a fourth independent attribute would mean either
+ * validating combinations at runtime or shipping palettes that can be asked
+ * for and should not be.
+ *
+ * Scoping it under its skin costs nothing and answers it for free:
+ * [data-skin="chrome"][data-preset="winamp"] simply does not match under any
+ * other skin, and the page falls back to that skin's own palette rather than
+ * to something incoherent.
+ *
+ * The specificity is deliberate too. Chrome's own light block reaches (0,2,0)
+ * on [data-skin="chrome"][data-theme="light"], so a preset that only reached
+ * (0,2,0) would be decided by import order. Every block here carries the
+ * preset attribute as well, which puts the themed ones at (0,3,0) and settles
+ * it on specificity rather than on the order of a list somebody may reorder.
+ *
+ * ── What makes this a preset and not a skin ───────────────────────────────
+ * It ships no treatment. glow.css is scoped to the cyber skin and everything
+ * else falls through to bevel.css, so this takes the stacked bevel by simply
+ * not being cyber. That is the line: a preset changes values, a skin changes
+ * the treatment file. Winamp needed nothing in css/treatment/ and cyber needed
+ * a file of its own.
+ */
+
+:root {
+
+  --pw-pewter-000: #ffffff;
+  --pw-pewter-050: #dde3ec;   /* light page */
+  --pw-pewter-100: #c9d2df;   /* light control face */
+  --pw-pewter-200: #b0bccd;   /* light well */
+  --pw-pewter-400: #8794a8;   /* light divider, 2.54:1 on the page */
+  --pw-pewter-500: #707d91;   /* dark divider, same 2.54:1 on its own page */
+  --pw-pewter-600: #5a6478;   /* light boundary and disabled ink */
+  --pw-pewter-700: #98a2b3;   /* dark boundary and disabled ink */
+  --pw-pewter-800: #3b4252;   /* dark control face */
+  --pw-pewter-900: #2e3440;   /* dark page */
+  --pw-pewter-950: #1b1f27;   /* dark well */
+  --pw-pewter-990: #141821;   /* light ink, and dark's primary ink */
+  --pw-pewter-995: #14171d;   /* the dark title bar, darker than its own page */   /* light ink */
+  --pw-pewter-010: #e5eaf2;   /* dark ink */
+
+  --pw-ice-300: #4fd2ff;      /* dark primary, 9.03:1 on the dark page */
+  --pw-ice-800: #1c4f70;      /* light primary */
+
+  --pw-gold-300: #ffd23f;     /* the faders, and dark's warning ink */
+  --pw-gold-800: #7a5300;     /* light's fader */
+
+  --pw-wa-mint-100: #cfeddc;
+  --pw-wa-mint-300: #5ff0a8;
+  --pw-wa-mint-800: #0a5133;
+  --pw-wa-mint-900: #153322;
+  --pw-wa-gold-100: #f6e6c0;
+  --pw-wa-gold-800: #6b4a05;
+  --pw-wa-gold-900: #332708;
+  --pw-wa-rose-100: #f7d9de;
+  --pw-wa-rose-300: #ff8095;
+  --pw-wa-rose-800: #8a1226;
+  --pw-wa-rose-900: #331116;
+}
+
+[data-skin="chrome"][data-preset="winamp"],
+[data-skin="chrome"][data-preset="winamp"][data-theme="light"] {
+
+  /* A light theme for a skin that never had one. The chassis lightens; the
+     displays do not, because a segment readout is a backlit object. */
+
+  --pw-color-base-100: var(--pw-pewter-050);
+  --pw-color-base-200: var(--pw-pewter-100);
+  --pw-color-base-300: var(--pw-pewter-200);
+  --pw-color-base-content: var(--pw-pewter-990);
+  --pw-color-disabled-content: var(--pw-pewter-600);
+  --pw-color-primary: var(--pw-ice-800);
+  --pw-color-primary-content: var(--pw-pewter-000);
+  --pw-color-titlebar: var(--pw-pewter-900);
+  --pw-color-titlebar-content: var(--pw-pewter-010);
+  --pw-color-focus: var(--pw-ice-800);
+  --pw-color-focus-contrast: var(--pw-pewter-000);
+  --pw-color-range: var(--pw-gold-800);
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+  --pw-color-success: var(--pw-wa-mint-100);
+  --pw-color-success-content: var(--pw-wa-mint-800);
+  --pw-color-warning: var(--pw-wa-gold-100);
+  --pw-color-warning-content: var(--pw-wa-gold-800);
+  --pw-color-error: var(--pw-wa-rose-100);
+  --pw-color-error-content: var(--pw-wa-rose-800);
+  --pw-bevel-light: var(--pw-pewter-000);
+  --pw-bevel-face: var(--pw-pewter-100);
+  --pw-bevel-shade: var(--pw-pewter-400);
+  --pw-bevel-frame: var(--pw-pewter-600);
+  --pw-bevel-boundary: var(--pw-pewter-600);
+  --pw-color-divider: var(--pw-pewter-400);
+  --pw-gloss-lit-base-200: var(--pw-pewter-100);
+  --pw-gloss-lit-primary: var(--pw-ice-800);
+  --pw-color-scrim: rgba(20, 24, 33, 0.62);
+
+
+  --pw-bevel-depth: 1;
+
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 6px;
+  --pw-glow-color: var(--pw-phos-300);
+
+  --pw-glass-blur: 0px;
+
+  --pw-shadow-outer-color: rgba(28, 28, 37, 0.22);
+}
+
+[data-skin="chrome"][data-preset="winamp"][data-theme="dark"] {
+
+  /* The base skin's own register: blue-slate chassis, black displays, and a
+     title bar darker than the page it sits on. */
+
+  --pw-color-base-100: var(--pw-pewter-900);
+  --pw-color-base-200: var(--pw-pewter-800);
+  --pw-color-base-300: var(--pw-pewter-950);
+  --pw-color-base-content: var(--pw-pewter-010);
+  --pw-color-disabled-content: var(--pw-pewter-700);
+  --pw-color-primary: var(--pw-ice-300);
+  --pw-color-primary-content: var(--pw-pewter-990);
+  --pw-color-titlebar: var(--pw-pewter-995);
+  --pw-color-titlebar-content: var(--pw-pewter-010);
+  --pw-color-focus: var(--pw-ice-300);
+  --pw-color-focus-contrast: var(--pw-pewter-990);
+  --pw-color-range: var(--pw-gold-300);
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+  --pw-color-success: var(--pw-wa-mint-900);
+  --pw-color-success-content: var(--pw-wa-mint-300);
+  --pw-color-warning: var(--pw-wa-gold-900);
+  --pw-color-warning-content: var(--pw-gold-300);
+  --pw-color-error: var(--pw-wa-rose-900);
+  --pw-color-error-content: var(--pw-wa-rose-300);
+  --pw-bevel-light: var(--pw-pewter-700);
+  --pw-bevel-face: var(--pw-pewter-800);
+  --pw-bevel-shade: var(--pw-pewter-950);
+  --pw-bevel-frame: var(--pw-pewter-995);
+  --pw-bevel-boundary: var(--pw-pewter-700);
+  --pw-color-divider: var(--pw-pewter-500);
+  --pw-gloss-lit-base-200: var(--pw-pewter-800);
+  --pw-gloss-lit-primary: var(--pw-ice-300);
+  --pw-color-scrim: rgba(0, 0, 0, 0.66);
+
+
+  --pw-bevel-depth: 1;
+
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 6px;
+  --pw-glow-color: var(--pw-phos-300);
+
+  --pw-glass-blur: 0px;
+
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0.55);
+}

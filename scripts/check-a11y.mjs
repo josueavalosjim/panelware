@@ -48,20 +48,28 @@ const RUN = `axe.run(document, {
   })),
 })))`;
 
-/* Every skin the kit ships. A check that iterates a hard-coded pair keeps
-   reporting a clean run for the skins it was written before. */
-const SKINS = ['chrome', 'cyber', 'winamp'];
+/* Every look the kit ships, as a skin and an optional preset. Not a cross
+   product: a preset is nested inside its skin, so pairing one with another
+   skin is not a combination that exists. */
+const LOOKS = [
+  { skin: 'chrome' },
+  { skin: 'chrome', preset: 'winamp' },
+  { skin: 'cyber' },
+];
 
 const failures = [];
 let checked = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
-    for (const skin of SKINS) {
+    for (const look of LOOKS) {
+      const skin = look.preset ? `${look.skin}+${look.preset}` : look.skin;
       for (const theme of ['light', 'dark']) {
       await p.goto(`${base}/${page}`);
       await p.settle(page.includes('index') ? 1800 : 900);
       await p.evaluate(`document.documentElement.dataset.theme = ${JSON.stringify(theme)}`);
-      await p.evaluate(`document.documentElement.dataset.skin = ${JSON.stringify(skin)}`);
+      await p.evaluate(`document.documentElement.dataset.skin = ${JSON.stringify(look.skin)}`);
+      if (look.preset) await p.evaluate(`document.documentElement.dataset.preset = ${JSON.stringify(look.preset)}`);
+      else await p.evaluate('delete document.documentElement.dataset.preset');
       await p.settle(300);
 
       const alive = await p.evaluate(`document.querySelectorAll('.pw-button, .pw-toggle').length`);
@@ -81,5 +89,5 @@ await withDemo(async (p, base) => {
   }
 });
 
-report('a11y', failures, `${checked} page/skin/theme combinations scanned by axe ${
+report('a11y', failures, `${checked} page/look/theme combinations scanned by axe ${
   JSON.parse(readFileSync(new URL('../node_modules/axe-core/package.json', import.meta.url), 'utf8')).version}`);

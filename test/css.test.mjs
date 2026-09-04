@@ -355,24 +355,36 @@ describe('the published reference data', () => {
       assert.deepEqual([...new Set(found)], [value], `${token} is ${found.join(' / ')}, not ${value}`);
     }
   });
-  test('the page checks iterate every skin the tokens declare', () => {
-    /* Both skin-aware checks had a hard-coded ['chrome', 'cyber'] in them, so
-       the day a third skin landed they went on reporting a clean run for two.
-       The output even said "2 skins" while three were shipping, which is the
-       worst kind of green: specific, confident, and measuring the wrong set. */
-    const declared = new Set();
+  test('the page checks cover every look the tokens declare', () => {
+    /* Both skin-aware checks once carried a hard-coded pair, so the day a
+       third look landed they went on reporting a clean run for two, printing
+       "2 skins" while three were shipping.
+
+       The set is derived from the files rather than listed: a skin is a
+       skin.*.css, a preset is a file under presets/, and a preset counts as
+       its own look because it is a different palette on the same treatment
+       and the palette is what these two measure. */
+    const skins = new Set();
     for (const file of readdirSync(join(ROOT, 'css', 'tokens'))) {
       const m = file.match(/^skin\.([a-z0-9-]+)\.css$/);
-      if (m) declared.add(m[1]);
+      if (m) skins.add(m[1]);
     }
-    assert.ok(declared.size >= 2, `only ${declared.size} skin file(s) found`);
+    const presets = readdirSync(join(ROOT, 'css', 'tokens', 'presets'))
+      .filter((f) => f.endsWith('.css')).map((f) => f.replace(/\.css$/, ''));
+    assert.ok(skins.size >= 2, `only ${skins.size} skin file(s) found`);
+    assert.ok(presets.length >= 1, 'no preset files found');
+
     for (const script of ['scripts/check-colour.mjs', 'scripts/check-a11y.mjs']) {
       const src = read(script);
-      const list = src.match(/const SKINS = \[([^\]]*)\]/);
-      assert.ok(list, `${script} has no SKINS list`);
-      const covered = new Set([...list[1].matchAll(/'([a-z0-9-]+)'/g)].map((x) => x[1]));
-      assert.deepEqual([...declared].sort().filter((s2) => !covered.has(s2)), [],
-        `${script} does not check every skin`);
+      const block = src.match(/const LOOKS = \[([\s\S]*?)\];/);
+      assert.ok(block, `${script} has no LOOKS list`);
+      const covered = block[1];
+      for (const skin of skins) {
+        assert.ok(covered.includes(`'${skin}'`), `${script} does not check the ${skin} skin`);
+      }
+      for (const preset of presets) {
+        assert.ok(covered.includes(`preset: '${preset}'`), `${script} does not check the ${preset} preset`);
+      }
     }
   });
 });

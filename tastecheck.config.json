@@ -12,8 +12,7 @@
       "css/tokens/theme-auto.css",
       "css/tokens/primitive.cyber.css",
       "css/tokens/semantic.cyber.css",
-      "css/tokens/primitive.winamp.css",
-      "css/tokens/semantic.winamp.css"
+      "css/tokens/presets/winamp.css"
     ],
     "themes": [
       {
@@ -55,18 +54,18 @@
         ]
       },
       {
-        "name": "winamp-light",
+        "name": "chrome-winamp-light",
         "scopes": [
           ":root",
-          "[data-skin=\"winamp\"]"
+          "[data-skin=\"chrome\"][data-preset=\"winamp\"]"
         ]
       },
       {
-        "name": "winamp-dark",
+        "name": "chrome-winamp-dark",
         "scopes": [
           ":root",
-          "[data-skin=\"winamp\"]",
-          "[data-skin=\"winamp\"][data-theme=\"dark\"]"
+          "[data-skin=\"chrome\"][data-preset=\"winamp\"]",
+          "[data-skin=\"chrome\"][data-preset=\"winamp\"][data-theme=\"dark\"]"
         ]
       }
     ],
@@ -213,9 +212,7 @@
       "css/tokens/primitive.cyber.css",
       "css/tokens/semantic.cyber.css",
       "css/tokens/skin.cyber.css",
-      "css/tokens/primitive.winamp.css",
-      "css/tokens/semantic.winamp.css",
-      "css/tokens/skin.winamp.css"
+      "css/tokens/presets/winamp.css"
     ],
     "allowPrefixes": [
       "--radix-"
@@ -262,12 +259,12 @@
         "after": "document.documentElement.setAttribute('data-skin', 'cyber'); document.documentElement.setAttribute('data-theme', 'dark')"
       },
       {
-        "name": "winamp-light",
-        "after": "document.documentElement.setAttribute('data-skin', 'winamp')"
+        "name": "chrome-winamp-light",
+        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'winamp')"
       },
       {
-        "name": "winamp-dark",
-        "after": "document.documentElement.setAttribute('data-skin', 'winamp'); document.documentElement.setAttribute('data-theme', 'dark')"
+        "name": "chrome-winamp-dark",
+        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'winamp'); document.documentElement.setAttribute('data-theme', 'dark')"
       }
     ],
     "targets": [

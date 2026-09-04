@@ -153,6 +153,11 @@
       const [density, setDensityAxis] = useState('comfortable');
       const [themeAxis, setThemeAxis] = useState('light');
       const [skinAxis, setSkinAxis] = useState('chrome');
+      const [presetAxis, setPresetAxis] = useState('default');
+      /* Presets are nested under a skin, so the list is per skin and the
+         picker resets when the skin changes rather than leaving a value
+         selected that no longer means anything. */
+      const PRESETS = { chrome: ['default', 'winamp'], cyber: ['default'] };
       const [docs, setDocs] = useState(null);
 
       /* The switcher writes the attributes a consumer would write. It is not
@@ -163,7 +168,11 @@
         el.setAttribute('data-theme', themeAxis);
         el.setAttribute('data-density', density);
         el.setAttribute('data-skin', skinAxis);
-      }, [themeAxis, density, skinAxis]);
+        if (presetAxis === 'default') el.removeAttribute('data-preset');
+        else el.setAttribute('data-preset', presetAxis);
+      }, [themeAxis, density, skinAxis, presetAxis]);
+
+      useEffect(() => { setPresetAxis('default'); }, [skinAxis]);
 
       useEffect(() => {
         fetch('./docs-data.json').then((r) => r.json()).then(setDocs).catch(() => {});
@@ -198,8 +207,16 @@
             h('span', { className: 'demo-axis-label' }, 'Skin'),
             h(Select, { label: 'Skin', value: skinAxis, onValueChange: setSkinAxis },
               h(SelectItem, { value: 'chrome' }, 'Chrome'),
-              h(SelectItem, { value: 'cyber' }, 'Cyber'),
-              h(SelectItem, { value: 'winamp' }, 'Winamp')))),
+              h(SelectItem, { value: 'cyber' }, 'Cyber'))),
+          /* Only rendered when the skin has more than one, because a picker
+             with one option is a label wearing a control's clothes. */
+          PRESETS[skinAxis].length > 1
+            ? h('div', { className: 'demo-axis' },
+                h('span', { className: 'demo-axis-label' }, 'Preset'),
+                h(Select, { label: 'Preset', value: presetAxis, onValueChange: setPresetAxis },
+                  ...PRESETS[skinAxis].map((v) =>
+                    h(SelectItem, { value: v, key: v }, v === 'default' ? 'Default' : 'Winamp'))))
+            : null),
 
         h(Section, {
           skin: skinAxis,
