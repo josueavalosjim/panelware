@@ -48,11 +48,15 @@ const RUN = `axe.run(document, {
   })),
 })))`;
 
+/* Every skin the kit ships. A check that iterates a hard-coded pair keeps
+   reporting a clean run for the skins it was written before. */
+const SKINS = ['chrome', 'cyber', 'winamp'];
+
 const failures = [];
 let checked = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
-    for (const skin of ['chrome', 'cyber']) {
+    for (const skin of SKINS) {
       for (const theme of ['light', 'dark']) {
       await p.goto(`${base}/${page}`);
       await p.settle(page.includes('index') ? 1800 : 900);

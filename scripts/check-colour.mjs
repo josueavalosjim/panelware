@@ -172,11 +172,15 @@ const floorFor = (row, tokens) => {
   return row.large ? 3 : 4.5;
 };
 
+/* Every skin the kit ships. A check that iterates a hard-coded pair keeps
+   reporting a clean run for the skins it was written before. */
+const SKINS = ['chrome', 'cyber', 'winamp'];
+
 const failures = [];
 let scanned = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
-    for (const skin of ['chrome', 'cyber']) {
+    for (const skin of SKINS) {
       for (const theme of ['light', 'dark']) {
       await p.goto(`${base}/${page}`);
       await p.settle(page.includes('index') ? 1700 : 800);
@@ -210,4 +214,4 @@ await withDemo(async (p, base) => {
   }
 }, { width: 1200, height: 900 });
 
-report('colour', failures, `${scanned} painted pairs across 2 pages x 2 skins x 2 themes`);
+report('colour', failures, `${scanned} painted pairs across 2 pages x ${SKINS.length} skins x 2 themes`);
