@@ -16,8 +16,9 @@ import { renderToStaticMarkup as render } from 'react-dom/server';
 import { describe, test } from 'node:test';
 
 import {
-  Badge, Button, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle, Window,
+  Badge, Button, Icon, Readout, Slider, Spinner, Tab, TabList, TabPanel, Tabs, Toggle, Window,
 } from '../dist/index.js';
+import { ICON_INDEX, ICON_NAMES } from '../dist/icons.js';
 
 describe('button', () => {
   test('emits one class, and the caller\'s alongside it', () => {
@@ -269,5 +270,54 @@ describe('window', () => {
     const full = render(h(Window, { title: 'x', onClose: () => {} }, 'b'));
     assert.match(full, /aria-label="Close"/);
     assert.doesNotMatch(full, /aria-label="Minimise"/);
+  });
+});
+
+describe('spinner', () => {
+  const frames = ICON_NAMES.filter((n) => n.startsWith('spinner-'));
+  const declared = (html, side) =>
+    Number(html.match(new RegExp(`--pw-icon-ink-${side}:\\s*(\\d+)`))?.[1]);
+
+  test('its bearings are true of every frame, not of the cell it names', () => {
+    /* The bug: it names spinner-1 and paints all eight, because the CSS walks
+       the whole row. spinner-1's ink starts 7 in and most of the others start
+       2 in, and .pw-badge turns the bearing into a negative margin, so a
+       spinner in a badge was pulled 5px into the word beside it for seven
+       frames out of eight.
+
+       Not "equals 2": derived from the sheet, so redrawing a frame tighter
+       fails this rather than silently making the pull too big again. */
+    const html = render(h(Spinner, null));
+    for (const side of ['l', 'r']) {
+      const got = declared(html, side);
+      for (const frame of frames) {
+        assert.ok(got <= ICON_INDEX[frame][side],
+          `declares ${side}:${got}, more than ${frame} has (${ICON_INDEX[frame][side]}), `
+          + 'so the badge pull puts the ink through the text on that frame');
+      }
+    }
+  });
+
+  test('and are as tight as that allows, rather than zero', () => {
+    /* The lazy fix. Dropping the bearings entirely also stops the overlap and
+       throws away the even optical gap the whole mechanism exists for. */
+    const html = render(h(Spinner, null));
+    for (const side of ['l', 'r']) {
+      assert.equal(declared(html, side), Math.min(...frames.map((f) => ICON_INDEX[f][side])));
+    }
+  });
+});
+
+describe('icon', () => {
+  test('a caller\'s style is merged, not silently dropped', () => {
+    /* Icon spreads rest and then wrote its own style object after it, so a
+       style prop was accepted, overwritten, and never mentioned. The spinner
+       is the caller that needs to override, since an animated icon is not
+       showing the cell it names. */
+    const html = render(h(Icon, {
+      name: 'check', decorative: true, style: { ['--pw-icon-ink-l']: 99 },
+    }));
+    assert.match(html, /--pw-icon-ink-l:\s*99/);
+    assert.match(html, /--pw-icon-y:/, 'the cell it computed is gone entirely');
   });
 });

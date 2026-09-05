@@ -33,6 +33,24 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### A Spinner in a Badge was pulled into the word beside it
+
+Every icon declares how much blank sits inside its cell on each side, and a
+badge turns those into negative margins so the optical gap beside a word is
+even. `Spinner` names one cell and paints eight, because the CSS walks the
+whole row, so the cell's bearings describe a frame that is on screen an eighth
+of the time. It named `spinner-1`, whose ink starts 7 in, while the frames it
+mostly paints start 2 in: measured in the browser, a spinner in a badge got
+`margin-left: -7px` where `-2px` was right.
+
+It declares the tightest bearing common to all eight frames now. Animating
+them frame by frame would be the wrong repair: the dots rotate and their
+extremes move, so a per-frame bearing would shuffle the element sideways eight
+times a second next to fixed text, and a busy indicator has to sit still.
+
+`Icon` merges a caller's `style` rather than writing its own over the top. It
+had been accepting the prop, spreading it, and then clobbering it silently.
+
 ### A documented skin hook broke the checkbox and the radio
 
 `--pw-clip-control` is offered in "Writing a skin" as the way to give the kit

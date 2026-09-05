@@ -44,6 +44,12 @@ export function Icon({ name, label, decorative, className, ...rest }: IconProps)
            a word multiplies these; one that does not, ignores them. */
         ['--pw-icon-ink-l' as string]: cell.l,
         ['--pw-icon-ink-r' as string]: cell.r,
+        /* The caller last, so these can be overridden rather than silently
+           dropped. One caller needs to: an icon the CSS animates is not
+           showing the cell it names, so the cell's own bearings are wrong for
+           it. See spinner.tsx. Before this, a style prop passed to Icon was
+           spread in above and then clobbered here without a word. */
+        ...rest.style,
       }}
     />
   );
