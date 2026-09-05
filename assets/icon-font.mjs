@@ -404,11 +404,20 @@ const I = {
     '................',
     '................',
   ],
-  /* The left side of the bowl is one row deep, so row 3 carries both shoulders
-     and row 4 carries only the right. That is a question mark rather than a
-     defect: the bowl is open at the lower left and the stroke has to stop
-     somewhere. The two pixels share an edge with the crown above them, so it
-     is a terminal and not the floating fragment it measures as.
+  /* The left shoulder carries two rows rather than one. It was one, which is
+     legitimate for a question mark, since the bowl is open at the lower left
+     and the stroke has to stop somewhere: the pixels share an edge with the
+     crown, so it was a terminal and not the floating fragment it measured as.
+
+     It came out too light anyway. Twenty-four ink against a set median of
+     thirty-two, sitting next to close's fifty-two, and the bowl was two rows
+     before the descent started, so the mark read as a hook rather than as a
+     question mark. The second row is twenty-six.
+
+     Drawn three ways and compared at 7x: this one, an eight-wide bowl at
+     thirty ink, and a ten-wide bowl that would have made question as wide as
+     close. The wider bowls read rounder and were not chosen, so if this comes
+     up again the alternatives were seen and declined rather than missed.
 
      The bowl is six wide and centred on the stem, which the first draft was
      not: a bowl centred on itself sits half a pixel left of the stem below
@@ -419,7 +428,7 @@ const I = {
     '................',
     '.....######.....',
     '....##....##....',
-    '..........##....',
+    '....##....##....',
     '.........##.....',
     '........##......',
     '.......##.......',
