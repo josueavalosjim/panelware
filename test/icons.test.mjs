@@ -160,6 +160,61 @@ describe('the drawings, not just the pipeline', () => {
     }
   });
 
+  test('no two parts of a glyph meet at a corner and nowhere else', () => {
+    /* An eight-connected join. search's handle met its ring at a single
+       diagonal pixel with both orthogonal neighbours empty, which is the one
+       place in the whole set two parts of a mark touched without sharing an
+       edge. A corner join has no width: it survives at 11x and can render as
+       a break at 1x, and a magnifier whose handle looks detached from its
+       lens has stopped being a magnifier.
+
+       Separate parts are fine and there are several: the question mark's
+       dot, the pause bars, eject's triangle over its bar. Those are clearly
+       apart. The defect is two regions close enough to read as joined while
+       being joined by nothing.
+
+       One instance in thirty-two glyphs, so this is the set's own rule
+       written down rather than a new one imposed on it. */
+    const offenders = [];
+    for (const name of ICON_NAMES) {
+      const g = grid(name);
+      /* Four-connected components, so "different region" is decidable. */
+      const id = Array.from({ length: ICON_H }, () => Array(ICON_W).fill(-1));
+      let next = 0;
+      for (let y = 0; y < ICON_H; y += 1) {
+        for (let x = 0; x < ICON_W; x += 1) {
+          if (!g[y][x] || id[y][x] >= 0) continue;
+          const stack = [[x, y]];
+          id[y][x] = next;
+          while (stack.length) {
+            const [cx, cy] = stack.pop();
+            for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+              const nx = cx + dx, ny = cy + dy;
+              if (nx < 0 || ny < 0 || nx >= ICON_W || ny >= ICON_H) continue;
+              if (g[ny][nx] && id[ny][nx] < 0) { id[ny][nx] = next; stack.push([nx, ny]); }
+            }
+          }
+          next += 1;
+        }
+      }
+      for (let y = 0; y < ICON_H; y += 1) {
+        for (let x = 0; x < ICON_W - 1; x += 1) {
+          for (const [dx, dy] of [[1, 1], [1, -1]]) {
+            const nx = x + dx, ny = y + dy;
+            if (ny < 0 || ny >= ICON_H) continue;
+            if (!g[y][x] || !g[ny][nx]) continue;
+            /* An edge connector anywhere around the corner makes it a join. */
+            if (g[y][nx] || g[ny][x]) continue;
+            if (id[y][x] !== id[ny][nx]) {
+              offenders.push(`${name}: (${x},${y}) touches (${nx},${ny}) only at a corner`);
+            }
+          }
+        }
+      }
+    }
+    assert.deepEqual(offenders, []);
+  });
+
   test('a stroke does not fatten as it converges', () => {
     /* The wedge signature. check used to run 2 3 3 5 6 6 6 4 2: the ink
        climbs steadily toward the vertex, which is a tick turning into a blob.

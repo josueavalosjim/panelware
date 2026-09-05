@@ -33,6 +33,23 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### The magnifier's handle met its lens at a corner
+
+`search`'s handle touched the ring at a single diagonal pixel with both
+orthogonal neighbours empty. A corner join has no width: it survives at 11×
+and can render as a break at 1×, and a magnifier whose handle looks detached
+from its lens has stopped being a magnifier. The ring's bottom row runs one
+column further right now, which is the join.
+
+It was the only eight-connected join in thirty-two glyphs, so the test that
+now forbids them is the set's own rule written down rather than a new one
+imposed on it. Separate parts stay legal and there are several: the question
+mark's dot, the pause bars, eject's triangle over its bar. The defect is two
+regions close enough to read as joined while being joined by nothing.
+
+The paragraph explaining why `dot` is the one round mark in the set sat 283
+lines from `dot`, heading a different section. It sits with `dot` now.
+
 ### The marquee's pause button had the browser's focus ring, not this kit's
 
 `reset.css` declares the focus ring once for a list of classes, and that list

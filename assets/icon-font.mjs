@@ -240,15 +240,6 @@ const I = {
     '................',
   ],
 
-  /* dot is rounded rather than square, and it is the only mark in the set
-     that is. It serves the radio's bullet, the menu's radio item and the
-     neutral badge, and a square bullet inside a round radio reads as a
-     mistake: the roundness of a radio is the thing that says choose-one, so
-     the mark inside it cannot argue with the box around it.
-
-     Six pixels cannot be a circle. Knocking the corners off is what every
-     bitmap radio bullet since Windows 3.1 has done. */
-
   /* Form marks.
 
      minus is the indeterminate checkbox, and it is a separate glyph from
@@ -345,9 +336,17 @@ const I = {
      drafts produced, and the handle takes the remaining three rows, so the
      whole mark is 11x12: it fills the live area's height and stops a column
      short of its width. This said "fills the 12x12 live area exactly", which
-     was not true and was the kind of claim that stops anyone measuring. Ink 44 against close's 52:
+     was not true and was the kind of claim that stops anyone measuring. Ink 45 against close's 52:
      a ring is lighter than a filled X and matching them would fatten the
-     stroke past the set's 2px. */
+     stroke past the set's 2px.
+
+     The bottom of the ring runs one column further right than the top, and
+     that pixel is the handle's join. Without it the handle met the ring at a
+     single corner, diagonally, which is the only place in the whole set where
+     two parts of a glyph touched without sharing an edge. A corner join has
+     no width: at 1x it can render as a break, and a mark whose handle looks
+     detached from its lens is not a magnifier. test/icons.test.mjs holds the
+     set to this now. */
   search: [
     '................',
     '................',
@@ -359,7 +358,7 @@ const I = {
     '...##.....##....',
     '...##.....##....',
     '....##...##.....',
-    '.....#####......',
+    '.....######.....',
     '..........##....',
     '...........##...',
     '............##..',
@@ -523,6 +522,14 @@ const I = {
     '................',
     '................',
   ],
+  /* dot is rounded rather than square, and it is the only mark in the set
+     that is. It serves the radio's bullet, the menu's radio item and the
+     neutral badge, and a square bullet inside a round radio reads as a
+     mistake: the roundness of a radio is the thing that says choose-one, so
+     the mark inside it cannot argue with the box around it.
+
+     Six pixels cannot be a circle. Knocking the corners off is what every
+     bitmap radio bullet since Windows 3.1 has done. */
   dot: [
     '................',
     '................',
