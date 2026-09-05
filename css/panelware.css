@@ -1465,19 +1465,28 @@
     }
   }
 
-  /* The slider thumb opts out of the corner clip, and this is not tidiness.
+  /* Three controls opt out of the corner clip, and this is not tidiness.
      clip-path clips an element's outline and its pseudo-elements along with
-     its corners. The thumb's 44x44 hit area is a ::after expander and its
-     focus ring is an outline at a 2px offset, so a skin that set
-     --pw-clip-control would silently collapse the target back to the 22x28
-     grip, under both the house 44 floor and WCAG 2.2 AA's 24x24, and clip
-     the ring away with it. Verified by setting a notched polygon: the hit
-     test at the thumb's centre plus 15px went from the thumb to the track.
+     its corners. Each of these draws its hit area as a ::after expander and
+     its focus ring as an outline at a 2px offset, so a skin that set
+     --pw-clip-control would silently collapse the target back to the ink and
+     clip the ring away with it.
 
-     A 22px grip has no room for a notch anyway. Anything else that takes
-     --pw-clip-control has to supply its focus ring some other way, because
-     an inset box-shadow ring gets clipped too. */
-  :where(.pw-slider-thumb) { clip-path: none; }
+     Measured, by setting a notched polygon and hit-testing from each
+     control's centre. The thumb's 44x44 went back to the 22x28 grip. The
+     checkbox and the radio went back to their 20x20 boxes: a hit at centre
+     plus 15px, and at centre plus 18px, both stopped landing on the control.
+     That is under the house 44 floor and under WCAG 2.5.8's 24x24.
+
+     The radio has a second reason. It is the one round thing in the kit and
+     the roundness is what says choose-one before a word has been read, and a
+     notched polygon overrides border-radius rather than intersecting with
+     it, so the hook squared it off.
+
+     None of these three has room for a notch at its size anyway. Anything
+     else that takes --pw-clip-control has to supply its focus ring some other
+     way, because an inset box-shadow ring gets clipped too. */
+  :where(.pw-slider-thumb, .pw-checkbox, .pw-radio) { clip-path: none; }
 
   /* Documented escape hatches for surfaces a consumer builds that are not
      panelware components. Nothing internal uses them; internal components

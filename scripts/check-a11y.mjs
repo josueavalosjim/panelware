@@ -1,5 +1,6 @@
 /**
- * axe over every component, in every state, in both themes.
+ * Accessibility measured in a browser: axe, plus the two questions axe
+ * cannot ask.
  *
  * This kit measures contrast exhaustively and, until this file, measured
  * accessibility not at all. The ARIA coverage was seventeen hand-written
@@ -139,6 +140,89 @@ await withDemo(async (p, base) => {
   }
 });
 
+/**
+ * The hit targets have to survive the hooks a skin is invited to set.
+ *
+ * --pw-clip-control is documented in "Writing a skin" and a skin is meant to
+ * put a notched corner in it. clip-path clips an element's outline and its
+ * pseudo-elements along with its corners, and three controls in this kit draw
+ * their hit area as a centred ::after and their focus ring as an outline. So
+ * setting the documented hook silently collapsed each target back to its ink:
+ * the checkbox and the radio to their 20x20 boxes, under WCAG 2.5.8's 24x24
+ * and well under this kit's own 44 floor. The slider thumb had already been
+ * given the opt-out and the other two had the identical construction.
+ *
+ * axe cannot find this. Its target-size rule reads the layout it is handed,
+ * and the layout it is handed is the default one, where every target is fine.
+ * The bug only exists in a skin nobody has written yet, which is exactly the
+ * kind a token contract is supposed to make impossible rather than likely.
+ *
+ * So this sets the hook the way a skin would and hit-tests from each
+ * control's centre, which is the same probe check-parity uses on the thumb.
+ */
+const NOTCH = 'polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px)';
+
+/** Controls whose hit area is bigger than their ink, and by how much. */
+const TARGETS = [
+  { selector: '#field .pw-checkbox', reach: 15 },
+  { selector: '#field .pw-radio', reach: 15 },
+  { selector: '#slider .pw-slider-thumb', reach: 15 },
+];
+
+const probe = (selector, reach) => `(() => {
+  const e = document.querySelector(${JSON.stringify(selector)});
+  if (!e) return null;
+  e.scrollIntoView({ block: 'center' });
+  const b = e.getBoundingClientRect();
+  const at = (dx) => {
+    const t = document.elementFromPoint(b.x + b.width / 2 + dx, b.y + b.height / 2);
+    return t === e || e.contains(t);
+  };
+  const s = getComputedStyle(e);
+  return { reaches: at(${reach}), radius: s.borderRadius, clip: s.clipPath };
+})()`;
+
+let targets = 0;
+await withDemo(async (p, base) => {
+  await p.goto(`${base}/demo/index.html`);
+  await p.settle(1800);
+
+  for (const { selector, reach } of TARGETS) {
+    const before = await p.evaluate(probe(selector, reach));
+    if (!before) {
+      failures.push(`${selector}: not on the page, so its target was never measured`);
+      continue;
+    }
+    if (!before.reaches) {
+      failures.push(`${selector}: the target does not reach ${reach}px from centre with no skin ` +
+        'set at all, so the rest of this proves nothing');
+      continue;
+    }
+
+    await p.evaluate(`document.documentElement.style.setProperty('--pw-clip-control', ${JSON.stringify(NOTCH)})`);
+    await p.settle(120);
+    const after = await p.evaluate(probe(selector, reach));
+    await p.evaluate(`document.documentElement.style.removeProperty('--pw-clip-control')`);
+    await p.settle(60);
+    targets += 1;
+
+    if (!after.reaches) {
+      failures.push(`${selector}: a skin setting --pw-clip-control collapses the target to its ` +
+        `ink, ${reach}px from centre no longer lands on it (WCAG 2.5.8 wants 24x24, this kit ` +
+        'wants 44)');
+    }
+    /* Not "the radius changed": a clip paints over a radius without altering
+       the computed value, so that assertion reads well and can never fail.
+       The falsifiable form of the same concern is that the hook did not reach
+       these controls at all. It also covers the radio's roundness, which the
+       README calls semantic and a notched polygon squares off. */
+    if (after.clip !== 'none') {
+      failures.push(`${selector}: the corner clip reached it as ${after.clip}, so the hook ` +
+        'is clipping a control whose hit area and focus ring live outside its box');
+    }
+  }
+});
+
 report('a11y', failures, `${checked} page/look/theme combinations scanned by axe ${
   JSON.parse(readFileSync(new URL('../node_modules/axe-core/package.json', import.meta.url), 'utf8')).version
-}, and ${named} accessible names the browser computed`);
+}, ${named} accessible names the browser computed, and ${targets} hit targets under a skin's clip`);

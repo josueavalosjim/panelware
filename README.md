@@ -380,6 +380,16 @@ rewrite: `--pw-clip-control` and `--pw-clip-box` for corner geometry a scalar
 radius cannot express, and `--pw-texture` with `--pw-texture-opacity` for a
 surface pattern.
 
+`--pw-clip-control` does not reach the slider thumb, the checkbox, or the
+radio, and that exemption is measured rather than promised. `clip-path` clips
+an element's outline and its pseudo-elements along with its corners, and all
+three of those draw their hit area as a centred `::after` and their focus ring
+as an `outline`, so the hook collapsed each target back to its ink: 20×20 for
+the checkbox and the radio, under WCAG 2.5.8's 24×24 and well under the 44
+this kit asks for. `check:a11y` sets a notched polygon and hit-tests each one,
+and a test holds any control built the same way to the same exemption. If you
+add a control whose target is larger than its box, it belongs in that list.
+
 **Then check it.** Add your theme to `tastecheck.config.json`'s `themes` array
 and run `npm run check`. Every pair is measured against your values, and a
 token your skin forgot to declare is a hard failure rather than a silent

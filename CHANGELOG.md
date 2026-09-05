@@ -33,6 +33,32 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### A documented skin hook broke the checkbox and the radio
+
+`--pw-clip-control` is offered in "Writing a skin" as the way to give the kit
+notched corners. `clip-path` clips an element's outline and its
+pseudo-elements along with its corners, and the checkbox and the radio each
+draw their hit area as a centred `::after` and their focus ring as an
+`outline`. Setting the hook collapsed both targets to their 20×20 boxes, under
+WCAG 2.5.8's 24×24 and well under the 44 this kit asks for, and squared off
+the radio whose roundness the README calls semantic.
+
+The slider thumb had been given the opt-out for exactly this reason, with the
+reasoning written down. The checkbox and the radio had the identical
+construction and had not.
+
+Two guards. `check:a11y` sets a notched polygon the way a skin would and
+hit-tests each control from its centre, which is the only way to see a bug
+that exists solely in a skin nobody has written yet. And a test holds every
+control built with a centred hit expander to the same exemption, keyed on the
+construction rather than on a list of names, so a fourth one fails on the day
+it is written rather than on the day someone writes a skin.
+
+One assertion was dropped for being unfalsifiable. Checking that the hook did
+not change `border-radius` reads well and can never fail, because a clip
+paints over a radius without altering the computed value. The falsifiable form
+of the same concern is that the hook did not reach these controls at all.
+
 ### Every List painted a focus ring at mount
 
 `.pw-list-item[data-active]` drew the focus outline with no condition on it,

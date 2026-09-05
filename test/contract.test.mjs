@@ -483,6 +483,46 @@ describe('what would block the second skin', () => {
     }
   });
 
+  test('every control with a hit expander opts out of the corner clip', () => {
+    /* clip-path clips an element's outline and its pseudo-elements along with
+       its corners. Three controls draw their hit area as a centred ::after
+       and their focus ring as an outline, so --pw-clip-control, which is a
+       documented hook a skin is invited to set, silently collapsed each
+       target back to its ink and clipped the ring away with it. The slider
+       thumb had been given the opt-out; the checkbox and the radio had the
+       identical construction and had not.
+
+       Measured, not inferred: with a notched polygon set, a hit at the
+       checkbox's centre plus 15px stopped landing on the checkbox. That is
+       under WCAG 2.5.8's 24x24 and well under this kit's own 44 floor.
+
+       The signature is the construction rather than a list of names, so a
+       fourth control built the same way fails this on the day it is written
+       rather than on the day someone writes a skin. */
+    const css = bare(read('css/panelware.css'));
+    /* Every member of the list, not the list. A selector list is where a
+       guard like this quietly stops working: match the whole string and one
+       member satisfies the test for all of them. */
+    const parts = (list) => list.split(',').map((x) => x.trim()).filter(Boolean);
+    const optOut = new Set(parts(css.match(/:where\(([^)]*)\)\s*\{\s*clip-path:\s*none/)?.[1] ?? ''));
+    const missing = [];
+    for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const centred = /position:\s*absolute/.test(body)
+        && /top:\s*50%/.test(body) && /left:\s*50%/.test(body)
+        && /transform:\s*translate\(-50%,\s*-50%\)/.test(body)
+        && /width:/.test(body) && /height:/.test(body);
+      if (!centred) continue;
+      for (const one of parts(selector)) {
+        if (!one.endsWith('::after')) continue;
+        const base = one.slice(0, -'::after'.length);
+        if (!optOut.has(base)) missing.push(base);
+      }
+    }
+    assert.deepEqual(missing, [],
+      'a hit expander on a control the corner clip still applies to, so a skin setting '
+      + '--pw-clip-control collapses the target to the ink');
+  });
+
   test('no component sets overflow: hidden on a bevelled surface', () => {
     /* It is the obvious fix for a 1px corner artefact and it would clip the
        second skin's outer glow dead. The gloss clips its own pseudo-elements
