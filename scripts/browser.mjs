@@ -60,6 +60,29 @@ export async function withPage(fn, { width = 1100, height = 900, settle = 900 } 
       }
       return page.settle(60);
     };
+    /* A real mouse press, for the same reason page.key exists. Radix opens a
+       menu on pointerdown rather than on click, so element.click() from page
+       script opens nothing and looks like the component is broken. This also
+       leaves the page in pointer modality, which is correct: a menu opened
+       with the mouse should not paint focus rings. */
+    page.click = async (selector) => {
+      const at = await page.evaluate(`(() => {
+        const e = document.querySelector(${JSON.stringify(selector)});
+        if (!e) return null;
+        e.scrollIntoView({ block: 'center' });
+        const r = e.getBoundingClientRect();
+        return { x: Math.round(r.x + r.width / 2), y: Math.round(r.y + r.height / 2) };
+      })()`);
+      if (!at) return false;
+      for (const type of ['mousePressed', 'mouseReleased']) {
+        await page.send('Input.dispatchMouseEvent', {
+          type, x: at.x, y: at.y, button: 'left', clickCount: 1, buttons: type === 'mousePressed' ? 1 : 0,
+        });
+      }
+      await page.settle(250);
+      return true;
+    };
+
     /* What the browser itself computed, rather than what the markup implies.
        An accessible name is the end of a long resolution: aria-labelledby to
        an id that has to exist, then aria-label, then content, then nothing.

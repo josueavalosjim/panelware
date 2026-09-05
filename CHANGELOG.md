@@ -33,6 +33,38 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### The checks now see the parts of the kit that only exist when opened
+
+axe scanned pages at rest, and a menu, a select listbox and a dialog are not
+on a page at rest. Ten classes the kit ships styling for had therefore never
+rendered in any browser check: the whole menu popup, the whole select list,
+and the dialog's overlay and panel. This file's own first line said "in every
+state".
+
+`browser.mjs` can press a real mouse button now, for the same reason it grew a
+key primitive: Radix opens a menu on pointerdown, so `element.click()` from
+page script opens nothing and looks like a broken component. Each surface is
+opened and scanned in both themes, and each opener is checked for having
+actually opened by naming the classes it should reveal, because a click that
+lands on nothing leaves axe rescanning the page it already scanned and
+reporting the same clean result.
+
+It found one thing, and it is upstream. Radix's Select hides the rest of the
+page with `aria-hidden` and does not also make it inert, so every focusable
+control behind the open listbox sits in an `aria-hidden` subtree. The Dialog
+does it properly and is clean, so this is a difference between two Radix
+primitives rather than something the skin does or can fix. It is recorded as a
+named exemption that is asserted to still be happening, so if Radix changes it
+the entry goes stale and says so rather than excusing a fixed bug forever.
+
+Two page-level rules are off for that pass. A modal correctly hides the page
+behind it, so the demo page's own `<main>` and `<h1>` stop being visible to
+axe and both rules fire: that is the modal working, reported as a defect.
+
+`check:overflow` tested the default look and nothing else, so compact density,
+the axis most likely to change whether a fixed-width row fits, had never been
+measured at any width. Eight measurements became sixteen. It passes.
+
 ### The tarball's own citations, and a gate that never looked at the code
 
 `HANDOFF.md` carries the design record and a dozen files in `src/` and `css/`

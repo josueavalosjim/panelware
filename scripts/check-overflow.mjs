@@ -10,10 +10,18 @@
  * The assertion is documentElement.scrollWidth against clientWidth, plus the
  * element responsible when they disagree, because "the page is 14px too wide"
  * without a culprit is a bug report to yourself.
+ *
+ * At every density, not only the shipped one. This tested the default look
+ * and nothing else, so compact, which makes controls denser and is the axis
+ * most likely to change how a fixed-width row fits, had never been measured
+ * at any width. Skin is left out on purpose: it changes colour and corner
+ * geometry rather than size, and it is the density and the width that decide
+ * whether something fits.
  */
 import { report, withDemo } from './browser.mjs';
 
 const WIDTHS = [320, 375, 768, 1100];
+const DENSITIES = ['comfortable', 'compact'];
 
 const MEASURE = `(() => {
   const d = document.documentElement;
@@ -56,20 +64,25 @@ const failures = [];
 for (const page of ['demo/states.html', 'demo/index.html']) {
   await withDemo(async (p, base) => {
     for (const width of WIDTHS) {
-      await p.resize(width, 900);
-      await p.goto(`${base}/${page}`);
-      await p.settle(700);
-      const alive = await p.evaluate(ALIVE);
-      if (alive < FLOOR) {
-        failures.push(`${page} at ${width}px rendered ${alive} controls, so nothing was measured` +
-          (page.includes('index') ? ' (it boots React from esm.sh and needs a network)' : ''));
-        continue;
+      for (const density of DENSITIES) {
+        await p.resize(width, 900);
+        await p.goto(`${base}/${page}`);
+        await p.settle(700);
+        await p.evaluate(`document.documentElement.dataset.density = ${JSON.stringify(density)}`);
+        await p.settle(200);
+        const alive = await p.evaluate(ALIVE);
+        if (alive < FLOOR) {
+          failures.push(`${page} at ${width}px ${density} rendered ${alive} controls, so nothing was measured` +
+            (page.includes('index') ? ' (it boots React from esm.sh and needs a network)' : ''));
+          continue;
+        }
+        const bad = await p.evaluate(MEASURE);
+        if (!bad) continue;
+        failures.push(`${page} at ${width}px ${density}: scrollWidth ${bad.scrollWidth} vs ${bad.clientWidth}` +
+          (bad.worst ? `, widest offender ${bad.worst.id} by ${bad.worst.over}px` : ''));
       }
-      const bad = await p.evaluate(MEASURE);
-      if (!bad) continue;
-      failures.push(`${page} at ${width}px: scrollWidth ${bad.scrollWidth} vs ${bad.clientWidth}` +
-        (bad.worst ? `, widest offender ${bad.worst.id} by ${bad.worst.over}px` : ''));
     }
   });
 }
-report('overflow', failures, `2 pages x ${WIDTHS.length} widths`);
+report('overflow', failures,
+  `2 pages x ${WIDTHS.length} widths x ${DENSITIES.length} densities`);

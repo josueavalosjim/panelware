@@ -49,6 +49,17 @@ const RUN = `axe.run(document, {
   })),
 })))`;
 
+/* The same run, minus two rules that describe the demo page's document
+   outline rather than the kit. A modal correctly hides the page behind it, so
+   the page's own <main> and <h1> stop being visible to axe and both rules
+   fire: that is the modal working, reported as a defect. Everything else,
+   including every rule that could say something about the surface actually
+   on screen, stays on. */
+const RUN_OPEN = RUN.replace('region: { enabled: false },',
+  `region: { enabled: false },
+    'landmark-one-main': { enabled: false },
+    'page-has-heading-one': { enabled: false },`);
+
 /* Every look the kit ships, as a skin and an optional preset. Not a cross
    product: a preset is nested inside its skin, so pairing one with another
    skin is not a combination that exists. */
@@ -141,6 +152,88 @@ await withDemo(async (p, base) => {
 });
 
 /**
+ * axe over the surfaces that only exist once you open them.
+ *
+ * Everything above scans a page at rest, and a menu, a select listbox and a
+ * dialog are not on a page at rest. Ten classes the kit ships styling for
+ * therefore never rendered in any browser check here: the whole menu popup,
+ * the whole select list, and the dialog's own overlay and panel. This file's
+ * first line said "in every state".
+ *
+ * demo/index.html only. states.html renders the components with no JavaScript
+ * at all, which is what makes it the proof the CSS stands alone and the wrong
+ * page to ask what happens when you open something.
+ *
+ * Each opener is checked for having actually opened, by name, because a click
+ * that lands on nothing leaves axe scanning the page it was already scanning
+ * and reporting the same clean result.
+ */
+/**
+ * Upstream behaviour, recorded rather than switched off.
+ *
+ * Radix's Select hides the rest of the page with aria-hidden and does not
+ * also make it inert, so every focusable control behind the open listbox is
+ * inside an aria-hidden subtree, which is exactly what this rule is for. The
+ * Dialog does it properly and is clean, so this is a difference between two
+ * Radix primitives rather than something the skin does or can fix.
+ *
+ * Listed with `seen`, and asserted below to have actually occurred, because
+ * an exemption nobody checks is how a fixed upstream bug stays permanently
+ * excused. If Radix changes this, the entry goes stale and says so.
+ */
+const KNOWN = [
+  { surface: 'select listbox', rule: 'aria-hidden-focus', seen: false,
+    why: 'Radix Select sets aria-hidden on the page without inert' },
+];
+
+const SURFACES = [
+  { name: 'menu', open: '#menubar .pw-menubar-trigger', reveals: ['pw-menu', 'pw-menu-item'] },
+  { name: 'select listbox', open: '#field .pw-select', reveals: ['pw-select-list', 'pw-select-item'] },
+  { name: 'dialog', open: '#dialog .pw-button', reveals: ['pw-panel', 'pw-overlay'] },
+];
+
+let opened = 0;
+await withDemo(async (p, base) => {
+  for (const theme of ['light', 'dark']) {
+    for (const { name, open, reveals } of SURFACES) {
+      await p.goto(`${base}/demo/index.html`);
+      await p.settle(1800);
+      await p.evaluate(`document.documentElement.dataset.theme = ${JSON.stringify(theme)}`);
+      await p.settle(200);
+
+      if (!(await p.click(open))) {
+        failures.push(`${name} (${theme}): nothing matched ${open}, so axe scanned the page at rest`);
+        continue;
+      }
+      const missing = await p.evaluate(`${JSON.stringify(reveals)}
+        .filter((c) => !document.querySelector('.' + c))`);
+      if (missing.length) {
+        failures.push(`${name} (${theme}): clicked ${open} and ${missing.join(', ')} did not appear, ` +
+          'so it never opened and axe scanned the page at rest');
+        continue;
+      }
+
+      await p.evaluate(AXE);
+      const violations = await p.evaluate(RUN_OPEN);
+      opened += 1;
+      for (const v of violations) {
+        const known = KNOWN.find((k) => k.surface === name && k.rule === v.id);
+        if (known) { known.seen = true; continue; }
+        failures.push(`${v.impact}: ${v.id} — ${v.help}  [open ${name}, ${theme}]`);
+        for (const n of v.nodes) failures.push(`      ${n.target}`);
+      }
+    }
+  }
+});
+
+for (const k of KNOWN) {
+  if (!k.seen) {
+    failures.push(`the ${k.rule} exemption for the open ${k.surface} did not occur, so ` +
+      `"${k.why}" is no longer true and the exemption should go`);
+  }
+}
+
+/**
  * The hit targets have to survive the hooks a skin is invited to set.
  *
  * --pw-clip-control is documented in "Writing a skin" and a skin is meant to
@@ -225,4 +318,4 @@ await withDemo(async (p, base) => {
 
 report('a11y', failures, `${checked} page/look/theme combinations scanned by axe ${
   JSON.parse(readFileSync(new URL('../node_modules/axe-core/package.json', import.meta.url), 'utf8')).version
-}, ${named} accessible names the browser computed, and ${targets} hit targets under a skin's clip`);
+}, ${opened} opened surfaces, ${named} accessible names the browser computed, and ${targets} hit targets under a skin's clip`);
