@@ -33,6 +33,42 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### Documentation that described something else
+
+`--pw-depth` was declared, documented as the scalar that flattens the kit,
+published in the demo's token table, and read by nothing. Its own comment said
+"see `css/treatment/bevel.css` for what actually reads this" and that file did
+not. It multiplies with the skin's own `--pw-bevel-depth` now, derived in the
+component block rather than on `:root` so setting it on a subtree works.
+`--pw-depth: 0` collapses the bevel offsets to zero, which is what it always
+claimed to do.
+
+Twelve other tokens are declared and unread, and most of them are fine: a
+scale is allowed to be complete before every rung has a user, and two exist to
+be measured by the contrast gate rather than painted. A test holds every token
+to being read or being on a list with a reason, in both directions, so a new
+dead token fails until somebody writes down why it is there and a listed one
+comes off the list when it gains a reader.
+
+`assets/README.md` gave the transport ink as 49, 72, 81 with a 9x9 square. It
+is 56, 72, 64 with an 8x8 square, and a 9x9 square would fail the even-size
+test in the same suite: the README documented a mark the tests forbid. The
+paragraph opens by warning that it is "the kind of thing that gets corrected
+later", which is what made the wrong numbers expensive. They are asserted
+against the drawing now.
+
+Two more comments described drafts rather than the drawing: `check`'s row
+profile is 3 3 3 6 6 5 3 and not 2 2 2 4 4 4 2, which matters because the real
+profile's ratio is exactly 2.00 against an assertion of `<= 2`, so the stale
+numbers made a knife-edge look roomy. And `search` is 11x12 rather than
+"filling the 12x12 live area exactly".
+
+One test was reading its own subject's comments. The check that the bevel
+derivation is not on `:root` searched the raw file, so writing a paragraph
+explaining why the derivation is not on `:root` turned it red. It strips
+comments now, because a guard a comment can break is a guard people learn to
+edit around.
+
 ### Three guards that could not catch what they were written for
 
 None of these was a product bug. All three were tests that pass while the

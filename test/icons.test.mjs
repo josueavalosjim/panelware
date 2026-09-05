@@ -322,6 +322,36 @@ describe('a chevron points where its name says', () => {
     const svg = read('assets/icons.svg');
     assert.ok(svg.includes(`viewBox="0 0 ${w} ${h}"`), 'the sheet is not that size');
   });
+  test('the README states the transport ink it actually draws', () => {
+    /* It said "pulled in to 9x9" and "49, 72 and 81 pixels" while the drawing
+       is an 8x8 square and 56, 72, 64. That paragraph opens by warning it is
+       "the kind of thing that gets corrected later", which is exactly what
+       makes a wrong number in it expensive: it tells the next reader not to
+       touch the drawing to match. A 9x9 square would also fail the even-size
+       test above, so the README documented a mark this suite forbids.
+
+       Measured from the same rects the sheet is drawn from, so redrawing a
+       transport mark fails here until the prose is updated with it. */
+    /* Whitespace-normalised, because the claim is a sentence in wrapped prose
+       and a line break landing mid-phrase is not a drift worth failing on. */
+    const doc = read('assets/README.md').replace(/\s+/g, ' ');
+    const ink = (name) => iconRects(name).reduce((n, r) => n + r.w * r.h, 0);
+    const size = (name) => {
+      const rects = iconRects(name);
+      const x = Math.min(...rects.map((r) => r.x));
+      const y = Math.min(...rects.map((r) => r.y));
+      return [Math.max(...rects.map((r) => r.x + r.w)) - x,
+        Math.max(...rects.map((r) => r.y + r.h)) - y];
+    };
+    assert.ok(doc.includes(`play ${ink('play')}, pause ${ink('pause')} and stop ${ink('stop')}`),
+      `README does not state the ink it draws: play ${ink('play')}, pause ${ink('pause')}, `
+      + `stop ${ink('stop')}`);
+    assert.ok(doc.includes(`pulled in to ${size('stop').join('x')}`),
+      `README does not state stop's ${size('stop').join('x')}`);
+    assert.ok(doc.includes(`tall and narrow at ${size('play').join('x')}`),
+      `README does not state play's ${size('play').join('x')}`);
+  });
+
   test('the index carries each glyph\'s ink bearings, measured not guessed', () => {
     /* Every icon is a 16x16 cell and almost none fill it. The check is 12
        pixels of ink with 2 either side; the exclamation is 2 with 7. A badge

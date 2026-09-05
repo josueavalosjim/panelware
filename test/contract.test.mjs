@@ -389,10 +389,16 @@ describe('the depth knob', () => {
        resolves against :root's depth once and descendants inherit the
        finished "1px", so setting the depth anywhere else does nothing at
        all. That shipped, and demo/states.html caught it. */
-    const at = bevel.indexOf('--pw-bevel-1:');
+    /* Comments stripped first. This read the raw file, so the words ":root"
+       and ":where(" inside a comment counted as declarations, and a paragraph
+       explaining why the derivation is not on :root failed the test that
+       checks it is not on :root. A guard that a comment can turn red is a
+       guard people learn to edit around. */
+    const src = bare(bevel);
+    const at = src.indexOf('--pw-bevel-1:');
     assert.notEqual(at, -1);
-    const selector = bevel.lastIndexOf(':where(', at);
-    const rootDecl = bevel.lastIndexOf(':root', at);
+    const selector = src.lastIndexOf(':where(', at);
+    const rootDecl = src.lastIndexOf(':root', at);
     assert.ok(selector > rootDecl,
       '--pw-bevel-1 is declared outside the component-level :where() block');
   });
@@ -521,6 +527,98 @@ describe('what a colour token is allowed to be', () => {
       assert.equal(/[^-]\bcolor\(/.test(css), false, `color() in ${rel}`);
       assert.equal(/\b(?:oklch|oklab|lab|lch|rgb|hsl)\(\s*from\b/.test(css), false,
         `relative colour syntax in ${rel}`);
+    }
+  });
+});
+
+describe('tokens nothing reads', () => {
+  /* A token declared, documented, published in the demo's token table, and
+     read by nothing is a knob a consumer will find and turn to no effect.
+     --pw-depth was the worst of them: its own comment said "see bevel.css for
+     what actually reads this" and bevel.css did not. It is wired now.
+
+     The rest are not all bugs, and that is the point of listing them rather
+     than banning them. A scale is allowed to be complete before every rung
+     has a user. So the rule is not "every token is read", it is "every token
+     is read or is on this list with a reason", which turns a silent set into
+     a maintained one: a new dead token fails until somebody writes down why
+     it is there. */
+  const RESERVED = new Map([
+    /* Complete scales. A gap in a scale is worse than an unused rung: the
+       next person picks the nearest value that exists rather than the one
+       that is right. */
+    ['--pw-space-2xl', 'a rung of the space scale'],
+    ['--pw-text-display', 'a rung of the type scale'],
+    ['--pw-text-heading', 'a rung of the type scale'],
+    ['--pw-leading-tight', 'a rung of the leading scale'],
+    ['--pw-tracking-display', 'the tracking that pairs with --pw-text-display'],
+    ['--pw-duration-slow', 'a rung of the duration scale'],
+
+    /* Role slots whose role has not happened yet. Both halves of the exit
+       pair are declared because a component that animates out will want them
+       together, and half a pair is how one of them ends up a literal. */
+    ['--pw-duration-exit', 'nothing animates out yet; the enter/exit pair stays whole'],
+    ['--pw-ease-exit', 'nothing animates out yet; the enter/exit pair stays whole'],
+    ['--pw-font-lcd', 'the readout is a sprite font, so its caption is UI type today'],
+
+    /* Declared to be measured, not to be painted. The glare is a sibling
+       pseudo-element rather than an ancestor background, so no compositing
+       check can see through it; these are that stack pre-flattened so the
+       static gate measures what the runtime gate finds painted. */
+    ['--pw-gloss-lit-base-200', 'pre-flattened for the contrast gate, never painted'],
+    ['--pw-gloss-lit-primary', 'pre-flattened for the contrast gate, never painted'],
+
+    /* Documented in the README as doing nothing today. */
+    ['--pw-texture-opacity', 'a skin hook the README states is inert'],
+
+    /* A semantic slot for consumers and the second skin. This kit's own
+       separator is engraved from the bevel pair instead, which is the period
+       drawing and not a flat line. */
+    ['--pw-color-divider', 'a semantic slot; the chrome separator is engraved, not drawn'],
+  ]);
+
+  test('every token is read, or is on the list with a reason', () => {
+    const files = [];
+    const walk = (dir) => {
+      for (const e of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
+        if (e.name === 'panelware.css') continue;
+        if (e.isDirectory()) walk(`${dir}/${e.name}`);
+        else if (e.name.endsWith('.css')) files.push(`${dir}/${e.name}`);
+      }
+    };
+    walk('css');
+
+    const declared = new Set();
+    const used = new Set();
+    for (const rel of files) {
+      const css = bare(read(rel));
+      for (const [, name] of css.matchAll(/(--pw-[\w-]+)\s*:/g)) declared.add(name);
+      for (const [, name] of css.matchAll(/var\((--pw-[\w-]+)/g)) used.add(name);
+    }
+    assert.ok(declared.size > 200, `only ${declared.size} tokens found, so this scanned nothing`);
+
+    const unread = [...declared].filter((t) => !used.has(t) && !RESERVED.has(t)).sort();
+    assert.deepEqual(unread, [],
+      'declared and read by nothing. Wire it, delete it, or add it to RESERVED with the reason');
+
+    /* Both directions. A token that gains a reader should come off the list,
+       or the list becomes a place stale entries go to be ignored. */
+    const stale = [...RESERVED.keys()].filter((t) => used.has(t)).sort();
+    assert.deepEqual(stale, [], 'on RESERVED but something reads it now, so the reason is stale');
+  });
+
+  test('--pw-depth is one of the ones that is really read', () => {
+    /* The specific lie this replaced, kept as its own assertion because the
+       token is published in the demo's token table and a consumer will find
+       it. Multiplied with the skin's own depth rather than replacing it, and
+       derived in the component block rather than on :root, which is what
+       makes setting it on a subtree work. */
+    const bevel = bare(read('css/treatment/bevel.css'));
+    assert.match(bevel, /--pw-bevel-scale:\s*calc\(var\(--pw-bevel-depth\)\s*\*\s*var\(--pw-depth\)\)/,
+      'the two depth knobs are not multiplied, so one of them does nothing');
+    for (const n of ['1', '2', '1n', '2n']) {
+      assert.match(bevel, new RegExp(`--pw-bevel-${n}:\\s*calc\\(var\\(--pw-bevel-scale\\)`),
+        `--pw-bevel-${n} does not read the combined scale`);
     }
   });
 });

@@ -1368,10 +1368,25 @@
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
          .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
          .pw-raised, .pw-sunken) {
-    --pw-bevel-1:  calc(var(--pw-bevel-depth) * 1px);
-    --pw-bevel-2:  calc(var(--pw-bevel-depth) * 2px);
-    --pw-bevel-1n: calc(var(--pw-bevel-depth) * -1px);
-    --pw-bevel-2n: calc(var(--pw-bevel-depth) * -2px);
+    /* Two knobs multiplied, because they have two owners. --pw-bevel-depth is
+       the skin's: chrome ships 1 and the cyber preset ships 0, and a consumer
+       has no business editing it. --pw-depth is the consumer's, kept by name
+       from DaisyUI, and until now it was declared, documented as the thing
+       that flattens the kit, published in the demo's token table, and read by
+       absolutely nothing. Its own comment said "see bevel.css for what
+       actually reads this" and bevel.css did not.
+
+       Multiplied here rather than resolved on :root for the reason the test
+       below this file's derivation checks: a custom property referencing
+       another is substituted against the element the first is declared on, so
+       a :root derivation resolves once and every descendant inherits a
+       finished pixel value. Doing it in the component block is what lets
+       either knob be set on a subtree and mean something. */
+    --pw-bevel-scale: calc(var(--pw-bevel-depth) * var(--pw-depth));
+    --pw-bevel-1:  calc(var(--pw-bevel-scale) * 1px);
+    --pw-bevel-2:  calc(var(--pw-bevel-scale) * 2px);
+    --pw-bevel-1n: calc(var(--pw-bevel-scale) * -1px);
+    --pw-bevel-2n: calc(var(--pw-bevel-scale) * -2px);
 
     --pw-bevel-raised-outer:
       inset var(--pw-bevel-1n) var(--pw-bevel-1n) var(--pw-bevel-frame),

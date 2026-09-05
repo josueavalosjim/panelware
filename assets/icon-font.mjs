@@ -343,7 +343,9 @@ const I = {
      mark a menu bar needs. */
   /* The lens is 9x9 (x3-x11, y2-y10) rather than the wider oval two earlier
      drafts produced, and the handle takes the remaining three rows, so the
-     whole mark fills the 12x12 live area exactly. Ink 44 against close's 52:
+     whole mark is 11x12: it fills the live area's height and stops a column
+     short of its width. This said "fills the 12x12 live area exactly", which
+     was not true and was the kind of claim that stops anyone measuring. Ink 44 against close's 52:
      a ring is lighter than a filled X and matching them would fatten the
      stroke past the set's 2px. */
   search: [

@@ -163,6 +163,13 @@ it look thin.
 
 Optical note, since it is the kind of thing that gets "corrected" later: play,
 pause and stop do not share a bounding box. A solid square reads heavier than
-a triangle that fills the same box, so the square is pulled in to 9x9 and the
-triangle is drawn tall and narrow. Ink areas are 49, 72 and 81 pixels, and
-that imbalance is what makes them look equal in a row.
+a triangle that fills the same box, so the square is pulled in to 8x8 and the
+triangle is drawn tall and narrow at 7x14. Ink areas are play 56, pause 72 and
+stop 64, and that imbalance is what makes them look equal in a row.
+
+Those five numbers are asserted against the drawing in `test/icons.test.mjs`,
+because the paragraph above them was wrong for months: it said 49, 72 and 81
+with a 9x9 square, describing a version of the mark that was redrawn and never
+existed in the shipped sheet. A 9x9 square would fail the even-size test two
+sections down. Prose that states a measurement gets a guard, the same as the
+sheet size does.
