@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.1.4
+
+Documentation only. The code is identical to 0.1.3, and the release exists for
+the reason 0.1.2 existed: npm renders the README and the metadata from the
+published tarball, so prose sitting on `main` is prose nobody reads.
+
+**The demo is public.** GitHub Pages had never been enabled on the repository,
+so `pages.yml` had been failing on every push to `main` since it was written,
+and the README's claim that the demo is the documentation pointed at a file
+path that only helps someone who has already cloned the repo. It is live at
+[josueavalosjim.github.io/panelware](https://josueavalosjim.github.io/panelware/),
+and the README's Status section leads with it.
+
+The site's root answered 404 at first, because the Pages artifact is the whole
+repo root and the root has no index. That is deliberate: `demo/` imports
+`../dist` and `../css`, so uploading `demo/` alone ships a page whose every
+relative path leaves the artifact. There is a redirect at the root now rather
+than a second copy of the demo, because two pages claiming to be the
+documentation is the drift this repo already runs three checks against.
+
+**`homepage` points somewhere worth going.** It was the repository's `#readme`
+anchor, and npmjs.com renders the README directly beneath that link, so it
+sent people to a copy of the page they were already reading. It is the demo
+now. The repository stays one click away through the `repository` field npm
+renders beside it.
+
 ## 0.1.3
 
 Two gates that reported green without having looked.
@@ -32,19 +58,6 @@ rebuild is a no-op that has been proved to be one.
 The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
-
-### The demo is public, and the package points at it
-
-GitHub Pages had never been enabled on the repository, so `pages.yml` had been
-failing on every push to `main` since it was written and the README's claim
-that the demo is the documentation pointed at nothing anyone could open. It is
-live at
-[josueavalosjim.github.io/panelware](https://josueavalosjim.github.io/panelware/).
-
-`homepage` in package.json was the repository's `#readme` anchor, which is
-close to a no-op on npm: that page already renders the README underneath the
-link. It is the demo now, and the repository stays reachable through the
-`repository` field npm renders beside it.
 
 ### The release gate stopped the release, which is what it is for
 
