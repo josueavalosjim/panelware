@@ -1,0 +1,33 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>panelware</title>
+<!--
+  The Pages artifact is the whole repo root, because demo/ imports ../dist and
+  ../css and uploading demo/ alone ships a page whose every relative path
+  leaves the artifact. That is deliberate and pages.yml says so. The cost is
+  that the site's front door has no index, so josueavalosjim.github.io/panelware/
+  answered 404 the day Pages was switched on.
+
+  A redirect rather than a copy of the demo: two pages claiming to be the
+  documentation is the drift this repo already has three checks against.
+-->
+<meta http-equiv="refresh" content="0; url=demo/index.html">
+<link rel="canonical" href="demo/index.html">
+<style>
+  html { color-scheme: light dark; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-content: center;
+    gap: 0.75rem;
+    text-align: center;
+    font: 15px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  a { color: inherit; }
+</style>
+<body>
+  <p>panelware</p>
+  <!-- Visible, because a meta refresh a browser ignores must still lead somewhere. -->
+  <p><a href="demo/index.html">Open the demo</a></p>
+</body>
