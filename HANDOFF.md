@@ -1,4 +1,10 @@
-# panelware (working name — rename before real work starts)
+# panelware, the design record
+
+Where the techniques in this kit came from and why each was chosen. It ships
+in the package because a dozen files in `src/` and `css/` cite it by name for
+their reasoning, and a citation to a file the tarball does not contain is a
+dead end for the person the reasoning was written for.
+
 
 Not "Winamp," "Aqua," "Aero," or "Luna" as the project name — those are real trademarks. Fine to
 cite them as inspiration/prior art in docs (everyone in this genre does — NES.css references
@@ -149,23 +155,3 @@ blur path.
 - Smashing Magazine, "Don't Follow Web Design Trends: Set Them!," Nov 2008: https://www.smashingmagazine.com/2008/11/dont-follow-trends-set-them/
 - 98.css source: https://github.com/jdan/98.css · NES.css source: https://github.com/nostalgic-css/NES.css
 - makeaero button source: https://github.com/Visnalize/makeaero/blob/main/app/button/button-client.tsx
-
-## Kickoff prompt
-
-Paste into a fresh Claude Code session with cwd `~/Documents/PORT/panelware/`:
-
-> Scaffold this design-system project per HANDOFF.md in this directory — read it first, it has the
-> full architecture decision, sourced technique, and v1 scope. Summary: a component engine built
-> as a Radix UI skin (not from-scratch ARIA), first skin is a chrome/LCD skeuomorphic aesthetic.
-> Start with: npm/pnpm workspace scaffold, install Radix primitives for button/toggle/tabs/dialog/
-> slider, build the token contract (DaisyUI-style semantic + structural tokens, extended with
-> --bevel-depth/--glow-intensity), then the bevel treatment using the 98.css stacked-inset-shadow
-> pattern documented in HANDOFF.md. Do the LCD readout as a CSS sprite sheet (background-position
-> swap), per the corrected period-accurate approach in HANDOFF.md, not per-segment divs. Every
-> palette this produces should be checkable against `taste-check` (a published tool at
-> `@josueavalosjim/taste-check` on npm) for contrast before it ships. Skip the multi-thumb EQ
-> slider and the second (cyberpunk) skin entirely for v1 — both are explicitly deferred. Skip
-> Storybook/Turborepo/Nx — plain workspace + Changesets + a simple demo page is the whole v1
-> tooling stack. Rename the project from the "panelware" placeholder to something real before
-> publishing (not "Winamp"/"Aqua"/"Aero"/"Luna" — those are trademarks, cite them as inspiration
-> only, the way NES.css cites Nintendo).

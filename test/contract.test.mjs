@@ -739,6 +739,30 @@ describe('the release', () => {
     const pkg = JSON.parse(read('package.json'));
     assert.deepEqual(missingFromPack(pkg, packedFiles()).map(([n]) => n), []);
   });
+  test('a packed file never cites a file the tarball leaves out', () => {
+    /* HANDOFF.md carries the design record, and a dozen files in src/ and
+       css/ cite it by name for their reasoning. It was not in the files
+       array, so every one of those citations was a dead end for the person
+       the reasoning was written for: they have the source, the source says
+       see HANDOFF.md, and there is no HANDOFF.md.
+
+       Nothing could see it. check-exports asks whether the exports map
+       resolves, which is a different question: a file can be perfectly
+       packed and still point at nothing. */
+    const packed = packedFiles();
+    const cited = new Map();
+    for (const path of packed) {
+      if (!/\.(?:ts|tsx|js|mjs|css|md)$/.test(path)) continue;
+      for (const [, name] of read(path).matchAll(/\b([A-Z][A-Z0-9_]*\.md)\b/g)) {
+        if (!packed.has(name)) cited.set(name, [...(cited.get(name) ?? []), path]);
+      }
+    }
+    assert.deepEqual([...cited.keys()], [],
+      `cited from the tarball and not in it:\n${[...cited]
+        .map(([name, where]) => `  ${name}, from ${where.length} files, e.g. ${where[0]}`)
+        .join('\n')}`);
+  });
+
   test('the README describes the module system the package actually has', () => {
     /* The README now documents two errors a consumer will hit: a CommonJS
        require gets ERR_PACKAGE_PATH_NOT_EXPORTED, and importing without the

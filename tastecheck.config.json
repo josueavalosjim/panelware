@@ -224,9 +224,14 @@
     ]
   },
   "treatments": {
-    "$comment": "demo/states.html is the only markup in the repo. Prefixes rather than a list of class names, because the list would need editing on every component and a list nobody maintains approves everything by accident.",
+    "$comment": [
+      "Prefixes rather than a list of class names, because the list would need editing on every component and a list nobody maintains approves everything by accident.",
+      "This scanned demo/states.html alone, on the stated grounds that it was the only markup in the repo, which was never true: every component in src/ writes markup and two of them cite this gate by name as the reason they emit unitless custom properties rather than px. Neither claim was checked, because the gate had never looked at the file making it. One file scanned became eighteen and it passed, so the components were right, but a rule nobody is held to is a rule that is right by luck."
+    ],
     "files": [
-      "demo/states.html"
+      "demo/states.html",
+      "demo/index.html",
+      "src/*.tsx"
     ],
     "allowPrefixes": [
       "pw-",

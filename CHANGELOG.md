@@ -33,6 +33,38 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### The tarball's own citations, and a gate that never looked at the code
+
+`HANDOFF.md` carries the design record and a dozen files in `src/` and `css/`
+cite it by name for their reasoning. It was not in the `files` array, so every
+one of those citations was a dead end for exactly the person the reasoning was
+written for: they have the source, the source says see `HANDOFF.md`, and the
+tarball has no `HANDOFF.md`. It ships now, without its kickoff-prompt section,
+and its title no longer says "working name, rename before real work starts" on
+a package that has been published three times.
+
+`check:exports` could not see this. It asks whether the exports map resolves,
+which is a different question: a file can be perfectly packed and still point
+at nothing. A test now holds every packed file to citing only files the
+tarball contains.
+
+The treatments gate scanned `demo/states.html` alone, on the stated grounds
+that it was the only markup in the repo. That was never true. Every component
+in `src/` writes markup, and two of them cite this gate by name as the reason
+they emit unitless custom properties rather than px, so the gate had never
+looked at the file making the claim about it. One file scanned is eighteen
+now. It passes, so those components were right, but a rule nobody is held to
+is a rule that is right by luck. Confirmed by planting a `3px` inline value in
+a component, which it now names by file and line.
+
+Two README samples described code that had been replaced. The readout section
+described a visually hidden span, which is what the component did before axe
+found the problem with it: `role="img"` on the host pruned the marquee's own
+pause button out of the accessibility tree. And the first code sample on the
+page taught a `<span>` wrapper inside a glossed button, which `gloss.css`
+explains at length was a workaround for a stacking bug that has been fixed,
+and which costs the button its flex gap.
+
 ### Documentation that described something else
 
 `--pw-depth` was declared, documented as the scalar that flattens the kit,

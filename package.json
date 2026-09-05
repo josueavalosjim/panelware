@@ -45,6 +45,7 @@
     "assets",
     "README.md",
     "CHANGELOG.md",
+    "HANDOFF.md",
     "LICENSE"
   ],
   "scripts": {

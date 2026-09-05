@@ -29,7 +29,7 @@ import "@josueavalosjim/panelware/css";
 
 ```html
 <button class="pw-button">Open</button>
-<button class="pw-button" data-variant="primary" data-gloss><span>Save</span></button>
+<button class="pw-button" data-variant="primary" data-gloss>Save</button>
 ```
 
 One class per element. No treatment classes in the markup, and nothing to
@@ -425,10 +425,18 @@ they are applied as a `mask-image` rather than a background image, so the ink
 is `--pw-color-lcd-content` and the contrast gate can measure it.
 
 The visible readout is a picture of text and gives assistive technology
-nothing, so the component renders the real string into a visually hidden span
-beside it. One span with `04:21` in it, never one per character. The live
-region is off by default, because a clock announcing itself once a second
-makes the rest of a page unusable.
+nothing, so the element that is the picture carries `role="img"` and the real
+string as its name. One name for the whole readout, never one per character.
+
+This described a visually hidden span beside the sheet, which is what the
+component used to do and what axe found wrong with it. `role="img"` prunes
+everything inside the element from the accessibility tree, so putting it on
+the host also hid the marquee's own pause button: a focusable control that a
+screen reader could not see. It sits on the thing that is the image now, and
+the controls are outside it.
+
+The live region is off by default, because a clock announcing itself once a
+second makes the rest of a page unusable.
 
 ## Development
 
