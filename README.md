@@ -72,9 +72,14 @@ a bundler, a `<link>`, or an `@import`, with or without React.
 
 ## Status
 
-The components are built and gated. `demo/index.html` runs them for real, and
-`demo/states.html` renders every component in every state with no JavaScript
-at all, which is the standing proof that the CSS does not need React.
+The components are built and gated, and the demo is live:
+
+**[josueavalosjim.github.io/panelware](https://josueavalosjim.github.io/panelware/)**
+
+That page runs the components for real, and
+[`demo/states.html`](https://josueavalosjim.github.io/panelware/demo/states.html)
+renders every component in every state with no JavaScript at all, which is the
+standing proof that the CSS does not need React.
 
 Those two pages render the same DOM, deliberately, and a check compares their
 geometry. A static page that positioned things more simply than the real
