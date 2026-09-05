@@ -908,6 +908,60 @@
      }
     },
     {
+     "name": "--pw-bracket-inset",
+     "values": {
+      "both": {
+       "declared": "3px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-bracket-arm",
+     "values": {
+      "both": {
+       "declared": "10px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-bracket-weight",
+     "values": {
+      "both": {
+       "declared": "2px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-selected-bg",
+     "values": {
+      "both": {
+       "declared": "var(--pw-color-primary)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-selected-content",
+     "values": {
+      "both": {
+       "declared": "var(--pw-color-primary-content)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-selected-mark",
+     "values": {
+      "both": {
+       "declared": "none",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-texture",
      "values": {
       "both": {

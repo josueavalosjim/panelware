@@ -92,10 +92,22 @@
      which is one state for both. That is correct here: a menu has a single
      current item however you arrived at it. */
   .pw-menu-item[data-highlighted] {
-    background-color: var(--pw-color-primary);
-    color: var(--pw-color-primary-content);
+    background-color: var(--pw-selected-bg);
+    color: var(--pw-selected-content);
     outline: none;
   }
+
+  /* The item the keyboard or pointer is on. The skin decides whether this paints anything: --pw-selected-mark
+     is none by default, so this is an empty box on chrome and four corner
+     brackets on cyber. */
+    .pw-menu-item[data-highlighted]::before {
+    content: '';
+    position: absolute;
+    inset: var(--pw-bracket-inset);
+    pointer-events: none;
+    background: var(--pw-selected-mark);
+  }
+
 
   .pw-menu-item[data-disabled] {
     color: var(--pw-color-disabled-content);

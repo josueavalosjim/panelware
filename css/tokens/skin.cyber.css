@@ -73,6 +73,46 @@
     rgba(0, 0, 0, var(--pw-texture-opacity)) 0 1px,
     rgba(0, 0, 0, 0) 1px 3px
   );
+
+  /* SELECTION IS DRAWN, NOT TINTED.
+     
+     The chrome skin marks a selected row by inverting it: the accent as a
+     ground, its content colour on top. On a screen-lineage skin that reads as
+     a lit cell, and it is the one idiom every reference in the set avoids.
+     They bracket the selected thing and leave the ground alone.
+     
+     So the wash comes off and four corner marks go on. The row keeps the text
+     colour it already had, which also makes the state cheaper to measure: a
+     selected row stops being a second foreground on a second ground and goes
+     back to being the same text it was.
+     
+     Eight gradients, two per corner. A border with a mask would be shorter
+     and would not survive forced-colors, where masks stay and backgrounds go;
+     gradients vanish there, which is correct, because the components restate
+     selection in the system's own inks under that media query.
+     
+     Shape rather than colour, so removing the wash does not leave
+     aria-selected carrying the state alone. */
+  --pw-selected-bg: transparent;
+  --pw-selected-content: inherit;
+  --pw-selected-mark:
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left top / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left top / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right top / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right top / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left bottom / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right bottom / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
+
 }
 
 [data-skin="cyber"][data-theme="dark"] {
@@ -104,4 +144,44 @@
     rgba(0, 0, 0, var(--pw-texture-opacity)) 0 1px,
     rgba(0, 0, 0, 0) 1px 3px
   );
+
+  /* SELECTION IS DRAWN, NOT TINTED.
+     
+     The chrome skin marks a selected row by inverting it: the accent as a
+     ground, its content colour on top. On a screen-lineage skin that reads as
+     a lit cell, and it is the one idiom every reference in the set avoids.
+     They bracket the selected thing and leave the ground alone.
+     
+     So the wash comes off and four corner marks go on. The row keeps the text
+     colour it already had, which also makes the state cheaper to measure: a
+     selected row stops being a second foreground on a second ground and goes
+     back to being the same text it was.
+     
+     Eight gradients, two per corner. A border with a mask would be shorter
+     and would not survive forced-colors, where masks stay and backgrounds go;
+     gradients vanish there, which is correct, because the components restate
+     selection in the system's own inks under that media query.
+     
+     Shape rather than colour, so removing the wash does not leave
+     aria-selected carrying the state alone. */
+  --pw-selected-bg: transparent;
+  --pw-selected-content: inherit;
+  --pw-selected-mark:
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left top / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left top / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right top / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right top / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left bottom / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right bottom / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
+
 }

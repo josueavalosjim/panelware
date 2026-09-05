@@ -53,9 +53,21 @@
      inversion is right: a row IS the control, so there is nothing smaller to
      mark. */
   .pw-list-item[aria-selected="true"] {
-    background-color: var(--pw-color-primary);
-    color: var(--pw-color-primary-content);
+    background-color: var(--pw-selected-bg);
+    color: var(--pw-selected-content);
   }
+
+  /* The selected row. The skin decides whether this paints anything: --pw-selected-mark
+     is none by default, so this is an empty box on chrome and four corner
+     brackets on cyber. */
+    .pw-list-item[aria-selected="true"]::before {
+    content: '';
+    position: absolute;
+    inset: var(--pw-bracket-inset);
+    pointer-events: none;
+    background: var(--pw-selected-mark);
+  }
+
 
   /* The row the keyboard is on, which is not necessarily the selected one.
      A quieter band, so moving through a list does not look like selecting

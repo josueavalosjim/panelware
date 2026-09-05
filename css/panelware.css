@@ -497,6 +497,37 @@
   /* Surface texture. Generalised from DaisyUI's --noise, which hard-codes a
      noise SVG. The second skin wants scanlines, not noise, and the honest
      name for the slot is what it is for rather than what chrome puts in it. */
+  /* Corner brackets: how far the marks sit inside the row's box, and how long
+     each arm runs. Declared here rather than in the cyber skin because a
+     second skin that wants bracketed selection should not have to reinvent
+     the geometry, only switch it on. */
+  --pw-bracket-inset: 3px;
+  --pw-bracket-arm:   10px;
+  --pw-bracket-weight: 2px;
+
+  /* SELECTION, as a slot rather than a rule.
+     
+     A selected list row and a highlighted menu item are painted by the skin,
+     not by the component, for the same reason --pw-elev is a slot: the
+     component's job is to say which row is selected, and the skin's job is to
+     say what selected looks like. The default is the inversion the chrome
+     skin has always drawn. The cyber skin fills --pw-selected-mark instead
+     and leaves the ground alone.
+     
+     This has to be a slot rather than a treatment override because
+     pw.components sorts after pw.treatment, so a treatment can never win a
+     declaration a component made. It can only fill one the component left. */
+  --pw-selected-bg:      var(--pw-color-primary);
+  --pw-selected-content: var(--pw-color-primary-content);
+  --pw-selected-mark:    none;
+
+  /* Corner brackets: how far the marks sit inside the row, and how long each
+     arm runs. Here rather than in the cyber skin so a second skin that wants
+     bracketed selection switches it on rather than reinventing the geometry. */
+  --pw-bracket-inset: 3px;
+  --pw-bracket-arm:   10px;
+  --pw-bracket-weight: 2px;
+
   --pw-texture: none;
   --pw-texture-opacity: 0;
 
@@ -979,6 +1010,46 @@
     rgba(0, 0, 0, var(--pw-texture-opacity)) 0 1px,
     rgba(0, 0, 0, 0) 1px 3px
   );
+
+  /* SELECTION IS DRAWN, NOT TINTED.
+     
+     The chrome skin marks a selected row by inverting it: the accent as a
+     ground, its content colour on top. On a screen-lineage skin that reads as
+     a lit cell, and it is the one idiom every reference in the set avoids.
+     They bracket the selected thing and leave the ground alone.
+     
+     So the wash comes off and four corner marks go on. The row keeps the text
+     colour it already had, which also makes the state cheaper to measure: a
+     selected row stops being a second foreground on a second ground and goes
+     back to being the same text it was.
+     
+     Eight gradients, two per corner. A border with a mask would be shorter
+     and would not survive forced-colors, where masks stay and backgrounds go;
+     gradients vanish there, which is correct, because the components restate
+     selection in the system's own inks under that media query.
+     
+     Shape rather than colour, so removing the wash does not leave
+     aria-selected carrying the state alone. */
+  --pw-selected-bg: transparent;
+  --pw-selected-content: inherit;
+  --pw-selected-mark:
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left top / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left top / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right top / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right top / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left bottom / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right bottom / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
+
 }
 
 [data-skin="cyber"][data-theme="dark"] {
@@ -1010,6 +1081,46 @@
     rgba(0, 0, 0, var(--pw-texture-opacity)) 0 1px,
     rgba(0, 0, 0, 0) 1px 3px
   );
+
+  /* SELECTION IS DRAWN, NOT TINTED.
+     
+     The chrome skin marks a selected row by inverting it: the accent as a
+     ground, its content colour on top. On a screen-lineage skin that reads as
+     a lit cell, and it is the one idiom every reference in the set avoids.
+     They bracket the selected thing and leave the ground alone.
+     
+     So the wash comes off and four corner marks go on. The row keeps the text
+     colour it already had, which also makes the state cheaper to measure: a
+     selected row stops being a second foreground on a second ground and goes
+     back to being the same text it was.
+     
+     Eight gradients, two per corner. A border with a mask would be shorter
+     and would not survive forced-colors, where masks stay and backgrounds go;
+     gradients vanish there, which is correct, because the components restate
+     selection in the system's own inks under that media query.
+     
+     Shape rather than colour, so removing the wash does not leave
+     aria-selected carrying the state alone. */
+  --pw-selected-bg: transparent;
+  --pw-selected-content: inherit;
+  --pw-selected-mark:
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left top / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left top / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right top / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right top / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left bottom / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      left bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right bottom / var(--pw-bracket-arm) var(--pw-bracket-weight) no-repeat,
+    linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
+      right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
+
 }
 
 /* Presets: palettes within a skin, scoped under the skin they belong to, so
@@ -2906,9 +3017,20 @@
      which is one state for both. That is correct here: a menu has a single
      current item however you arrived at it. */
   .pw-menu-item[data-highlighted] {
-    background-color: var(--pw-color-primary);
-    color: var(--pw-color-primary-content);
+    background-color: var(--pw-selected-bg);
+    color: var(--pw-selected-content);
     outline: none;
+  }
+
+  /* The item the keyboard or pointer is on. The skin decides whether this paints anything: --pw-selected-mark
+     is none by default, so this is an empty box on chrome and four corner
+     brackets on cyber. */
+    .pw-menu-item[data-highlighted]::before {
+    content: '';
+    position: absolute;
+    inset: var(--pw-bracket-inset);
+    pointer-events: none;
+    background: var(--pw-selected-mark);
   }
 
   .pw-menu-item[data-disabled] {
@@ -3032,8 +3154,19 @@
      inversion is right: a row IS the control, so there is nothing smaller to
      mark. */
   .pw-list-item[aria-selected="true"] {
-    background-color: var(--pw-color-primary);
-    color: var(--pw-color-primary-content);
+    background-color: var(--pw-selected-bg);
+    color: var(--pw-selected-content);
+  }
+
+  /* The selected row. The skin decides whether this paints anything: --pw-selected-mark
+     is none by default, so this is an empty box on chrome and four corner
+     brackets on cyber. */
+    .pw-list-item[aria-selected="true"]::before {
+    content: '';
+    position: absolute;
+    inset: var(--pw-bracket-inset);
+    pointer-events: none;
+    background: var(--pw-selected-mark);
   }
 
   /* The row the keyboard is on, which is not necessarily the selected one.
