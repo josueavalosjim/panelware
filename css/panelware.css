@@ -1291,7 +1291,7 @@
    used to. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
        .pw-menubar-trigger, .pw-checkbox, .pw-radio, .pw-select,
-       .pw-slider-thumb, .pw-panel, .pw-list):focus-visible {
+       .pw-slider-thumb, .pw-panel, .pw-list, .pw-lcd-pause):focus-visible {
   --pw-focus-halo: 0 0 0 var(--pw-focus-width) var(--pw-color-focus-contrast);
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
   outline-offset: var(--pw-focus-width);

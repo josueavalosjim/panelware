@@ -33,6 +33,24 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### The marquee's pause button had the browser's focus ring, not this kit's
+
+`reset.css` declares the focus ring once for a list of classes, and that list
+is the whole answer to 2.4.7. `.pw-lcd-pause` was not in it, so the readout's
+pause button got whatever outline the browser draws on a `<button>`, on the
+readout's dark green face. That surface is the reason this kit draws two rings
+in the first place: a single ring is only as visible as the ground behind it
+allows.
+
+The check that found it is worth describing, because the obvious version of it
+cannot fail. Reading the list out of `reset.css` and confirming each member
+rings proves nothing: delete a control from the list and it leaves the list
+being read. So the subject is what the page renders as focusable, and the list
+is what is tested against it. And a bare outline is not evidence either, since
+a browser rings a `<button>` whether or not this kit says anything. The
+assertion is on `--pw-focus-halo`, the second ring, which the reset sets only
+on classes it names and which has no user-agent equivalent.
+
 ### The checks now see the parts of the kit that only exist when opened
 
 axe scanned pages at rest, and a menu, a select listbox and a dialog are not

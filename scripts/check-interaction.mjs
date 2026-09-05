@@ -195,5 +195,83 @@ await withDemo(async (p, base) => {
   }
 }, { width: 1100, height: 900 });
 
+/**
+ * Every focusable thing this kit renders draws the kit's own focus ring.
+ *
+ * reset.css declares the ring once for a fixed list of classes, and that list
+ * is the whole answer to 2.4.7. The obvious check is to read the list and
+ * confirm each member rings, and that check cannot fail: delete a control
+ * from the list and it leaves the list the check is reading. So the subject
+ * is what the page actually renders as focusable, and the list is what is
+ * being tested against it.
+ *
+ * Two assertions, because a bare outline is not evidence. Most of these are
+ * <button>, and a browser draws its own focus outline on a button whether or
+ * not this kit says anything, so an outline alone survives deleting the rule
+ * and proves nothing. The kit's ring is two rings in opposite values, and the
+ * second one is --pw-focus-halo, which the reset sets only on the classes it
+ * lists and which has no user-agent equivalent. Reading it while the control
+ * has focus is what tells a kit ring from a browser one.
+ *
+ * That is how .pw-lcd-pause was found. The marquee's pause button is
+ * focusable, was not in the list, and got the browser's single outline on the
+ * readout's dark green face, which is the exact surface the two-ring argument
+ * was written about.
+ */
+let ringed = 0;
+await withDemo(async (p, base) => {
+  await p.goto(`${base}/demo/index.html`);
+  await p.settle(1800);
+  /* Keyboard modality, once. :focus-visible is the browser's own judgement
+     about how focus arrived and cannot be set from script. */
+  await p.key('Tab');
+
+  const found = await p.evaluate(`(() => {
+    const els = [...document.querySelectorAll(
+      'a[href],button,input,[tabindex]:not([tabindex="-1"]),[role="slider"]')]
+      .filter((e) => !e.hasAttribute('disabled') && e.getAttribute('aria-disabled') !== 'true')
+      .filter((e) => [...e.classList].some((c) => c.startsWith('pw-')));
+    const out = [];
+    const seen = new Set();
+    for (const e of els) {
+      const name = [...e.classList].filter((c) => c.startsWith('pw-')).join('.');
+      if (seen.has(name)) continue;
+      seen.add(name);
+      e.focus();
+      if (document.activeElement !== e) continue;
+      const s = getComputedStyle(e);
+      const halo = s.getPropertyValue('--pw-focus-halo').trim();
+      out.push({ name,
+        ring: s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0,
+        style: s.outlineStyle,
+        /* The default is a transparent zero-spread shadow. Anything with a
+           spread and a colour is the reset having named this class. */
+        halo: /[0-9]+px/.test(halo) && halo.indexOf('#0000') === -1
+          && halo.indexOf('transparent') === -1,
+        haloValue: halo });
+    }
+    return out;
+  })()`);
+
+  /* A page that rendered nothing has no focusable controls to fail. */
+  if (found.length < 8) {
+    failures.push(`only ${found.length} focusable controls on index.html, so this measured nothing`);
+    return;
+  }
+
+  for (const got of found) {
+    ringed += 1;
+    if (!got.ring) {
+      failures.push(`.${got.name} takes keyboard focus and draws no outline ` +
+        `(outline-style ${got.style}), which is 2.4.7 missing on one control`);
+    } else if (!got.halo) {
+      failures.push(`.${got.name} takes keyboard focus and --pw-focus-halo stays at its ` +
+        `default (${got.haloValue}), so it is getting the browser's single outline rather than ` +
+        'this kit\'s two rings: the class is missing from the list in reset.css');
+    }
+  }
+}, { width: 1100, height: 900 });
+
 report('interaction', failures,
-  `${scanned} sliders driven from the keyboard, ${rings} lists focused`);
+  `${scanned} sliders driven from the keyboard, ${rings} lists focused, `
+  + `${ringed} focusable controls checked for the kit's own focus ring`);
