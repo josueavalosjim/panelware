@@ -114,6 +114,15 @@ const I = {
     '................',
     '................',
   ],
+  /* Two above the triangle and four below the bar, which is one row high of
+     geometric centre and deliberate. The mark is a light tapering triangle
+     over a solid bar, so its visual mass sits low and centring it by the box
+     makes it look like it is sinking. Checked at 4x against stop, which is a
+     solid square and is centred 4/4 because it has nothing to correct for.
+
+     Worth stating because the numbers argue the other way and will again:
+     eject and minimize are the only even-height glyphs in the set that are
+     off centre, and minimize has its own reason a few glyphs down. */
   eject: [
     '................',
     '................',
@@ -155,6 +164,16 @@ const I = {
     '................',
     '................',
   ],
+  /* Twenty ink against restore's sixty-eight, in a row where the four render
+     side by side. That spread is the shapes rather than an inconsistency: a
+     minimize mark is a bar and a bar is two rows, so matching the boxes would
+     mean drawing something that is not a bar. Checked at 1x in a real title
+     bar, where the four read as one cluster.
+
+     It also sits low rather than centred, at 10 above and 4 below, because
+     the mark is a title bar dropping to the taskbar. minus explains the same
+     thing from the other side, where a low dash in a checkbox would read as a
+     mistake. */
   minimize: [
     '................',
     '................',
@@ -191,21 +210,33 @@ const I = {
     '................',
     '................',
   ],
+  /* Two 7x7 windows at offset 3, which puts restore on maximize's exact
+     10x10 footprint with the same 3px margins. It was 8x8 windows at offset
+     4, so the mark grew two pixels on every side and gained twenty ink the
+     moment you clicked the button: the same control, toggled, changing size.
+
+     The cost is the back window's reveal, which is one row now rather than
+     two. It still reads as two windows at 1x, which was the thing to protect.
+
+     The occluded parts of the back window are removed rather than drawn
+     under the front one. That is what keeps the front window's interior
+     open: a back edge crossing it would read as a line through the window
+     rather than as a window behind. */
   restore: [
     '................',
     '................',
-    '......########..',
-    '......########..',
-    '......##....##..',
-    '......##....##..',
-    '..########..##..',
-    '..########..##..',
-    '..##....######..',
-    '..##....######..',
-    '..##....##......',
-    '..##....##......',
-    '..########......',
-    '..########......',
+    '................',
+    '......#######...',
+    '......#######...',
+    '......##...##...',
+    '...#######.##...',
+    '...#######.##...',
+    '...##...#####...',
+    '...##...#####...',
+    '...##...##......',
+    '...#######......',
+    '...#######......',
+    '................',
     '................',
     '................',
   ],
@@ -335,7 +366,15 @@ const I = {
   /* The lens is 9x9 (x3-x11, y2-y10) rather than the wider oval two earlier
      drafts produced, and the handle takes the remaining three rows, so the
      whole mark is 11x12: it fills the live area's height and stops a column
-     short of its width. This said "fills the 12x12 live area exactly", which
+     short of its width.
+
+     The ring is two pixels at the sides and one at the poles, which is the
+     only place in the set a stroke is not two, and the lens is nine columns
+     wide, which is odd and so cannot centre on the cell. Both are the live
+     area's budget rather than oversights: a two-pixel pole needs a ten-row
+     lens, and the lens plus a three-step handle already fills rows 2 to 13
+     exactly. Widening the lens buys a uniform ring and pays for it with a
+     two-step handle, which is the part of the mark that says magnifier. This said "fills the 12x12 live area exactly", which
      was not true and was the kind of claim that stops anyone measuring. Ink 45 against close's 52:
      a ring is lighter than a filled X and matching them would fatten the
      stroke past the set's 2px.
@@ -365,7 +404,13 @@ const I = {
     '................',
     '................',
   ],
-  /* The bowl is six wide and centred on the stem, which the first draft was
+  /* The left side of the bowl is one row deep, so row 3 carries both shoulders
+     and row 4 carries only the right. That is a question mark rather than a
+     defect: the bowl is open at the lower left and the stroke has to stop
+     somewhere. The two pixels share an edge with the crown above them, so it
+     is a terminal and not the floating fragment it measures as.
+
+     The bowl is six wide and centred on the stem, which the first draft was
      not: a bowl centred on itself sits half a pixel left of the stem below
      it and reads as a leaning glyph. The dot is at y11-y12, the same rows as
      exclamation's, so the two line up in a row. */
@@ -450,6 +495,16 @@ const I = {
      Only frames 1 to 4 are here. Frame k+4 is frame k turned 180 degrees,
      which is two exact quarter turns, so the other four are derived below
      and cannot drift from these. */
+  /* Every dot sits at exactly radius 5 and the diagonals land at 36.9 degrees
+     from vertical rather than 45, so the step from one frame to the next
+     alternates 36.9 and 53.1 and the spin pulses about 18 percent either side
+     of its mean rather than turning evenly.
+
+     Left alone, because the alternative is worse. A true 45 degree diagonal
+     at radius 5 lands on 3.54, which is not a pixel, so an even cadence means
+     moving the diagonals to radius 4 or 6 and giving up the round ring. The
+     ring being exactly round is the thing being paid for here, and at eight
+     frames on a constant timer the cadence is not what anyone sees. */
   'spinner-1': [
     '................',
     '................',

@@ -27,7 +27,7 @@ export const ICON_INDEX: Record<IconName, IconCell> = {
   'close': { x: 6, y: 0, l: 3, r: 3 },
   'minimize': { x: 7, y: 0, l: 3, r: 3 },
   'maximize': { x: 0, y: 1, l: 3, r: 3 },
-  'restore': { x: 1, y: 1, l: 2, r: 2 },
+  'restore': { x: 1, y: 1, l: 3, r: 3 },
   'chevron-down': { x: 2, y: 1, l: 2, r: 2 },
   'chevron-up': { x: 3, y: 1, l: 2, r: 2 },
   'chevron-right': { x: 4, y: 1, l: 4, r: 5 },
