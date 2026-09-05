@@ -37,6 +37,42 @@
 
   /* No cast shadow: nothing here is a physical object sitting on a surface. */
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  /* Notched corners, which is the reference lineage's frame: a cut corner
+     rather than a radius. --pw-clip-control and --pw-clip-box are the hooks
+     the README has always offered for exactly this and that nothing had ever
+     used, so this is the first time the claim that a notched skin is a token
+     change gets tested.
+
+     Two opposite corners rather than four. Four reads as an octagon; two
+     reads as a cut, and the diagonal it sets up is what the HUD idiom is
+     actually made of.
+
+     It reaches the eleven surfaces that do not draw a focus ring, which is
+     the window chrome, the menu, the tab panel, the readout, the badge and
+     the wells. Everything a keyboard lands on keeps square corners, because
+     clip-path clips an outline and the focus ring is an outline. bevel.css
+     carries the reasoning and a test holds the two lists together. */
+  --pw-clip-control:
+    polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px);
+  --pw-clip-box:
+    polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+
+  /* Scanlines, which is the other half of the lineage: surface as pattern
+     rather than as shade. The chrome skin says "this is moulded plastic" with
+     a gradient; this says "this is a screen" with a raster.
+
+     One pixel on, two off, at an alpha the token carries. --pw-texture-opacity
+     was declared and read by nothing until this, which made it the fourth
+     dead knob in the file. Baking the alpha into the gradient here is what
+     wires it, and it means a consumer can turn the raster down without
+     replacing the pattern. */
+  --pw-texture-opacity: 0.055;
+  --pw-texture: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, var(--pw-texture-opacity)) 0 1px,
+    rgba(0, 0, 0, 0) 1px 3px
+  );
 }
 
 [data-skin="cyber"][data-theme="dark"] {
@@ -54,4 +90,18 @@
   --pw-glass-blur: 0px;
 
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  /* The same two, and the raster a shade stronger: a light scanline on a dark
+     screen reads weaker than a dark one on a light screen at the same alpha. */
+  --pw-clip-control:
+    polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px);
+  --pw-clip-box:
+    polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+
+  --pw-texture-opacity: 0.09;
+  --pw-texture: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, var(--pw-texture-opacity)) 0 1px,
+    rgba(0, 0, 0, 0) 1px 3px
+  );
 }

@@ -161,7 +161,28 @@
     }
   }
 
-  /* Three controls opt out of the corner clip, and this is not tidiness.
+  /* Everything that draws a focus ring opts out of the corner clip, and this
+     is not tidiness.
+
+     clip-path clips an element's rendering entire: its corners, its
+     pseudo-elements, and its OUTLINE. The focus ring in this kit is an
+     outline, declared once in reset.css for the list repeated below. So a
+     skin that set --pw-clip-control, which the README offers as the way to
+     give the kit notched corners, would have removed the focus ring from
+     every control in that skin. Measured with a 10px outline and a 12px
+     chamfer side by side: the unclipped box draws its ring, the clipped box
+     draws nothing at all.
+
+     That leaves eleven surfaces the clip still reaches, which is the whole
+     window chrome, the menu, the tab panel, the readout, the badge and the
+     wells. A notched skin is still a token change. It just cannot notch the
+     things a keyboard lands on.
+
+     The list is reset.css's focus-ring list verbatim, and a test holds the
+     two together, because the failure is silent: the ring is simply not
+     painted and every computed style still says outline-style: solid.
+
+     Three of these have a second reason on top.
      clip-path clips an element's outline and its pseudo-elements along with
      its corners. Each of these draws its hit area as a ::after expander and
      its focus ring as an outline at a 2px offset, so a skin that set
@@ -179,10 +200,10 @@
      notched polygon overrides border-radius rather than intersecting with
      it, so the hook squared it off.
 
-     None of these three has room for a notch at its size anyway. Anything
-     else that takes --pw-clip-control has to supply its focus ring some other
-     way, because an inset box-shadow ring gets clipped too. */
-  :where(.pw-slider-thumb, .pw-checkbox, .pw-radio) { clip-path: none; }
+     None of those three has room for a notch at its size anyway. */
+  :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
+         .pw-menubar-trigger, .pw-checkbox, .pw-radio, .pw-select,
+         .pw-slider-thumb, .pw-panel, .pw-list, .pw-lcd-pause) { clip-path: none; }
 
   /* Documented escape hatches for surfaces a consumer builds that are not
      panelware components. Nothing internal uses them; internal components

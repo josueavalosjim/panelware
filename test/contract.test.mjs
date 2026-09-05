@@ -568,9 +568,6 @@ describe('tokens nothing reads', () => {
     ['--pw-gloss-lit-base-200', 'pre-flattened for the contrast gate, never painted'],
     ['--pw-gloss-lit-primary', 'pre-flattened for the contrast gate, never painted'],
 
-    /* Documented in the README as doing nothing today. */
-    ['--pw-texture-opacity', 'a skin hook the README states is inert'],
-
     /* A semantic slot for consumers and the second skin. This kit's own
        separator is engraved from the bevel pair instead, which is the period
        drawing and not a flat line. */
@@ -671,6 +668,35 @@ describe('what would block the second skin', () => {
     assert.deepEqual(missing, [],
       'a hit expander on a control the corner clip still applies to, so a skin setting '
       + '--pw-clip-control collapses the target to the ink');
+  });
+
+  test('everything that draws a focus ring opts out of the corner clip', () => {
+    /* clip-path clips an element's rendering entire, and that includes its
+       outline. The focus ring in this kit is an outline. So a skin setting
+       --pw-clip-control, which the README offers as the way to get notched
+       corners, would have taken the ring off every control it reached: eight
+       of the thirteen at the time this was written.
+
+       The failure is silent in the worst way. The rule still matches, the
+       computed style still says outline-style: solid, and axe still sees an
+       outline. Nothing is painted. Measured with a 10px outline against a
+       12px chamfer, where the unclipped box draws its ring and the clipped
+       box draws nothing.
+
+       Both lists are read out of the CSS rather than written here, so this
+       fails when either side moves and cannot pass by agreeing with itself. */
+    const ringed = new Set(
+      [...bare(read('css/reset.css')).matchAll(/:where\(([^)]*)\):focus-visible/g)]
+        .flatMap((m) => members(m[1])),
+    );
+    assert.ok(ringed.size > 8, `only ${ringed.size} classes draw a ring, so this scanned nothing`);
+
+    const bevel = bare(read('css/treatment/bevel.css'));
+    const optOut = new Set(members(bevel.match(/:where\(([^)]*)\)\s*\{\s*clip-path:\s*none/)?.[1] ?? ''));
+    const unprotected = [...ringed].filter((c) => !optOut.has(c)).sort();
+    assert.deepEqual(unprotected, [],
+      'draws a focus ring and can still be reached by --pw-clip-control, so a notched skin '
+      + 'silently removes its ring');
   });
 
   test('no component sets overflow: hidden on a bevelled surface', () => {
