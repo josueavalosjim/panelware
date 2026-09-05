@@ -33,6 +33,33 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### Three guards that could not catch what they were written for
+
+None of these was a product bug. All three were tests that pass while the
+thing they describe is broken, which is worse, because a green run is what
+everything else here is built on.
+
+The bevel-literal guard tested `/\binset\s+-?\d/`, which only ever looks at
+the token immediately after `inset`. A literal in the Y slot went straight
+through, and a ghost edge at depth 0 is exactly what the test exists to
+prevent. It asserts the shape of every layer now: `inset` plus three `var()`
+references and nothing else.
+
+The ARIA-twin guard counted occurrences of `[data-state]` and `[aria-*]` across
+a file and compared the totals, which agree at zero. Deleting every state rule
+from a component left it quiet. It now checks each selector list carries both,
+and holds each file to a floor.
+
+The gloss `:active` guard matched a whole selector list as one string, so one
+member naming a `button` satisfied it for every other member, including the
+unscoped container selector it exists to prevent. It splits the list and
+checks each member.
+
+That last one is a shape rather than an incident: a guard matching a selector
+list as one string has probably stopped working. The splitter is shared now,
+and it is parenthesis-aware, because `:where(button, a[href], ...)` is full of
+commas that do not separate members.
+
 ### A Spinner in a Badge was pulled into the word beside it
 
 Every icon declares how much blank sits inside its cell on each side, and a

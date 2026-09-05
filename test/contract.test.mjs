@@ -23,6 +23,26 @@ import { disagreements, scannedLine } from '../scripts/check-parity.mjs';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
 
+/* Split a selector list into its members, respecting parentheses.
+   A guard that matches a selector list as one string is a guard that has
+   probably stopped working: one member satisfying the test satisfies it for
+   every other member, including the one the guard exists to catch. Naive
+   splitting is no better here, because :where(button, a[href], ...) is full
+   of commas that do not separate members. */
+const members = (list) => {
+  const out = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < list.length; i += 1) {
+    const c = list[i];
+    if (c === '(' || c === '[') depth += 1;
+    else if (c === ')' || c === ']') depth -= 1;
+    else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; }
+  }
+  out.push(list.slice(start));
+  return out.map((x) => x.trim()).filter(Boolean);
+};
+
 /**
  * Comments removed. Every file here explains its own selectors in prose, and
  * those prose selectors are matchable text.
@@ -339,9 +359,25 @@ describe('the depth knob', () => {
        nothing reports an error. */
     const shadows = bevel.match(/--pw-bevel-(?:raised|sunken)-\w+:[\s\S]*?;/g) ?? [];
     assert.equal(shadows.length, 4, 'expected four bevel shadow declarations');
+    /* Every slot, not the first one. This read /\binset\s+-?\d/, which only
+       ever looked at the token immediately after "inset", so a literal in the
+       Y slot went straight through: inset var(--pw-bevel-1n) 2px var(...) is
+       exactly the ghost edge at depth 0 that this test describes, and it
+       passed. Whoever planted the mutation to prove the guard fires must have
+       put it in the X slot.
+
+       So the assertion is the shape of each layer rather than the absence of
+       one pattern. Every layer is inset plus three var() references and
+       nothing else, and anything that is not that shape fails whether it is a
+       literal, a calc, or a slot nobody thought of. */
+    const LAYER = /^inset\s+var\(--[\w-]+\)\s+var\(--[\w-]+\)\s+var\(--[\w-]+\)$/;
     for (const decl of shadows) {
-      assert.equal(/\binset\s+-?\d/.test(decl), false,
-        `a bevel offset is a literal rather than a calc:\n${decl}`);
+      const body = decl.slice(decl.indexOf(':') + 1).replace(/;$/, '');
+      for (const layer of members(body)) {
+        assert.match(layer.replace(/\s+/g, ' '), LAYER,
+          `a bevel layer is not "inset var var var", so an offset is not a calc of the depth:`
+          + `\n  ${layer.replace(/\s+/g, ' ')}\nin ${decl.split(':')[0]}`);
+      }
     }
     assert.match(bevel, /--pw-shadow-outer:\s*\n?\s*0 calc\(var\(--pw-bevel-depth\)/,
       'the cast shadow does not scale with depth');
@@ -375,16 +411,31 @@ describe('visual state and ARIA state', () => {
        that styles one styles all of them. */
     const pairs = [
       ['css/components/toggle.css', 'data-state="on"',
-        ['aria-pressed="true"', 'aria-checked="true"']],
-      ['css/components/tabs.css', 'data-state="active"', ['aria-selected="true"']],
+        ['aria-pressed="true"', 'aria-checked="true"'], 2],
+      ['css/components/tabs.css', 'data-state="active"', ['aria-selected="true"'], 1],
     ];
-    for (const [rel, dataAttr, ariaAttrs] of pairs) {
+    /* Per selector list, and with a floor. This counted occurrences across
+       the whole file and compared the totals, which agrees with itself at
+       zero: delete every state rule from a component and the guard goes
+       quiet, because nothing is now styled inconsistently. It also could not
+       tell one rule styling both attributes from two rules styling one each,
+       which is the arrangement that actually breaks a hand-wired consumer. */
+    for (const [rel, dataAttr, ariaAttrs, floor] of pairs) {
       const css = bare(read(rel));
-      const dataCount = css.split(`[${dataAttr}]`).length - 1;
-      for (const ariaAttr of ariaAttrs) {
-        const ariaCount = css.split(`[${ariaAttr}]`).length - 1;
-        assert.equal(ariaCount, dataCount,
-          `${rel} styles [${dataAttr}] ${dataCount} times but [${ariaAttr}] ${ariaCount} times`);
+      const lists = [...css.matchAll(/([^{}]+)\{/g)]
+        .map((m) => m[1])
+        .filter((list) => list.includes(`[${dataAttr}]`));
+      assert.ok(lists.length >= floor,
+        `${rel} styles [${dataAttr}] in ${lists.length} rules, under the floor of ${floor}: `
+        + 'the state rules are gone rather than consistent');
+      for (const list of lists) {
+        const written = members(list).join(' ');
+        for (const ariaAttr of ariaAttrs) {
+          assert.ok(written.includes(`[${ariaAttr}]`),
+            `${rel} has a rule on [${dataAttr}] with no [${ariaAttr}] beside it, so a consumer `
+            + `wiring the ARIA by hand gets the state announced and not drawn:\n  `
+            + `${list.trim().replace(/\s+/g, ' ')}`);
+        }
       }
     }
   });
@@ -439,9 +490,14 @@ describe('state rules that could reach an ancestor', () => {
        The guard is on the selector because the selector is the fix. Every
        :active rule in this file has to name what kind of element it applies
        to, so a container can never satisfy it. */
-    const unscoped = [...bare(gloss).matchAll(/([^{}]*):active[^{}]*\{/g)]
-      .map((m) => m[0].trim())
-      .filter((rule) => !/\b(?:button|a\[href\]|\[role=)/.test(rule));
+    /* Every member of the list. This matched the whole selector list as one
+       string, and [^{}]* is greedy, so one member naming a button satisfied
+       the filter for every other member of the same list, including the
+       unscoped container selector this exists to prevent. */
+    const unscoped = [...bare(gloss).matchAll(/([^{}]+)\{/g)]
+      .flatMap((m) => members(m[1]))
+      .filter((one) => one.includes(':active'))
+      .filter((one) => !/\b(?:button|a\[href\]|\[role=)/.test(one));
     assert.deepEqual(unscoped, [],
       `a gloss :active rule does not restrict to a control, so it fires on ancestors too:\n${unscoped.join('\n')}`);
   });
@@ -500,11 +556,7 @@ describe('what would block the second skin', () => {
        fourth control built the same way fails this on the day it is written
        rather than on the day someone writes a skin. */
     const css = bare(read('css/panelware.css'));
-    /* Every member of the list, not the list. A selector list is where a
-       guard like this quietly stops working: match the whole string and one
-       member satisfies the test for all of them. */
-    const parts = (list) => list.split(',').map((x) => x.trim()).filter(Boolean);
-    const optOut = new Set(parts(css.match(/:where\(([^)]*)\)\s*\{\s*clip-path:\s*none/)?.[1] ?? ''));
+    const optOut = new Set(members(css.match(/:where\(([^)]*)\)\s*\{\s*clip-path:\s*none/)?.[1] ?? ''));
     const missing = [];
     for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
       const centred = /position:\s*absolute/.test(body)
@@ -512,7 +564,7 @@ describe('what would block the second skin', () => {
         && /transform:\s*translate\(-50%,\s*-50%\)/.test(body)
         && /width:/.test(body) && /height:/.test(body);
       if (!centred) continue;
-      for (const one of parts(selector)) {
+      for (const one of members(selector)) {
         if (!one.endsWith('::after')) continue;
         const base = one.slice(0, -'::after'.length);
         if (!optOut.has(base)) missing.push(base);
