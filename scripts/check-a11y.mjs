@@ -167,6 +167,19 @@ await withDemo(async (p, base) => {
  * Each opener is checked for having actually opened, by name, because a click
  * that lands on nothing leaves axe scanning the page it was already scanning
  * and reporting the same clean result.
+ *
+ * At 820 rather than the default 1100, and the width is load-bearing. This
+ * pass first ran at 1100, passed on a Mac, and failed on CI, which is the
+ * exact shape of green-for-the-wrong-reason this repo keeps finding. The
+ * reason: Radix locks scrolling while a menu is open and pads the body to
+ * compensate for the scrollbar it just removed. macOS overlay scrollbars are
+ * zero wide so the padding is zero and nothing moves; Linux scrollbars are
+ * real, so the content narrowed and the demo's contrast tables tipped into
+ * horizontal overflow, where axe correctly reported seven scrollable regions
+ * a keyboard could not reach.
+ *
+ * A width where the tables overflow on any platform makes the result the
+ * same everywhere. Measured: at 820 they scroll before anything opens.
  */
 /**
  * Upstream behaviour, recorded rather than switched off.
@@ -224,7 +237,7 @@ await withDemo(async (p, base) => {
       }
     }
   }
-});
+}, { width: 820, height: 900 });
 
 for (const k of KNOWN) {
   if (!k.seen) {

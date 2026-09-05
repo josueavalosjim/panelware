@@ -33,6 +33,25 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### The release gate stopped the release, which is what it is for
+
+Tagging 0.1.3 failed at `check:a11y`, so `npm publish` never ran. Two things
+came out of it.
+
+The demo's contrast tables scroll horizontally and had no keyboard access,
+which is 2.1.1. They are focusable named regions now.
+
+And the check that found it was itself green for the wrong reason. It ran at
+1100px, where nothing on the page scrolls on a Mac, and passed. On CI it
+failed, because Radix locks scrolling while a menu is open and pads the body to
+compensate for the scrollbar it removed: macOS overlay scrollbars are zero wide
+so nothing moves, Linux scrollbars are real, so the content narrowed and the
+tables tipped into overflow. The opened-surface pass runs at 820px now, where
+the tables overflow on any platform, and it reproduces CI's result locally.
+
+That is the same failure this release exists to fix, found one level up: a
+check whose result depended on the machine it ran on.
+
 ### The magnifier's handle met its lens at a corner
 
 `search`'s handle touched the ring at a single diagonal pixel with both

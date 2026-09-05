@@ -96,7 +96,13 @@
         h('div', { key: g.name },
           h('h3', { className: 'demo-heading' }, g.name),
           h('p', { className: 'demo-note demo-mono' }, g.file),
-          h('div', { className: 'demo-table-wrap' },
+          /* tabIndex, because the wrapper scrolls horizontally and a scrollable
+             region a keyboard cannot reach is 2.1.1. Named as a region too,
+             so the tab stop announces what it is rather than "group". */
+          h('div', {
+            className: 'demo-table-wrap', tabIndex: 0,
+            role: 'region', 'aria-label': `${g.name} tokens, scrollable`,
+          },
             h('table', { className: 'demo-table' },
               h('thead', null, h('tr', null,
                 h('th', null, 'Token'),
@@ -123,7 +129,10 @@
       return h('div', null, themes.map((theme) =>
         h('div', { key: theme },
           h('h3', { className: 'demo-heading' }, theme),
-          h('div', { className: 'demo-table-wrap' },
+          h('div', {
+            className: 'demo-table-wrap', tabIndex: 0,
+            role: 'region', 'aria-label': `${theme} contrast pairs, scrollable`,
+          },
             h('table', { className: 'demo-table' },
               h('thead', null, h('tr', null,
                 h('th', null, 'Foreground'), h('th', null, 'Background'),
