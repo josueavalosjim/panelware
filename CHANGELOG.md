@@ -33,6 +33,19 @@ The fixture that must fail, which is what certifies the contrast gate measures
 anything, was in both workflows and in neither the release script nor anyone's
 hands. It is `npm run check:gate` now and runs in all three.
 
+### The demo is public, and the package points at it
+
+GitHub Pages had never been enabled on the repository, so `pages.yml` had been
+failing on every push to `main` since it was written and the README's claim
+that the demo is the documentation pointed at nothing anyone could open. It is
+live at
+[josueavalosjim.github.io/panelware](https://josueavalosjim.github.io/panelware/).
+
+`homepage` in package.json was the repository's `#readme` anchor, which is
+close to a no-op on npm: that page already renders the README underneath the
+link. It is the demo now, and the repository stays reachable through the
+`repository` field npm renders beside it.
+
 ### The release gate stopped the release, which is what it is for
 
 Tagging 0.1.3 failed at `check:a11y`, so `npm publish` never ran. Two things
