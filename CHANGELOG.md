@@ -1,5 +1,94 @@
 # Changelog
 
+## 0.2.0
+
+A minor rather than a patch, and the reason is the cyber skin: anyone rendering
+`data-skin="cyber"` gets a visibly different product. Nothing about the chrome
+skin, the API, or the CSS entry points changed, so an upgrade is safe if you
+were never on cyber, and deliberate if you were.
+
+### The cyber skin stops being the chrome skin in a different colour
+
+It differed by hue and a bevel, which makes it a theme. Same face, same size,
+same rhythm, same three-hue status vocabulary, so the two side by side showed
+one design twice. Four changes fix that, all of them things the reference
+lineage does and the kit already had hooks for.
+
+**Notched corners.** `--pw-clip-control` and `--pw-clip-box` have been offered
+in the README since the beginning as the way to get a notched skin, and
+nothing had ever used them. Two opposite corners rather than four: four reads
+as an octagon, two reads as a cut, and the diagonal is what the idiom is
+actually built from.
+
+**Scanlines** in `--pw-texture`, one pixel on and two off, stronger in dark
+than light because a dark line on a light ground reads heavier at equal alpha.
+That wired `--pw-texture-opacity`, which had been declared, documented as a
+skin hook, and read by nothing.
+
+**Selection is drawn, not tinted.** A selected row and a highlighted menu item
+get four corner brackets and keep their ground. Selection became a slot to do
+it: components assign `--pw-selected-bg`, `--pw-selected-content` and
+`--pw-selected-mark` exactly as they already assign `--pw-elev`, and the
+defaults reproduce chrome's inversion to the pixel.
+
+**One accent, and shape carries the rest.** `success`, `warning` and `error`
+all resolve to the same cyan pair. A chassis has three inks because green,
+amber and red are the moulded-plastic vocabulary; a HUD has a ground, an ink
+and one signal, and says which signal by drawing a different shape. The
+badge's mark already did that work and was always the thing carrying meaning
+for anyone who cannot separate hues.
+
+**Mono, uppercase, tracked.** `--pw-font-ui` points at the mono stack, with
+uppercase on controls only, because a control's label is structure and a list
+row's text is content. This was the single biggest change and it cost one
+token swap.
+
+### A documented hook was unusable, and would have failed silently
+
+`clip-path` clips an element's outline, and this kit's focus ring is an
+outline. Setting `--pw-clip-control` as the README described would have taken
+the ring off eight of the thirteen controls that draw one. Measured with a
+10px outline against a 12px chamfer: the unclipped box draws its ring, the
+clipped box draws nothing.
+
+The failure is silent in the worst way. The rule still matches, the computed
+style still reads `outline-style: solid`, and axe still sees an outline.
+Nothing is painted.
+
+The opt-out is now `reset.css`'s focus-ring list verbatim, with a test holding
+both lists together and reading each out of the CSS so neither can drift. The
+README's promise is smaller and true: a notched skin is still a token change,
+it just cannot notch the things a keyboard lands on.
+
+### New: metadata
+
+`Meta`, and `.pw-meta` for the CSS-only install. The coordinate readouts and
+serial strings a screen in this genre carries in its corners. A `<dl>`,
+because field and value pairs have had an element since 1993 and a stack of
+divs with a colon in the text reads identically to a sighted user while giving
+a screen reader nothing to walk. Every item takes a label.
+
+The contrast is the decision. Those screens draw this at around 8px and
+something like 2.5:1; copying the size is fine and copying the contrast is
+not, because 1.4.3 applies to small text. A quieter ink was tried and
+abandoned: it needed a new rung in four palettes, and in three of them the
+only rung clearing the floor was barely quieter than the body ink anyway, with
+the deck's light theme at 4.37:1 against a 4.5 floor. Metadata takes the body
+ink and gets its quiet from size, tracking and the label's own step back.
+
+### Two icons redrawn
+
+`restore` is on `maximize`'s footprint. It was 12x12 and 84 ink against
+maximize's 10x10 and 64, so the same button changed size the moment you
+clicked it. Two 7x7 windows at offset 3 puts it at 10x10 and 68.
+
+`question` gained a second row on its left shoulder. At 24 ink against a set
+median of 32, with a bowl two rows deep before the descent, it read as a hook
+rather than as a question mark. The one-row shoulder was not incorrect: a
+question mark's bowl is open at the lower left. The problem was weight, and
+the earlier pass closed it by asking whether the drawing was wrong and never
+asking whether it was thin.
+
 ## 0.1.4
 
 Documentation only. The code is identical to 0.1.3, and the release exists for
