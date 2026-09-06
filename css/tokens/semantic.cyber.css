@@ -44,12 +44,29 @@
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
 
-  --pw-color-success: var(--pw-mint-100);
-  --pw-color-success-content: var(--pw-mint-800);
-  --pw-color-warning: var(--pw-amber-100);
-  --pw-color-warning-content: var(--pw-amber-800);
-  --pw-color-error: var(--pw-rose-100);
-  --pw-color-error-content: var(--pw-rose-800);
+  /* ONE ACCENT, AND SHAPE CARRIES THE REST.
+     
+     The chrome skin gives success, warning and error a hue each, which is what
+     a chassis does: green, amber and red are the moulded-plastic vocabulary.
+     A HUD does not have three inks. It has a ground, an ink, and one signal
+     colour, and it tells you which signal you are looking at by drawing a
+     different shape.
+     
+     So all three roles resolve to the same cyan pair, and the badge's mark is
+     what differentiates them: a check, an exclamation, a cross, a dot. That
+     mark was always there and was always the thing carrying the meaning for
+     anyone who cannot separate the hues; collapsing the palette just stops
+     pretending the colour was doing the work.
+     
+     The roles stay three tokens rather than becoming one alias, because a
+     consumer who wants their own red for error should be able to say so
+     without unpicking a shared name. */
+  --pw-color-success: var(--pw-cyan-100);
+  --pw-color-success-content: var(--pw-cyan-800);
+  --pw-color-warning: var(--pw-cyan-100);
+  --pw-color-warning-content: var(--pw-cyan-800);
+  --pw-color-error: var(--pw-cyan-100);
+  --pw-color-error-content: var(--pw-cyan-800);
 
   /* The five bevel inks, declared and unused by the bevel: depth 0 collapses
      that stack entirely. --pw-bevel-boundary is the exception and is doing
@@ -91,12 +108,12 @@
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
 
-  --pw-color-success: var(--pw-mint-900);
-  --pw-color-success-content: var(--pw-mint-300);
-  --pw-color-warning: var(--pw-amber-900);
-  --pw-color-warning-content: var(--pw-amber-300);
-  --pw-color-error: var(--pw-rose-900);
-  --pw-color-error-content: var(--pw-rose-300);
+  --pw-color-success: var(--pw-cyan-900);
+  --pw-color-success-content: var(--pw-cyan-300);
+  --pw-color-warning: var(--pw-cyan-900);
+  --pw-color-warning-content: var(--pw-cyan-300);
+  --pw-color-error: var(--pw-cyan-900);
+  --pw-color-error-content: var(--pw-cyan-300);
 
   /* Same inversion the chrome skin makes, for the same reason: whichever ink
      reads against the ground carries the boundary, and here that is the pale

@@ -93,6 +93,25 @@
      
      Shape rather than colour, so removing the wash does not leave
      aria-selected carrying the state alone. */
+
+  /* MONO, UPPERCASE, TRACKED.
+     
+     The single biggest reason this skin still read as the chrome one with a
+     different palette. Both used the same system UI face at the same size with
+     the same rhythm, so the only difference was hue and a bevel, and a skin
+     that differs by hue is a theme.
+     
+     --pw-font-ui is a token precisely so a skin can answer this. The mono face
+     is the one every reference in the set uses for structure: a terminal, a
+     HUD and a BBS all set their labels in a fixed pitch, and the even column
+     is what makes a row of controls read as an instrument rather than as a
+     web page.
+     
+     Uppercase and the tracking that uppercase needs are in glow.css, on the
+     controls only. Body copy stays as it is, which is the other half of the
+     reference note: mono uppercase for structure, and only there. */
+  --pw-font-ui: var(--pw-font-mono);
+  --pw-tracking-ui: 0.045em;
   --pw-selected-bg: transparent;
   --pw-selected-content: inherit;
   --pw-selected-mark:
@@ -164,6 +183,25 @@
      
      Shape rather than colour, so removing the wash does not leave
      aria-selected carrying the state alone. */
+
+  /* MONO, UPPERCASE, TRACKED.
+     
+     The single biggest reason this skin still read as the chrome one with a
+     different palette. Both used the same system UI face at the same size with
+     the same rhythm, so the only difference was hue and a bevel, and a skin
+     that differs by hue is a theme.
+     
+     --pw-font-ui is a token precisely so a skin can answer this. The mono face
+     is the one every reference in the set uses for structure: a terminal, a
+     HUD and a BBS all set their labels in a fixed pitch, and the even column
+     is what makes a row of controls read as an instrument rather than as a
+     web page.
+     
+     Uppercase and the tracking that uppercase needs are in glow.css, on the
+     controls only. Body copy stays as it is, which is the other half of the
+     reference note: mono uppercase for structure, and only there. */
+  --pw-font-ui: var(--pw-font-mono);
+  --pw-tracking-ui: 0.045em;
   --pw-selected-bg: transparent;
   --pw-selected-content: inherit;
   --pw-selected-mark:

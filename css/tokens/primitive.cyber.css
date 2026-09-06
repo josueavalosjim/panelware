@@ -23,19 +23,17 @@
   --pw-slate-900: #0b1116;   /* dark page */
   --pw-slate-950: #05090c;   /* dark well, and light's ink */
 
+  --pw-cyan-100: #d3f2f8;    /* light status chip, the collapsed ground */
   --pw-cyan-300: #3fd8f0;    /* dark primary, 9.85:1 on the dark page */
   --pw-cyan-800: #0a4f63;    /* light primary, 7.35:1 on the light page */
+  --pw-cyan-900: #062029;    /* dark status chip, the collapsed ground */
 
-  --pw-mint-100: #d6f2e2;
-  --pw-mint-300: #5ff0a8;
-  --pw-mint-800: #0a5133;
-  --pw-mint-900: #0d2a1c;
+  /* Amber survives the collapse and mint and rose did not, which looks
+     arbitrary and is not: the status roles all resolve to cyan now, and what
+     is left of this ramp is the readout, which is amber because a segment
+     display is. Two greens and two reds went with the roles that used them. */
   --pw-amber-100: #f8ecc9;
   --pw-amber-300: #f5c542;
   --pw-amber-800: #6b4a05;
   --pw-amber-900: #2e2408;
-  --pw-rose-100: #fadfe3;
-  --pw-rose-300: #ff8095;
-  --pw-rose-800: #8a1226;
-  --pw-rose-900: #2e0f14;
 }

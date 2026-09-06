@@ -801,21 +801,19 @@
   --pw-slate-900: #0b1116;   /* dark page */
   --pw-slate-950: #05090c;   /* dark well, and light's ink */
 
+  --pw-cyan-100: #d3f2f8;    /* light status chip, the collapsed ground */
   --pw-cyan-300: #3fd8f0;    /* dark primary, 9.85:1 on the dark page */
   --pw-cyan-800: #0a4f63;    /* light primary, 7.35:1 on the light page */
+  --pw-cyan-900: #062029;    /* dark status chip, the collapsed ground */
 
-  --pw-mint-100: #d6f2e2;
-  --pw-mint-300: #5ff0a8;
-  --pw-mint-800: #0a5133;
-  --pw-mint-900: #0d2a1c;
+  /* Amber survives the collapse and mint and rose did not, which looks
+     arbitrary and is not: the status roles all resolve to cyan now, and what
+     is left of this ramp is the readout, which is amber because a segment
+     display is. Two greens and two reds went with the roles that used them. */
   --pw-amber-100: #f8ecc9;
   --pw-amber-300: #f5c542;
   --pw-amber-800: #6b4a05;
   --pw-amber-900: #2e2408;
-  --pw-rose-100: #fadfe3;
-  --pw-rose-300: #ff8095;
-  --pw-rose-800: #8a1226;
-  --pw-rose-900: #2e0f14;
 }
 
 /**
@@ -864,12 +862,29 @@
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
 
-  --pw-color-success: var(--pw-mint-100);
-  --pw-color-success-content: var(--pw-mint-800);
-  --pw-color-warning: var(--pw-amber-100);
-  --pw-color-warning-content: var(--pw-amber-800);
-  --pw-color-error: var(--pw-rose-100);
-  --pw-color-error-content: var(--pw-rose-800);
+  /* ONE ACCENT, AND SHAPE CARRIES THE REST.
+     
+     The chrome skin gives success, warning and error a hue each, which is what
+     a chassis does: green, amber and red are the moulded-plastic vocabulary.
+     A HUD does not have three inks. It has a ground, an ink, and one signal
+     colour, and it tells you which signal you are looking at by drawing a
+     different shape.
+     
+     So all three roles resolve to the same cyan pair, and the badge's mark is
+     what differentiates them: a check, an exclamation, a cross, a dot. That
+     mark was always there and was always the thing carrying the meaning for
+     anyone who cannot separate the hues; collapsing the palette just stops
+     pretending the colour was doing the work.
+     
+     The roles stay three tokens rather than becoming one alias, because a
+     consumer who wants their own red for error should be able to say so
+     without unpicking a shared name. */
+  --pw-color-success: var(--pw-cyan-100);
+  --pw-color-success-content: var(--pw-cyan-800);
+  --pw-color-warning: var(--pw-cyan-100);
+  --pw-color-warning-content: var(--pw-cyan-800);
+  --pw-color-error: var(--pw-cyan-100);
+  --pw-color-error-content: var(--pw-cyan-800);
 
   /* The five bevel inks, declared and unused by the bevel: depth 0 collapses
      that stack entirely. --pw-bevel-boundary is the exception and is doing
@@ -911,12 +926,12 @@
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
 
-  --pw-color-success: var(--pw-mint-900);
-  --pw-color-success-content: var(--pw-mint-300);
-  --pw-color-warning: var(--pw-amber-900);
-  --pw-color-warning-content: var(--pw-amber-300);
-  --pw-color-error: var(--pw-rose-900);
-  --pw-color-error-content: var(--pw-rose-300);
+  --pw-color-success: var(--pw-cyan-900);
+  --pw-color-success-content: var(--pw-cyan-300);
+  --pw-color-warning: var(--pw-cyan-900);
+  --pw-color-warning-content: var(--pw-cyan-300);
+  --pw-color-error: var(--pw-cyan-900);
+  --pw-color-error-content: var(--pw-cyan-300);
 
   /* Same inversion the chrome skin makes, for the same reason: whichever ink
      reads against the ground carries the boundary, and here that is the pale
@@ -1030,6 +1045,25 @@
      
      Shape rather than colour, so removing the wash does not leave
      aria-selected carrying the state alone. */
+
+  /* MONO, UPPERCASE, TRACKED.
+     
+     The single biggest reason this skin still read as the chrome one with a
+     different palette. Both used the same system UI face at the same size with
+     the same rhythm, so the only difference was hue and a bevel, and a skin
+     that differs by hue is a theme.
+     
+     --pw-font-ui is a token precisely so a skin can answer this. The mono face
+     is the one every reference in the set uses for structure: a terminal, a
+     HUD and a BBS all set their labels in a fixed pitch, and the even column
+     is what makes a row of controls read as an instrument rather than as a
+     web page.
+     
+     Uppercase and the tracking that uppercase needs are in glow.css, on the
+     controls only. Body copy stays as it is, which is the other half of the
+     reference note: mono uppercase for structure, and only there. */
+  --pw-font-ui: var(--pw-font-mono);
+  --pw-tracking-ui: 0.045em;
   --pw-selected-bg: transparent;
   --pw-selected-content: inherit;
   --pw-selected-mark:
@@ -1101,6 +1135,25 @@
      
      Shape rather than colour, so removing the wash does not leave
      aria-selected carrying the state alone. */
+
+  /* MONO, UPPERCASE, TRACKED.
+     
+     The single biggest reason this skin still read as the chrome one with a
+     different palette. Both used the same system UI face at the same size with
+     the same rhythm, so the only difference was hue and a bevel, and a skin
+     that differs by hue is a theme.
+     
+     --pw-font-ui is a token precisely so a skin can answer this. The mono face
+     is the one every reference in the set uses for structure: a terminal, a
+     HUD and a BBS all set their labels in a fixed pitch, and the even column
+     is what makes a row of controls read as an instrument rather than as a
+     web page.
+     
+     Uppercase and the tracking that uppercase needs are in glow.css, on the
+     controls only. Body copy stays as it is, which is the other half of the
+     reference note: mono uppercase for structure, and only there. */
+  --pw-font-ui: var(--pw-font-mono);
+  --pw-tracking-ui: 0.045em;
   --pw-selected-bg: transparent;
   --pw-selected-content: inherit;
   --pw-selected-mark:
@@ -1873,6 +1926,31 @@
     --pw-shadow-sunken:
       inset 0 0 0 1px var(--pw-bevel-boundary),
       inset 0 2px 6px -2px var(--pw-color-scrim);
+  }
+
+  /* Uppercase, and only where the reference set puts it.
+     
+     A control's label is structure: it names an action, it is read at a
+     glance, and in every reference in the set it is set in caps. A list row's
+     text is content and stays as the consumer wrote it, which is why the row
+     is not in this list and neither is a menu item.
+     
+     text-transform rather than a token, because no component declares it, so
+     the treatment layer can simply claim it. That is the one property in this
+     file that does not need a slot: pw.components only outranks pw.treatment
+     where both declare the same thing, and here only one of them does.
+     
+     The tracking comes from --pw-tracking-ui, which the skin raises. Caps at
+     the default tracking set solid is the classic way to make uppercase
+     unreadable. */
+  [data-skin="cyber"] :where(.pw-button,
+                             .pw-toggle,
+                             .pw-tab,
+                             .pw-badge,
+                             .pw-menubar-trigger,
+                             .pw-title,
+                             .pw-lcd-caption) {
+    text-transform: uppercase;
   }
 }
 

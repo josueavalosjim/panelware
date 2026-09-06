@@ -2296,7 +2296,7 @@
    "fg": "--pw-color-success-content",
    "bg": "--pw-color-success",
    "note": "",
-   "ratio": 7.89,
+   "ratio": 7.71,
    "min": 4.5,
    "pass": true
   },
@@ -2305,7 +2305,7 @@
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
-   "ratio": 6.84,
+   "ratio": 7.71,
    "min": 4.5,
    "pass": true
   },
@@ -2314,7 +2314,7 @@
    "fg": "--pw-color-error-content",
    "bg": "--pw-color-error",
    "note": "",
-   "ratio": 7.62,
+   "ratio": 7.71,
    "min": 4.5,
    "pass": true
   },
@@ -2485,7 +2485,7 @@
    "fg": "--pw-color-success-content",
    "bg": "--pw-color-success",
    "note": "",
-   "ratio": 10.63,
+   "ratio": 9.86,
    "min": 4.5,
    "pass": true
   },
@@ -2494,7 +2494,7 @@
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
-   "ratio": 9.44,
+   "ratio": 9.86,
    "min": 4.5,
    "pass": true
   },
@@ -2503,7 +2503,7 @@
    "fg": "--pw-color-error-content",
    "bg": "--pw-color-error",
    "note": "",
-   "ratio": 7.34,
+   "ratio": 9.86,
    "min": 4.5,
    "pass": true
   },
