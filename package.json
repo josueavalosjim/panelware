@@ -64,7 +64,7 @@
     "check:exports": "node scripts/check-exports.mjs",
     "check:pages": "npm run check:overflow && npm run check:parity && npm run check:colour && npm run check:cssom && npm run check:a11y && npm run check:interaction",
     "prepublishOnly": "npm run build",
-    "release": "npm test && npm run check && npm run check:gate && npm run check:runtime && npm run check:pages && npm run check:exports && npm version ${LEVEL:-patch} -m \"Release %s\" && git push --follow-tags",
+    "release": "npm test && npm run check && npm run check:gate && npm run check:runtime && npm run check:pages && npm run check:exports && node scripts/release.mjs",
     "serve": "node scripts/serve.mjs"
   },
   "engines": {

@@ -471,6 +471,26 @@ JavaScript at all.
 `npm run check` reads files and takes about half a second. `check:runtime`
 needs a Chromium and refuses to run without one, rather than skipping quietly.
 
+### Releasing
+
+Set the version by hand in `package.json`, write the matching `## x.y.z`
+section in `CHANGELOG.md`, commit, push. Then:
+
+```bash
+npm run release
+```
+
+That runs the whole gate and, if it passes, tags and pushes. It does not bump
+the version, and that is deliberate: you cannot write `## 0.2.0` in a changelog
+without having already decided on 0.2.0, and a script that bumped afterwards
+fought the test holding those two together. What it does instead is refuse to
+tag unless the version, the changelog heading, the branch, the working tree
+and the remote all already agree, and it names which one does not.
+
+The tag is what publishes. `publish.yml` calls the same workflow a pull request
+runs, on the tagged commit, and `npm publish` is gated behind it: a red check
+means nothing reaches the registry.
+
 `check:pages` is the six checks that need the pages rather than the files:
 nothing scrolls sideways at 320 and up, the static and live pages still render
 the same shapes, every colour actually painted clears its floor against the

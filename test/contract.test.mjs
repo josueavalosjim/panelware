@@ -19,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 
 import { exportedPaths, missingFromPack, packedFiles } from '../scripts/check-exports.mjs';
 import { disagreements, scannedLine } from '../scripts/check-parity.mjs';
+import { blockers, changelogVersion } from '../scripts/release.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
@@ -724,6 +725,61 @@ describe('what would block the second skin', () => {
     }
   });
 });
+describe('what refuses to tag', () => {
+  /* The release script used to end in `npm version ${LEVEL:-patch}`, which
+     fought the test below it: that one holds the changelog's top heading to
+     package.json's version, so writing the entry first meant npm version
+     bumped past it and bumping first meant the suite went red before the
+     script reached the bump. The documented path was unusable, three releases
+     went out around it by hand, and the script sat there looking
+     authoritative. Run after a hand-set version it would have tagged a number
+     nobody had written notes for.
+
+     It verifies now instead of bumping, and this is that decision under test,
+     because a release gate nobody can exercise is the thing this repo has
+     spent a fortnight removing. */
+  const clean = {
+    version: '1.2.3', changelog: '1.2.3', branch: 'main',
+    dirty: false, unpushed: 0, tagExists: false, tagOnRemote: false,
+  };
+
+  test('a repo that agrees with itself has nothing in the way', () => {
+    assert.deepEqual(blockers(clean), []);
+  });
+
+  test('each thing that has to agree is checked', () => {
+    const cases = [
+      [{ changelog: '1.2.2' }, /changelog leads with 1\.2\.2/],
+      [{ changelog: null }, /no version heading/],
+      [{ branch: 'fix/something' }, /every tag in this repo's history sits on a commit that is on main/],
+      [{ dirty: true }, /working tree has changes/],
+      [{ unpushed: 2 }, /2 commits not on origin/],
+      [{ tagExists: true }, /already exists locally/],
+      [{ tagOnRemote: true }, /already exists on origin/],
+    ];
+    for (const [patch, pattern] of cases) {
+      const got = blockers({ ...clean, ...patch });
+      assert.equal(got.length, 1, `${JSON.stringify(patch)} produced ${got.length} blockers`);
+      assert.match(got[0], pattern);
+    }
+  });
+
+  test('one commit reads as one commit', () => {
+    /* Small, and the kind of thing that survives for years once it ships. */
+    assert.match(blockers({ ...clean, unpushed: 1 })[0], /1 commit not on origin/);
+  });
+
+  test('the changelog heading is read the same way both places', () => {
+    /* This and the test below it read the same file for the same fact, and
+       they disagreed once already, which is what made the old release script
+       unrunnable. Same parse, same answer. */
+    assert.equal(changelogVersion('# Changelog\n\n## 9.9.9\n\nnotes\n\n## 9.9.8\n'), '9.9.9');
+    assert.equal(changelogVersion('# Changelog\n\nno headings here\n'), null);
+    assert.equal(changelogVersion(read('CHANGELOG.md')),
+      JSON.parse(read('package.json')).version);
+  });
+});
+
 describe('the release', () => {
   test('the changelog leads with the version being shipped', () => {
     /* publish.yml already refuses a tag that disagrees with package.json, so
