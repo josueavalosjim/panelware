@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.2.1
+
+Documentation only. No component, stylesheet or type changed, and
+`git diff v0.2.0..v0.2.1 -- src/ css/ assets/` is empty.
+
+The README gains a Releasing section, because the release script it would have
+described was wrong. `npm run release` ended in `npm version`, which fought the
+test holding the changelog's top heading to package.json's version: writing the
+entry first meant the bump went past it, and bumping first meant the suite went
+red before the script reached the bump. There was no order that worked, so
+0.1.3, 0.1.4 and 0.2.0 were each cut by hand around a documented path that
+could not be followed.
+
+It verifies rather than bumps now. The version is a hand edit, which it always
+effectively was, and the script refuses to tag unless the version, the
+changelog heading, the branch, the working tree, the unpushed count and the
+tag's availability all already agree. Each refusal says why it matters rather
+than only that it fired.
+
+This release is the first one cut with it.
+
 ## 0.2.0
 
 A minor rather than a patch, and the reason is the cyber skin: anyone rendering
