@@ -69,6 +69,9 @@ export type { SpinnerProps } from './spinner.js';
 export { Badge } from './badge.js';
 export type { BadgeProps, BadgeStatus } from './badge.js';
 
+export { Meta } from './meta.js';
+export type { MetaProps, MetaEntry } from './meta.js';
+
 export { Readout } from './readout.js';
 export type { ReadoutProps } from './readout.js';
 

@@ -92,6 +92,19 @@
      XP's own disabled ink, rgb(161,161,146), measures 1.78:1 here. It is in
      HANDOFF.md as a sourced value and it is not usable as one. */
   --pw-color-disabled-content: var(--pw-silver-700);
+  /* The quietest ink that still clears 4.5:1 on the page.
+     
+     Metadata in this genre is drawn at a whisper: the reference set puts
+     coordinate readouts and serial strings at around 8px and something like
+     2.5:1, and that is the one thing from those images this kit does not
+     copy. 1.4.3 applies to small text, small text is exactly what this is,
+     and a kit that measures every other pair does not get to make an
+     exception for the pair it would most like to. So the quiet comes from
+     size and tracking, and the ink stays at the floor rather than under it.
+     
+     A separate role from disabled-content, which sits lower on purpose
+     because disabled text is exempt. Metadata is not disabled. It is just
+     not the thing you came to read. */
 
   --pw-color-primary: var(--pw-blue-800);
   --pw-color-primary-content: var(--pw-silver-000);

@@ -746,6 +746,15 @@
      }
     },
     {
+     "name": "--pw-tracking-meta",
+     "values": {
+      "both": {
+       "declared": "0.04em",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-tracking-ui",
      "values": {
       "both": {
@@ -903,6 +912,15 @@
      "values": {
       "both": {
        "declared": "1",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-meta-label-opacity",
+     "values": {
+      "both": {
+       "declared": "0.72",
        "resolved": null
       }
      }

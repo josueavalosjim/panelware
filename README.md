@@ -88,9 +88,9 @@ component would be verifying a shape that never ships.
 ## What is in it
 
 Button, toggle, toggle group, tabs, dialog, window chrome, menu bar,
-transport, seek, slider, equaliser, list, status badge, icon, segment readout,
-and the form controls: checkbox, radio group, select, and the label they
-share.
+transport, seek, slider, equaliser, list, status badge, metadata, icon,
+segment readout, and the form controls: checkbox, radio group, select, and the
+label they share.
 
 Two themes, `chrome` light and dark, and two densities, `comfortable` (44px
 targets) and `compact` (32px). Skin, theme and density are three independent

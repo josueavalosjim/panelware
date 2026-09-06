@@ -14,11 +14,19 @@ import assert from 'node:assert/strict';
 import { createElement as h } from 'react';
 import { renderToStaticMarkup as render } from 'react-dom/server';
 import { describe, test } from 'node:test';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import {
-  Badge, Button, Icon, Readout, Slider, Spinner, Tab, TabList, TabPanel, Tabs, Toggle, Window,
+  Badge, Button, Icon, Meta, Readout, Slider, Spinner, Tab, TabList, TabPanel, Tabs, Toggle, Window,
 } from '../dist/index.js';
 import { ICON_INDEX, ICON_NAMES } from '../dist/icons.js';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+/* Named apart from the local `bare` inside the window tests, which is a
+   rendered string rather than a stripped stylesheet. */
+const readCss = (rel) => readFileSync(join(ROOT, rel), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
 describe('button', () => {
   test('emits one class, and the caller\'s alongside it', () => {
@@ -319,5 +327,55 @@ describe('icon', () => {
     }));
     assert.match(html, /--pw-icon-ink-l:\s*99/);
     assert.match(html, /--pw-icon-y:/, 'the cell it computed is gone entirely');
+  });
+});
+
+describe('metadata', () => {
+  test('renders a description list, not a stack of divs with colons in it', () => {
+    /* Field and value pairs have had an element since 1993. The two are
+       identical to a sighted reader and only one of them is walkable, which
+       is the whole argument for the component existing rather than the
+       consumer writing spans. */
+    const html = render(h(Meta, { items: [{ label: 'Session', value: '2038 282' }] }));
+    assert.match(html, /^<dl class="pw-meta"/);
+    assert.match(html, /<dt class="pw-meta-label">Session<\/dt>/);
+    assert.match(html, /<dd class="pw-meta-value">2038 282<\/dd>/);
+  });
+
+  test('each pair is wrapped, so a dt and its dd belong to each other', () => {
+    /* A bare dl is a flat run of terms and definitions that happen to
+       alternate. The wrapper is what says which value goes with which
+       field, and it is also the row this component lays out. */
+    const html = render(h(Meta, {
+      items: [{ label: 'A', value: '1' }, { label: 'B', value: '2' }],
+    }));
+    assert.equal([...html.matchAll(/class="pw-meta-item"/g)].length, 2);
+    assert.match(html, /<div class="pw-meta-item"><dt[^>]*>A<\/dt><dd[^>]*>1<\/dd><\/div>/);
+  });
+
+  test('the inline layout is an attribute, and block emits none', () => {
+    /* Presence, not "false". Same rule as data-gloss: an attribute selector
+       matching on presence turns the layout ON when the value is the string
+       "false". */
+    assert.match(render(h(Meta, { layout: 'inline', items: [] })), /data-layout="inline"/);
+    assert.doesNotMatch(render(h(Meta, { layout: 'block', items: [] })), /data-layout/);
+    assert.doesNotMatch(render(h(Meta, { items: [] })), /data-layout/);
+  });
+
+  test('the quiet is size and tracking, never a quieter ink', () => {
+    /* The one thing not copied from the reference screens, which draw this at
+       around 2.5:1. A quieter ink was tried and needed a new rung in four
+       palettes, and in three of them the only rung clearing the floor was
+       barely quieter than the body ink: 4.37:1 against a 4.5 floor in the
+       deck's light theme, which is a fail dressed as a design.
+
+       Asserted rather than commented, because "it uses the body ink" is
+       exactly the kind of claim that quietly stops being true. */
+    const css = readCss('css/components/meta.css');
+    const block = css.slice(css.indexOf('.pw-meta {'), css.indexOf('}', css.indexOf('.pw-meta {')));
+    assert.match(block, /color:\s*var\(--pw-color-base-content\)/,
+      'metadata no longer takes the same ink as body text');
+    assert.match(block, /letter-spacing:\s*var\(--pw-tracking-meta\)/);
+    assert.match(block, /font-size:\s*var\(--pw-text-micro\)/);
   });
 });

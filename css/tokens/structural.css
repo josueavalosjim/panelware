@@ -37,6 +37,9 @@
 
   /* Tracking tightens as size goes up. A 15px control label needs none. */
   --pw-tracking-display: -0.02em;
+  /* Metadata is set small and tracked open, which is where its quiet comes
+     from. Caps or not, a 12px mono run reads as a block without this. */
+  --pw-tracking-meta:     0.04em;
   --pw-tracking-ui:      0;
 
   /* system-ui first, and this is a considered choice rather than a default.
@@ -88,6 +91,9 @@
      each arm runs. Declared here rather than in the cyber skin because a
      second skin that wants bracketed selection should not have to reinvent
      the geometry, only switch it on. */
+  /* How far the label half of a metadata pair drops behind its value. */
+  --pw-meta-label-opacity: 0.72;
+
   --pw-bracket-inset: 3px;
   --pw-bracket-arm:   10px;
   --pw-bracket-weight: 2px;
@@ -111,6 +117,9 @@
   /* Corner brackets: how far the marks sit inside the row, and how long each
      arm runs. Here rather than in the cyber skin so a second skin that wants
      bracketed selection switches it on rather than reinventing the geometry. */
+  /* How far the label half of a metadata pair drops behind its value. */
+  --pw-meta-label-opacity: 0.72;
+
   --pw-bracket-inset: 3px;
   --pw-bracket-arm:   10px;
   --pw-bracket-weight: 2px;

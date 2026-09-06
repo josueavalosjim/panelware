@@ -1,0 +1,92 @@
+/**
+ * METADATA.
+ *
+ * The coordinate readouts, serial strings and status lines that every screen
+ * in this genre carries in its corners. A block of label and value pairs set
+ * small, tracked, and quiet.
+ *
+ * It is a <dl> because that is what it is. A readout is field and value, and
+ * the one markup element for field and value pairs has been in HTML since
+ * 1993. A stack of divs with a colon in the text reads identically to a
+ * sighted user and gives a screen reader nothing to walk.
+ *
+ * Every value is tabular. These are numbers in a column: a serial that jumps
+ * a pixel sideways when a 1 replaces a 7 is the kind of thing nobody can name
+ * and everybody notices.
+ *
+ * On the quiet: the reference screens draw this at around 8px and something
+ * like 2.5:1, and that is the one thing from them this kit does not copy.
+ * 1.4.3 applies to small text and this is small text. The quiet comes from
+ * size and tracking, and --pw-color-meta-content stays at the floor rather
+ * than under it. There is a measured pair in tastecheck.config.json holding
+ * it there.
+ */
+
+@layer pw.components {
+  .pw-meta {
+    display: grid;
+    /* The label column is as wide as its widest label and no wider, which is
+       what keeps the values in one column without a hard-coded width that a
+       longer label would break. */
+    grid-template-columns: auto 1fr;
+    gap: var(--pw-space-3xs) var(--pw-space-xs);
+    margin: 0;
+    font-family: var(--pw-font-mono);
+    font-size: var(--pw-text-micro);
+    line-height: var(--pw-leading-ui);
+    letter-spacing: var(--pw-tracking-meta);
+    /* The body ink, not a quieter one, and that is the decision in this file.
+       
+       The reference screens draw metadata at around 8px and something like
+       2.5:1. Copying the size is one thing; copying the contrast would put
+       small text under 1.4.3, and a kit that measures fifteen thousand
+       painted pairs does not get an exemption for the pair it would most like
+       to have one for.
+       
+       A quieter ink was tried and abandoned. It needed a new rung in four
+       palettes, and in three of them the only rung that cleared the floor was
+       barely quieter than the body ink anyway: 4.37:1 in the deck's light
+       theme against a 4.5 floor, which is a fail dressed as a design. So the
+       quiet comes from size, tracking, and the label's own step back, and the
+       colour does not participate at all. */
+    color: var(--pw-color-base-content);
+  }
+
+  /* Each pair is its own row, so a value that wraps takes its label's row with
+     it rather than sliding the whole column up. */
+  .pw-meta-item {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+
+  .pw-meta-label {
+    margin: 0;
+    /* The label is the quieter half of an already quiet block, and it earns
+       that by being the half you do not read: you scan for the value. */
+    opacity: var(--pw-meta-label-opacity);
+  }
+
+  .pw-meta-value {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    /* A serial or a coordinate is one unbroken token and breaking it mid-run
+       makes it unreadable, but a long status string still has to wrap. */
+    overflow-wrap: anywhere;
+  }
+
+  /* Laid out in a row instead, for a footer strip rather than a corner block.
+     Same pairs, same type, no grid: the pairs sit inline and wrap. */
+  .pw-meta[data-layout="inline"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--pw-space-3xs) var(--pw-space-md);
+  }
+
+  .pw-meta[data-layout="inline"] .pw-meta-item {
+    display: flex;
+    gap: var(--pw-space-2xs);
+    grid-column: auto;
+    grid-template-columns: none;
+  }
+}

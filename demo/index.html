@@ -47,7 +47,7 @@
     import { createElement as h, useEffect, useState, StrictMode } from 'react';
     import { createRoot } from 'react-dom/client';
     import {
-      Badge, Spinner, Button, Dialog, DialogPanel, DialogTrigger, Equalizer, Icon,
+      Badge, Meta, Spinner, Button, Dialog, DialogPanel, DialogTrigger, Equalizer, Icon,
       List, Menu, MenuCheckboxItem, MenuContent, MenuItem, MenuLabel, MenuRadioGroup,
       MenuRadioItem, MenuSeparator, MenuSub, MenuTrigger, Menubar,
       Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
@@ -583,6 +583,33 @@ const [value, setValue] = useState([40]);
             format: (v, band) =>
               `${band.name}, ${v > 0 ? 'plus ' : v < 0 ? 'minus ' : ''}${Math.abs(v)} decibels`,
           })),
+
+        h(Section, {
+          skin: skinAxis,
+          id: 'meta', title: 'Metadata',
+          note: 'The coordinate readouts and serial strings a screen in this genre carries in its corners. A description list, because field and value pairs have had an element since 1993 and a stack of divs with a colon in the text gives a screen reader nothing to walk. Every item takes a label: an unlabelled string in a readout looks like data and says nothing.',
+          code: `import { Meta } from '@josueavalosjim/panelware';
+
+<Meta items={[
+  { label: 'Session', value: '2038 282 92L28' },
+  { label: 'Signal', value: 'Interrupted' },
+]} />
+
+// A footer strip rather than a corner block.
+<Meta layout="inline" items={pairs} />`,
+        },
+          h('div', { className: 'demo-stack' },
+            h(Meta, { items: [
+              { label: 'Session', value: '2038 282 92L28' },
+              { label: 'Signal', value: 'Interrupted, retrying' },
+              { label: 'Position', value: '21.0652, 55.3157' },
+              { label: 'Build', value: 'deck-r7' },
+            ] }),
+            h(Meta, { layout: 'inline', items: [
+              { label: 'Rate', value: '44.1 kHz' },
+              { label: 'Depth', value: '24 bit' },
+              { label: 'Latency', value: '11 ms' },
+            ] }))),
 
         h(Section, {
           skin: skinAxis,
