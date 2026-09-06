@@ -64,14 +64,19 @@ const failures = [];
 let scanned = 0;
 await withDemo(async (p, base) => {
   await p.goto(`${base}/demo/index.html`);
-  await p.settle(1800);
 
   /* A page that never rendered has no thumbs to press, and every row below
-     would report as missing rather than as the one thing that went wrong. */
-  const alive = await p.evaluate(`document.querySelectorAll('.pw-slider-thumb').length`);
-  if (alive < 4) {
-    failures.push(`index.html rendered ${alive} slider thumbs, so nothing was driven` +
-      ' (it boots React from esm.sh and needs a network)');
+     would report as missing rather than as the one thing that went wrong.
+
+     Waited for rather than slept through. This ran on a fixed 1800ms settle
+     and failed once inside a full run of the page checks and never again on
+     its own, which is the worst way for a gate to behave: a release gate that
+     fails intermittently teaches people to re-run it, and a gate people
+     re-run until it goes green is not a gate. */
+  const THUMBS = `document.querySelectorAll('.pw-slider-thumb').length`;
+  if (!(await p.ready(`(${THUMBS}) >= 4`))) {
+    failures.push(`index.html rendered ${await p.evaluate(THUMBS)} slider thumbs before the `
+      + 'timeout, so nothing was driven (it boots React from esm.sh and needs a network)');
     return;
   }
 
@@ -160,7 +165,10 @@ let rings = 0;
 await withDemo(async (p, base) => {
   for (const page of PAGES) {
     await p.goto(`${base}/${page}`);
-    await p.settle(page.includes('index') ? 1800 : 900);
+    if (!(await p.ready(`document.querySelectorAll('.pw-list-item').length > 0`))) {
+      failures.push(`${page}: no list rendered before the timeout, so no ring was checked`);
+      continue;
+    }
 
     const atRest = await p.evaluate(RING);
     if (!atRest) {
@@ -221,7 +229,10 @@ await withDemo(async (p, base) => {
 let ringed = 0;
 await withDemo(async (p, base) => {
   await p.goto(`${base}/demo/index.html`);
-  await p.settle(1800);
+  if (!(await p.ready(`document.querySelectorAll('.pw-button').length >= 4`))) {
+    failures.push('index.html did not render its controls before the timeout, so no ring was checked');
+    return;
+  }
   /* Keyboard modality, once. :focus-visible is the browser's own judgement
      about how focus arrived and cannot be set from script. */
   await p.key('Tab');

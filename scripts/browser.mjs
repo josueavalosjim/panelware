@@ -60,6 +60,23 @@ export async function withPage(fn, { width = 1100, height = 900, settle = 900 } 
       }
       return page.settle(60);
     };
+    /* Wait for the page to be ready rather than for a duration.
+       
+       demo/index.html boots React from esm.sh, and how long that takes is a
+       property of the network, not of the page. A fixed settle is a bet on
+       the slowest machine that will ever run the check, and a bet that is
+       usually won is exactly the kind that produces a gate people re-run
+       until it is green. This polls instead, and fails loudly with what it
+       was waiting for rather than continuing against a half-built page. */
+    page.ready = async (expression, { timeout = 15000, every = 100 } = {}) => {
+      const deadline = Date.now() + timeout;
+      for (;;) {
+        if (await page.evaluate(expression)) return true;
+        if (Date.now() > deadline) return false;
+        await page.settle(every);
+      }
+    };
+
     /* A real mouse press, for the same reason page.key exists. Radix opens a
        menu on pointerdown rather than on click, so element.click() from page
        script opens nothing and looks like the component is broken. This also
