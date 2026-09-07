@@ -1,5 +1,80 @@
 # Changelog
 
+## 0.2.2
+
+No component, stylesheet output or type changed. `git diff v0.2.1..v0.2.2 --
+src/ assets/` is empty, and the only change under `css/` de-duplicates four
+declarations that already resolved to the same values.
+
+Six gates and the documentation. Every guard added here was proved by planting
+the mutation it claims to catch and watching it go red.
+
+### The gate stops betting on a clock
+
+`check:interaction` was moved to a polled wait when a fixed settle nearly took
+a release out. The other five browser checks kept theirs, so the fix covered
+the file where the flake happened rather than the shape of it.
+
+The bet was worse than a slow gate. Each wait for the demo to boot was
+followed by a control count, and that count cannot tell a page that rendered
+nothing from a page that was merely slow: both arrive at zero and both were
+reported as a defect. Only the first one is. The counts stay, worded as they
+were, and the waits in front of them are conditions now.
+
+`check:pages` went from 1:43 to 0:40 as a side effect, which is the 63 seconds
+of fixed waiting there was to remove.
+
+### One `:root` declared four tokens twice
+
+`--pw-bracket-inset`, `--pw-bracket-arm`, `--pw-bracket-weight` and
+`--pw-meta-label-opacity` each appeared twice in the same block in
+`structural.css`, from two commits inserting near the same line. Both copies
+carried the same value, so nothing here measured anything different and every
+gate agreed with itself.
+
+It is a live hazard rather than untidiness: an edit to the first copy is
+silently overruled by the second. A guard now walks every stylesheet and holds
+each block to declaring a name once.
+
+### Thirteen skin knobs were real, live, and unwritten
+
+The README's "Writing a skin" section gave the procedure as copy
+`skin.chrome.css` and change the values, then documented six of the
+twenty-two tokens those files touch. The selection slot, the bracket geometry,
+the three glow tokens, the three gloss internals and the glass blur were all
+missing. The demo's token table listed them as a name and a value, which is
+worse than silence: it says a knob exists and nothing about what turning it
+does.
+
+They are written up now, grouped by what turning one does, with the selection
+slot given the most room because it is the second worked example of the rule
+the cascade layers set up and the first one is easy to read as a special case.
+
+Two claims in the same file had gone stale and are corrected. The four clip
+and texture hooks no longer "do nothing today": the cyber skin uses all of
+them. And a preset moving `--pw-bevel-depth` is no longer unenforced.
+
+A guard holds the set going forward, on the reserved-token list's rule: every
+knob is documented, or is on a list with a reason.
+
+### Three more lists that could drift apart
+
+The demo's skin picker and its `PRESETS` map are now held to the same
+filesystem-derived set of looks the check scripts already answer to, and a
+preset's owning skin is read out of its own selector rather than assumed.
+
+The demo's import map is held to the package's own peer ranges. It boots React
+and Radix from esm.sh, so the versions in that HTML are what every browser
+check measures, and the map could have pinned a Radix a major behind `^1.6`
+with every check still passing.
+
+### The recorded Radix exemption, re-checked
+
+`check:a11y` records one upstream exemption, that Radix's Select hides the page
+with `aria-hidden` without also making it `inert`. Still occurring on
+radix-ui 1.6.7, the current published version. The exemption stays, and the
+green line now names the version it was measured against.
+
 ## 0.2.1
 
 Documentation only. No component, stylesheet or type changed, and
