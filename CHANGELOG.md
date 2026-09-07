@@ -1,5 +1,83 @@
 # Changelog
 
+## 0.3.0
+
+A minor rather than a patch, for the new components. Two existing controls also
+change what they paint, and both are noted below rather than left to be found.
+
+### The kit can build a form now
+
+`<Input>` and `<Textarea>`, and `.pw-input` and `.pw-textarea` for the half of
+the audience that never touches React.
+
+Three of the four form controls shipped in 0.1 and the fourth did not, so the
+kit could label a choice and could not take a name. Installing the published
+tarball and building an ordinary settings panel against it found that in the
+first minute: five bare `<input>`s at browser default, and on the dark cyber
+skin they were the brightest thing on the page.
+
+There is no Radix under these and there is not meant to be. An input is an
+input, the interaction is the platform's, and neither Radix nor shadcn wraps
+one either. All the components add is a class name, which is what made this the
+cheapest thing in the kit to have been missing.
+
+It is the same sunken well as the combo box's field half, deliberately: the two
+sit in the same form, and a raised text field beside a sunken select would be
+two vocabularies in one row.
+
+**The placeholder is italic rather than dimmed**, which is a measurement rather
+than a preference. A placeholder is text in an enabled control, so 1.4.3 asks
+4.5:1 of it and the disabled tier's 3.0 does not apply.
+`--pw-color-disabled-content` against a field's own ground clears 4.5 in three
+of the six palettes here and misses in the other three, at 4.29, 4.44 and 3.83.
+Adding a seventh rung to six palettes to land just over the floor is the trade
+the metadata ink was offered and refused.
+
+**Invalid draws a ring, not a tint**, and `--pw-invalid-ring` is a separate
+token from `--pw-border` because the cyber skin resolves error, success and
+warning to one cyan pair on purpose. Under that skin colour carries nothing and
+weight is the only thing left, so a ring at the resting edge's own weight would
+be a state with no carrier. Nothing here validates: `aria-invalid` is yours to
+set.
+
+### Three controls get their focus ring back under the cyber skin
+
+`.pw-panel`, `.pw-list` and `.pw-select` have been shipping with no focus ring
+in that skin. All three are in the list `reset.css` rings and the list
+`bevel.css` opts out of the corner clip, and both lists were correct.
+`dialog.css`, `list.css` and `field.css` each re-declared `clip-path` anyway,
+and `@layer pw.components` sorts after `@layer pw.treatment`, so the component
+won and the opt-out lost. `clip-path` clips an outline and this kit's focus
+ring is an outline.
+
+The test holding those two lists together could not see it, because the defect
+was in a third file neither list knows about. The new guard asks the browser
+what the cascade settled on instead, sets both clip hooks rather than one, and
+fails if any ringed class is missing from both demo pages.
+
+**Visible change:** the cyber dialog no longer has a notched corner. That was
+already the documented trade, argued at length in `bevel.css`: a notched skin
+still cannot notch the things a keyboard lands on. The window, the menu, the
+equaliser, the select list and the tab panel keep theirs.
+
+### The select's placeholder changes with the text field's
+
+**Visible change:** it was `opacity: 0.7` and it is italic now. That half is a
+fix rather than a consistency pass. `check-colour` reads a computed `color` and
+composites its alpha, and element opacity is not alpha, so the gate had been
+measuring the full-strength value and the ratio the select was actually
+painting had never been checked at all.
+
+### Two checks that would have reported a clean run
+
+`check:interaction`'s focus-ring sweep queried `a[href]`, `button` and `input`
+and not `textarea`, so a new control would have been green in a check that
+never looked at it. And both new controls are in `check:parity`'s shape list,
+which is the claim that file makes about what it compares: 191x44 and 200x88,
+identical on both pages.
+
+182 tests. 16680 painted pairs, up from 15840. 14 focus rings, up from 12.
+
 ## 0.2.2
 
 No component, stylesheet output or type changed. `git diff v0.2.1..v0.2.2 --
