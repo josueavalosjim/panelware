@@ -239,7 +239,7 @@ await withDemo(async (p, base) => {
 
   const found = await p.evaluate(`(() => {
     const els = [...document.querySelectorAll(
-      'a[href],button,input,[tabindex]:not([tabindex="-1"]),[role="slider"]')]
+      'a[href],button,input,textarea,select,[tabindex]:not([tabindex="-1"]),[role="slider"]')]
       .filter((e) => !e.hasAttribute('disabled') && e.getAttribute('aria-disabled') !== 'true')
       .filter((e) => [...e.classList].some((c) => c.startsWith('pw-')));
     const out = [];

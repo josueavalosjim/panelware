@@ -75,6 +75,8 @@ const GEOM = `(() => {
       checkbox: box('#field .pw-checkbox'),
       radio: box('#field .pw-radio'),
       select: box('#field .pw-select'),
+      input: box('#field .pw-input'),
+      textarea: box('#field .pw-textarea'),
     },
     /* Not sizes: what the pointer actually lands on. Null rather than absent
        when there is no thumb, because 'thumb' above already reports that and

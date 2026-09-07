@@ -51,7 +51,7 @@
       List, Menu, MenuCheckboxItem, MenuContent, MenuItem, MenuLabel, MenuRadioGroup,
       MenuRadioItem, MenuSeparator, MenuSub, MenuTrigger, Menubar,
       Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
-      Checkbox, Field, Radio, RadioGroup, Select, SelectItem,
+      Checkbox, Field, Input, Radio, RadioGroup, Select, SelectItem, Textarea,
       ToggleGroup, ToggleGroupItem, Transport, TransportButton, Window,
     } from '../dist/index.js';
 
@@ -264,9 +264,21 @@
         h(Section, {
           skin: skinAxis,
           id: 'field', title: 'Form controls',
-          note: 'The label is part of the target: clicking the words works, which is native behaviour a hand-rolled checkbox routinely loses. The radio is the one round thing in the kit, because the shape is what tells you it is a choose-one before you have read a word. The combo box is a sunken field with a raised drop button, which is what makes it read as something you can open.',
-          code: `import { Field, Checkbox, RadioGroup, Radio, Select, SelectItem }
+          note: 'The label is part of the target: clicking the words works, which is native behaviour a hand-rolled checkbox routinely loses. The radio is the one round thing in the kit, because the shape is what tells you it is a choose-one before you have read a word. The combo box is a sunken field with a raised drop button, which is what makes it read as something you can open. A text field is the same well as the combo box\u2019s field half, so the two read as one vocabulary in a row; its placeholder is italic rather than dimmed, because a quieter ink misses 4.5:1 in three of the six palettes here.',
+          code: `import { Field, Input, Textarea, Checkbox, RadioGroup, Radio, Select, SelectItem }
   from '@josueavalosjim/panelware';
+
+// labelFirst, because Field's default puts the label after the control,
+// which is right for a checkbox and backwards for this
+<Field label="Server" labelFirst>
+  <Input value={host} onChange={(e) => setHost(e.target.value)} />
+</Field>
+
+// The invalid ring is thicker than the resting edge, not just a colour:
+// under the cyber skin error and success are the same ink
+<Field label="Port" labelFirst><Input aria-invalid={!valid} /></Field>
+
+<Field label="Notes" labelFirst><Textarea rows={3} /></Field>
 
 <Field label="Always on top">
   <Checkbox checked={onTop} onCheckedChange={setOnTop} />
@@ -286,6 +298,16 @@
 </Select>`,
         },
           h('div', { className: 'demo-stack' },
+            h(Field, { label: 'Server', labelFirst: true },
+              h(Input, { defaultValue: 'panel.example.net' })),
+            h(Field, { label: 'Nickname', labelFirst: true },
+              h(Input, { placeholder: 'not set' })),
+            h(Field, { label: 'Port', labelFirst: true },
+              h(Input, { defaultValue: 'not a port', 'aria-invalid': true })),
+            h(Field, { label: 'Licence key', labelFirst: true },
+              h(Input, { defaultValue: 'XXXX-XXXX', disabled: true })),
+            h(Field, { label: 'Notes', labelFirst: true },
+              h(Textarea, { rows: 3, defaultValue: 'Ten bands, sharing a scale.' })),
             h(Field, { label: 'Always on top' },
               h(Checkbox, { checked: alwaysOnTop, onCheckedChange: setAlwaysOnTop })),
             h(Field, { label: 'Some tracks selected' },

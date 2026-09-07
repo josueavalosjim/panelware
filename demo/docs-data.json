@@ -971,6 +971,15 @@
      }
     },
     {
+     "name": "--pw-invalid-ring",
+     "values": {
+      "both": {
+       "declared": "2px",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-bracket-inset",
      "values": {
       "both": {
@@ -1770,6 +1779,24 @@
    "pass": true
   },
   {
+   "theme": "chrome-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 7.69,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 6.31,
+   "min": 3,
+   "pass": true
+  },
+  {
    "theme": "chrome-dark",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-100",
@@ -1959,6 +1986,24 @@
    "pass": true
   },
   {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 7.65,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 6.23,
+   "min": 3,
+   "pass": true
+  },
+  {
    "theme": "chrome-dark-auto",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-100",
@@ -2145,6 +2190,24 @@
    "note": "",
    "ratio": 7.62,
    "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 7.65,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-dark-auto",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 6.23,
+   "min": 3,
    "pass": true
   },
   {
@@ -2337,6 +2400,24 @@
    "pass": true
   },
   {
+   "theme": "cyber-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 8.13,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 7.24,
+   "min": 3,
+   "pass": true
+  },
+  {
    "theme": "cyber-dark",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-100",
@@ -2523,6 +2604,24 @@
    "note": "",
    "ratio": 9.86,
    "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 11.11,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 9.78,
+   "min": 3,
    "pass": true
   },
   {
@@ -2715,6 +2814,24 @@
    "pass": true
   },
   {
+   "theme": "chrome-deck-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 7.41,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-deck-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 6.27,
+   "min": 3,
+   "pass": true
+  },
+  {
    "theme": "chrome-deck-dark",
    "fg": "--pw-color-base-content",
    "bg": "--pw-color-base-100",
@@ -2901,6 +3018,24 @@
    "note": "",
    "ratio": 7.12,
    "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "chrome-deck-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 5.22,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "chrome-deck-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 4.2,
+   "min": 3,
    "pass": true
   }
  ]

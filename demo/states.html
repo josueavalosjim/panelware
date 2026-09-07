@@ -635,9 +635,24 @@
 
     <section class="demo-section" id="field">
       <h2 class="demo-heading">Form controls</h2>
-      <p class="demo-note">Checkbox, radio and combo box, in every state the attributes can reach. This page had none of them: they were added to the live page and never mirrored here, so their CSS had no proof it works without React and the runtime contrast gate, which reads this page, had never measured them.</p>
+      <p class="demo-note">Text field, textarea, checkbox, radio and combo box, in every state the attributes can reach. This page had none of them: they were added to the live page and never mirrored here, so their CSS had no proof it works without React and the runtime contrast gate, which reads this page, had never measured them.</p>
       <div class="demo-row">
         <div class="demo-stack">
+          <label class="pw-field">
+            <span class="pw-label">Server</span>
+            <input class="pw-input" type="text" value="panel.example.net"></label>
+          <label class="pw-field">
+            <span class="pw-label">Nickname</span>
+            <input class="pw-input" type="text" placeholder="not set"></label>
+          <label class="pw-field">
+            <span class="pw-label">Port</span>
+            <input class="pw-input" type="text" value="not a port" aria-invalid="true"></label>
+          <label class="pw-field">
+            <span class="pw-label">Licence key</span>
+            <input class="pw-input" type="text" value="XXXX-XXXX" disabled=""></label>
+          <label class="pw-field">
+            <span class="pw-label">Notes</span>
+            <textarea class="pw-textarea" rows="3">Ten bands, sharing a scale.</textarea></label>
           <label class="pw-field">
             <button type="button" role="checkbox" aria-checked="true" data-state="checked" value="on" class="pw-checkbox">
               <span data-state="checked" class="pw-box-indicator">

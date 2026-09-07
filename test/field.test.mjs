@@ -12,7 +12,9 @@ import { dirname, join } from 'node:path';
 import { describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { Checkbox, Field, Radio, RadioGroup, Select, SelectItem } from '../dist/index.js';
+import {
+  Checkbox, Field, Input, Radio, RadioGroup, Select, SelectItem, Textarea,
+} from '../dist/index.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
@@ -26,6 +28,83 @@ describe('the label is part of the control', () => {
     const html = render(h(Field, { label: 'Always on top' }, h(Checkbox, {})));
     assert.match(html, /^<label class="pw-field"/);
     assert.match(html, /class="pw-label">Always on top</);
+  });
+});
+
+describe('text field', () => {
+  test('is a plain input carrying one class, and types default to text', () => {
+    /* There is no primitive under this and there is not meant to be. If this
+       ever grows a wrapper element, the CSS-only half of the kit stops getting
+       the same control from the same markup. */
+    const html = render(h(Input, {}));
+    assert.equal(html, '<input type="text" class="pw-input"/>');
+  });
+
+  test('the type prop still reaches the element', () => {
+    assert.match(render(h(Input, { type: 'password' })), /type="password"/);
+  });
+
+  test('a textarea is its own component, not a prop on the input', () => {
+    /* Collapsing them would mean a props type that sometimes accepts rows and
+       sometimes accepts type, with the union unrepresentable. */
+    assert.match(render(h(Textarea, { rows: 3 })), /^<textarea rows="3" class="pw-textarea"/);
+  });
+
+  test('both are wells, and the same well the combo box field is', () => {
+    /* A raised text field beside a sunken select is two vocabularies in one
+       row, and they appear in one row in every form anybody builds. */
+    const css = bare(read('css/components/field.css'));
+    const block = css.match(/\.pw-input,\s*\.pw-textarea \{([^}]*)\}/);
+    assert.ok(block, 'no shared .pw-input/.pw-textarea rule');
+    assert.match(block[1], /--pw-elev:\s*var\(--pw-shadow-sunken\)/);
+  });
+
+  test('neither takes the corner clip, because both draw a focus ring', () => {
+    /* clip-path clips an outline and this kit's focus ring is an outline.
+       bevel.css opts the ringed controls out in an earlier layer, so a
+       clip-path here would win it straight back. Three components were doing
+       exactly that, silently, under the only skin that sets the hook. */
+    const css = bare(read('css/components/field.css'));
+    const block = css.match(/\.pw-input,\s*\.pw-textarea \{([^}]*)\}/)[1];
+    assert.doesNotMatch(block, /clip-path/);
+    const ringed = bare(read('css/reset.css'))
+      .match(/:where\(([^)]*)\):focus-visible/)[1];
+    for (const cls of ['.pw-input', '.pw-textarea']) {
+      assert.ok(ringed.includes(cls), `${cls} takes no focus ring at all`);
+    }
+  });
+
+  test('the placeholder is the body ink, quieted by shape rather than by value', () => {
+    /* Measured, not chosen: --pw-color-disabled-content against a field's own
+       ground clears 4.5 in three of the six palettes here and misses in the
+       other three, and a placeholder is text in an enabled control so 1.4.3
+       reaches it. The select was using opacity, which the contrast gate reads
+       straight through, so its real ratio was never measured at all.
+
+       Asserted rather than commented, because "it uses the body ink" is
+       exactly the kind of claim that stops being true quietly. Same shape as
+       the assertion meta.css carries. */
+    const css = bare(read('css/components/field.css'));
+    const block = css.match(/::placeholder[^{]*\{([^}]*)\}/);
+    assert.ok(block, 'no ::placeholder rule');
+    assert.match(block[1], /color:\s*var\(--pw-color-base-content\)/);
+    assert.match(block[1], /font-style:\s*italic/);
+    assert.doesNotMatch(css, /opacity:\s*0\.7/,
+      'a placeholder dimmed with opacity is one the contrast gate cannot measure');
+  });
+
+  test('invalid is carried by weight, not only by colour', () => {
+    /* The cyber skin resolves error, success and warning to one cyan pair on
+       purpose. Under that skin a tinted invalid field says nothing at all, so
+       the ring has to be thicker than the resting edge. --pw-border would make
+       it exactly the resting edge. */
+    const css = bare(read('css/components/field.css'));
+    const block = css.match(/\[aria-invalid="true"\][^{]*\{([^}]*)\}/);
+    assert.ok(block, 'nothing styles an invalid field');
+    assert.match(block[1], /var\(--pw-invalid-ring\)/);
+    assert.doesNotMatch(block[1], /var\(--pw-border\)/);
+    /* First in the list, because box-shadow paints the first entry on top. */
+    assert.match(block[1], /--pw-elev:\s*\n?\s*inset[^;]*--pw-color-error-content[^;]*,\s*\n?\s*var\(--pw-shadow-sunken\)/);
   });
 });
 

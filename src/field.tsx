@@ -39,6 +39,44 @@ export function Field({ label, labelFirst, className, children, ...rest }: Field
   );
 }
 
+/**
+ * A text field.
+ *
+ * No Radix, and that is not an omission. There is no Select-shaped primitive
+ * to wrap here: an <input> already has the behaviour, the platform owns it,
+ * and neither Radix nor shadcn wraps one either. Everything this adds is a
+ * class name, which is also why the CSS-only half of the kit gets the same
+ * control with no React involved.
+ *
+ * type defaults to "text" because <input> defaults to "text" and leaving it
+ * implicit would make the one prop most consumers set look optional in a way
+ * the DOM does not. Pass type="password", "email", "number" and the rest
+ * straight through.
+ *
+ * The label belongs to <Field>, which wraps the pair in a <label> so the
+ * association is structural rather than an id that has to be kept unique.
+ * Field puts its label AFTER the control by default, which is right for a
+ * checkbox and wrong for this: pass labelFirst.
+ */
+export type InputProps = ComponentPropsWithoutRef<'input'>;
+
+export function Input({ className, type = 'text', ...rest }: InputProps) {
+  return <input {...rest} type={type} className={cx('pw-input', className)} />;
+}
+
+/**
+ * The same field with more than one line in it.
+ *
+ * Separate from Input rather than a prop, because they are different elements
+ * and collapsing them would mean a component that sometimes accepts rows and
+ * sometimes accepts type, with the union unrepresentable in the props type.
+ */
+export type TextareaProps = ComponentPropsWithoutRef<'textarea'>;
+
+export function Textarea({ className, ...rest }: TextareaProps) {
+  return <textarea {...rest} className={cx('pw-textarea', className)} />;
+}
+
 export type CheckboxProps = ComponentPropsWithoutRef<typeof RadixCheckbox.Root>;
 
 export function Checkbox({ className, ...rest }: CheckboxProps) {

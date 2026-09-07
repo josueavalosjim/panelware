@@ -109,6 +109,15 @@
   --pw-selected-content: var(--pw-color-primary-content);
   --pw-selected-mark:    none;
 
+  /* How thick an invalid field's ring is drawn.
+
+     Not --pw-border, and this is the reason: the cyber skin resolves error,
+     success and warning to one cyan pair on purpose, so under that skin colour
+     carries nothing and the only thing separating an invalid field from a
+     valid one is that its edge is thicker than the resting hairline. A ring at
+     the boundary's own weight would be a state with no carrier at all. */
+  --pw-invalid-ring: 2px;
+
   /* Corner brackets: how far the marks sit inside the row, and how long each
      arm runs. Here rather than in the cyber skin so a second skin that wants
      bracketed selection switches it on rather than reinventing the geometry. */

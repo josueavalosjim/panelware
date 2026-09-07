@@ -89,8 +89,8 @@ component would be verifying a shape that never ships.
 
 Button, toggle, toggle group, tabs, dialog, window chrome, menu bar,
 transport, seek, slider, equaliser, list, status badge, metadata, icon,
-segment readout, and the form controls: checkbox, radio group, select, and the
-label they share.
+segment readout, and the form controls: text field, textarea, checkbox, radio
+group, select, and the label they share.
 
 Two themes, `chrome` light and dark, and two densities, `comfortable` (44px
 targets) and `compact` (32px). Skin, theme and density are three independent
@@ -322,7 +322,54 @@ knowing before you look for it: the dialog carries no `aria-modal`. Radix
 marks the rest of the page `aria-hidden` instead, which achieves the same
 containment with better support than `aria-modal` has ever had.
 
-Three things Radix does not cover, which this owns.
+### The text field, which has no primitive under it
+
+`<Input>` and `<Textarea>` wrap nothing. There is no Radix primitive here and
+there is not meant to be: an input is an input, the interaction is the
+platform's, and neither Radix nor shadcn wraps one either. All the components
+add is a class name, which is why the same control is available with no React
+at all.
+
+```jsx
+// Field's label goes AFTER the control by default, which is right for a
+// checkbox and backwards for this
+<Field label="Server" labelFirst><Input value={host} onChange={…} /></Field>
+<Field label="Notes" labelFirst><Textarea rows={3} /></Field>
+```
+
+```html
+<input class="pw-input" type="text">
+<textarea class="pw-textarea" rows="3"></textarea>
+```
+
+It is the same sunken well as the combo box's field half, on purpose: the two
+sit in the same form, and a raised text field beside a sunken select is two
+vocabularies in one row.
+
+**The placeholder is italic rather than dimmed**, and that is a measurement
+rather than a preference. A placeholder is text in an enabled control, so
+1.4.3 asks 4.5:1 of it and the disabled tier's 3.0 does not apply. The kit's
+own quiet ink, `--pw-color-disabled-content`, clears 4.5 against a field's
+ground in three of the six palettes here and misses in the other three, at
+4.29, 4.44 and 3.83. Adding a seventh rung to six palettes to land just over
+the floor is a trade this kit has refused once already, for the metadata ink.
+So the placeholder takes the body ink at full strength and says what it is by
+its shape.
+
+**Invalid draws a ring, not a tint**, and the ring is thicker than the resting
+edge. `--pw-invalid-ring` is a separate token from `--pw-border` for one
+reason: the cyber skin resolves error, success and warning to a single cyan
+pair on purpose, so under that skin colour carries nothing at all and the only
+thing separating an invalid field from a valid one is weight.
+
+```jsx
+<Field label="Port" labelFirst><Input aria-invalid={!valid} /></Field>
+```
+
+Nothing here validates for you. `aria-invalid` is the consumer's to set,
+because the kit has no idea what a valid port is.
+
+### Three other things Radix does not cover, which this owns.
 
 The marquee ships a real pause button. WCAG 2.2.2 asks for a mechanism to
 pause anything moving for more than five seconds, and pausing on hover is not

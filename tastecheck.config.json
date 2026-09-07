@@ -192,6 +192,18 @@
         "fg": "--pw-color-error-content",
         "bg": "--pw-color-error",
         "min": 4.5
+      },
+      {
+        "fg": "--pw-color-error-content",
+        "bg": "--pw-color-base-100",
+        "min": 3.0,
+        "label": "an invalid field's ring, against the field it rings"
+      },
+      {
+        "fg": "--pw-color-error-content",
+        "bg": "--pw-color-base-200",
+        "min": 3.0,
+        "label": "the same ring on a field inside a panel"
       }
     ]
   },

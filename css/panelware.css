@@ -535,6 +535,15 @@
   --pw-selected-content: var(--pw-color-primary-content);
   --pw-selected-mark:    none;
 
+  /* How thick an invalid field's ring is drawn.
+
+     Not --pw-border, and this is the reason: the cyber skin resolves error,
+     success and warning to one cyan pair on purpose, so under that skin colour
+     carries nothing and the only thing separating an invalid field from a
+     valid one is that its edge is thicker than the resting hairline. A ring at
+     the boundary's own weight would be a state with no carrier at all. */
+  --pw-invalid-ring: 2px;
+
   /* Corner brackets: how far the marks sit inside the row, and how long each
      arm runs. Here rather than in the cyber skin so a second skin that wants
      bracketed selection switches it on rather than reinventing the geometry. */
@@ -1475,7 +1484,8 @@
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-panel, .pw-title-button,
        .pw-badge, .pw-slider, .pw-slider-track, .pw-slider-range,
        .pw-slider-thumb, .pw-lcd, .pw-lcd-render, .pw-lcd-cell,
-       .pw-tab-list, .pw-tab-panel, .pw-overlay) {
+       .pw-tab-list, .pw-tab-panel, .pw-overlay,
+       .pw-input, .pw-textarea) {
   box-sizing: border-box;
 }
 
@@ -1495,7 +1505,8 @@
    next control added outside the slot too. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button,
        .pw-transport-button, .pw-menubar-trigger,
-       .pw-checkbox, .pw-radio, .pw-select) {
+       .pw-checkbox, .pw-radio, .pw-select,
+       .pw-input, .pw-textarea) {
   appearance: none;
   border: 0;
   margin: 0;
@@ -1529,7 +1540,8 @@
    used to. */
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
        .pw-menubar-trigger, .pw-checkbox, .pw-radio, .pw-select,
-       .pw-slider-thumb, .pw-panel, .pw-list, .pw-lcd-pause):focus-visible {
+       .pw-slider-thumb, .pw-panel, .pw-list, .pw-lcd-pause,
+       .pw-input, .pw-textarea):focus-visible {
   --pw-focus-halo: 0 0 0 var(--pw-focus-width) var(--pw-color-focus-contrast);
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
   outline-offset: var(--pw-focus-width);
@@ -1605,6 +1617,7 @@
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
          .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
+         .pw-input, .pw-textarea,
          .pw-raised, .pw-sunken) {
     /* Two knobs multiplied, because they have two owners. --pw-bevel-depth is
        the skin's: chrome ships 1 and the cyber preset ships 0, and a consumer
@@ -1680,7 +1693,8 @@
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
-         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list) {
+         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
+         .pw-input, .pw-textarea) {
     /* The bevel, plus the focus ring's inner half when there is one.
        --pw-focus-halo is transparent by default and set on :focus-visible. */
     box-shadow: var(--pw-elev), var(--pw-focus-halo);
@@ -1713,7 +1727,8 @@
            .pw-slider-track, .pw-slider-thumb, .pw-lcd,
            .pw-tab-panel, .pw-title-button, .pw-window,
            .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
-           .pw-checkbox, .pw-radio, .pw-select, .pw-select-list) {
+           .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
+           .pw-input, .pw-textarea) {
       border: var(--pw-border) solid ButtonBorder;
     }
   }
@@ -1760,7 +1775,8 @@
      None of those three has room for a notch at its size anyway. */
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
          .pw-menubar-trigger, .pw-checkbox, .pw-radio, .pw-select,
-         .pw-slider-thumb, .pw-panel, .pw-list, .pw-lcd-pause) { clip-path: none; }
+         .pw-slider-thumb, .pw-panel, .pw-list, .pw-lcd-pause,
+         .pw-input, .pw-textarea) { clip-path: none; }
 
   /* Documented escape hatches for surfaces a consumer builds that are not
      panelware components. Nothing internal uses them; internal components
@@ -1933,6 +1949,8 @@
          .pw-radio,
          .pw-select,
          .pw-select-list,
+         .pw-input,
+         .pw-textarea,
          .pw-raised,
          .pw-sunken) {
     /* One hairline in the boundary ink, which carries WCAG 1.4.11 in this skin
@@ -3327,11 +3345,24 @@
 }
 
 /**
- * FORM CONTROLS: checkbox, radio, select, label.
+ * FORM CONTROLS: text field, textarea, checkbox, radio, select, label.
  *
  * The kit had none of these, which is a larger hole than it sounds: they are
  * the first thing anyone evaluating a design system looks for, and every peer
  * leads with them.
+ *
+ * ── The text field is the one that was still missing ─────────────────────
+ * Three of the four shipped and the fourth did not, so the kit could label a
+ * choice and could not take a name. Building an ordinary settings panel
+ * against the published package found it in the first minute: five bare
+ * <input>s, browser default, and on the dark cyber skin they were the
+ * brightest thing on the page.
+ *
+ * There is no Radix primitive here and there is not meant to be. An input is
+ * an input, its interaction is the platform's, and neither Radix nor shadcn
+ * wraps one. That is what makes this the cheapest thing in the kit to have
+ * been missing: no dependency, no ARIA to own, and it works with no React at
+ * all, which is the half of the audience the architecture was built for.
  *
  * ── The radio is round, and that is a deliberate break ───────────────────
  * Everything else here is square at a 2px radius, and that rule is held
@@ -3374,6 +3405,93 @@
   .pw-field[data-disabled] .pw-label {
     color: var(--pw-color-disabled-content);
     cursor: default;
+  }
+
+  /* ── Text field and textarea ────────────────────────────────────────── */
+  .pw-input,
+  .pw-textarea {
+    /* A well, and the same well the combo box's field half is, because the two
+       sit in the same form. A text field raised beside a sunken select would
+       be two vocabularies in one row. */
+    --pw-elev: var(--pw-shadow-sunken);
+    display: inline-block;
+    min-width: var(--pw-control-min-w);
+    /* The overflow gate runs at 320px and an <input> sizes itself from its
+       size attribute rather than from its container, so without this it is
+       about 170px wide whatever it has been put inside. */
+    max-width: 100%;
+    background-color: var(--pw-color-base-100);
+    color: var(--pw-color-base-content);
+    border-radius: var(--pw-radius-control);
+    /* No clip-path. It is in reset.css's focus-ring list, and clip-path clips
+       an outline. bevel.css opts every ringed control out; a line here would
+       win it back, in a later layer, and take the ring off under any notched
+       skin. Three components were doing exactly that. */
+    cursor: text;
+  }
+
+  .pw-input {
+    min-height: var(--pw-control-h);
+    /* Horizontal only. A single-line input centres its own text in whatever
+       height it is given, so vertical padding would only fight the min-height
+       that makes the target 44px. */
+    padding: 0 var(--pw-control-pad-x);
+  }
+
+  .pw-textarea {
+    /* Two rows before anyone drags it. */
+    min-height: calc(var(--pw-control-h) * 2);
+    padding: var(--pw-space-2xs) var(--pw-control-pad-x);
+    /* Vertical only: a horizontal drag takes it out of the column it was laid
+       out in, and a form is a column. */
+    resize: vertical;
+    line-height: var(--pw-leading-ui);
+  }
+
+  /* The placeholder takes the body ink, at full strength, and says it is a
+     placeholder by being italic.
+
+     The obvious treatment is a quieter ink, and it was measured rather than
+     assumed: --pw-color-disabled-content on the field's own ground clears 4.5
+     in three of the six palettes this kit ships and misses it in the other
+     three, at 4.29, 4.44 and 3.83. A placeholder is text in an enabled
+     control, so 1.4.3 reaches it and the disabled tier's 3.0 does not apply.
+     Adding a seventh rung to six palettes to land just over the floor is the
+     same trade the metadata ink was offered and refused.
+
+     The .pw-select placeholder was doing it with opacity: 0.7, which is worse
+     than a quiet ink rather than better: check-colour reads a computed color
+     and composites its alpha, and element opacity is not alpha, so the gate
+     measured the full-strength value and the real ratio was never checked at
+     all. Both placeholders are the same treatment now, and it is one the gate
+     can see. */
+  .pw-input::placeholder,
+  .pw-textarea::placeholder {
+    color: var(--pw-color-base-content);
+    font-style: italic;
+    /* Firefox dims placeholders by default. */
+    opacity: 1;
+  }
+
+  .pw-input:disabled,
+  .pw-textarea:disabled {
+    color: var(--pw-color-disabled-content);
+    cursor: default;
+  }
+
+  /* Invalid draws a ring rather than tinting the field, for the reason the
+     cyber skin's own palette forces: error, success and warning all resolve to
+     one cyan pair there, so a tint would say nothing. A ring thicker than the
+     resting boundary is a shape difference, which is what the rule about no
+     state being carried by colour alone is asking for.
+
+     Listed before the sunken stack, because box-shadow paints the first entry
+     on top. Behind it the bevel would only show at the corners. */
+  .pw-input[aria-invalid="true"],
+  .pw-textarea[aria-invalid="true"] {
+    --pw-elev:
+      inset 0 0 0 var(--pw-invalid-ring) var(--pw-color-error-content),
+      var(--pw-shadow-sunken);
   }
 
   /* ── Checkbox and radio share a box ─────────────────────────────────── */
@@ -3518,7 +3636,10 @@
   }
 
   .pw-select:disabled { color: var(--pw-color-disabled-content); }
-  .pw-select[data-placeholder] .pw-select-value { opacity: 0.7; }
+  /* The same placeholder treatment as the text field, and for the reason given
+     up there: this was opacity: 0.7, and element opacity is invisible to the
+     contrast gate, so the ratio it was actually painting was never measured. */
+  .pw-select[data-placeholder] .pw-select-value { font-style: italic; }
 
   /* The open list reuses the menu's surface, because it is one. */
   .pw-select-list {
