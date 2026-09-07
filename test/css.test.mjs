@@ -387,6 +387,52 @@ describe('the published reference data', () => {
       }
     }
   });
+  test('the demo offers every look the tokens declare', () => {
+    /* The same drift the check scripts had, in the one place a visitor meets
+       it. demo/index.html hand-maintains two lists: the skin picker's
+       SelectItems, and a PRESETS map keyed by skin. A third skin that landed
+       without both being edited would ship a demo that renders it nowhere,
+       and the page is the only thing most people will ever look at.
+
+       A preset's owning skin is read out of its own selector rather than
+       assumed, because the pairing is the part that can be wrong: a preset
+       listed under the wrong skin matches nothing and falls back silently,
+       which is the behaviour the token contract chose on purpose and is
+       therefore invisible. */
+    const skins = new Set();
+    for (const file of readdirSync(join(ROOT, 'css', 'tokens'))) {
+      const m = file.match(/^skin\.([a-z0-9-]+)\.css$/);
+      if (m) skins.add(m[1]);
+    }
+    assert.ok(skins.size >= 2, `only ${skins.size} skin file(s) found`);
+
+    const owners = new Map();
+    for (const file of readdirSync(join(ROOT, 'css', 'tokens', 'presets'))) {
+      if (!file.endsWith('.css')) continue;
+      const name = file.replace(/\.css$/, '');
+      const css = read(join('css', 'tokens', 'presets', file));
+      const m = css.match(new RegExp(`\\[data-skin="([a-z0-9-]+)"\\]\\[data-preset="${name}"\\]`));
+      assert.ok(m, `${file} never scopes itself to a skin, so it matches nothing`);
+      owners.set(name, m[1]);
+    }
+    assert.ok(owners.size >= 1, 'no preset files found');
+
+    const demo = read('demo/index.html');
+    const presets = demo.match(/const PRESETS = \{([^}]*)\}/);
+    assert.ok(presets, 'demo/index.html has no PRESETS map');
+
+    for (const skin of skins) {
+      assert.match(demo, new RegExp(`SelectItem, \\{ value: '${skin}' \\}`),
+        `the demo's skin picker does not offer ${skin}`);
+      assert.match(presets[1], new RegExp(`${skin}:\\s*\\[`),
+        `the demo's PRESETS map has no entry for ${skin}, so picking it throws`);
+    }
+    for (const [preset, skin] of owners) {
+      const list = presets[1].match(new RegExp(`${skin}:\\s*\\[([^\\]]*)\\]`));
+      assert.ok(list?.[1].includes(`'${preset}'`),
+        `the demo does not offer the ${preset} preset under ${skin}, which is the skin it scopes itself to`);
+    }
+  });
   test('no preset moves the elevation model', () => {
     /* A preset may move knobs. The deck preset sets --pw-gloss-opacity to 0,
        and being able to do that without a class or a codemod is the whole
