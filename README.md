@@ -185,7 +185,9 @@ the knob being a token rather than a class buys.
 
 What a preset should not move is `--pw-bevel-depth`, because that is the
 elevation model rather than a decoration, and a preset that set it to 0 would be
-a different skin wearing a preset's name. Nothing enforces that yet.
+a different skin wearing a preset's name. A test reads every file under
+`css/tokens/presets/` and fails on a `--pw-bevel-depth` declaration in any of
+them, because prose does not fail a build.
 
 The line between the two is whether a treatment file is involved. The cyber
 skin ships `css/treatment/glow.css` and replaces what goes in the elevation
@@ -379,11 +381,102 @@ carries outer shadows as happily as insets.
 markup at once. Removing the rule instead would leave a dead attribute
 scattered through code you do not own.
 
-**Three hooks exist for skins that are not this one**, do nothing today, and
-are the reason a notched or textured skin is a token change rather than a
-rewrite: `--pw-clip-control` and `--pw-clip-box` for corner geometry a scalar
-radius cannot express, and `--pw-texture` with `--pw-texture-opacity` for a
-surface pattern.
+**5. The rest of the knobs.** A skin file declares every one of these, and a
+skin that declares fewer makes the missing ones a fact about the consumer's
+markup rather than a fact about the skin. Grouped by what turning one does.
+
+*Elevation and shade*
+
+| Token | What it does |
+| --- | --- |
+| `--pw-bevel-depth` | multiplies every bevel offset; 0 collapses the stack to nothing |
+| `--pw-shadow-outer-color` | the cast shadow's colour. Its geometry is derived per element in `bevel.css`. Fully transparent means a skin whose surfaces are not objects sitting on anything |
+| `--pw-glass-blur` | the one place `backdrop-filter` is allowed, and it is 0 in both shipped skins. See the perf note below |
+
+*Gloss*
+
+| Token | What it does |
+| --- | --- |
+| `--pw-gloss-opacity` | the whole Web 2.0 highlight, per skin. 0 silences every `[data-gloss]` at once |
+| `--pw-gloss-glare-alpha` | the 120deg diagonal sweep, at its brightest stop |
+| `--pw-gloss-cap-alpha` | the inset top-highlight capsule |
+| `--pw-gloss-cap-height` | how far down the face that capsule reaches |
+
+The three alphas are separate because they are the period values rather than
+one number scaled: the tutorials this is traced from set the glare, the
+capsule, and the ellipse independently, and dark needs a dimmer glare than
+light does at the same apparent brightness.
+
+*Glow*
+
+| Token | What it does |
+| --- | --- |
+| `--pw-glow-color` | what glows |
+| `--pw-glow-radius` | how far |
+| `--pw-glow-intensity` | how much; 0 turns it off everywhere |
+
+Only the readout glows in either shipped skin. The tokens are at skin level
+rather than inside the readout's own rules so a skin that wants glowing
+buttons does not need a new token to say so.
+
+*Selection*
+
+A selected list row and a highlighted menu item are painted by the skin, not
+by the component, for the same reason `--pw-elev` is a slot.
+
+| Token | What it does |
+| --- | --- |
+| `--pw-selected-bg` | the ground under a selected row |
+| `--pw-selected-content` | its text colour |
+| `--pw-selected-mark` | a `background` shorthand painted on top, for a skin that draws selection rather than tinting it |
+
+The chrome skin inverts the row: the accent as a ground, its content colour on
+top, and `--pw-selected-mark: none`. The cyber skin does the opposite, setting
+the first two to `transparent` and `inherit` and putting four corner brackets
+in the mark. That is the second worked example of the rule the cascade layers
+set up, after `--pw-elev`: **a treatment can never win a declaration a
+component already made, so replacing what a component paints means the
+component has to leave a slot.**
+
+Marking with shape rather than colour also keeps the state cheaper to measure.
+A bracketed row is the same text on the same ground it already was, instead of
+a second foreground on a second ground that the contrast gate has to check.
+
+The bracket geometry is declared in `structural.css` rather than in the cyber
+skin, so a skin that wants bracketed selection switches it on rather than
+reinventing it:
+
+| Token | What it does |
+| --- | --- |
+| `--pw-bracket-inset` | how far inside the row's box the marks sit |
+| `--pw-bracket-arm` | how long each arm runs |
+| `--pw-bracket-weight` | how thick it is |
+
+*Type*
+
+| Token | What it does |
+| --- | --- |
+| `--pw-font-ui` | the face the controls are set in |
+| `--pw-tracking-ui` | the tracking that face wants |
+
+These are the two that stop a second skin reading as the first one recoloured.
+The cyber skin points `--pw-font-ui` at the mono stack, and a fixed pitch is
+what makes a row of controls read as an instrument rather than as a web page.
+A skin that differs only by hue is a theme.
+
+*Geometry and surface*
+
+| Token | What it does |
+| --- | --- |
+| `--pw-clip-control` | corner geometry a scalar radius cannot express, on controls |
+| `--pw-clip-box` | the same, on panels and wells |
+| `--pw-texture` | a surface pattern, as a `background-image` |
+| `--pw-texture-opacity` | how strong, read from inside the pattern so it can be turned down without being replaced |
+
+These four were the kit's answer to "is a notched or textured skin really a
+token change", and until the cyber skin they were an unexercised claim. They
+are now what draws its cut corners and its scanlines, which is the first time
+the claim was actually tested rather than asserted.
 
 `--pw-clip-control` does not reach the slider thumb, the checkbox, or the
 radio, and that exemption is measured rather than promised. `clip-path` clips

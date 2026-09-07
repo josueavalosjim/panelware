@@ -466,4 +466,58 @@ describe('the published reference data', () => {
     }
     assert.deepEqual(offenders, [], offenders.join('\n'));
   });
+  test('every knob a skin sets is written down, or is on the list with a reason', () => {
+    /* A knob a consumer cannot find is a knob that does not exist. Thirteen of
+       them shipped that way: the selection slot, the bracket geometry, the
+       three glow tokens, the three gloss internals and the glass blur were all
+       real, live, and absent from the README, and the demo's token table
+       listed them as a name and a value, which tells somebody that a knob is
+       there and nothing about what turning it does.
+
+       The rule is the one the reserved-token list uses, for the same reason:
+       not "every knob is documented", but "every knob is documented or is on
+       this list with a reason", which turns a silent set into a maintained
+       one. A new knob fails until somebody either writes it up or writes down
+       why it is not a knob.
+
+       The set is derived rather than listed. A knob is what a skin.*.css
+       declares, plus what one of those files reaches into structural.css for,
+       because "copy skin.chrome.css and change the values" is the procedure
+       the README actually gives. */
+    const NOT_A_KNOB = new Map([
+      ['--pw-font-mono', 'a face in the type stack, not a knob; it is what --pw-font-ui is pointed at'],
+    ]);
+
+    const skinFiles = readdirSync(join(ROOT, 'css', 'tokens'))
+      .filter((f) => /^skin\..+\.css$/.test(f));
+    assert.ok(skinFiles.length >= 2, `only ${skinFiles.length} skin file(s) found`);
+
+    const declared = new Set();
+    const referenced = new Set();
+    for (const file of skinFiles) {
+      const css = read(join('css', 'tokens', file)).replace(/\/\*[\s\S]*?\*\//g, '');
+      for (const [, n] of css.matchAll(/(--pw-[\w-]+)\s*:/g)) declared.add(n);
+      for (const [, n] of css.matchAll(/var\((--pw-[\w-]+)/g)) referenced.add(n);
+    }
+    const structural = new Set();
+    for (const [, n] of read('css/tokens/structural.css').replace(/\/\*[\s\S]*?\*\//g, '')
+      .matchAll(/(--pw-[\w-]+)\s*:/g)) structural.add(n);
+
+    const knobs = [...new Set([...declared,
+      ...[...referenced].filter((n) => structural.has(n) && !declared.has(n))])].sort();
+    assert.ok(knobs.length >= 15, `only ${knobs.length} knobs found, so this scanned nothing`);
+
+    const doc = read('README.md');
+    const undocumented = knobs.filter((n) => !doc.includes(n) && !NOT_A_KNOB.has(n));
+    assert.deepEqual(undocumented, [],
+      `a skin sets these and the README never names them:\n${undocumented.map((n) => `  ${n}`).join('\n')}`);
+
+    /* The other direction, so the list cannot outlive its reasons. */
+    for (const [name, why] of NOT_A_KNOB) {
+      assert.ok(knobs.includes(name),
+        `${name} is on the not-a-knob list ("${why}") and no skin touches it any more`);
+      assert.ok(!doc.includes(name),
+        `${name} is on the not-a-knob list ("${why}") and the README documents it, so take it off`);
+    }
+  });
 });
