@@ -12,7 +12,7 @@
  * anywhere behind it is either a dead class or a stylesheet that did not
  * parse, and both are worth a red build.
  */
-import { report, withDemo } from './browser.mjs';
+import { rendered, report, withDemo } from './browser.mjs';
 
 const CHECK = `(() => {
   const selectors = [];
@@ -54,7 +54,10 @@ let seen = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
     await p.goto(`${base}/${page}`);
-    await p.settle(page.includes('index') ? 1700 : 900);
+    /* Not branched on: the "rendered no pw- classes at all" failure below is
+       the same finding with a better message, and it is the one this file
+       already words for the reader. */
+    await p.ready(rendered());
     const r = await p.evaluate(CHECK);
     if (r.unreadable) { failures.push(`${page}: ${r.unreadable} could not be read`); continue; }
     if (!r.rendered.length) {

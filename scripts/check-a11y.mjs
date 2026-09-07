@@ -25,7 +25,7 @@
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 
-import { ROOT, report, withDemo } from './browser.mjs';
+import { ROOT, counted, present, rendered, report, withDemo } from './browser.mjs';
 
 const require = createRequire(import.meta.url);
 const AXE = readFileSync(require.resolve('axe-core'), 'utf8');
@@ -79,18 +79,18 @@ await withDemo(async (p, base) => {
       const skin = look.preset ? `${look.skin}+${look.preset}` : look.skin;
       for (const theme of ['light', 'dark']) {
       await p.goto(`${base}/${page}`);
-      await p.settle(page.includes('index') ? 1800 : 900);
+      if (!(await p.ready(rendered()))) {
+        failures.push(`${page} (${skin}-${theme}) rendered ${await p.evaluate(counted())} controls ` +
+          'before the wait ran out, so axe scanned nothing');
+        continue;
+      }
       await p.evaluate(`document.documentElement.dataset.theme = ${JSON.stringify(theme)}`);
       await p.evaluate(`document.documentElement.dataset.skin = ${JSON.stringify(look.skin)}`);
       if (look.preset) await p.evaluate(`document.documentElement.dataset.preset = ${JSON.stringify(look.preset)}`);
       else await p.evaluate('delete document.documentElement.dataset.preset');
+      /* A style recalc, not a network wait. Nothing polls for this because
+         reading a computed style forces it. */
       await p.settle(300);
-
-      const alive = await p.evaluate(`document.querySelectorAll('.pw-button, .pw-toggle').length`);
-      if (alive < 4) {
-        failures.push(`${page} (${skin}-${theme}) rendered ${alive} controls, so axe scanned nothing`);
-        continue;
-      }
       await p.evaluate(AXE);
       const violations = await p.evaluate(RUN);
       checked += 1;
@@ -130,7 +130,11 @@ let named = 0;
 await withDemo(async (p, base) => {
   for (const page of PAGES) {
     await p.goto(`${base}/${page}`);
-    await p.settle(page.includes('index') ? 1800 : 900);
+    /* Waited for, not timed, and the result is deliberately not branched on:
+       if one of these never arrives the loop below names which one, and that
+       is a better message than a timeout that says only that something was
+       missing. */
+    await p.ready(present(NAMED.map((n) => n.selector)));
     for (const { selector, role, why } of NAMED) {
       const found = await p.ax(selector);
       if (!found.length) {
@@ -210,7 +214,10 @@ await withDemo(async (p, base) => {
   for (const theme of ['light', 'dark']) {
     for (const { name, open, reveals } of SURFACES) {
       await p.goto(`${base}/demo/index.html`);
-      await p.settle(1800);
+      if (!(await p.ready(present(open)))) {
+        failures.push(`${name} (${theme}): ${open} never appeared, so axe scanned the page at rest`);
+        continue;
+      }
       await p.evaluate(`document.documentElement.dataset.theme = ${JSON.stringify(theme)}`);
       await p.settle(200);
 
@@ -291,7 +298,9 @@ const probe = (selector, reach) => `(() => {
 let targets = 0;
 await withDemo(async (p, base) => {
   await p.goto(`${base}/demo/index.html`);
-  await p.settle(1800);
+  /* Not branched on, for the reason the names sweep gives: the loop below
+     reports the missing control by name. */
+  await p.ready(present(TARGETS.map((t) => t.selector)));
 
   for (const { selector, reach } of TARGETS) {
     const before = await p.evaluate(probe(selector, reach));

@@ -24,7 +24,7 @@
  * shape list below is the claim this file makes about what it compares, so
  * absence has to break it.
  */
-import { report, withDemo } from './browser.mjs';
+import { rendered, report, withDemo } from './browser.mjs';
 
 const GEOM = `(() => {
   const box = (sel, root = document) => {
@@ -136,13 +136,16 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   let failures = [];
   let scanned = 'nothing, the pages never loaded';
   await withDemo(async (p, base) => {
-    const read = async (page, settle) => {
+    const read = async (page) => {
       await p.goto(`${base}/${page}`);
-      await p.settle(settle);
+      /* Not branched on: GEOM carries its own `controls` count, and a page
+         that never rendered disagrees on that one line rather than on every
+         shape at once, which is the message this file was built to give. */
+      await p.ready(rendered());
       return p.evaluate(GEOM);
     };
-    const stat = await read('demo/states.html', 900);
-    const live = await read('demo/index.html', 1800);
+    const stat = await read('demo/states.html');
+    const live = await read('demo/index.html');
 
     scanned = scannedLine(stat);
     failures = disagreements(stat, live);

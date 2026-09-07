@@ -146,6 +146,38 @@ export async function withDemo(fn, options) {
   }
 }
 
+/**
+ * "The demo has rendered", as a condition rather than a duration.
+ *
+ * Every page check here waited a fixed time for demo/index.html to boot React
+ * from esm.sh and then counted controls, and that conflates two different
+ * failures under one message. A page that rendered nothing and a page that was
+ * merely slow both arrive at the count as zero, and the check calls both a
+ * defect. Only the first one is. The second is a bet on the slowest machine
+ * that will ever run this, and a bet that is usually won is exactly the kind
+ * that produces a gate people re-run until it is green: check:interaction
+ * failed once in a full run and never again on its own, which is the worst
+ * behaviour a release gate can have.
+ *
+ * So the count stays and the wait goes. Hand `rendered()` to page.ready, which
+ * polls to a deadline, and a slow boot passes while an empty page still fails.
+ * `counted()` is the same selector as a number, for saying how few arrived.
+ *
+ * Both come from one selector rather than being written out at each call site,
+ * because the condition and the diagnostic disagreeing about what they are
+ * looking for is how a check reports a count for something it never waited on.
+ */
+export const CONTROLS = '.pw-button, .pw-toggle';
+
+export const counted = (selector = CONTROLS) =>
+  `document.querySelectorAll(${JSON.stringify(selector)}).length`;
+
+export const rendered = (min = 4, selector = CONTROLS) => `(${counted(selector)}) >= ${min}`;
+
+/** The same thing for elements there is exactly one of: all of these exist. */
+export const present = (...selectors) => selectors.flat()
+  .map((s) => `!!document.querySelector(${JSON.stringify(s)})`).join(' && ');
+
 /** Report and exit the way every other gate in this repo does. */
 export function report(name, failures, scanned) {
   if (!failures.length) {

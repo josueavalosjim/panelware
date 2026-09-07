@@ -18,7 +18,7 @@
  * geometry rather than size, and it is the density and the width that decide
  * whether something fits.
  */
-import { report, withDemo } from './browser.mjs';
+import { counted, rendered, report, withDemo } from './browser.mjs';
 
 const WIDTHS = [320, 375, 768, 1100];
 const DENSITIES = ['comfortable', 'compact'];
@@ -57,7 +57,8 @@ const MEASURE = `(() => {
    reports clean and the check is measuring an empty document. Counting the
    controls first is what makes the difference between green and green for the
    wrong reason. */
-const ALIVE = `document.querySelectorAll('.pw-button, .pw-toggle, .pw-tab').length`;
+const SELECTOR = '.pw-button, .pw-toggle, .pw-tab';
+const ALIVE = counted(SELECTOR);
 const FLOOR = 6;
 
 const failures = [];
@@ -67,15 +68,16 @@ for (const page of ['demo/states.html', 'demo/index.html']) {
       for (const density of DENSITIES) {
         await p.resize(width, 900);
         await p.goto(`${base}/${page}`);
-        await p.settle(700);
-        await p.evaluate(`document.documentElement.dataset.density = ${JSON.stringify(density)}`);
-        await p.settle(200);
-        const alive = await p.evaluate(ALIVE);
-        if (alive < FLOOR) {
-          failures.push(`${page} at ${width}px ${density} rendered ${alive} controls, so nothing was measured` +
+        if (!(await p.ready(rendered(FLOOR, SELECTOR)))) {
+          const alive = await p.evaluate(ALIVE);
+          failures.push(`${page} at ${width}px ${density} rendered ${alive} controls ` +
+            'before the wait ran out, so nothing was measured' +
             (page.includes('index') ? ' (it boots React from esm.sh and needs a network)' : ''));
           continue;
         }
+        await p.evaluate(`document.documentElement.dataset.density = ${JSON.stringify(density)}`);
+        /* A style recalc, not a network wait. */
+        await p.settle(200);
         const bad = await p.evaluate(MEASURE);
         if (!bad) continue;
         failures.push(`${page} at ${width}px ${density}: scrollWidth ${bad.scrollWidth} vs ${bad.clientWidth}` +

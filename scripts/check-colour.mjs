@@ -31,7 +31,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { ROOT, report, withDemo } from './browser.mjs';
+import { ROOT, counted, rendered, report, withDemo } from './browser.mjs';
 
 const MEASURE = `(() => {
   const parse = (css) => {
@@ -189,17 +189,17 @@ await withDemo(async (p, base) => {
       const skin = look.preset ? `${look.skin}+${look.preset}` : look.skin;
       for (const theme of ['light', 'dark']) {
       await p.goto(`${base}/${page}`);
-      await p.settle(page.includes('index') ? 1700 : 800);
+      if (!(await p.ready(rendered()))) {
+        failures.push(`${page} (${skin}-${theme}) rendered ${await p.evaluate(counted())} controls ` +
+          'before the wait ran out, so nothing was measured');
+        continue;
+      }
       await p.evaluate(`document.documentElement.dataset.theme = ${JSON.stringify(theme)}`);
       await p.evaluate(`document.documentElement.dataset.skin = ${JSON.stringify(look.skin)}`);
       if (look.preset) await p.evaluate(`document.documentElement.dataset.preset = ${JSON.stringify(look.preset)}`);
       else await p.evaluate('delete document.documentElement.dataset.preset');
+      /* A style recalc, not a network wait. */
       await p.settle(400);
-      const alive = await p.evaluate(`document.querySelectorAll('.pw-button, .pw-toggle').length`);
-      if (alive < 4) {
-        failures.push(`${page} (${skin}-${theme}) rendered ${alive} controls, so nothing was measured`);
-        continue;
-      }
       const name = namesFor(theme, skin);
       const rows = await p.evaluate(MEASURE);
       scanned += rows.length;
