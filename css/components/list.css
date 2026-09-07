@@ -28,7 +28,6 @@
     max-height: var(--pw-list-h);
     background-color: var(--pw-color-base-300);
     border-radius: var(--pw-radius-control);
-    clip-path: var(--pw-clip-control);
     font-family: var(--pw-font-ui);
     font-size: var(--pw-control-text);
     color: var(--pw-color-base-content);

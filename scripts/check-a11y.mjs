@@ -347,7 +347,73 @@ await withDemo(async (p, base) => {
   }
 });
 
+/**
+ * The corner clip must not reach anything that draws a focus ring.
+ *
+ * bevel.css opts those controls out of --pw-clip-control, and a test in
+ * test/css.test.mjs holds that opt-out list to reset.css's ring list verbatim.
+ * Both lists were correct and three controls were clipped anyway.
+ *
+ * dialog.css, list.css and field.css each re-declared clip-path for .pw-panel,
+ * .pw-list and .pw-select. Those files are in @layer pw.components, the opt-out
+ * is in @layer pw.treatment, and components sorts later, so the component won
+ * and the opt-out lost. All three were shipping clipped under the cyber skin,
+ * which is the only skin that sets the hook, and all three declarations were
+ * redundant anyway: the shared slot already applies the clip to everything in
+ * it, and the opt-out is what takes it back off.
+ *
+ * Comparing the two lists could never have seen this, because the defect was in
+ * neither list. It was in a third file that neither list knows about. So this
+ * asks the browser what the cascade settled on, which is the only thing that
+ * knows.
+ *
+ * Both hooks are set, not just --pw-clip-control. The panel was clipped through
+ * --pw-clip-box, and a probe that only set the other one would have found two
+ * of the three and reported a clean run for the third.
+ */
+const RINGED = [...readFileSync(new URL('../css/reset.css', import.meta.url), 'utf8')
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .matchAll(/:where\(([^)]*)\):focus-visible/g)]
+  .flatMap((m) => m[1].split(',').map((x) => x.trim()))
+  .filter(Boolean);
+
+let clipped = 0;
+const seen = new Set();
+await withDemo(async (p, base) => {
+  for (const page of PAGES) {
+    await p.goto(`${base}/${page}`);
+    await p.ready(rendered());
+    await p.evaluate(`(() => {
+      const s = document.documentElement.style;
+      s.setProperty('--pw-clip-control', ${JSON.stringify(NOTCH)});
+      s.setProperty('--pw-clip-box', ${JSON.stringify(NOTCH)});
+    })()`);
+    await p.settle(120);
+
+    const got = await p.evaluate(`${JSON.stringify(RINGED)}.map((sel) => {
+      const e = document.querySelector(sel);
+      return e ? { sel, clip: getComputedStyle(e).clipPath } : null;
+    }).filter(Boolean)`);
+
+    for (const { sel, clip } of got) {
+      seen.add(sel);
+      clipped += 1;
+      if (clip !== 'none') {
+        failures.push(`${page}: ${sel} draws a focus ring and the corner clip reaches it as ` +
+          `${clip}, so a notched skin paints no ring on it at all`);
+      }
+    }
+  }
+});
+
+/* A probe that finds nothing reports a clean run, so absence is a failure. */
+const unseen = RINGED.filter((sel) => !seen.has(sel));
+if (unseen.length) {
+  failures.push(`neither demo page renders ${unseen.join(', ')}, so the corner clip was never ` +
+    `measured on ${unseen.length === 1 ? 'it' : 'them'}`);
+}
+
 report('a11y', failures, `${checked} page/look/theme combinations scanned by axe ${
   JSON.parse(readFileSync(new URL('../node_modules/axe-core/package.json', import.meta.url), 'utf8')).version
 }, ${opened} opened surfaces against radix-ui ${RADIX}, ${named} accessible names the browser computed, ` +
-  `and ${targets} hit targets under a skin's clip`);
+  `and ${targets} hit targets plus ${clipped} focus rings under a skin's clip`);

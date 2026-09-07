@@ -136,7 +136,6 @@
     font-family: var(--pw-font-ui);
     font-size: var(--pw-control-text);
     border-radius: var(--pw-radius-control);
-    clip-path: var(--pw-clip-control);
     cursor: default;
     text-align: left;
   }

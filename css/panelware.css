@@ -2576,7 +2576,6 @@
     max-width: calc(100% - (var(--pw-space-lg) * 2));
     max-height: calc(100% - (var(--pw-space-xl) * 2));
     border-radius: var(--pw-radius-box);
-    clip-path: var(--pw-clip-box);
     font-family: var(--pw-font-ui);
     /* The centring translate is part of the animated transform, so the two
        cannot be separate declarations. */
@@ -3231,7 +3230,6 @@
     max-height: var(--pw-list-h);
     background-color: var(--pw-color-base-300);
     border-radius: var(--pw-radius-control);
-    clip-path: var(--pw-clip-control);
     font-family: var(--pw-font-ui);
     font-size: var(--pw-control-text);
     color: var(--pw-color-base-content);
@@ -3466,7 +3464,6 @@
     font-family: var(--pw-font-ui);
     font-size: var(--pw-control-text);
     border-radius: var(--pw-radius-control);
-    clip-path: var(--pw-clip-control);
     cursor: default;
     text-align: left;
   }

@@ -44,7 +44,6 @@
     max-width: calc(100% - (var(--pw-space-lg) * 2));
     max-height: calc(100% - (var(--pw-space-xl) * 2));
     border-radius: var(--pw-radius-box);
-    clip-path: var(--pw-clip-box);
     font-family: var(--pw-font-ui);
     /* The centring translate is part of the animated transform, so the two
        cannot be separate declarations. */
