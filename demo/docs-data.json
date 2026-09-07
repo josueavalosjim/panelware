@@ -917,37 +917,28 @@
      }
     },
     {
+     "name": "--pw-texture",
+     "values": {
+      "both": {
+       "declared": "none",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-texture-opacity",
+     "values": {
+      "both": {
+       "declared": "0",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-meta-label-opacity",
      "values": {
       "both": {
        "declared": "0.72",
-       "resolved": null
-      }
-     }
-    },
-    {
-     "name": "--pw-bracket-inset",
-     "values": {
-      "both": {
-       "declared": "3px",
-       "resolved": null
-      }
-     }
-    },
-    {
-     "name": "--pw-bracket-arm",
-     "values": {
-      "both": {
-       "declared": "10px",
-       "resolved": null
-      }
-     }
-    },
-    {
-     "name": "--pw-bracket-weight",
-     "values": {
-      "both": {
-       "declared": "2px",
        "resolved": null
       }
      }
@@ -980,19 +971,28 @@
      }
     },
     {
-     "name": "--pw-texture",
+     "name": "--pw-bracket-inset",
      "values": {
       "both": {
-       "declared": "none",
+       "declared": "3px",
        "resolved": null
       }
      }
     },
     {
-     "name": "--pw-texture-opacity",
+     "name": "--pw-bracket-arm",
      "values": {
       "both": {
-       "declared": "0",
+       "declared": "10px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-bracket-weight",
+     "values": {
+      "both": {
+       "declared": "2px",
        "resolved": null
       }
      }

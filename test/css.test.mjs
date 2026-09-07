@@ -411,4 +411,59 @@ describe('the published reference data', () => {
         `${file} moves --pw-bevel-depth, which makes it a skin rather than a preset`);
     }
   });
+  test('no block declares the same token twice', () => {
+    /* structural.css declared --pw-bracket-inset, --pw-bracket-arm,
+       --pw-bracket-weight and --pw-meta-label-opacity twice inside one :root,
+       from two commits inserting near the same line. The second copy had also
+       drifted away from its comment, so the "Surface texture" note sat above a
+       bracket declaration with --pw-texture forty lines further down.
+
+       Nothing could see it. Both copies carried the same value, so no gate
+       here measured anything different: parity, contrast and the CSSOM check
+       all read whichever copy won and agreed with themselves. It is a live
+       hazard rather than untidiness, because an edit to the first copy is
+       silently overruled by the second, which is the same failure as editing a
+       generated file by hand.
+
+       Comments come off first, for the reason the bevel-derivation test gives:
+       a guard a comment can turn red is a guard people edit around. */
+    const files = [];
+    const walk = (dir) => {
+      for (const e of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
+        if (e.isDirectory()) { walk(`${dir}/${e.name}`); continue; }
+        /* The bundles are concatenations of these files, so a duplicate would
+           be reported twice and could be fixed in the copy nobody edits. */
+        if (e.name === 'panelware.css' || e.name === 'tokens.css') continue;
+        if (e.name.endsWith('.css')) files.push(`${dir}/${e.name}`);
+      }
+    };
+    walk('css');
+    assert.ok(files.length > 20, `only ${files.length} stylesheets scanned, so this looked at nothing`);
+
+    const offenders = [];
+    for (const rel of files) {
+      const css = read(rel).replace(/\/\*[\s\S]*?\*\//g, '');
+      const stack = [];
+      let line = 1;
+      let decl = '';
+      for (const ch of css) {
+        if (ch === '\n') line += 1;
+        if (ch === '{') { stack.push(new Map()); decl = ''; continue; }
+        if (ch === '}') { stack.pop(); decl = ''; continue; }
+        if (ch !== ';') { decl += ch; continue; }
+        /* Anchored, so box-shadow: var(--pw-elev) is not read as declaring
+           --pw-elev. Only a custom property on the left counts. */
+        const name = decl.trimStart().match(/^(--pw-[\w-]+)\s*:/)?.[1];
+        const block = stack[stack.length - 1];
+        if (name && block) {
+          if (block.has(name)) {
+            offenders.push(`${rel}: ${name} is declared twice in one block, ending at lines ` +
+              `${block.get(name)} and ${line}, so an edit to the first is overruled by the second`);
+          } else block.set(name, line);
+        }
+        decl = '';
+      }
+    }
+    assert.deepEqual(offenders, [], offenders.join('\n'));
+  });
 });
