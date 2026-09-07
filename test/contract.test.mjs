@@ -845,6 +845,55 @@ describe('the release', () => {
         .join('\n')}`);
   });
 
+  test('the demo runs the peers the package asks consumers to install', () => {
+    /* Every browser check here drives demo/index.html, and that page does not
+       use the installed node_modules. It boots React and Radix from esm.sh
+       through an import map with the versions written into the HTML, so the
+       Radix those checks measure is whichever one that map names.
+
+       Nothing held the two together. The map could pin a Radix a major behind
+       the peer range and every check would go on passing, having measured a
+       library no consumer of this package would get. The Select
+       aria-hidden-focus exemption in check-a11y is the sharpest case: it is an
+       assertion about upstream behaviour, and an assertion about upstream is
+       only worth the version it was made against.
+
+       Ranges here are carets and nothing else, so this compares carets rather
+       than taking a semver dependency for one test. A range that stops being a
+       caret fails loudly instead of being waved through. */
+    const pkg = JSON.parse(read('package.json'));
+    const map = read('demo/index.html').match(/<script type="importmap">([\s\S]*?)<\/script>/);
+    assert.ok(map, 'demo/index.html has no import map');
+    const imports = JSON.parse(map[1]).imports;
+
+    const pinned = new Map();
+    for (const url of Object.values(imports)) {
+      const m = url.match(/^https:\/\/esm\.sh\/((?:@[^/]+\/)?[^@/]+)@([0-9]+\.[0-9]+\.[0-9]+)/);
+      assert.ok(m, `${url} is not an esm.sh URL pinned to an exact version`);
+      const [, name, version] = m;
+      const seen = pinned.get(name);
+      assert.ok(seen === undefined || seen === version,
+        `the import map pins ${name} at both ${seen} and ${version}`);
+      pinned.set(name, version);
+    }
+
+    const parts = (v) => v.split('.').map(Number);
+    const checked = [];
+    for (const [name, range] of Object.entries(pkg.peerDependencies)) {
+      const version = pinned.get(name);
+      assert.ok(version, `${name} is a peer dependency and the demo's import map never loads it`);
+      assert.match(range, /^\^\d/, `${name}'s peer range "${range}" is not a caret, so this cannot judge it`);
+      const floor = parts(range.slice(1));
+      const got = parts(version);
+      assert.equal(got[0], floor[0],
+        `the demo runs ${name}@${version} and the package asks for ${range}, a different major`);
+      const under = got[1] < (floor[1] ?? 0)
+        || (got[1] === (floor[1] ?? 0) && got[2] < (floor[2] ?? 0));
+      assert.ok(!under, `the demo runs ${name}@${version}, under the package's own ${range}`);
+      checked.push(name);
+    }
+    assert.deepEqual(checked.sort(), Object.keys(pkg.peerDependencies).sort());
+  });
   test('the README describes the module system the package actually has', () => {
     /* The README now documents two errors a consumer will hit: a CommonJS
        require gets ERR_PACKAGE_PATH_NOT_EXPORTED, and importing without the

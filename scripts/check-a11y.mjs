@@ -203,6 +203,15 @@ const KNOWN = [
     why: 'Radix Select sets aria-hidden on the page without inert' },
 ];
 
+/* Which Radix this actually measured. The demo boots it from esm.sh through
+   an import map, so node_modules is not the answer and the HTML is. It goes
+   in the green line beside the axe version for the same reason: an exemption
+   recorded against upstream is worth the version it was recorded against, and
+   a run that does not say which one leaves the next reader guessing at how
+   stale it is. A test holds this pin to the package's own peer range. */
+const RADIX = readFileSync(new URL('../demo/index.html', import.meta.url), 'utf8')
+  .match(/esm\.sh\/radix-ui@([0-9.]+)/)?.[1] ?? 'an unreadable version';
+
 const SURFACES = [
   { name: 'menu', open: '#menubar .pw-menubar-trigger', reveals: ['pw-menu', 'pw-menu-item'] },
   { name: 'select listbox', open: '#field .pw-select', reveals: ['pw-select-list', 'pw-select-item'] },
@@ -340,4 +349,5 @@ await withDemo(async (p, base) => {
 
 report('a11y', failures, `${checked} page/look/theme combinations scanned by axe ${
   JSON.parse(readFileSync(new URL('../node_modules/axe-core/package.json', import.meta.url), 'utf8')).version
-}, ${opened} opened surfaces, ${named} accessible names the browser computed, and ${targets} hit targets under a skin's clip`);
+}, ${opened} opened surfaces against radix-ui ${RADIX}, ${named} accessible names the browser computed, ` +
+  `and ${targets} hit targets under a skin's clip`);
