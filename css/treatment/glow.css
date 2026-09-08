@@ -84,14 +84,18 @@
      
      The tracking comes from --pw-tracking-ui, which the skin raises. Caps at
      the default tracking set solid is the classic way to make uppercase
-     unreadable. */
+     unreadable.
+     
+     .pw-lcd-caption was in this list and nothing in the kit has ever rendered
+     it: no component emits it and no component file styles it, so the rule
+     could never match. Writing the class reference is what found it, because
+     it was the one class in the bundle with no honest description. */
   [data-skin="cyber"] :where(.pw-button,
                              .pw-toggle,
                              .pw-tab,
                              .pw-badge,
                              .pw-menubar-trigger,
-                             .pw-title,
-                             .pw-lcd-caption) {
+                             .pw-title) {
     text-transform: uppercase;
   }
 }

@@ -39,6 +39,24 @@ a token change rather than a find and replace.
 That is the whole CSS-only install. The stylesheet has no dependencies and no
 build step, and nothing above this line involves React.
 
+**[`CLASSES.md`](./CLASSES.md) is the reference for that path**: every class
+the stylesheet ships, what it is, and the element it goes on. It is generated
+from the stylesheet, so it cannot be short, and a test holds each element claim
+to what the components actually render.
+
+The package also ships the demo. `demo/states.html` renders every component in
+every state an attribute can reach with **no JavaScript at all**, so it is both
+the standing proof the CSS does not need React and the working version of the
+reference:
+
+```bash
+open node_modules/@josueavalosjim/panelware/demo/states.html
+```
+
+Two things that path hands you which the components otherwise handle: the ARIA
+and `data-state` attributes the CSS keys off, and the sprite cell coordinates
+an icon is positioned by. Both are covered in the reference.
+
 ## Two things about the JavaScript entry
 
 **The React layer is a peer, and it is not installed for you.** `react` and
