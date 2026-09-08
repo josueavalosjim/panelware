@@ -110,8 +110,27 @@ const MEASURE = `(() => {
       if (fg && fg.a > 0.05) {
         const size = parseFloat(c.fontSize);
         const large = size >= 24 || (size >= 18.66 && Number(c.fontWeight) >= 700);
+        /* Element opacity is not the colour's alpha, and this read only the
+           alpha for a long time. Six text surfaces in the kit are quieted with
+           opacity rather than with a quieter ink, and every one of them was
+           measured at full strength: the metadata label, the list's secondary
+           line in both states, the menu shortcut in both states, and the
+           equaliser's band label. A ratio computed from a colour the page is
+           not painting is not a measurement.
+
+           The product runs up the ancestors as well, because opacity composes
+           and a faded container fades its text with it. What that does not
+           model is a faded ancestor's own BACKGROUND, which fades against
+           whatever is behind it; the ground here is taken unfaded. Nothing in
+           this kit carries a resting opacity on a container, so the case does
+           not arise, and it is written down rather than silently assumed. */
+        let fade = Number(c.opacity);
+        for (let q = el.parentElement; q; q = q.parentElement) {
+          fade *= Number(getComputedStyle(q).opacity);
+        }
+        const a = fg.a * fade;
         rows.push({ kind: disabled ? 'disabled text' : 'text', id, disabled, large,
-          fg: hex(fg.a < 1 ? over(fg, bg) : fg), bg: hex(bg),
+          fg: hex(a < 1 ? over({ ...fg, a }, bg) : fg), bg: hex(bg),
           text: el.textContent.trim().slice(0, 24) });
       }
     }

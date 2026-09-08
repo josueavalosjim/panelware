@@ -151,7 +151,7 @@ Everything below the trigger exists only while a menu is open.
 | `.pw-menu-item` | `<div>` | One row in it. *(only exists while open)* |
 | `.pw-menu-indicator` | `<span>` | The tick or bullet on a checked or selected row. It sits in the gutter, which is why every row is indented whether or not it has one. *(only exists while open)* |
 | `.pw-menu-label` | `<div>` | A non-interactive heading inside a menu. *(only exists while open)* |
-| `.pw-menu-separator` | `<div>` | A grouping line. Drawn with --pw-color-divider, which is held to 2:1 rather than 3:1 because a grouping line is not a control boundary. *(only exists while open)* |
+| `.pw-menu-separator` | `<div>` | A groove between two rows, engraved from the bevel pair rather than drawn in --pw-color-divider: inside a bevelled popup that is the period drawing. The flat rule is .pw-separator. *(only exists while open)* |
 | `.pw-menu-shortcut` | `<span>` | The key hint on the right of a row. *(only exists while open)* |
 
 ```html

@@ -146,7 +146,7 @@ export const GROUPS = [
       ['pw-menu-item', 'div', 'One row in it.', 'open'],
       ['pw-menu-indicator', 'span', 'The tick or bullet on a checked or selected row. It sits in the gutter, which is why every row is indented whether or not it has one.', 'open'],
       ['pw-menu-label', 'div', 'A non-interactive heading inside a menu.', 'open'],
-      ['pw-menu-separator', 'div', 'A grouping line. Drawn with --pw-color-divider, which is held to 2:1 rather than 3:1 because a grouping line is not a control boundary.', 'open'],
+      ['pw-menu-separator', 'div', 'A groove between two rows, engraved from the bevel pair rather than drawn in --pw-color-divider: inside a bevelled popup that is the period drawing. The flat rule is .pw-separator.', 'open'],
       ['pw-menu-shortcut', 'span', 'The key hint on the right of a row.', 'open'],
     ],
     markup: `<div class="pw-menubar" role="menubar">

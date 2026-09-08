@@ -216,12 +216,16 @@ const SURFACES = [
   { name: 'menu', open: '#menubar .pw-menubar-trigger', reveals: ['pw-menu', 'pw-menu-item'] },
   { name: 'select listbox', open: '#field .pw-select', reveals: ['pw-select-list', 'pw-select-item'] },
   { name: 'dialog', open: '#dialog .pw-button', reveals: ['pw-panel', 'pw-overlay'] },
+  /* A tooltip does not open on a press, which is the point of it. Radix opens
+     this one on focus, and focus is also the only way a keyboard user ever
+     sees it, so it is the interaction worth scanning. */
+  { name: 'tooltip', open: '#tooltip-trigger', reveals: ['pw-tooltip'], by: 'focus' },
 ];
 
 let opened = 0;
 await withDemo(async (p, base) => {
   for (const theme of ['light', 'dark']) {
-    for (const { name, open, reveals } of SURFACES) {
+    for (const { name, open, reveals, by } of SURFACES) {
       await p.goto(`${base}/demo/index.html`);
       if (!(await p.ready(present(open)))) {
         failures.push(`${name} (${theme}): ${open} never appeared, so axe scanned the page at rest`);
@@ -230,7 +234,15 @@ await withDemo(async (p, base) => {
       await p.evaluate(`document.documentElement.dataset.theme = ${JSON.stringify(theme)}`);
       await p.settle(200);
 
-      if (!(await p.click(open))) {
+      if (by === 'focus') {
+        await p.evaluate(`document.querySelector(${JSON.stringify(open)}).focus()`);
+        /* Radix waits out its own delay before it mounts anything. */
+        if (!(await p.ready(`!!document.querySelector('.${reveals[0]}')`, { timeout: 4000 }))) {
+          failures.push(`${name} (${theme}): focusing ${open} opened nothing, so axe scanned ` +
+            'the page at rest');
+          continue;
+        }
+      } else if (!(await p.click(open))) {
         failures.push(`${name} (${theme}): nothing matched ${open}, so axe scanned the page at rest`);
         continue;
       }

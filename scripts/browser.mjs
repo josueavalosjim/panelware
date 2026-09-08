@@ -46,6 +46,17 @@ export async function withPage(fn, { width = 1100, height = 900, settle = 900 } 
     page.resize = (w, h) => page.send('Emulation.setDeviceMetricsOverride', {
       width: w, height: h, deviceScaleFactor: 1, mobile: false,
     });
+    /* A headless page is never the focused window, so document.hasFocus() is
+       false and element.focus() moves activeElement without firing a focus
+       event. Anything listening for one therefore never hears it, which is not
+       a bug in the component: Radix's tooltip opens on focus and simply was
+       not being told. Focus emulation makes the page believe it is frontmost,
+       which is what a real user's browser would be.
+
+       Harmless where it is not needed. :focus-visible still depends on how
+       focus arrived, so this does not fake keyboard modality and the ring
+       sweep still presses a real Tab for that. */
+    await page.send('Emulation.setFocusEmulationEnabled', { enabled: true }).catch(() => {});
     page.settle = (ms = settle) => page.evaluate(`new Promise((r) => setTimeout(r, ${ms}))`);
     /* A real key event, not element.dispatchEvent. Radix listens on the DOM
        and reads the event's key, but a synthetic event from page script does
