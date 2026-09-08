@@ -62,12 +62,16 @@ was simply not being told, and focus is the only way a keyboard user ever sees
 one. With focus emulation the tooltip joins the surfaces axe opens: eight
 rather than six.
 
-The first attempt at that wait capped itself at four seconds, which is a fixed
-bet wearing a poll's clothes. It held here and lost on CI, in the dark theme
-only, on the last of eight iterations, which is the exact behaviour `check:pages`
-spent 0.2.2 removing everywhere else. It uses the same deadline as every other
-wait now, and the page is asked whether it has focus before anything is focused
-rather than after.
+Getting there took three attempts and each one found something. The first
+capped the wait at four seconds, which is a fixed bet wearing a poll's clothes:
+it held here and lost on CI, in the dark theme only, on the last of eight
+iterations. The second polled properly and revealed the real fault, because the
+new assertion that a surface is **still open after axe has run** fired: the
+tooltip opened on focus and closed again partway through the scan, which would
+otherwise have been a clean report on a page with no tooltip on it. It is
+opened by parking a real pointer on the trigger now, because a hovered tooltip
+stays open exactly as long as the pointer is there and axe does not move the
+pointer.
 
 190 tests. 130 rendered classes, 16884 painted pairs, 32 focus rings under a
 skin's clip, 26 parity shapes.

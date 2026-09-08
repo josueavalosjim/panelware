@@ -216,10 +216,14 @@ const SURFACES = [
   { name: 'menu', open: '#menubar .pw-menubar-trigger', reveals: ['pw-menu', 'pw-menu-item'] },
   { name: 'select listbox', open: '#field .pw-select', reveals: ['pw-select-list', 'pw-select-item'] },
   { name: 'dialog', open: '#dialog .pw-button', reveals: ['pw-panel', 'pw-overlay'] },
-  /* A tooltip does not open on a press, which is the point of it. Radix opens
-     this one on focus, and focus is also the only way a keyboard user ever
-     sees it, so it is the interaction worth scanning. */
-  { name: 'tooltip', open: '#tooltip-trigger', reveals: ['pw-tooltip'], by: 'focus' },
+  /* A tooltip does not open on a press, which is the point of it. Hover
+     rather than focus, and the reason is that the pointer STAYS: a hovered
+     tooltip is open exactly as long as the pointer is on its trigger, and axe
+     does not move the pointer. Opening it by focus worked and then closed
+     again partway through the scan, which the surface-still-open assertion
+     below caught and which would otherwise have been a clean report on a page
+     with no tooltip on it. */
+  { name: 'tooltip', open: '#tooltip-trigger', reveals: ['pw-tooltip'], by: 'hover' },
 ];
 
 let opened = 0;
@@ -234,42 +238,42 @@ await withDemo(async (p, base) => {
       await p.evaluate(`document.documentElement.dataset.theme = ${JSON.stringify(theme)}`);
       await p.settle(200);
 
-      if (by === 'focus') {
-        /* Waited for, not assumed. element.focus() fires no focus event while
-           the page believes it is not the frontmost window, so focusing before
-           the emulation has taken effect moves activeElement and tells the
-           component nothing. */
-        if (!(await p.ready('document.hasFocus()'))) {
-          failures.push(`${name} (${theme}): the page never took focus, so focusing ${open} ` +
-            'would have fired no event');
-          continue;
-        }
-        await p.evaluate(`document.querySelector(${JSON.stringify(open)}).focus()`);
-        /* Radix waits out its own delay before it mounts anything, so this
-           polls rather than settling. The first version capped it at 4000ms,
-           which was a fixed bet wearing a poll's clothes: it held on this
-           machine and lost on CI, in the dark theme only, on the last of eight
-           iterations. The default deadline is the same one every other wait
-           here uses. */
-        if (!(await p.ready(`!!document.querySelector('.${reveals[0]}')`))) {
-          failures.push(`${name} (${theme}): focusing ${open} opened nothing, so axe scanned ` +
-            'the page at rest');
+      if (by === 'hover') {
+        if (!(await p.hover(open))) {
+          failures.push(`${name} (${theme}): nothing matched ${open}, so axe scanned the page at rest`);
           continue;
         }
       } else if (!(await p.click(open))) {
         failures.push(`${name} (${theme}): nothing matched ${open}, so axe scanned the page at rest`);
         continue;
       }
-      const missing = await p.evaluate(`${JSON.stringify(reveals)}
-        .filter((c) => !document.querySelector('.' + c))`);
-      if (missing.length) {
-        failures.push(`${name} (${theme}): clicked ${open} and ${missing.join(', ')} did not appear, ` +
+
+      /* Polled, not read once. Radix waits out its own delay before it mounts
+         anything, and a single read after the opener is a bet on how long that
+         takes: it held here every time and lost on CI, on the tooltip, in the
+         dark theme, on the last of eight iterations. A first attempt at fixing
+         it capped the poll at four seconds, which is the same bet wearing a
+         poll's clothes. This uses the deadline every other wait here uses. */
+      const present_ = `${JSON.stringify(reveals)}.every((c) => !!document.querySelector('.' + c))`;
+      const how = by === 'hover' ? 'hovering' : 'clicking';
+      if (!(await p.ready(present_))) {
+        const missing = await p.evaluate(`${JSON.stringify(reveals)}
+          .filter((c) => !document.querySelector('.' + c))`);
+        failures.push(`${name} (${theme}): ${how} ${open} left ${missing.join(', ')} unrendered, ` +
           'so it never opened and axe scanned the page at rest');
         continue;
       }
 
       await p.evaluate(AXE);
       const violations = await p.evaluate(RUN_OPEN);
+      /* And still open afterwards. A surface that closed while axe was running
+         leaves it reporting a clean scan of the page at rest, which is the one
+         result this whole section exists to make impossible. */
+      if (!(await p.evaluate(present_))) {
+        failures.push(`${name} (${theme}): the surface closed while axe was scanning it, so the ` +
+          'clean result describes the page at rest');
+        continue;
+      }
       opened += 1;
       for (const v of violations) {
         const known = KNOWN.find((k) => k.surface === name && k.rule === v.id);

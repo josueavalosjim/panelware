@@ -121,6 +121,25 @@ export async function withPage(fn, { width = 1100, height = 900, settle = 900 } 
       return true;
     };
 
+    /* A real pointer, parked. page.click presses and releases, which is the
+       wrong gesture for anything that opens on hover and closes when the
+       pointer leaves: a tooltip is open exactly as long as the pointer is on
+       its trigger, and a synthetic mouseover does not put it there. */
+    page.hover = async (selector) => {
+      const at = await page.evaluate(`(() => {
+        const e = document.querySelector(${JSON.stringify(selector)});
+        if (!e) return null;
+        e.scrollIntoView({ block: 'center' });
+        const r = e.getBoundingClientRect();
+        return { x: Math.round(r.x + r.width / 2), y: Math.round(r.y + r.height / 2) };
+      })()`);
+      if (!at) return false;
+      await page.send('Input.dispatchMouseEvent', {
+        type: 'mouseMoved', x: at.x, y: at.y, button: 'none', buttons: 0,
+      });
+      return true;
+    };
+
     /* What the browser itself computed, rather than what the markup implies.
        An accessible name is the end of a long resolution: aria-labelledby to
        an id that has to exist, then aria-label, then content, then nothing.
