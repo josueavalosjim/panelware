@@ -16,7 +16,7 @@
        .pw-slider-thumb, .pw-lcd, .pw-lcd-render, .pw-lcd-cell,
        .pw-tab-list, .pw-tab-panel, .pw-overlay,
        .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb,
-       .pw-tooltip, .pw-separator, .pw-toolbar) {
+       .pw-tooltip, .pw-separator, .pw-toolbar, .pw-visualiser) {
   box-sizing: border-box;
 }
 

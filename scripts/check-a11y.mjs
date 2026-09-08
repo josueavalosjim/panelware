@@ -124,6 +124,8 @@ const NAMED = [
   { selector: '.pw-window', role: 'region', why: 'a window is a region or it is nothing' },
   { selector: '.pw-eq', role: 'group', why: 'ten bands that belong to each other' },
   { selector: '.pw-list', role: 'listbox', why: 'a listbox with no name is an unnamed choice' },
+  { selector: '.pw-visualiser', role: 'image',
+    why: 'a picture of the audio, and role="img" prunes the bands inside it' },
 ];
 
 let named = 0;

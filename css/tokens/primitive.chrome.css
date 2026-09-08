@@ -62,6 +62,7 @@
      a lit display is a light source, not a surface we paint, and a readout
      that went pale in light theme would stop being a readout. 11.26:1. */
   --pw-phos-300: #3ff08a;
+  --pw-phos-800: #1d3329;
   --pw-phos-950: #12201a;
 
   /* ── Status ────────────────────────────────────────────────────────────

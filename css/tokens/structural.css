@@ -196,6 +196,14 @@
   --pw-switch-w: 2.25rem;
   --pw-switch-h: 1.25rem;
 
+  /* The analyser. Its height is fixed rather than density-scaled: it is a
+     display rather than a control, nothing in it is a hit target, and a
+     spectrum that changed shape with the density would be reporting the
+     layout rather than the audio. */
+  --pw-vis-h:          5rem;
+  --pw-vis-gap:        var(--pw-space-3xs);
+  --pw-vis-grid-pitch: 4px;
+
   --pw-eq-height: 10rem;
   --pw-eq-gap:    var(--pw-space-2xs);
   /* Where the zero line sits, as a percentage down the well. Declared here

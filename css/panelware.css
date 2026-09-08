@@ -106,6 +106,7 @@
      a lit display is a light source, not a surface we paint, and a readout
      that went pale in light theme would stop being a readout. 11.26:1. */
   --pw-phos-300: #3ff08a;
+  --pw-phos-800: #1d3329;
   --pw-phos-950: #12201a;
 
   /* ── Status ────────────────────────────────────────────────────────────
@@ -622,6 +623,14 @@
   --pw-switch-w: 2.25rem;
   --pw-switch-h: 1.25rem;
 
+  /* The analyser. Its height is fixed rather than density-scaled: it is a
+     display rather than a control, nothing in it is a hit target, and a
+     spectrum that changed shape with the density would be reporting the
+     layout rather than the audio. */
+  --pw-vis-h:          5rem;
+  --pw-vis-gap:        var(--pw-space-3xs);
+  --pw-vis-grid-pitch: 4px;
+
   --pw-eq-height: 10rem;
   --pw-eq-gap:    var(--pw-space-2xs);
   /* Where the zero line sits, as a percentage down the well. Declared here
@@ -654,6 +663,56 @@
     --pw-dialog-w: calc(100vw - (var(--pw-space-lg) * 2));
     --pw-text-subhead: 1.0625rem;
   }
+}
+
+/**
+ * DISPLAY — the palette of a lit screen, which does not follow the page.
+ *
+ * The readout already believes this and the contract test already records it:
+ * --pw-color-lcd and --pw-color-lcd-content are the only two semantic colours
+ * identical in light and dark, because a lit display is a light source and
+ * does not dim because the page did. Every palette in the kit, including the
+ * cyber skin's, resolves them to the same phosphor pair.
+ *
+ * So the analyser's palette is declared once here rather than four times in
+ * the semantic files, and neither shipped skin overrides it. The cyber skin
+ * does not, and that is the decision rather than an omission: its own readout
+ * is the same green phosphor chrome's is, because the display is a light
+ * source and the skin is a chassis around it. A skin that genuinely wants a
+ * different scope has the four tokens, the same way --pw-clip-control sits
+ * neutral in the structure until a skin says otherwise.
+ *
+ * ── Where the structure comes from ───────────────────────────────────────
+ * Strider's 1998 "Unofficial WinAMP Skin Specifications" documents
+ * viscolor.txt as 24 lines: line 0 the visualiser background, 1 the dot grid,
+ * 2 to 17 the analyser gradient from top to bottom, 18 to 22 the oscilloscope
+ * from centre to edge, and 23 the analyser peak marker. That structure is what
+ * is borrowed here. The values are not: they are this kit's own ramps, for the
+ * same reason the project cites Winamp as prior art and does not use its name.
+ *
+ * The sixteen gradient steps are three anchors and an interpolation. A CSS
+ * gradient does per-row colouring for free, and sixteen literals would be
+ * sixteen values nobody could check against anything, since the original's are
+ * not reproduced here anyway.
+ *
+ * The oscilloscope's five lines are not implemented. There is no oscilloscope.
+ */
+
+:root {
+  /* The ramp, bottom to top: quiet, working, hot. Read at the 300 weight
+     because everything here sits on --pw-color-lcd, which is near-black, and
+     the 100s are tints meant for paper-coloured grounds. */
+  --pw-color-vis-low:  var(--pw-green-300);
+  --pw-color-vis-mid:  var(--pw-amber-300);
+  --pw-color-vis-high: var(--pw-red-300);
+
+  /* The dot grid. Dim enough to read as texture rather than as content, which
+     is the one thing the original's line 1 is doing. */
+  --pw-color-vis-grid: var(--pw-phos-800);
+
+  /* The peak marker is the readout's own ink. It is the brightest thing on the
+     surface in the original too, and giving it a token of its own would be a
+     fifth value that has to be kept in step with the display it sits on. */
 }
 
 /**
@@ -1521,7 +1580,7 @@
        .pw-slider-thumb, .pw-lcd, .pw-lcd-render, .pw-lcd-cell,
        .pw-tab-list, .pw-tab-panel, .pw-overlay,
        .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb,
-       .pw-tooltip, .pw-separator, .pw-toolbar) {
+       .pw-tooltip, .pw-separator, .pw-toolbar, .pw-visualiser) {
   box-sizing: border-box;
 }
 
@@ -1654,6 +1713,7 @@
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
          .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
          .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
+         .pw-visualiser,
          .pw-raised, .pw-sunken) {
     /* Two knobs multiplied, because they have two owners. --pw-bevel-depth is
        the skin's: chrome ships 1 and the cyber preset ships 0, and a consumer
@@ -1730,7 +1790,8 @@
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
          .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
-         .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip) {
+         .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
+         .pw-visualiser) {
     /* The bevel, plus the focus ring's inner half when there is one.
        --pw-focus-halo is transparent by default and set on :focus-visible. */
     box-shadow: var(--pw-elev), var(--pw-focus-halo);
@@ -1764,7 +1825,8 @@
            .pw-tab-panel, .pw-title-button, .pw-window,
            .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
            .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
-           .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip) {
+           .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
+           .pw-visualiser) {
       border: var(--pw-border) solid ButtonBorder;
     }
   }
@@ -1990,6 +2052,7 @@
          .pw-switch,
          .pw-switch-thumb,
          .pw-tooltip,
+         .pw-visualiser,
          .pw-raised,
          .pw-sunken) {
     /* One hairline in the boundary ink, which carries WCAG 1.4.11 in this skin
@@ -4670,5 +4733,108 @@
       transform: none;
     }
     .pw-lcd-pause { transition-duration: 1ms; }
+  }
+}
+
+/**
+ * VISUALISER — the spectrum analyser.
+ *
+ * The last piece of the console the chrome skin is drawing. The kit already
+ * ships a transport, a seek bar, an equaliser and a segment readout, and the
+ * analyser is the one everybody pictures first.
+ *
+ * ── The gradient is sampled by height, not stretched to it ───────────────
+ * This is the whole technique and it is what makes it read as the original
+ * rather than as a bar chart. Winamp coloured each ROW of the display, not
+ * each bar: a band reaching the top is green at the bottom and red at the top,
+ * and a short band is green all the way up because it never reaches the rows
+ * where the ramp turns.
+ *
+ * A gradient painted on a short bar at background-size: 100% 100% does the
+ * opposite: it squashes the whole ramp into whatever height the bar has, so
+ * every band shows every colour and the ramp stops meaning level at all. So
+ * the bar's background is sized to the FULL column and anchored to the bottom,
+ * and the bar's own height clips it. One declaration, and it is the difference
+ * between a spectrum analyser and a stacked bar chart.
+ *
+ * ── The peak marker is in the band, not the bar ──────────────────────────
+ * It floats above the bar it belongs to and has to position against the full
+ * column, which is what the band is for.
+ *
+ * ── No motion here ───────────────────────────────────────────────────────
+ * Nothing in this file animates. The component redraws when its values change
+ * and the values come from the consumer, so WCAG 2.2.2 lands where the motion
+ * is rather than on a kit that cannot see it. The marquee is the opposite case
+ * and ships its own pause control, which is why the two are worth comparing
+ * before anyone adds a timer here.
+ */
+
+@layer pw.components {
+  .pw-visualiser {
+    /* A well, like the equaliser's. The display is set into the chassis. */
+    --pw-elev: var(--pw-shadow-sunken);
+    /* The height of one column, which is what the gradient is sized to. */
+    --pw-vis-col: calc(var(--pw-vis-h) - (var(--pw-vis-gap) * 2));
+    display: flex;
+    align-items: flex-end;
+    gap: var(--pw-vis-gap);
+    height: var(--pw-vis-h);
+    padding: var(--pw-vis-gap);
+    background-color: var(--pw-color-lcd);
+    /* The dot grid, which is line 1 of the palette this borrows its structure
+       from. Drawn rather than tiled from an image: one gradient, no request,
+       and it scales with the pitch token. */
+    background-image:
+      radial-gradient(var(--pw-color-vis-grid) 1px, transparent 1px);
+    background-size: var(--pw-vis-grid-pitch) var(--pw-vis-grid-pitch);
+  }
+
+  .pw-visualiser-band {
+    position: relative;
+    flex: 1 1 0;
+    height: 100%;
+    min-width: var(--pw-border);
+  }
+
+  .pw-visualiser-bar {
+    position: absolute;
+    inset: auto 0 0 0;
+    /* Set per band from markup, as a plain fraction. Declared here rather than
+       left to a var() fallback for the reason icon.css gives about its cell
+       coordinates: a var() with no declaration anywhere is the cheapest bug in
+       this project to introduce, it renders as nothing, and the token gate
+       cannot see it unless somebody declares it. */
+    --pw-vis-level: 0;
+    height: calc(var(--pw-vis-level) * 100%);
+    background-image: linear-gradient(
+      to top,
+      var(--pw-color-vis-low),
+      var(--pw-color-vis-mid),
+      var(--pw-color-vis-high)
+    );
+    /* See the header. Sized to the column and anchored to its floor, so the
+       bar shows the slice of the ramp its level actually reaches. */
+    background-size: 100% var(--pw-vis-col);
+    background-position: left bottom;
+    background-repeat: no-repeat;
+  }
+
+  .pw-visualiser-peak {
+    position: absolute;
+    left: 0;
+    right: 0;
+    --pw-vis-hold: 0;
+    height: var(--pw-border);
+    bottom: calc(var(--pw-vis-hold) * 100%);
+    background-color: var(--pw-color-lcd-content);
+  }
+
+  /* Forced colors strips background-color and background-image both, so the
+     analyser would be an empty box. Bars become bordered instead: the shape is
+     the information and the ramp never was. */
+  @media (forced-colors: active) {
+    .pw-visualiser { border: var(--pw-border) solid CanvasText; }
+    .pw-visualiser-bar { border: var(--pw-border) solid CanvasText; }
+    .pw-visualiser-peak { background-color: Highlight; forced-color-adjust: none; }
   }
 }

@@ -92,6 +92,9 @@ export type { BadgeProps, BadgeStatus } from './badge.js';
 export { Meta } from './meta.js';
 export type { MetaProps, MetaEntry } from './meta.js';
 
+export { Visualiser } from './visualiser.js';
+export type { VisualiserProps } from './visualiser.js';
+
 export { Readout } from './readout.js';
 export type { ReadoutProps } from './readout.js';
 

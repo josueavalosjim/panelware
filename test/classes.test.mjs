@@ -126,6 +126,7 @@ describe('the class reference', () => {
       h(kit.Meta, { items: [{ label: 'Session', value: '42 min' }] }),
       h(kit.Icon, { name: 'check', decorative: true }),
       h(kit.Spinner, {}),
+      h(kit.Visualiser, { label: 'Spectrum analyser', values: [0.2, 0.6, 0.9] }),
       h(kit.Readout, { value: '01:23', marquee: true }),
       h(kit.Menubar, {}, h(kit.Menu, {}, h(kit.MenuTrigger, {}, 'File'))),
     ));

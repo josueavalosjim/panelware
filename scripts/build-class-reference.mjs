@@ -355,6 +355,22 @@ export const GROUPS = [
 <span class="pw-icon" data-icon="exclamation" role="img" aria-label="Warning"></span>`,
   },
   {
+    name: 'Visualiser',
+    note: 'A spectrum analyser. It listens to nothing: no Web Audio, no requestAnimationFrame, just an array of levels. The gradient is sized to the full column and anchored to its floor, so a bar shows the slice of the ramp its level reaches rather than the whole ramp squashed into its height. That one declaration is the difference between an analyser and a stacked bar chart, and it is what Winamp did: it coloured rows, not bars.',
+    classes: [
+      ['pw-visualiser', 'div', 'The display, set into the chassis as a well. role="img" with a label, for the reason the readout gives: it is a picture, the bands are not facts anybody wants read out, and there is no ARIA pattern for a spectrum.'],
+      ['pw-visualiser-band', 'span', 'One column. The peak floats in here rather than in the bar, because it has to position against the full height.'],
+      ['pw-visualiser-bar', 'span', 'The level. --pw-vis-level is its height as a fraction of the column.'],
+      ['pw-visualiser-peak', 'span', 'The held maximum. --pw-vis-hold is where it sits, on the same scale.'],
+    ],
+    markup: `<div class="pw-visualiser" role="img" aria-label="Spectrum analyser">
+  <span class="pw-visualiser-band" aria-hidden="true">
+    <span class="pw-visualiser-bar" style="--pw-vis-level: 0.62"></span>
+    <span class="pw-visualiser-peak" style="--pw-vis-hold: 0.80"></span>
+  </span>
+</div>`,
+  },
+  {
     name: 'Segment readout',
     note: 'A sprite font, not per-segment rendering, which is what Winamp actually did: numbers.bmp used 9x13px digit cells. The window is role="img" with a label, and that prunes everything inside it, which is why the pause button lives outside it.',
     classes: [

@@ -82,6 +82,7 @@ const GEOM = `(() => {
       toolbar: box('#structure .pw-toolbar'),
       collapsibleTrigger: box('#structure .pw-collapsible-trigger'),
       separator: box('#structure .pw-separator'),
+      visualiser: box('#visualiser .pw-visualiser'),
     },
     /* Not sizes: what the pointer actually lands on. Null rather than absent
        when there is no thumb, because 'thumb' above already reports that and

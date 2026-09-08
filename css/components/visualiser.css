@@ -1,0 +1,102 @@
+/**
+ * VISUALISER — the spectrum analyser.
+ *
+ * The last piece of the console the chrome skin is drawing. The kit already
+ * ships a transport, a seek bar, an equaliser and a segment readout, and the
+ * analyser is the one everybody pictures first.
+ *
+ * ── The gradient is sampled by height, not stretched to it ───────────────
+ * This is the whole technique and it is what makes it read as the original
+ * rather than as a bar chart. Winamp coloured each ROW of the display, not
+ * each bar: a band reaching the top is green at the bottom and red at the top,
+ * and a short band is green all the way up because it never reaches the rows
+ * where the ramp turns.
+ *
+ * A gradient painted on a short bar at background-size: 100% 100% does the
+ * opposite: it squashes the whole ramp into whatever height the bar has, so
+ * every band shows every colour and the ramp stops meaning level at all. So
+ * the bar's background is sized to the FULL column and anchored to the bottom,
+ * and the bar's own height clips it. One declaration, and it is the difference
+ * between a spectrum analyser and a stacked bar chart.
+ *
+ * ── The peak marker is in the band, not the bar ──────────────────────────
+ * It floats above the bar it belongs to and has to position against the full
+ * column, which is what the band is for.
+ *
+ * ── No motion here ───────────────────────────────────────────────────────
+ * Nothing in this file animates. The component redraws when its values change
+ * and the values come from the consumer, so WCAG 2.2.2 lands where the motion
+ * is rather than on a kit that cannot see it. The marquee is the opposite case
+ * and ships its own pause control, which is why the two are worth comparing
+ * before anyone adds a timer here.
+ */
+
+@layer pw.components {
+  .pw-visualiser {
+    /* A well, like the equaliser's. The display is set into the chassis. */
+    --pw-elev: var(--pw-shadow-sunken);
+    /* The height of one column, which is what the gradient is sized to. */
+    --pw-vis-col: calc(var(--pw-vis-h) - (var(--pw-vis-gap) * 2));
+    display: flex;
+    align-items: flex-end;
+    gap: var(--pw-vis-gap);
+    height: var(--pw-vis-h);
+    padding: var(--pw-vis-gap);
+    background-color: var(--pw-color-lcd);
+    /* The dot grid, which is line 1 of the palette this borrows its structure
+       from. Drawn rather than tiled from an image: one gradient, no request,
+       and it scales with the pitch token. */
+    background-image:
+      radial-gradient(var(--pw-color-vis-grid) 1px, transparent 1px);
+    background-size: var(--pw-vis-grid-pitch) var(--pw-vis-grid-pitch);
+  }
+
+  .pw-visualiser-band {
+    position: relative;
+    flex: 1 1 0;
+    height: 100%;
+    min-width: var(--pw-border);
+  }
+
+  .pw-visualiser-bar {
+    position: absolute;
+    inset: auto 0 0 0;
+    /* Set per band from markup, as a plain fraction. Declared here rather than
+       left to a var() fallback for the reason icon.css gives about its cell
+       coordinates: a var() with no declaration anywhere is the cheapest bug in
+       this project to introduce, it renders as nothing, and the token gate
+       cannot see it unless somebody declares it. */
+    --pw-vis-level: 0;
+    height: calc(var(--pw-vis-level) * 100%);
+    background-image: linear-gradient(
+      to top,
+      var(--pw-color-vis-low),
+      var(--pw-color-vis-mid),
+      var(--pw-color-vis-high)
+    );
+    /* See the header. Sized to the column and anchored to its floor, so the
+       bar shows the slice of the ramp its level actually reaches. */
+    background-size: 100% var(--pw-vis-col);
+    background-position: left bottom;
+    background-repeat: no-repeat;
+  }
+
+  .pw-visualiser-peak {
+    position: absolute;
+    left: 0;
+    right: 0;
+    --pw-vis-hold: 0;
+    height: var(--pw-border);
+    bottom: calc(var(--pw-vis-hold) * 100%);
+    background-color: var(--pw-color-lcd-content);
+  }
+
+  /* Forced colors strips background-color and background-image both, so the
+     analyser would be an empty box. Bars become bordered instead: the shape is
+     the information and the ramp never was. */
+  @media (forced-colors: active) {
+    .pw-visualiser { border: var(--pw-border) solid CanvasText; }
+    .pw-visualiser-bar { border: var(--pw-border) solid CanvasText; }
+    .pw-visualiser-peak { background-color: Highlight; forced-color-adjust: none; }
+  }
+}

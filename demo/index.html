@@ -50,7 +50,7 @@
       Badge, Meta, Spinner, Button, Dialog, DialogPanel, DialogTrigger, Equalizer, Icon,
       List, Menu, MenuCheckboxItem, MenuContent, MenuItem, MenuLabel, MenuRadioGroup,
       MenuRadioItem, MenuSeparator, MenuSub, MenuTrigger, Menubar,
-      Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
+      Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle, Visualiser,
       Checkbox, Field, Input, Radio, RadioGroup, Select, SelectItem, Textarea,
       Switch, Separator, Toolbar, ToolbarButton, ToolbarSeparator,
       Collapsible, CollapsibleTrigger, CollapsibleContent, Tooltip, TooltipProvider,
@@ -169,6 +169,23 @@
          picker resets when the skin changes rather than leaving a value
          selected that no longer means anything. */
       const PRESETS = { chrome: ['default', 'deck'], cyber: ['default'] };
+      /* The analyser's levels. The demo moves them, not the kit: the component
+         redraws when its values change and has no timer of its own, which is
+         the whole reason WCAG 2.2.2 does not land on it. */
+      const [levels, setLevels] = useState(() => Array.from({ length: 16 }, () => 0.1));
+      useEffect(() => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) { setLevels(Array.from({ length: 16 }, (_, i) => 0.25 + (i % 5) * 0.14)); return; }
+        let t = 0;
+        const id = setInterval(() => {
+          t += 1;
+          setLevels(Array.from({ length: 16 }, (_, i) =>
+            Math.max(0, Math.min(1,
+              0.5 + 0.45 * Math.sin((t / 6) + i / 2.2) * Math.cos(t / 17 + i / 5)))));
+        }, 120);
+        return () => clearInterval(id);
+      }, []);
+
       const [docs, setDocs] = useState(null);
 
       /* The switcher writes the attributes a consumer would write. It is not
@@ -326,6 +343,27 @@
               h(SelectItem, { value: 'wave' }, 'DirectSound'),
               h(SelectItem, { value: 'asio' }, 'ASIO'),
               h(SelectItem, { value: 'null', disabled: true }, 'Null output')))),
+
+        h(Section, {
+          skin: skinAxis,
+          id: 'visualiser', title: 'Visualiser',
+          note: 'A spectrum analyser, and the last piece of the console this skin draws. It listens to nothing: no Web Audio, no animation frame, just an array of levels, because an audio graph is the application\u2019s and a skin that opened one would be deciding something on the consumer\u2019s behalf. It also means the component never animates on its own, which keeps WCAG 2.2.2 where the motion is. The levels below are the demo moving them. The gradient is sized to the full column and anchored to its floor, so a bar shows the slice of the ramp its level reaches: a short band is green all the way up because it never gets to the rows where the ramp turns. That is what Winamp did, and it is the difference between an analyser and a stacked bar chart.',
+          code: `import { Visualiser } from '@josueavalosjim/panelware';
+
+// The levels are yours. About six lines with an AnalyserNode:
+//   analyser.getByteFrequencyData(buf);
+//   setLevels([...buf].map((v) => v / 255));
+<Visualiser label="Spectrum analyser" values={levels} />
+
+// Peaks are held here, and the hold decays per update rather than
+// on a timer, so it is the same behaviour at any frame rate
+<Visualiser label="Spectrum" values={levels} peakDecay={0.02} />
+<Visualiser label="Spectrum" values={levels} peakDecay={false} />`,
+        },
+          h('div', { className: 'demo-stack' },
+            h(Visualiser, { label: 'Spectrum analyser', values: levels }),
+            h(Visualiser, { label: 'Spectrum analyser, peaks held longer', values: levels, peakDecay: 0.01 }),
+            h(Visualiser, { label: 'Spectrum analyser, no peak markers', values: levels, peakDecay: false }))),
 
         h(Section, {
           skin: skinAxis,

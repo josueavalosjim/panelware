@@ -542,6 +542,15 @@
      }
     },
     {
+     "name": "--pw-phos-800",
+     "values": {
+      "both": {
+       "declared": "#1d3329",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-phos-950",
      "values": {
       "both": {
@@ -1101,6 +1110,33 @@
      "values": {
       "both": {
        "declared": "1.25rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-vis-h",
+     "values": {
+      "both": {
+       "declared": "5rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-vis-gap",
+     "values": {
+      "both": {
+       "declared": "var(--pw-space-3xs)",
+       "resolved": "0.125rem"
+      }
+     }
+    },
+    {
+     "name": "--pw-vis-grid-pitch",
+     "values": {
+      "both": {
+       "declared": "4px",
        "resolved": null
       }
      }

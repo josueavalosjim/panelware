@@ -9,7 +9,7 @@ Every class the stylesheet carries a rule for, what it is, and the element it
 goes on. The React components emit all of this for you and you do not need
 this page to use them. It is here for the other entry point: the stylesheet
 works with no React at all, and until this file the README named one class out
-of 80.
+of 84.
 
 Two things a consumer on that path inherits, both of which the components
 otherwise handle:
@@ -401,6 +401,26 @@ Both draw from one sprite sheet. Name the glyph with data-icon and the cell come
 
 <!-- An icon that carries the whole meaning needs a name of its own -->
 <span class="pw-icon" data-icon="exclamation" role="img" aria-label="Warning"></span>
+```
+
+## Visualiser
+
+A spectrum analyser. It listens to nothing: no Web Audio, no requestAnimationFrame, just an array of levels. The gradient is sized to the full column and anchored to its floor, so a bar shows the slice of the ramp its level reaches rather than the whole ramp squashed into its height. That one declaration is the difference between an analyser and a stacked bar chart, and it is what Winamp did: it coloured rows, not bars.
+
+| Class | Element | What it is |
+| --- | --- | --- |
+| `.pw-visualiser` | `<div>` | The display, set into the chassis as a well. role="img" with a label, for the reason the readout gives: it is a picture, the bands are not facts anybody wants read out, and there is no ARIA pattern for a spectrum. |
+| `.pw-visualiser-band` | `<span>` | One column. The peak floats in here rather than in the bar, because it has to position against the full height. |
+| `.pw-visualiser-bar` | `<span>` | The level. --pw-vis-level is its height as a fraction of the column. |
+| `.pw-visualiser-peak` | `<span>` | The held maximum. --pw-vis-hold is where it sits, on the same scale. |
+
+```html
+<div class="pw-visualiser" role="img" aria-label="Spectrum analyser">
+  <span class="pw-visualiser-band" aria-hidden="true">
+    <span class="pw-visualiser-bar" style="--pw-vis-level: 0.62"></span>
+    <span class="pw-visualiser-peak" style="--pw-vis-hold: 0.80"></span>
+  </span>
+</div>
 ```
 
 ## Segment readout
