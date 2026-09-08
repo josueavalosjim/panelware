@@ -1,5 +1,70 @@
 # Changelog
 
+## 0.4.0
+
+Five components, all of them on primitives the package already depended on, so
+none is new interaction work. Nothing existing changed what it paints.
+
+### Switch, collapsible, toolbar, separator, tooltip
+
+**A switch is not a toggle**, and the kit ships both on purpose. A toggle is a
+button that stays pressed: it answers "is this mode on", it carries its label
+inside itself, and a screen reader says "pressed". A switch is a thing you
+throw: the label sits beside it, the state is where the thumb is, and
+`aria-checked` makes it "on". If it belongs in a toolbar it is a toggle; if it
+belongs in a settings list it is a switch.
+
+Position carries the state and the track's tint is the second signal, which
+the cyber skin makes concrete rather than theoretical: it resolves its accents
+to one ink on purpose, so a skin can arrive where a tint says nothing. The
+thumb's travel is the track's width minus its height, which is one expression
+at any padding, because the padding is `--pw-bevel-1` and collapses to zero
+under a flat skin. Measured: 1 to 17 under chrome, 0 to 16 under cyber.
+
+**The toolbar** is one tab stop with the arrow keys inside it, which is the
+whole reason to use one: eleven buttons in a plain row is eleven tab stops.
+`Transport` has been this primitive with a fixed set of buttons in it since
+0.1; this is the general shape. Its buttons wear `.pw-button`, because a button
+in a toolbar is a button.
+
+**The separator** is why `--pw-color-divider` exists. That token was declared
+in every palette from the beginning and read by nothing, sitting on the
+reserved-token list with the note that it was "a semantic slot for consumers".
+It is now that. The menu's own separator stays engraved from the bevel pair,
+which is a different job: a groove between two rows of a bevelled popup is the
+period drawing. Its 2:1 tier and the contrast gate's grouping-line branch are
+both exercised for the first time.
+
+Two things declined on purpose. **The collapsible does not animate its
+height**: Radix publishes the variable for it and every kit in this genre uses
+it, but height is a layout property and animating it reflows the document every
+frame. The chevron turns instead. And **the tooltip has no arrow**: an arrow is
+an SVG, every edge in this kit is an inset box-shadow, and a skinned arrow
+would be a hand-drawn second description of the frame that no token controls.
+
+A tooltip is not a label. A control whose only name is its tooltip has no name
+to a touch user, who cannot hover, and no name to anyone else until focus
+reaches it.
+
+### Two holes in the gate, found by walking into them
+
+**`check:colour` could not see element opacity.** It read a computed `color`
+and composited its alpha, and opacity is not alpha. Six text surfaces here are
+quieted that way rather than with a quieter ink, and every one was measured at
+full strength. All six pass once measured properly, which is the good outcome
+and not the point: nothing could have said so. Proved by fading the metadata
+label to 0.30, which goes red with the fix and clean with the old arithmetic.
+
+**A headless page is never the focused window.** `document.hasFocus()` is
+false, so `element.focus()` moves `activeElement` without firing a focus event,
+and anything listening for one never hears it. The tooltip opens on focus and
+was simply not being told, and focus is the only way a keyboard user ever sees
+one. With focus emulation the tooltip joins the surfaces axe opens: eight
+rather than six.
+
+190 tests. 130 rendered classes, 16884 painted pairs, 32 focus rings under a
+skin's clip, 26 parity shapes.
+
 ## 0.3.1
 
 Documentation and the CSS-only path. No component and no visual change:
