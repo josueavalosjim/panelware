@@ -56,7 +56,17 @@ export async function withPage(fn, { width = 1100, height = 900, settle = 900 } 
        Harmless where it is not needed. :focus-visible still depends on how
        focus arrived, so this does not fake keyboard modality and the ring
        sweep still presses a real Tab for that. */
-    await page.send('Emulation.setFocusEmulationEnabled', { enabled: true }).catch(() => {});
+    const focusEmulation = () =>
+      page.send('Emulation.setFocusEmulationEnabled', { enabled: true }).catch(() => {});
+    await focusEmulation();
+    /* Re-applied after every navigation, and then waited for rather than
+       assumed. Setting it once at connect was a bet that it survives a
+       document swap, and the bet lost on CI exactly the way this repo's other
+       fixed settles did: the tooltip opened in the light theme, did not open
+       in the dark one, and passed every time locally. A gate that fails on one
+       of two identical iterations is the worst kind, because it teaches people
+       to re-run it. */
+
     page.settle = (ms = settle) => page.evaluate(`new Promise((r) => setTimeout(r, ${ms}))`);
     /* A real key event, not element.dispatchEvent. Radix listens on the DOM
        and reads the event's key, but a synthetic event from page script does

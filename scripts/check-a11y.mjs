@@ -235,9 +235,23 @@ await withDemo(async (p, base) => {
       await p.settle(200);
 
       if (by === 'focus') {
+        /* Waited for, not assumed. element.focus() fires no focus event while
+           the page believes it is not the frontmost window, so focusing before
+           the emulation has taken effect moves activeElement and tells the
+           component nothing. */
+        if (!(await p.ready('document.hasFocus()'))) {
+          failures.push(`${name} (${theme}): the page never took focus, so focusing ${open} ` +
+            'would have fired no event');
+          continue;
+        }
         await p.evaluate(`document.querySelector(${JSON.stringify(open)}).focus()`);
-        /* Radix waits out its own delay before it mounts anything. */
-        if (!(await p.ready(`!!document.querySelector('.${reveals[0]}')`, { timeout: 4000 }))) {
+        /* Radix waits out its own delay before it mounts anything, so this
+           polls rather than settling. The first version capped it at 4000ms,
+           which was a fixed bet wearing a poll's clothes: it held on this
+           machine and lost on CI, in the dark theme only, on the last of eight
+           iterations. The default deadline is the same one every other wait
+           here uses. */
+        if (!(await p.ready(`!!document.querySelector('.${reveals[0]}')`))) {
           failures.push(`${name} (${theme}): focusing ${open} opened nothing, so axe scanned ` +
             'the page at rest');
           continue;
