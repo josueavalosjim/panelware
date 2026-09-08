@@ -1,5 +1,77 @@
 # Changelog
 
+## 0.5.0
+
+The visualiser, a corner fix that changes how the cyber skin looks, and a
+palette bug that had been painting the wrong ink since 0.2.0.
+
+### The spectrum analyser
+
+The last piece of the console this skin draws, built from research that had
+been on file and unreferenced since before the first commit.
+
+**The gradient is sampled by height, not stretched to it**, and that is the
+whole technique. Winamp coloured each *row* of the display: a band reaching the
+top is green at the bottom and red at the top, and a short band is green all
+the way up because it never reaches the rows where the ramp turns. A gradient
+painted on a short bar at `background-size: 100% 100%` does the opposite, so
+every band shows every colour and the ramp stops meaning level. The bar's
+background is sized to the full column and anchored to its floor instead, and
+the bar's own height clips it.
+
+**It listens to nothing.** No Web Audio, no `AnalyserNode`, no animation frame:
+it takes an array of levels and draws them. An audio graph needs a user
+gesture, needs cleaning up, and belongs to the application. That boundary is
+also where WCAG 2.2.2 lands, since the component never animates on its own.
+Peaks are held here and decay per update rather than per second, which keeps
+them drawing rather than motion and makes them the same at any frame rate.
+
+The palette's *structure* is Strider's 1998 skin specification, which documents
+`viscolor.txt` as 24 lines. The values are this kit's own ramps, for the same
+reason the project cites Winamp as prior art and does not use its name. There
+is no oscilloscope.
+
+### The cyber skin is square now
+
+**Visible change.** It set the chamfer and left the radius alone, so it had
+both. Measured before the fix: eleven surfaces notched and twenty still
+carrying chrome's 2px, including every button, tab, text field, checkbox,
+select and switch, and the dialog panel. `--pw-clip-control` reaches only the
+surfaces that do not draw a focus ring, because `clip-path` clips an outline,
+so the controls a keyboard lands on were opted out of the chamfer and kept a
+radius nobody had overridden. They looked like chrome's controls in a different
+colour, which is what the skin was rebuilt to stop being.
+
+Two tokens. After: ten notched, one rounded, and the one is the radio, which
+stays round on purpose and which a skin cannot square, because the roundness is
+what says choose-one before a word has been read.
+
+If you are writing a skin: set both or neither. The README says so now.
+
+### The chrome skin's warning ink was the cyber skin's amber
+
+Both primitive files declared on a bare `:root` and the cyber one is imported
+second. `:root` and `[data-skin="cyber"]` are both (0,1,0), so wherever the two
+ramps shared a name the later import won *everywhere*. All four amber shades
+are shared and all four differ, so `--pw-color-warning-content` resolved to
+`#f5c542` where `#e6c463` was declared, in every chrome theme and in the deck
+preset, since 0.2.0.
+
+Nothing could see it, and the reason is the useful part: the contrast gate
+resolves the cascade exactly as the browser does, so it measured the colour
+being painted and passed. What was wrong is that the painted colour was not the
+declared one, and "every token has a reader" is a different question from
+"every token's declaration is the one that wins". The corrected numbers still
+pass at 6.41:1 and 8.41:1 against a 4.5 floor.
+
+The base ramp owns `:root` and every other skin's ramp scopes to its own skin
+now, which makes the collision impossible rather than merely absent. Sharing a
+name stays fine, and is done on purpose: the cyber skin reads the phosphor ramp
+from the base file, because a lit display does not follow the skin.
+
+191 tests. 138 rendered classes, 17028 painted pairs, 27 parity shapes, 10
+accessible names.
+
 ## 0.4.0
 
 Five components, all of them on primitives the package already depended on, so

@@ -107,8 +107,8 @@ component would be verifying a shape that never ships.
 ## What is in it
 
 Button, toggle, toggle group, tabs, dialog, window chrome, menu bar, toolbar,
-transport, seek, slider, equaliser, list, collapsible, separator, tooltip,
-status badge, metadata, icon, segment readout, and the form controls: text
+transport, seek, slider, equaliser, visualiser, list, collapsible, separator,
+tooltip, status badge, metadata, icon, segment readout, and the form controls: text
 field, textarea, switch, checkbox, radio group, select, and the label they
 share.
 
