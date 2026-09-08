@@ -542,15 +542,30 @@ A skin that differs only by hue is a theme.
 
 | Token | What it does |
 | --- | --- |
+| `--pw-radius-control` | how round a control's corners are |
+| `--pw-radius-box` | the same, on panels and windows |
 | `--pw-clip-control` | corner geometry a scalar radius cannot express, on controls |
 | `--pw-clip-box` | the same, on panels and wells |
 | `--pw-texture` | a surface pattern, as a `background-image` |
 | `--pw-texture-opacity` | how strong, read from inside the pattern so it can be turned down without being replaced |
 
-These four were the kit's answer to "is a notched or textured skin really a
+The clip pair was the kit's answer to "is a notched or textured skin really a
 token change", and until the cyber skin they were an unexercised claim. They
 are now what draws its cut corners and its scanlines, which is the first time
 the claim was actually tested rather than asserted.
+
+**Set the radius as well as the clip.** `--pw-clip-control` reaches only the
+surfaces that do not draw a focus ring, because `clip-path` clips an outline
+and the ring is an outline. A skin that sets the clip and leaves the radius
+alone therefore gets notched panels and rounded buttons: measured on the cyber
+skin, eleven surfaces notched and twenty still carrying chrome's 2px. Both
+tokens or neither.
+
+The radio is the one thing a skin cannot square, and that is deliberate rather
+than an oversight. `field.css` writes its 50% as a literal instead of reading
+the token, because the roundness is what says choose-one before a word has been
+read. That is semantics, and it does not stop being true under a different
+frame.
 
 `--pw-clip-control` does not reach the slider thumb, the checkbox, or the
 radio, and that exemption is measured rather than promised. `clip-path` clips
