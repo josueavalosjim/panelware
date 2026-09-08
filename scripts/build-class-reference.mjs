@@ -113,7 +113,7 @@ export const GROUPS = [
     <h2 class="pw-title" id="w-title">Playlist</h2>
     <div class="pw-title-controls">
       <button class="pw-title-button" type="button" aria-label="Close">
-        <span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 0"></span>
+        <span class="pw-icon" data-icon="close" aria-hidden="true"></span>
       </button>
     </div>
   </div>
@@ -192,8 +192,7 @@ export const GROUPS = [
   <button class="pw-checkbox" type="button" role="checkbox"
           aria-checked="true" data-state="checked">
     <span class="pw-box-indicator" data-state="checked">
-      <span class="pw-icon" data-mark="check" aria-hidden="true"
-            style="--pw-icon-x: 6; --pw-icon-y: 1"></span>
+      <span class="pw-icon" data-mark="check" data-icon="check" aria-hidden="true"></span>
     </span>
   </button>
   <span class="pw-label">Always on top</span>
@@ -234,7 +233,7 @@ export const GROUPS = [
     ],
     markup: `<div class="pw-transport" role="toolbar" aria-label="Playback">
   <button class="pw-transport-button" type="button" aria-label="Play">
-    <span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 0"></span>
+    <span class="pw-icon" data-icon="play" aria-hidden="true"></span>
   </button>
 </div>
 
@@ -254,7 +253,7 @@ export const GROUPS = [
     markup: `<ul class="pw-list" role="listbox" aria-label="Playlist" tabindex="0">
   <li class="pw-list-item" role="option" aria-selected="true" data-current>
     <span class="pw-list-marker">
-      <span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 0"></span>
+      <span class="pw-icon" data-icon="play" aria-hidden="true"></span>
     </span>
     <span class="pw-list-primary">Intro</span>
     <span class="pw-list-secondary">2:14</span>
@@ -270,8 +269,7 @@ export const GROUPS = [
       ['pw-badge', 'span', 'A status chip. data-status is "success", "warning" or "error", and the glyph inside is what carries the meaning for anyone who cannot separate the hues. Under the cyber skin all three resolve to one ink on purpose, so the glyph is the whole difference.'],
     ],
     markup: `<span class="pw-badge" data-status="success">
-  <span class="pw-icon" aria-hidden="true"
-        style="--pw-icon-x: 6; --pw-icon-y: 1; --pw-icon-ink-l: 2; --pw-icon-ink-r: 2"></span>Connected
+  <span class="pw-icon" data-icon="check" aria-hidden="true"></span>Connected
 </span>`,
   },
   {
@@ -286,12 +284,15 @@ export const GROUPS = [
   },
   {
     name: 'Icon and spinner',
-    note: 'Both draw from one sprite sheet, positioned by cell coordinates. Those coordinates are the one place the CSS-only path is still worse than the React one: <Icon name="check"> looks the cell up for you and hand-written markup has to carry it. The mapping is in src/icons.ts and assets/icon-font.mjs.',
+    note: 'Both draw from one sprite sheet. Name the glyph with data-icon and the cell comes from a generated rule, so hand-written markup does not carry sprite coordinates: the same index the Icon component reads is emitted as CSS. ICON_NAMES lists the thirty-two names, and the demo\'s icon gallery shows every one of them.',
     classes: [
-      ['pw-icon', 'span', 'One glyph. --pw-icon-x and --pw-icon-y pick the cell; --pw-icon-ink-l and --pw-icon-ink-r trim the empty columns either side when it sits beside text. Always aria-hidden, or give the thing around it a name.'],
+      ['pw-icon', 'span', 'One glyph. data-icon names it. The four knobs behind that are --pw-icon-x and --pw-icon-y for the cell and --pw-icon-ink-l and --pw-icon-ink-r for the empty columns either side, which a component subtracts to get an even optical gap beside a word; set them yourself only for a glyph that is not on the sheet. Always aria-hidden, or give the thing around it a name.'],
       ['pw-spinner', 'span', 'An eight-frame spinner. role="status", and it stops under prefers-reduced-motion.'],
     ],
-    markup: `<span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 1"></span>`,
+    markup: `<span class="pw-icon" data-icon="check" aria-hidden="true"></span>
+
+<!-- An icon that carries the whole meaning needs a name of its own -->
+<span class="pw-icon" data-icon="exclamation" role="img" aria-label="Warning"></span>`,
   },
   {
     name: 'Segment readout',

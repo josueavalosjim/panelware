@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { withGallery } from '../scripts/build-icon-gallery.mjs';
 import { ICON_COLS, ICON_H, ICON_NAMES, ICON_ORDER, ICON_ROWS, ICON_W, iconRects } from '../assets/icon-font.mjs';
 import { iconSheet } from '../scripts/build-sprites.mjs';
-import { iconsIndex } from '../scripts/build-icons-index.mjs';
+import { iconsCss, iconsIndex } from '../scripts/build-icons-index.mjs';
 import { ICON_INDEX, ICON_NAMES as INDEX_NAMES } from '../dist/icons.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -25,6 +25,42 @@ describe('the icon sheet', () => {
     /* A generator nobody runs is a hand-kept copy with a misleading comment
        at the top. This is what makes the "GENERATED" claim true. */
     assert.equal(read('src/icons.ts'), iconsIndex());
+  });
+
+  test('the generated CSS is what the generator writes', () => {
+    assert.equal(read('css/components/icon-index.css'), iconsCss());
+  });
+
+  test('every icon can be named from markup, at the cell the index gives it', () => {
+    /* The component reads ICON_INDEX and writes the cell inline. Hand-written
+       markup could not: the mapping was TypeScript, and CSS cannot read
+       TypeScript, so the CSS-only half of this kit carried sprite coordinates
+       by hand and got them by reading the source of a generated file.
+
+       Both halves come from one generator now, and this is the comparison
+       that says so. Testing the comparison rather than the run, which is the
+       rule this repo learned from the parity hole: the browser applying a
+       rule is check:cssom's job, and it does that too, because a selector
+       that matches nothing renders cell 0,0 rather than an error. */
+    const css = iconsCss();
+    for (const name of INDEX_NAMES) {
+      const cell = ICON_INDEX[name];
+      const rule = css.match(
+        new RegExp(`\\.pw-icon\\[data-icon="${name}"\\] \\{([^}]*)\\}`),
+      );
+      assert.ok(rule, `no data-icon rule for ${name}`);
+      for (const [prop, want] of [
+        ['--pw-icon-x', cell.x], ['--pw-icon-y', cell.y],
+        ['--pw-icon-ink-l', cell.l], ['--pw-icon-ink-r', cell.r],
+      ]) {
+        assert.match(rule[1], new RegExp(`${prop}: ${want};`),
+          `${name}'s ${prop} is not ${want}`);
+      }
+    }
+    /* The bundle is what a consumer links, so the rules have to reach it. */
+    const bundle = read('css/panelware.css');
+    const named = new Set([...bundle.matchAll(/\[data-icon="([a-z0-9-]+)"\]/g)].map((m) => m[1]));
+    assert.deepEqual([...named].sort(), [...INDEX_NAMES].sort());
   });
 
   test('every icon drawn is on the sheet, and nothing on the sheet is undrawn', () => {

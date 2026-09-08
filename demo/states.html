@@ -90,7 +90,7 @@
             <div class="pw-title-bar" data-gloss>
               <h3 class="pw-title">Preferences</h3>
               <div class="pw-title-controls">
-                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 0"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
               </div>
             </div>
             <div class="pw-panel-body">
@@ -110,7 +110,7 @@
         <div class="demo-stack">
           <ul class="pw-list" role="listbox" aria-label="Playlist" tabindex="0">
             <li class="pw-list-item" role="option" aria-selected="false" aria-current="true">
-              <span class="pw-list-marker"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 0"></span></span>
+              <span class="pw-list-marker"><span class="pw-icon" aria-hidden="true" data-icon="play"></span></span>
               <span class="pw-list-primary">DJ Mike Llama - Llama Whippin Intro</span>
               <span class="pw-list-secondary">0:05</span>
               <span class="pw-sr-only">, now playing</span>
@@ -149,9 +149,9 @@
           <div class="pw-title-bar" data-gloss>
             <h3 class="pw-title" id="states-window-title">Playlist</h3>
             <div class="pw-title-controls">
-              <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 7; --pw-icon-y: 0"></span></button>
-              <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 1"></span></button>
-              <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 0"></span></button>
+              <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+              <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+              <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
             </div>
           </div>
           <div class="pw-window-body">
@@ -169,11 +169,11 @@
       <div class="demo-row">
         <div class="demo-stack">
           <div class="pw-transport" role="toolbar" aria-label="Playback">
-            <button class="pw-transport-button" type="button" aria-label="Previous track"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 3; --pw-icon-y: 0"></span></button>
-            <button class="pw-transport-button" type="button" aria-label="Play"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 0"></span></button>
-            <button class="pw-transport-button" type="button" aria-label="Stop"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 2; --pw-icon-y: 0"></span></button>
-            <button class="pw-transport-button" type="button" aria-label="Next track"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 4; --pw-icon-y: 0"></span></button>
-            <button class="pw-transport-button" type="button" aria-label="Eject" disabled><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 5; --pw-icon-y: 0"></span></button>
+            <button class="pw-transport-button" type="button" aria-label="Previous track"><span class="pw-icon" aria-hidden="true" data-icon="previous"></span></button>
+            <button class="pw-transport-button" type="button" aria-label="Play"><span class="pw-icon" aria-hidden="true" data-icon="play"></span></button>
+            <button class="pw-transport-button" type="button" aria-label="Stop"><span class="pw-icon" aria-hidden="true" data-icon="stop"></span></button>
+            <button class="pw-transport-button" type="button" aria-label="Next track"><span class="pw-icon" aria-hidden="true" data-icon="next"></span></button>
+            <button class="pw-transport-button" type="button" aria-label="Eject" disabled><span class="pw-icon" aria-hidden="true" data-icon="eject"></span></button>
           </div>
           <label class="demo-field">
             <span class="demo-field-label">Buffered</span>
@@ -221,261 +221,261 @@
       <!-- icons:start -->
       <div class="demo-row demo-icons">
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 0; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="play"></span>
             <span class="demo-icon-name">play</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 1; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="pause"></span>
             <span class="demo-icon-name">pause</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 2; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="stop"></span>
             <span class="demo-icon-name">stop</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 3; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="previous"></span>
             <span class="demo-icon-name">previous</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 4; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="next"></span>
             <span class="demo-icon-name">next</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 5; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="eject"></span>
             <span class="demo-icon-name">eject</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 6; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="close"></span>
             <span class="demo-icon-name">close</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 7; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="minimize"></span>
             <span class="demo-icon-name">minimize</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 0; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="maximize"></span>
             <span class="demo-icon-name">maximize</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 1; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="restore"></span>
             <span class="demo-icon-name">restore</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 2; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="chevron-down"></span>
             <span class="demo-icon-name">chevron-down</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 3; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="chevron-up"></span>
             <span class="demo-icon-name">chevron-up</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 4; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="chevron-right"></span>
             <span class="demo-icon-name">chevron-right</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 5; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="chevron-left"></span>
             <span class="demo-icon-name">chevron-left</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 6; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="check"></span>
             <span class="demo-icon-name">check</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 7; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="exclamation"></span>
             <span class="demo-icon-name">exclamation</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 0; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="dot"></span>
             <span class="demo-icon-name">dot</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 1; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="minus"></span>
             <span class="demo-icon-name">minus</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 2; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="plus"></span>
             <span class="demo-icon-name">plus</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 3; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="caret-down"></span>
             <span class="demo-icon-name">caret-down</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 4; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="search"></span>
             <span class="demo-icon-name">search</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 5; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="info"></span>
             <span class="demo-icon-name">info</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 6; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="question"></span>
             <span class="demo-icon-name">question</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 7; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="ellipsis"></span>
             <span class="demo-icon-name">ellipsis</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 0; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-1"></span>
             <span class="demo-icon-name">spinner-1</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 1; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-2"></span>
             <span class="demo-icon-name">spinner-2</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 2; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-3"></span>
             <span class="demo-icon-name">spinner-3</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 3; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-4"></span>
             <span class="demo-icon-name">spinner-4</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 4; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-5"></span>
             <span class="demo-icon-name">spinner-5</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 5; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-6"></span>
             <span class="demo-icon-name">spinner-6</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 6; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-7"></span>
             <span class="demo-icon-name">spinner-7</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 7; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-8"></span>
             <span class="demo-icon-name">spinner-8</span>
           </span>
       </div>
       <div class="demo-row demo-icons" style="--pw-icon-scale: 2">
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 0; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="play"></span>
             <span class="demo-icon-name">play</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 1; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="pause"></span>
             <span class="demo-icon-name">pause</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 2; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="stop"></span>
             <span class="demo-icon-name">stop</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 3; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="previous"></span>
             <span class="demo-icon-name">previous</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 4; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="next"></span>
             <span class="demo-icon-name">next</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 5; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="eject"></span>
             <span class="demo-icon-name">eject</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 6; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="close"></span>
             <span class="demo-icon-name">close</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 7; --pw-icon-y: 0"></span>
+            <span class="pw-icon" data-icon="minimize"></span>
             <span class="demo-icon-name">minimize</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 0; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="maximize"></span>
             <span class="demo-icon-name">maximize</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 1; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="restore"></span>
             <span class="demo-icon-name">restore</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 2; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="chevron-down"></span>
             <span class="demo-icon-name">chevron-down</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 3; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="chevron-up"></span>
             <span class="demo-icon-name">chevron-up</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 4; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="chevron-right"></span>
             <span class="demo-icon-name">chevron-right</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 5; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="chevron-left"></span>
             <span class="demo-icon-name">chevron-left</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 6; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="check"></span>
             <span class="demo-icon-name">check</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 7; --pw-icon-y: 1"></span>
+            <span class="pw-icon" data-icon="exclamation"></span>
             <span class="demo-icon-name">exclamation</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 0; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="dot"></span>
             <span class="demo-icon-name">dot</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 1; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="minus"></span>
             <span class="demo-icon-name">minus</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 2; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="plus"></span>
             <span class="demo-icon-name">plus</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 3; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="caret-down"></span>
             <span class="demo-icon-name">caret-down</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 4; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="search"></span>
             <span class="demo-icon-name">search</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 5; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="info"></span>
             <span class="demo-icon-name">info</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 6; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="question"></span>
             <span class="demo-icon-name">question</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 7; --pw-icon-y: 2"></span>
+            <span class="pw-icon" data-icon="ellipsis"></span>
             <span class="demo-icon-name">ellipsis</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 0; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-1"></span>
             <span class="demo-icon-name">spinner-1</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 1; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-2"></span>
             <span class="demo-icon-name">spinner-2</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 2; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-3"></span>
             <span class="demo-icon-name">spinner-3</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 3; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-4"></span>
             <span class="demo-icon-name">spinner-4</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 4; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-5"></span>
             <span class="demo-icon-name">spinner-5</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 5; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-6"></span>
             <span class="demo-icon-name">spinner-6</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 6; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-7"></span>
             <span class="demo-icon-name">spinner-7</span>
           </span>
           <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: 7; --pw-icon-y: 3"></span>
+            <span class="pw-icon" data-icon="spinner-8"></span>
             <span class="demo-icon-name">spinner-8</span>
           </span>
       </div>
@@ -656,14 +656,14 @@
           <label class="pw-field">
             <button type="button" role="checkbox" aria-checked="true" data-state="checked" value="on" class="pw-checkbox">
               <span data-state="checked" class="pw-box-indicator">
-                <span data-mark="check" class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 1;"></span>
-                <span data-mark="minus" class="pw-icon" aria-hidden="true" style="--pw-icon-x: 1; --pw-icon-y: 2;"></span></span></button>
+                <span data-mark="check" class="pw-icon" aria-hidden="true" data-icon="check"></span>
+                <span data-mark="minus" class="pw-icon" aria-hidden="true" data-icon="minus"></span></span></button>
             <span class="pw-label">Always on top</span></label>
           <label class="pw-field">
             <button type="button" role="checkbox" aria-checked="mixed" data-state="indeterminate" value="on" class="pw-checkbox">
               <span data-state="indeterminate" class="pw-box-indicator">
-                <span data-mark="check" class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 1;"></span>
-                <span data-mark="minus" class="pw-icon" aria-hidden="true" style="--pw-icon-x: 1; --pw-icon-y: 2;"></span></span></button>
+                <span data-mark="check" class="pw-icon" aria-hidden="true" data-icon="check"></span>
+                <span data-mark="minus" class="pw-icon" aria-hidden="true" data-icon="minus"></span></span></button>
             <span class="pw-label">Some tracks selected</span></label>
           <label class="pw-field">
             <button type="button" role="checkbox" aria-checked="false" data-state="unchecked" data-disabled="" disabled="" value="on" class="pw-checkbox"></button>
@@ -672,7 +672,7 @@
             <label class="pw-field">
               <button type="button" role="radio" aria-checked="true" data-state="checked" value="base" class="pw-radio" tabindex="-1">
                 <span data-state="checked" class="pw-box-indicator">
-                  <span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 0; --pw-icon-y: 2;"></span></span></button>
+                  <span class="pw-icon" aria-hidden="true" data-icon="dot"></span></span></button>
               <span class="pw-label">Base</span></label>
             <label class="pw-field">
               <button type="button" role="radio" aria-checked="false" data-state="unchecked" value="night" class="pw-radio" tabindex="-1"></button>
@@ -685,7 +685,7 @@
             <span class="pw-select-value">
               <span>DirectSound</span></span>
             <span class="pw-select-button">
-              <span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 3; --pw-icon-y: 2;"></span></span></button>
+              <span class="pw-icon" aria-hidden="true" data-icon="caret-down"></span></span></button>
         </div>
       </div>
 
@@ -696,7 +696,7 @@
       <p class="demo-note">Eight cells on the sheet, stepped. Not one glyph rotated: only a quarter turn is exact on a pixel grid, so the other seven positions are drawn.</p>
       <div class="demo-row">
         <span class="pw-spinner" role="status">
-          <span class="pw-icon" style="--pw-icon-x: 0; --pw-icon-y: 3"></span>
+          <span class="pw-icon" data-icon="spinner-1"></span>
           <span class="pw-sr-only">Loading</span>
         </span>
       </div>
@@ -727,9 +727,9 @@
       <h2 class="demo-heading">Status badge</h2>
       <p class="demo-note">Every badge is a glyph and a word. A coloured dot alone is the failure this component exists to avoid.</p>
       <div class="demo-row">
-        <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 1; --pw-icon-ink-l: 2; --pw-icon-ink-r: 2"></span>Connected</span>
-        <span class="pw-badge" data-status="warning"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 7; --pw-icon-y: 1; --pw-icon-ink-l: 7; --pw-icon-ink-r: 7"></span>Buffering</span>
-        <span class="pw-badge" data-status="error"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 0; --pw-icon-ink-l: 3; --pw-icon-ink-r: 3"></span>No device</span>
+        <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>Connected</span>
+        <span class="pw-badge" data-status="warning"><span class="pw-icon" aria-hidden="true" data-icon="exclamation"></span>Buffering</span>
+        <span class="pw-badge" data-status="error"><span class="pw-icon" aria-hidden="true" data-icon="close"></span>No device</span>
       </div>
     </section>
 
@@ -749,7 +749,7 @@
           </span>
           <span class="pw-lcd pw-lcd-marquee">
             <span class="pw-lcd-window" role="img" aria-label="Now playing: panelware 0.1.0"><span class="pw-lcd-render" aria-hidden="true"><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 14; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 24; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 6; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 1; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 14; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 24; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 6; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 1; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 27; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 1"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 29; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span></span>
-            <button class="pw-lcd-pause" type="button" aria-pressed="false" aria-label="Pause scrolling" disabled><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 1; --pw-icon-y: 0"></span></button>
+            <button class="pw-lcd-pause" type="button" aria-pressed="false" aria-label="Pause scrolling" disabled><span class="pw-icon" aria-hidden="true" data-icon="pause"></span></button>
           </span>
           </span>
         </div>
@@ -764,7 +764,7 @@
           <button class="pw-button">Open</button>
           <button class="pw-button" data-variant="primary">Save changes</button>
           <button class="pw-toggle" type="button" data-state="on" aria-pressed="true">Shuffle</button>
-          <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" style="--pw-icon-x: 6; --pw-icon-y: 1; --pw-icon-ink-l: 2; --pw-icon-ink-r: 2"></span>Connected</span>
+          <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>Connected</span>
         </div>
       </div>
     </section>

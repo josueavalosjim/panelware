@@ -16,7 +16,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { ICON_COLS, ICON_ORDER } from '../assets/icon-font.mjs';
+import { ICON_ORDER } from '../assets/icon-font.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PAGE = join(HERE, '..', 'demo', 'states.html');
@@ -25,8 +25,12 @@ const START = '<!-- icons:start -->';
 const END = '<!-- icons:end -->';
 
 export function gallery() {
-  const cells = ICON_ORDER.map((name, i) => `          <span class="demo-icon-cell">
-            <span class="pw-icon" style="--pw-icon-x: ${i % ICON_COLS}; --pw-icon-y: ${Math.floor(i / ICON_COLS)}"></span>
+  /* data-icon rather than the cell inline, which is the whole point of
+     css/components/icon-index.css existing: sixty-four elements on the page
+     the browser gates load, all of them resolving a name through the
+     generated rules. If a rule stops matching, this is where it shows. */
+  const cells = ICON_ORDER.map((name) => `          <span class="demo-icon-cell">
+            <span class="pw-icon" data-icon="${name}"></span>
             <span class="demo-icon-name">${name}</span>
           </span>`).join('\n');
 

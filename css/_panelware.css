@@ -38,6 +38,9 @@
    that separates them. */
 @import "./treatment/glow.css";
 @import "./components/icon.css";
+/* Generated: one rule per icon name, so hand-written markup can say
+   data-icon="check" instead of carrying the sprite cell itself. */
+@import "./components/icon-index.css";
 @import "./components/button.css";
 @import "./components/toggle.css";
 @import "./components/tabs.css";

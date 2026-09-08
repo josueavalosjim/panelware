@@ -84,7 +84,64 @@ ${names}
 `;
 }
 
+/**
+ * The same index again, as CSS, so an icon can be named from markup.
+ *
+ * <Icon name="check"> looks the cell up and writes --pw-icon-x and
+ * --pw-icon-y as inline style. Hand-written markup had no way to do that: the
+ * mapping lived only in src/icons.ts, which is TypeScript, which CSS cannot
+ * read. So the CSS-only half of this kit, which is the half the architecture
+ * was built for, had to carry sprite coordinates by hand and get them from
+ * reading the source of a generated file.
+ *
+ * <span class="pw-icon" data-icon="check"> now does it. Same numbers, same
+ * generator, one source.
+ *
+ * The bearings come along because the component sets them too, and an icon
+ * that positioned correctly and sat wrong beside a word would be a worse bug
+ * than the one this fixes: it would look almost right.
+ *
+ * Specificity is deliberate and the ordering falls out of it. The rule below
+ * is (0,2,0), the .pw-icon defaults are (0,1,0), and an inline style beats
+ * both, so a data-icon attribute overrides the defaults and the component's
+ * own style still overrides the attribute. The spinner depends on exactly
+ * that: its frame names a cell whose bearings do not survive the animation,
+ * and it replaces them inline.
+ */
+export function iconsCss() {
+  const rules = ICON_ORDER.map((n, i) => {
+    const b = bearings(n);
+    return `  .pw-icon[data-icon="${n}"] {\n` +
+      `    --pw-icon-x: ${i % ICON_COLS};\n` +
+      `    --pw-icon-y: ${Math.floor(i / ICON_COLS)};\n` +
+      `    --pw-icon-ink-l: ${b.l};\n` +
+      `    --pw-icon-ink-r: ${b.r};\n` +
+      '  }';
+  }).join('\n\n');
+
+  return `/**
+ * Icon name to sheet cell, as CSS.
+ *
+ * GENERATED from assets/icon-font.mjs by scripts/build-icons-index.mjs.
+ * Do not edit by hand: edit the font data and run \`npm run generate\`.
+ * test/icons.test.mjs fails if this file has drifted from that source, and
+ * check:cssom asks the browser whether each rule resolves to the cell the
+ * index names, because a selector that matches nothing renders cell 0,0
+ * rather than an error.
+ *
+ * This is the CSS-only half of what the Icon component does inline. See the
+ * generator for why both exist and how they order against each other.
+ */
+
+@layer pw.components {
+${rules}
+}
+`;
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   writeFileSync(join(HERE, '..', 'src', 'icons.ts'), iconsIndex());
+  writeFileSync(join(HERE, '..', 'css', 'components', 'icon-index.css'), iconsCss());
   console.log(`src/icons.ts    ${ICON_ORDER.length} icons`);
+  console.log(`css/components/icon-index.css  ${ICON_ORDER.length} named cells`);
 }

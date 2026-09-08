@@ -53,9 +53,10 @@ reference:
 open node_modules/@josueavalosjim/panelware/demo/states.html
 ```
 
-Two things that path hands you which the components otherwise handle: the ARIA
-and `data-state` attributes the CSS keys off, and the sprite cell coordinates
-an icon is positioned by. Both are covered in the reference.
+One thing that path hands you which the components otherwise handle: the ARIA
+and `data-state` attributes the CSS keys off. Icons name themselves, so
+`<span class="pw-icon" data-icon="check">` is the whole of it and no sprite
+coordinate appears in markup. Both are covered in the reference.
 
 ## Two things about the JavaScript entry
 

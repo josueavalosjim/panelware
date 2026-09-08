@@ -1,0 +1,239 @@
+/**
+ * Icon name to sheet cell, as CSS.
+ *
+ * GENERATED from assets/icon-font.mjs by scripts/build-icons-index.mjs.
+ * Do not edit by hand: edit the font data and run `npm run generate`.
+ * test/icons.test.mjs fails if this file has drifted from that source, and
+ * check:cssom asks the browser whether each rule resolves to the cell the
+ * index names, because a selector that matches nothing renders cell 0,0
+ * rather than an error.
+ *
+ * This is the CSS-only half of what the Icon component does inline. See the
+ * generator for why both exist and how they order against each other.
+ */
+
+@layer pw.components {
+  .pw-icon[data-icon="play"] {
+    --pw-icon-x: 0;
+    --pw-icon-y: 0;
+    --pw-icon-ink-l: 5;
+    --pw-icon-ink-r: 4;
+  }
+
+  .pw-icon[data-icon="pause"] {
+    --pw-icon-x: 1;
+    --pw-icon-y: 0;
+    --pw-icon-ink-l: 4;
+    --pw-icon-ink-r: 4;
+  }
+
+  .pw-icon[data-icon="stop"] {
+    --pw-icon-x: 2;
+    --pw-icon-y: 0;
+    --pw-icon-ink-l: 4;
+    --pw-icon-ink-r: 4;
+  }
+
+  .pw-icon[data-icon="previous"] {
+    --pw-icon-x: 3;
+    --pw-icon-y: 0;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 4;
+  }
+
+  .pw-icon[data-icon="next"] {
+    --pw-icon-x: 4;
+    --pw-icon-y: 0;
+    --pw-icon-ink-l: 4;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="eject"] {
+    --pw-icon-x: 5;
+    --pw-icon-y: 0;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="close"] {
+    --pw-icon-x: 6;
+    --pw-icon-y: 0;
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  .pw-icon[data-icon="minimize"] {
+    --pw-icon-x: 7;
+    --pw-icon-y: 0;
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  .pw-icon[data-icon="maximize"] {
+    --pw-icon-x: 0;
+    --pw-icon-y: 1;
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  .pw-icon[data-icon="restore"] {
+    --pw-icon-x: 1;
+    --pw-icon-y: 1;
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  .pw-icon[data-icon="chevron-down"] {
+    --pw-icon-x: 2;
+    --pw-icon-y: 1;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="chevron-up"] {
+    --pw-icon-x: 3;
+    --pw-icon-y: 1;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="chevron-right"] {
+    --pw-icon-x: 4;
+    --pw-icon-y: 1;
+    --pw-icon-ink-l: 4;
+    --pw-icon-ink-r: 5;
+  }
+
+  .pw-icon[data-icon="chevron-left"] {
+    --pw-icon-x: 5;
+    --pw-icon-y: 1;
+    --pw-icon-ink-l: 5;
+    --pw-icon-ink-r: 4;
+  }
+
+  .pw-icon[data-icon="check"] {
+    --pw-icon-x: 6;
+    --pw-icon-y: 1;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="exclamation"] {
+    --pw-icon-x: 7;
+    --pw-icon-y: 1;
+    --pw-icon-ink-l: 7;
+    --pw-icon-ink-r: 7;
+  }
+
+  .pw-icon[data-icon="dot"] {
+    --pw-icon-x: 0;
+    --pw-icon-y: 2;
+    --pw-icon-ink-l: 5;
+    --pw-icon-ink-r: 5;
+  }
+
+  .pw-icon[data-icon="minus"] {
+    --pw-icon-x: 1;
+    --pw-icon-y: 2;
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  .pw-icon[data-icon="plus"] {
+    --pw-icon-x: 2;
+    --pw-icon-y: 2;
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  .pw-icon[data-icon="caret-down"] {
+    --pw-icon-x: 3;
+    --pw-icon-y: 2;
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  .pw-icon[data-icon="search"] {
+    --pw-icon-x: 4;
+    --pw-icon-y: 2;
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="info"] {
+    --pw-icon-x: 5;
+    --pw-icon-y: 2;
+    --pw-icon-ink-l: 7;
+    --pw-icon-ink-r: 7;
+  }
+
+  .pw-icon[data-icon="question"] {
+    --pw-icon-x: 6;
+    --pw-icon-y: 2;
+    --pw-icon-ink-l: 4;
+    --pw-icon-ink-r: 4;
+  }
+
+  .pw-icon[data-icon="ellipsis"] {
+    --pw-icon-x: 7;
+    --pw-icon-y: 2;
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  .pw-icon[data-icon="spinner-1"] {
+    --pw-icon-x: 0;
+    --pw-icon-y: 3;
+    --pw-icon-ink-l: 7;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="spinner-2"] {
+    --pw-icon-x: 1;
+    --pw-icon-y: 3;
+    --pw-icon-ink-l: 4;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="spinner-3"] {
+    --pw-icon-x: 2;
+    --pw-icon-y: 3;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="spinner-4"] {
+    --pw-icon-x: 3;
+    --pw-icon-y: 3;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 4;
+  }
+
+  .pw-icon[data-icon="spinner-5"] {
+    --pw-icon-x: 4;
+    --pw-icon-y: 3;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 7;
+  }
+
+  .pw-icon[data-icon="spinner-6"] {
+    --pw-icon-x: 5;
+    --pw-icon-y: 3;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 4;
+  }
+
+  .pw-icon[data-icon="spinner-7"] {
+    --pw-icon-x: 6;
+    --pw-icon-y: 3;
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 2;
+  }
+
+  .pw-icon[data-icon="spinner-8"] {
+    --pw-icon-x: 7;
+    --pw-icon-y: 3;
+    --pw-icon-ink-l: 4;
+    --pw-icon-ink-r: 2;
+  }
+}

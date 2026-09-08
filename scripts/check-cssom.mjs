@@ -12,7 +12,15 @@
  * anywhere behind it is either a dead class or a stylesheet that did not
  * parse, and both are worth a red build.
  */
+import { ICON_COLS, ICON_ORDER } from '../assets/icon-font.mjs';
+
 import { rendered, report, withDemo } from './browser.mjs';
+
+/* The cell each icon name should resolve to, straight from the font data
+   rather than from the generated CSS, so this cannot agree with itself. */
+const CELLS = Object.fromEntries(ICON_ORDER.map((name, i) => [
+  name, { x: i % ICON_COLS, y: Math.floor(i / ICON_COLS) },
+]));
 
 const CHECK = `(() => {
   const selectors = [];
@@ -51,6 +59,7 @@ const FLOOR = 150;
 
 const failures = [];
 let seen = 0;
+let named = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
     await p.goto(`${base}/${page}`);
@@ -69,6 +78,38 @@ await withDemo(async (p, base) => {
       failures.push(`${page}: the browser kept only ${r.rules} rules, under the floor of ${FLOOR}`);
     }
     for (const c of r.unstyled) failures.push(`${page}: .${c} is rendered but no rule anywhere matches it`);
+
+    /* data-icon names a sprite cell, and the failure when a rule stops
+       matching is the worst kind this file exists for: the element still
+       renders, --pw-icon-x falls back to the 0 that .pw-icon declares, and
+       the page shows the wrong glyph rather than an error. A whole row of
+       icons quietly becoming `play` looks like a design decision.
+
+       The expected cells come from assets/icon-font.mjs, which is what the
+       generator reads, rather than from the generated CSS this is checking. */
+    for (const [name, want] of Object.entries(CELLS)) {
+      const got = await p.evaluate(`(() => {
+        const e = document.querySelector(${JSON.stringify(`.pw-icon[data-icon="${name}"]`)});
+        if (!e) return null;
+        const s = getComputedStyle(e);
+        return { x: s.getPropertyValue('--pw-icon-x').trim(),
+                 y: s.getPropertyValue('--pw-icon-y').trim() };
+      })()`);
+      if (!got) continue;
+      named += 1;
+      if (got.x !== String(want.x) || got.y !== String(want.y)) {
+        failures.push(`${page}: data-icon="${name}" resolves to cell ${got.x},${got.y} ` +
+          `and the sheet puts it at ${want.x},${want.y}`);
+      }
+    }
   }
 });
-report('cssom', failures, `${seen} rendered classes across 2 pages`);
+
+/* A probe that matched nothing reports a clean run. Both scales of the demo's
+   icon gallery are on states.html, so every name should be found twice. */
+if (named < ICON_ORDER.length) {
+  failures.push(`only ${named} of ${ICON_ORDER.length} icon names were found on either page, ` +
+    'so the data-icon rules were mostly unmeasured');
+}
+
+report('cssom', failures, `${seen} rendered classes and ${named} named icon cells across 2 pages`);
