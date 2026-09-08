@@ -875,7 +875,24 @@
  * hues are there because the badge needs four of them and for no other reason.
  */
 
-:root {
+/* Scoped to the skin, not to :root, and that is load-bearing rather than
+   tidy. Both primitive files declared on a bare :root, this one is imported
+   second, and :root and [data-skin="cyber"] are both (0,1,0), so wherever the
+   two ramps shared a name the later import won EVERYWHERE. All four amber
+   shades are shared, and the chrome skin's warning ink has been the cyber
+   skin's amber since the second skin landed: --pw-color-warning-content reads
+   --pw-amber-800 in light and --pw-amber-300 in dark, and both resolved here.
+
+   Nothing could see it. The contrast gate resolves the cascade the same way
+   the browser does, so it measured the colour that was painted and passed;
+   what was wrong was that the painted colour was not the declared one. A
+   token being overridden is invisible to a check that only asks whether every
+   token has a reader.
+
+   The phosphor ramp is deliberately not redeclared here. The readout is a lit
+   display and does not follow the skin, so cyber reads --pw-phos-* from the
+   base file by inheritance, which is the same reason display.css exists. */
+[data-skin="cyber"] {
   --pw-slate-000: #ffffff;
   --pw-slate-050: #eef3f6;   /* light page, and dark's ink */
   --pw-slate-100: #dde7ed;   /* light control face */

@@ -1819,7 +1819,7 @@
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
-   "ratio": 6.84,
+   "ratio": 6.41,
    "min": 4.5,
    "pass": true
   },
@@ -2026,7 +2026,7 @@
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
-   "ratio": 9.44,
+   "ratio": 8.41,
    "min": 4.5,
    "pass": true
   },
@@ -2233,7 +2233,7 @@
    "fg": "--pw-color-warning-content",
    "bg": "--pw-color-warning",
    "note": "",
-   "ratio": 9.44,
+   "ratio": 8.41,
    "min": 4.5,
    "pass": true
   },

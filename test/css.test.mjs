@@ -387,6 +387,53 @@ describe('the published reference data', () => {
       }
     }
   });
+  test('a second skin\'s ramp cannot reach the first skin', () => {
+    /* Both primitive files declared on a bare :root and this one is imported
+       second. :root and [data-skin="cyber"] are both (0,1,0), so wherever the
+       two ramps shared a name the later import won EVERYWHERE, including under
+       the skin that did not declare it. All four amber shades were shared, and
+       the chrome skin's warning ink had been the cyber skin's amber since the
+       second skin landed: --pw-color-warning-content reads --pw-amber-800 in
+       light and --pw-amber-300 in dark, and both resolved to the wrong file.
+
+       Nothing could see it. The contrast gate resolves the cascade exactly as
+       the browser does, so it measured the colour being painted and passed;
+       what was wrong is that the painted colour was not the declared one. And
+       "every token has a reader" is a different question from "every token's
+       declaration is the one that wins", which is the one nobody was asking.
+
+       So the rule is about scope rather than about names: the base ramp owns
+       :root, and every other skin's ramp scopes to its own skin. Sharing a
+       name is then harmless, which matters because the phosphor ramp is shared
+       on purpose. */
+    const files = readdirSync(join(ROOT, 'css', 'tokens'))
+      .filter((f) => /^primitive\..+\.css$/.test(f));
+    assert.ok(files.length >= 2, `only ${files.length} primitive ramp(s) found`);
+
+    const BASE = 'primitive.chrome.css';
+    assert.ok(files.includes(BASE), 'the base ramp is gone, so this checks nothing');
+
+    for (const file of files) {
+      const css = read(join('css', 'tokens', file)).replace(/\/\*[\s\S]*?\*\//g, '');
+      const selectors = [...css.matchAll(/([^{}]+)\{/g)].map((m) => m[1].trim()).filter(Boolean);
+      assert.ok(selectors.length, `${file} declares nothing`);
+      const skin = file.replace(/^primitive\.|\.css$/g, '');
+      for (const selector of selectors) {
+        if (file === BASE) {
+          assert.ok(selector.includes(':root'),
+            `${BASE} is the base ramp and every other file reads it, so it owns :root; ` +
+            `this block is "${selector}"`);
+        } else {
+          assert.ok(selector.includes(`[data-skin="${skin}"]`),
+            `${file} declares under "${selector}". A ramp on a bare :root ties with the base ` +
+            'ramp at (0,1,0) and wins by import order, under every skin rather than its own.');
+          assert.ok(!/(^|\s):root(\s|$|,)/.test(selector),
+            `${file} declares under "${selector}", which includes a bare :root`);
+        }
+      }
+    }
+  });
+
   test('the demo offers every look the tokens declare', () => {
     /* The same drift the check scripts had, in the one place a visitor meets
        it. demo/index.html hand-maintains two lists: the skin picker's
