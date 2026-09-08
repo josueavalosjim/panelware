@@ -1,5 +1,78 @@
 # Changelog
 
+## 0.3.1
+
+Documentation and the CSS-only path. No component and no visual change:
+`git diff v0.3.0..v0.3.1 -- src/` is empty, and the only rules added to the
+stylesheet are one per icon name.
+
+This release is the other half of a bet the package made in 0.1 and then
+documented badly. The stylesheet is meant to stand alone, most of the audience
+for a skin is not React-first, and a consumer on that path was handed one class
+name and four thousand lines of CSS.
+
+### `CLASSES.md`
+
+Every class the stylesheet ships, what it is, and the element it goes on. The
+list is generated from `css/panelware.css`, so it cannot be short, and four
+tests hold it honest: every shipped class is described and no description
+outlives its class, every class named in a markup example is one that ships,
+every shipped class is rendered by a component or is on a hook list with a
+reason, and the element each class claims is the element the component renders.
+
+The last two earned their place on the first run. The hook test found
+`.pw-lcd-caption`, which `glow.css` uppercased and nothing had ever rendered,
+so the rule could never match. The element test found two errors in the
+descriptions as they were being written: `.pw-title` documented at `h3` when
+the component defaults to level 2, and `.pw-list-marker` described as the
+selected row's mark when it is the playing row's.
+
+The general lesson is the mirror of what the gates taught. Writing prose about
+code and then measuring it against the code found errors in the prose
+immediately.
+
+### The demo is in the package
+
+`demo/` is in the `files` array. `demo/states.html` renders every component in
+every state an attribute can reach with no JavaScript at all, and the README
+has called it the standing proof the CSS needs no React since 0.1 while leaving
+it out of the tarball.
+
+```bash
+open node_modules/@josueavalosjim/panelware/demo/states.html
+```
+
+Every relative path both pages make resolves inside the package, verified by
+packing and loading `states.html` from where a consumer would open it. The
+tarball goes from 180kB to 260kB.
+
+### An icon names itself
+
+```html
+<span class="pw-icon" data-icon="check" aria-hidden="true"></span>
+```
+
+`<Icon name="check">` reads the index and writes the sprite cell inline.
+Hand-written markup could not, because the mapping lived only in
+`src/icons.ts`, so the CSS-only path carried `--pw-icon-x` and `--pw-icon-y` by
+hand and got the numbers by reading the source of a generated file.
+
+Same generator, same font data, one source. `demo/states.html` now carries no
+sprite coordinates at all, which puts eighty-six elements resolving through the
+new rules on the page every browser check loads.
+
+Specificity does the ordering: the generated rule is (0,2,0), the `.pw-icon`
+defaults are (0,1,0), and an inline style beats both, so an attribute overrides
+the defaults and the component's own style still overrides the attribute. The
+spinner depends on that.
+
+`check:cssom` asks the browser what each name resolved to, against the font
+data rather than against the generated CSS. The failure it is there for is the
+quiet one: a rule that stops matching does not error, `--pw-icon-x` falls back
+to 0, and the page shows the wrong glyph.
+
+190 tests.
+
 ## 0.3.0
 
 A minor rather than a patch, for the new components. Two existing controls also
