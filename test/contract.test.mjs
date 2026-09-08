@@ -569,10 +569,16 @@ describe('tokens nothing reads', () => {
     ['--pw-gloss-lit-base-200', 'pre-flattened for the contrast gate, never painted'],
     ['--pw-gloss-lit-primary', 'pre-flattened for the contrast gate, never painted'],
 
-    /* A semantic slot for consumers and the second skin. This kit's own
-       separator is engraved from the bevel pair instead, which is the period
-       drawing and not a flat line. */
-    ['--pw-color-divider', 'a semantic slot; the chrome separator is engraved, not drawn'],
+    /* --pw-color-divider was here, with the note that it was "a semantic slot
+       for consumers" and that this kit's own separator is engraved from the
+       bevel pair rather than drawn flat. Both halves were true and the first
+       one is now built: <Separator> is that consumer-facing line, and it reads
+       the token. The menu's separator stays engraved, because a groove between
+       two rows of a bevelled popup is the period drawing and a different job.
+
+       Worth keeping as a note rather than deleting silently, because this is
+       the list working in the direction that is easy to forget: a token that
+       gains a reader has to come off it, and the test fails until it does. */
   ]);
 
   test('every token is read, or is on the list with a reason', () => {

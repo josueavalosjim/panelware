@@ -614,6 +614,14 @@
      from --pw-control-h instead. */
   --pw-box-size: 1.25rem;
 
+  /* The switch's track. Its height matches --pw-box-size so a switch and a
+     checkbox in the same column line up, and the width is that plus one thumb
+     of travel, which is what makes the two positions read as two positions
+     rather than as a nudge. The thumb takes its own size from the track, so
+     there is no third number to keep in step. */
+  --pw-switch-w: 2.25rem;
+  --pw-switch-h: 1.25rem;
+
   --pw-eq-height: 10rem;
   --pw-eq-gap:    var(--pw-space-2xs);
   /* Where the zero line sits, as a percentage down the well. Declared here
@@ -1485,7 +1493,8 @@
        .pw-badge, .pw-slider, .pw-slider-track, .pw-slider-range,
        .pw-slider-thumb, .pw-lcd, .pw-lcd-render, .pw-lcd-cell,
        .pw-tab-list, .pw-tab-panel, .pw-overlay,
-       .pw-input, .pw-textarea) {
+       .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb,
+       .pw-tooltip, .pw-separator, .pw-toolbar) {
   box-sizing: border-box;
 }
 
@@ -1506,7 +1515,7 @@
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button,
        .pw-transport-button, .pw-menubar-trigger,
        .pw-checkbox, .pw-radio, .pw-select,
-       .pw-input, .pw-textarea) {
+       .pw-input, .pw-textarea, .pw-switch, .pw-collapsible-trigger) {
   appearance: none;
   border: 0;
   margin: 0;
@@ -1541,7 +1550,7 @@
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
        .pw-menubar-trigger, .pw-checkbox, .pw-radio, .pw-select,
        .pw-slider-thumb, .pw-panel, .pw-list, .pw-lcd-pause,
-       .pw-input, .pw-textarea):focus-visible {
+       .pw-input, .pw-textarea, .pw-switch, .pw-collapsible-trigger):focus-visible {
   --pw-focus-halo: 0 0 0 var(--pw-focus-width) var(--pw-color-focus-contrast);
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
   outline-offset: var(--pw-focus-width);
@@ -1617,7 +1626,7 @@
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
          .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
-         .pw-input, .pw-textarea,
+         .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
          .pw-raised, .pw-sunken) {
     /* Two knobs multiplied, because they have two owners. --pw-bevel-depth is
        the skin's: chrome ships 1 and the cyber preset ships 0, and a consumer
@@ -1694,7 +1703,7 @@
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
          .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
-         .pw-input, .pw-textarea) {
+         .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip) {
     /* The bevel, plus the focus ring's inner half when there is one.
        --pw-focus-halo is transparent by default and set on :focus-visible. */
     box-shadow: var(--pw-elev), var(--pw-focus-halo);
@@ -1728,7 +1737,7 @@
            .pw-tab-panel, .pw-title-button, .pw-window,
            .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
            .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
-           .pw-input, .pw-textarea) {
+           .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip) {
       border: var(--pw-border) solid ButtonBorder;
     }
   }
@@ -1776,7 +1785,7 @@
   :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
          .pw-menubar-trigger, .pw-checkbox, .pw-radio, .pw-select,
          .pw-slider-thumb, .pw-panel, .pw-list, .pw-lcd-pause,
-         .pw-input, .pw-textarea) { clip-path: none; }
+         .pw-input, .pw-textarea, .pw-switch, .pw-collapsible-trigger) { clip-path: none; }
 
   /* Documented escape hatches for surfaces a consumer builds that are not
      panelware components. Nothing internal uses them; internal components
@@ -1951,6 +1960,9 @@
          .pw-select-list,
          .pw-input,
          .pw-textarea,
+         .pw-switch,
+         .pw-switch-thumb,
+         .pw-tooltip,
          .pw-raised,
          .pw-sunken) {
     /* One hairline in the boundary ink, which carries WCAG 1.4.11 in this skin
@@ -3931,6 +3943,317 @@
       color: HighlightText;
       forced-color-adjust: none;
     }
+  }
+}
+
+/**
+ * SWITCH.
+ *
+ * Not a toggle, and the difference is worth stating because the kit now ships
+ * both. A toggle is a button that stays pressed: it answers "is this mode on",
+ * and its own face carries the state. A switch is a thing you throw, and the
+ * state is WHERE THE THUMB IS. That is why one is a <button aria-pressed> and
+ * the other is a <button role="switch" aria-checked>, and why a switch reads
+ * correctly at a glance from across a settings panel while a pressed button
+ * does not.
+ *
+ * ── Position is the carrier, and it has to be ────────────────────────────
+ * The track tints when it is on, and that tint is the second signal rather
+ * than the first. It has to be, twice over. The house rule is that no state
+ * in this kit is carried by colour alone, and the cyber skin makes that
+ * concrete rather than theoretical: it resolves error, success and warning to
+ * one accent on purpose, so a skin can arrive where the tint says nothing.
+ * The thumb has moved half the track's width either way.
+ *
+ * ── The travel is one expression at any padding ──────────────────────────
+ * The thumb is square and as tall as the track's inside, so its width is the
+ * track height minus twice the padding, and the distance it has to cover is
+ * the track width minus twice the padding minus that. The paddings cancel:
+ * the travel is always width minus height. Which matters because the padding
+ * is --pw-bevel-1, so it is a pixel under the chrome skin and zero under a
+ * flat one, and the same declaration has to be right for both.
+ */
+
+@layer pw.components {
+  .pw-switch {
+    /* A well with something sitting in it, exactly as the checkbox is. */
+    --pw-elev: var(--pw-shadow-sunken);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    width: var(--pw-switch-w);
+    height: var(--pw-switch-h);
+    padding: var(--pw-bevel-1);
+    background-color: var(--pw-color-base-300);
+    border-radius: var(--pw-radius-control);
+    cursor: pointer;
+  }
+
+  /* The ink is 36x20 and a finger is not. Same split as the checkbox, the
+     radio and the slider grip: a centred ::after carries the target, which is
+     also why this control is on the corner-clip opt-out list. */
+  .pw-switch::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--pw-control-h));
+    height: var(--pw-control-h);
+    transform: translate(-50%, -50%);
+  }
+
+  .pw-switch-thumb {
+    --pw-elev: var(--pw-shadow-raised);
+    display: block;
+    height: 100%;
+    aspect-ratio: 1;
+    background-color: var(--pw-color-base-200);
+    border-radius: var(--pw-radius-control);
+    box-shadow: var(--pw-elev);
+    transition: transform var(--pw-duration-fast) var(--pw-ease-state);
+  }
+
+  /* Both spellings, for the reason the toggle gives: the CSS keyed off one
+     and the accessibility tree off the other, with nothing binding them, and
+     this kit also ships as standalone CSS where a consumer wires the
+     attributes by hand. */
+  .pw-switch[data-state="checked"],
+  .pw-switch[aria-checked="true"] {
+    background-color: var(--pw-color-primary);
+  }
+
+  .pw-switch[data-state="checked"] .pw-switch-thumb,
+  .pw-switch[aria-checked="true"] .pw-switch-thumb {
+    transform: translateX(calc(var(--pw-switch-w) - var(--pw-switch-h)));
+  }
+
+  .pw-switch:disabled,
+  .pw-switch[data-disabled] { cursor: default; }
+
+  /* The travel survives, only its duration goes. The rule this kit follows is
+     that a state change is not motion for its own sake: a switch that does not
+     move has not told anyone anything. */
+  @media (prefers-reduced-motion: reduce) {
+    .pw-switch-thumb { transition-duration: 1ms; }
+  }
+
+  @media (forced-colors: active) {
+    /* background-color is forced and box-shadow is stripped, so the tint that
+       says "on" is gone and the thumb's own edge with it. The position still
+       reads, and a border puts the thumb back. */
+    .pw-switch-thumb { border: var(--pw-border) solid ButtonText; }
+  }
+}
+
+/**
+ * COLLAPSIBLE.
+ *
+ * A disclosure row and the thing it discloses. Radix owns the aria-expanded
+ * and aria-controls pair, which is the part that is easy to write and easy to
+ * write wrong: a trigger whose aria-controls points at an id that is not in
+ * the document looks perfectly correct in the markup and tells a screen reader
+ * nothing.
+ *
+ * ── The height is not animated, and that is the house rule rather than a
+ *    shortcut ─────────────────────────────────────────────────────────────
+ * Radix publishes --radix-collapsible-content-height precisely so the open and
+ * close can be tweened, and every kit in this genre uses it. This one does
+ * not, because height is a layout property: animating it reflows the document
+ * on every frame, and the kit's motion rule is transform and opacity only.
+ *
+ * The chevron turns instead. That is a transform, it is the affordance anyone
+ * actually reads, and it costs one composited property rather than a reflow.
+ */
+
+@layer pw.components {
+  .pw-collapsible { display: block; }
+
+  /* Flat, like the menu bar's trigger. It is a row you press, not a control
+     sitting on a surface, and a bevel here would make every disclosure look
+     like a button that had been left out of a toolbar. The focus ring still
+     reaches it: reset.css draws that for the classes it lists, whether or not
+     they are in the elevation slot. */
+  .pw-collapsible-trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--pw-control-gap);
+    width: 100%;
+    min-height: var(--pw-control-h);
+    padding: 0 var(--pw-control-pad-x) 0 0;
+    background: none;
+    color: var(--pw-color-base-content);
+    text-align: left;
+  }
+
+  .pw-collapsible-trigger:disabled,
+  .pw-collapsible-trigger[data-disabled] {
+    color: var(--pw-color-disabled-content);
+    cursor: default;
+  }
+
+  /* The one moving part. Pointing right when shut and down when open is the
+     convention every file tree has used since Explorer, and a quarter turn is
+     exact on a square lattice, which the icon sheet cares about: the chevron
+     is pixel art and 90 degrees resamples nothing. */
+  .pw-collapsible-trigger .pw-icon {
+    transition: transform var(--pw-duration-fast) var(--pw-ease-state);
+  }
+
+  .pw-collapsible-trigger[data-state="open"] .pw-icon,
+  .pw-collapsible-trigger[aria-expanded="true"] .pw-icon {
+    transform: rotate(90deg);
+  }
+
+  .pw-collapsible-content { display: block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-collapsible-trigger .pw-icon { transition-duration: 1ms; }
+  }
+}
+
+/**
+ * TOOLBAR.
+ *
+ * A row of controls that behaves as one tab stop, with the arrow keys moving
+ * between them. That is the whole point and Radix owns all of it: a toolbar
+ * with eleven buttons is eleven tab stops without it, and eleven tab stops
+ * between a user and the next thing on the page is how a keyboard user learns
+ * to avoid a toolbar.
+ *
+ * Flat, like the menu bar, and for the same reason. The controls inside it
+ * are already bevelled; a bevelled tray under them would be a second frame
+ * around a frame, which is the mistake the window chrome exists to avoid
+ * making twice.
+ *
+ * .pw-transport is the same primitive with a fixed set of buttons in it. This
+ * is the general one, for a consumer's own row.
+ */
+
+@layer pw.components {
+  .pw-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--pw-control-gap);
+    /* Radix puts outline: none inline on the root, which is correct: the
+       roving tabindex means focus lands on a button, never on the tray. */
+  }
+
+  .pw-toolbar[data-orientation="vertical"] { flex-direction: column; align-items: stretch; }
+}
+
+/**
+ * SEPARATOR.
+ *
+ * The one component that reads --pw-color-divider, and that token's whole
+ * reason for existing. It was declared in every palette from the start and
+ * read by nothing, sitting on the reserved-token list with the note that this
+ * kit's own separator is engraved from the bevel pair rather than drawn flat.
+ *
+ * Both things are true and they are different jobs. .pw-menu-separator sits
+ * inside a bevelled popup, where a groove between two rows is the period
+ * drawing; it stays engraved. This one is the grouping line a consumer puts
+ * between sections of their own layout, which is exactly what the token's own
+ * comment called it: "a semantic slot for consumers".
+ *
+ * That tier is 2:1, not 3:1, and the reason is written into the contrast gate:
+ * removing a grouping line identifies nothing and changes no state, so 1.4.11
+ * does not reach it. An earlier version of check-colour floored every border
+ * at 3 and reported the whole tier as forty failures the day it was added.
+ *
+ * Drawn as a border rather than a background, because that is the property
+ * check-colour reads to decide something is a line at all. What it will not
+ * do is measure this off the page: it skips anything under 2px in either
+ * direction and a hairline rule is 1. The declared pair in
+ * tastecheck.config.json is what holds the ink, and it holds it against both
+ * grounds in all seven themes.
+ */
+
+@layer pw.components {
+  .pw-separator {
+    flex: 0 0 auto;
+    border: 0;
+  }
+
+  .pw-separator[data-orientation="horizontal"] {
+    height: 0;
+    width: 100%;
+    border-top: var(--pw-border) solid var(--pw-color-divider);
+  }
+
+  .pw-separator[data-orientation="vertical"] {
+    width: 0;
+    align-self: stretch;
+    /* A vertical rule with nothing tall beside it is invisible, and a toolbar
+       separator is the common case. */
+    min-height: var(--pw-space-lg);
+    border-left: var(--pw-border) solid var(--pw-color-divider);
+  }
+
+  /* Forced colors keeps border and strips almost everything else, which is
+     the one place this kit's shadow-only edges need a real border. Here the
+     border is already the whole thing, so it only needs a system ink. */
+  @media (forced-colors: active) {
+    .pw-separator { border-color: CanvasText; }
+  }
+}
+
+/**
+ * TOOLTIP.
+ *
+ * A raised surface, the same one the menu is, because it is the same thing:
+ * something that appears above the page and is not part of it.
+ *
+ * ── No arrow ─────────────────────────────────────────────────────────────
+ * Radix ships Tooltip.Arrow and it renders an <svg>. This kit's every edge is
+ * an inset box-shadow, and an SVG triangle cannot take one, so a skinned arrow
+ * would be a second, hand-drawn description of the bevel that no token
+ * controls and no gate measures. It would go wrong the first time a skin
+ * changed the frame. The tooltip is placed with an offset instead, which is
+ * what the reference lineage did: a period tooltip is a box near the pointer,
+ * not a speech bubble.
+ *
+ * ── What a tooltip is not ────────────────────────────────────────────────
+ * It is not a label. A control whose only name is its tooltip has no name to
+ * a touch user, who cannot hover, and no name until focus for anyone else.
+ * The kit's own icon-only buttons all carry aria-label for that reason and a
+ * tooltip on top of one is a convenience, not the name. Documented rather
+ * than enforced, because a component cannot tell which case it is in.
+ */
+
+@layer pw.components {
+  .pw-tooltip {
+    --pw-elev: var(--pw-shadow-raised);
+    max-width: 20rem;
+    padding: var(--pw-space-2xs) var(--pw-space-sm);
+    background-color: var(--pw-color-base-200);
+    color: var(--pw-color-base-content);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-text-micro);
+    line-height: var(--pw-leading-ui);
+    border-radius: var(--pw-radius-control);
+    /* Clipped, unlike the controls: nothing here takes focus, so there is no
+       outline for a notch to eat. */
+    clip-path: var(--pw-clip-control);
+    /* Radix measures the trigger and positions this; the kit only says how
+       far off it sits. */
+    z-index: var(--pw-z-panel);
+  }
+
+  /* Enter only. A tooltip that fades out holds a box over the thing you just
+     moved the pointer to, and the exit tokens are on the reserved list because
+     nothing in this kit has yet had a reason to animate out. This is not it. */
+  .pw-tooltip[data-state="delayed-open"] {
+    animation: pw-tooltip-in var(--pw-duration-fast) var(--pw-ease-enter);
+  }
+
+  @keyframes pw-tooltip-in {
+    from { opacity: 0; transform: scale(0.98); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-tooltip[data-state="delayed-open"] { animation-duration: 1ms; }
   }
 }
 

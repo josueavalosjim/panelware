@@ -1,0 +1,58 @@
+/**
+ * TOOLTIP.
+ *
+ * A raised surface, the same one the menu is, because it is the same thing:
+ * something that appears above the page and is not part of it.
+ *
+ * ── No arrow ─────────────────────────────────────────────────────────────
+ * Radix ships Tooltip.Arrow and it renders an <svg>. This kit's every edge is
+ * an inset box-shadow, and an SVG triangle cannot take one, so a skinned arrow
+ * would be a second, hand-drawn description of the bevel that no token
+ * controls and no gate measures. It would go wrong the first time a skin
+ * changed the frame. The tooltip is placed with an offset instead, which is
+ * what the reference lineage did: a period tooltip is a box near the pointer,
+ * not a speech bubble.
+ *
+ * ── What a tooltip is not ────────────────────────────────────────────────
+ * It is not a label. A control whose only name is its tooltip has no name to
+ * a touch user, who cannot hover, and no name until focus for anyone else.
+ * The kit's own icon-only buttons all carry aria-label for that reason and a
+ * tooltip on top of one is a convenience, not the name. Documented rather
+ * than enforced, because a component cannot tell which case it is in.
+ */
+
+@layer pw.components {
+  .pw-tooltip {
+    --pw-elev: var(--pw-shadow-raised);
+    max-width: 20rem;
+    padding: var(--pw-space-2xs) var(--pw-space-sm);
+    background-color: var(--pw-color-base-200);
+    color: var(--pw-color-base-content);
+    font-family: var(--pw-font-ui);
+    font-size: var(--pw-text-micro);
+    line-height: var(--pw-leading-ui);
+    border-radius: var(--pw-radius-control);
+    /* Clipped, unlike the controls: nothing here takes focus, so there is no
+       outline for a notch to eat. */
+    clip-path: var(--pw-clip-control);
+    /* Radix measures the trigger and positions this; the kit only says how
+       far off it sits. */
+    z-index: var(--pw-z-panel);
+  }
+
+  /* Enter only. A tooltip that fades out holds a box over the thing you just
+     moved the pointer to, and the exit tokens are on the reserved list because
+     nothing in this kit has yet had a reason to animate out. This is not it. */
+  .pw-tooltip[data-state="delayed-open"] {
+    animation: pw-tooltip-in var(--pw-duration-fast) var(--pw-ease-enter);
+  }
+
+  @keyframes pw-tooltip-in {
+    from { opacity: 0; transform: scale(0.98); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-tooltip[data-state="delayed-open"] { animation-duration: 1ms; }
+  }
+}

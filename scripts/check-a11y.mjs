@@ -286,6 +286,7 @@ const NOTCH = 'polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 10
 
 /** Controls whose hit area is bigger than their ink, and by how much. */
 const TARGETS = [
+  { selector: '#structure .pw-switch', reach: 15 },
   { selector: '#field .pw-checkbox', reach: 15 },
   { selector: '#field .pw-radio', reach: 15 },
   { selector: '#slider .pw-slider-thumb', reach: 15 },

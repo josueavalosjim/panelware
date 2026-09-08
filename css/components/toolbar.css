@@ -1,0 +1,29 @@
+/**
+ * TOOLBAR.
+ *
+ * A row of controls that behaves as one tab stop, with the arrow keys moving
+ * between them. That is the whole point and Radix owns all of it: a toolbar
+ * with eleven buttons is eleven tab stops without it, and eleven tab stops
+ * between a user and the next thing on the page is how a keyboard user learns
+ * to avoid a toolbar.
+ *
+ * Flat, like the menu bar, and for the same reason. The controls inside it
+ * are already bevelled; a bevelled tray under them would be a second frame
+ * around a frame, which is the mistake the window chrome exists to avoid
+ * making twice.
+ *
+ * .pw-transport is the same primitive with a fixed set of buttons in it. This
+ * is the general one, for a consumer's own row.
+ */
+
+@layer pw.components {
+  .pw-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--pw-control-gap);
+    /* Radix puts outline: none inline on the root, which is correct: the
+       roving tabindex means focus lands on a button, never on the tray. */
+  }
+
+  .pw-toolbar[data-orientation="vertical"] { flex-direction: column; align-items: stretch; }
+}

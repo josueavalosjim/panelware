@@ -52,6 +52,8 @@
       MenuRadioItem, MenuSeparator, MenuSub, MenuTrigger, Menubar,
       Progress, Readout, Slider, Tab, TabList, TabPanel, Tabs, Toggle,
       Checkbox, Field, Input, Radio, RadioGroup, Select, SelectItem, Textarea,
+      Switch, Separator, Toolbar, ToolbarButton, ToolbarSeparator,
+      Collapsible, CollapsibleTrigger, CollapsibleContent, Tooltip, TooltipProvider,
       ToggleGroup, ToggleGroupItem, Transport, TransportButton, Window,
     } from '../dist/index.js';
 
@@ -324,6 +326,66 @@
               h(SelectItem, { value: 'wave' }, 'DirectSound'),
               h(SelectItem, { value: 'asio' }, 'ASIO'),
               h(SelectItem, { value: 'null', disabled: true }, 'Null output')))),
+
+        h(Section, {
+          skin: skinAxis,
+          id: 'structure', title: 'Switch, collapsible, toolbar, separator, tooltip',
+          note: 'A switch is not a toggle: a toggle answers "is this mode on" and carries its label inside itself, a switch is a thing you throw with its label beside it, and the state is where the thumb is. The toolbar is one tab stop with the arrow keys inside it, which is the whole reason to use one. The separator is the only thing that reads --pw-color-divider, and that token had been declared in every palette and read by nothing since the beginning.',
+          code: `import { Switch, Separator, Toolbar, ToolbarButton, ToolbarSeparator,
+  Collapsible, CollapsibleTrigger, CollapsibleContent,
+  Tooltip, TooltipProvider } from '@josueavalosjim/panelware';
+
+<Field label="Reconnect automatically" labelFirst>
+  <Switch checked={on} onCheckedChange={setOn} />
+</Field>
+
+<Toolbar label="Formatting">
+  <ToolbarButton>Bold</ToolbarButton>
+  <ToolbarSeparator />
+  <ToolbarButton variant="primary">Apply</ToolbarButton>
+</Toolbar>
+
+<Collapsible>
+  <CollapsibleTrigger>Advanced</CollapsibleTrigger>
+  <CollapsibleContent>…</CollapsibleContent>
+</Collapsible>
+
+// One provider above them all, so moving between triggers does not
+// wait for the delay again
+<TooltipProvider>
+  <Tooltip label="Stops after this track">
+    <button className="pw-button">Stop</button>
+  </Tooltip>
+</TooltipProvider>`,
+        },
+          h('div', { className: 'demo-stack' },
+            h(Field, { label: 'Reconnect automatically', labelFirst: true },
+              h(Switch, { defaultChecked: true })),
+            h(Field, { label: 'Verbose logging', labelFirst: true },
+              h(Switch, {})),
+            h(Field, { label: 'Unavailable', labelFirst: true },
+              h(Switch, { disabled: true })),
+
+            h(Separator, {}),
+
+            h(Toolbar, { label: 'Formatting' },
+              h(ToolbarButton, {}, 'Bold'),
+              h(ToolbarButton, {}, 'Italic'),
+              h(ToolbarSeparator, {}),
+              h(ToolbarButton, { variant: 'primary' }, 'Apply')),
+
+            h(Separator, {}),
+
+            h(Collapsible, { defaultOpen: true },
+              h(CollapsibleTrigger, {}, 'Advanced'),
+              h(CollapsibleContent, null,
+                h('p', { className: 'demo-note' },
+                  'The height is not animated. Height is a layout property and animating it '
+                  + 'reflows the document every frame, so the chevron turns instead.'))),
+
+            h(TooltipProvider, { delayDuration: 200 },
+              h(Tooltip, { label: 'Stops after this track' },
+                h('button', { className: 'pw-button', type: 'button' }, 'Hover me'))))),
 
         h(Section, {
           skin: skinAxis,

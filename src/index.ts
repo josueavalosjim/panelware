@@ -39,6 +39,23 @@ export type {
   CheckboxProps, RadioGroupProps, RadioProps, SelectProps, SelectItemProps,
 } from './field.js';
 
+export { Switch } from './switch.js';
+export type { SwitchProps } from './switch.js';
+
+export { Separator } from './separator.js';
+export type { SeparatorProps } from './separator.js';
+
+export { Toolbar, ToolbarButton, ToolbarSeparator } from './toolbar.js';
+export type { ToolbarProps, ToolbarButtonProps, ToolbarSeparatorProps } from './toolbar.js';
+
+export { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsible.js';
+export type {
+  CollapsibleProps, CollapsibleTriggerProps, CollapsibleContentProps,
+} from './collapsible.js';
+
+export { Tooltip, TooltipProvider } from './tooltip.js';
+export type { TooltipProps, TooltipProviderProps } from './tooltip.js';
+
 export { List } from './list.js';
 export type { ListProps, ListRow } from './list.js';
 

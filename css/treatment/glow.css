@@ -51,6 +51,9 @@
          .pw-select-list,
          .pw-input,
          .pw-textarea,
+         .pw-switch,
+         .pw-switch-thumb,
+         .pw-tooltip,
          .pw-raised,
          .pw-sunken) {
     /* One hairline in the boundary ink, which carries WCAG 1.4.11 in this skin

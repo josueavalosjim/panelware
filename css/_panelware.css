@@ -52,6 +52,11 @@
 @import "./components/menubar.css";
 @import "./components/list.css";
 @import "./components/field.css";
+@import "./components/switch.css";
+@import "./components/collapsible.css";
+@import "./components/toolbar.css";
+@import "./components/separator.css";
+@import "./components/tooltip.css";
 @import "./components/badge.css";
 @import "./components/meta.css";
 @import "./components/lcd.css";

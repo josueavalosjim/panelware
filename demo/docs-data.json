@@ -1088,6 +1088,24 @@
      }
     },
     {
+     "name": "--pw-switch-w",
+     "values": {
+      "both": {
+       "declared": "2.25rem",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-switch-h",
+     "values": {
+      "both": {
+       "declared": "1.25rem",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-eq-height",
      "values": {
       "both": {

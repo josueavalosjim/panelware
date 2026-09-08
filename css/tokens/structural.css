@@ -188,6 +188,14 @@
      from --pw-control-h instead. */
   --pw-box-size: 1.25rem;
 
+  /* The switch's track. Its height matches --pw-box-size so a switch and a
+     checkbox in the same column line up, and the width is that plus one thumb
+     of travel, which is what makes the two positions read as two positions
+     rather than as a nudge. The thumb takes its own size from the track, so
+     there is no third number to keep in step. */
+  --pw-switch-w: 2.25rem;
+  --pw-switch-h: 1.25rem;
+
   --pw-eq-height: 10rem;
   --pw-eq-gap:    var(--pw-space-2xs);
   /* Where the zero line sits, as a percentage down the well. Declared here

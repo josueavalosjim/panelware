@@ -1,0 +1,55 @@
+/**
+ * SEPARATOR.
+ *
+ * The one component that reads --pw-color-divider, and that token's whole
+ * reason for existing. It was declared in every palette from the start and
+ * read by nothing, sitting on the reserved-token list with the note that this
+ * kit's own separator is engraved from the bevel pair rather than drawn flat.
+ *
+ * Both things are true and they are different jobs. .pw-menu-separator sits
+ * inside a bevelled popup, where a groove between two rows is the period
+ * drawing; it stays engraved. This one is the grouping line a consumer puts
+ * between sections of their own layout, which is exactly what the token's own
+ * comment called it: "a semantic slot for consumers".
+ *
+ * That tier is 2:1, not 3:1, and the reason is written into the contrast gate:
+ * removing a grouping line identifies nothing and changes no state, so 1.4.11
+ * does not reach it. An earlier version of check-colour floored every border
+ * at 3 and reported the whole tier as forty failures the day it was added.
+ *
+ * Drawn as a border rather than a background, because that is the property
+ * check-colour reads to decide something is a line at all. What it will not
+ * do is measure this off the page: it skips anything under 2px in either
+ * direction and a hairline rule is 1. The declared pair in
+ * tastecheck.config.json is what holds the ink, and it holds it against both
+ * grounds in all seven themes.
+ */
+
+@layer pw.components {
+  .pw-separator {
+    flex: 0 0 auto;
+    border: 0;
+  }
+
+  .pw-separator[data-orientation="horizontal"] {
+    height: 0;
+    width: 100%;
+    border-top: var(--pw-border) solid var(--pw-color-divider);
+  }
+
+  .pw-separator[data-orientation="vertical"] {
+    width: 0;
+    align-self: stretch;
+    /* A vertical rule with nothing tall beside it is invisible, and a toolbar
+       separator is the common case. */
+    min-height: var(--pw-space-lg);
+    border-left: var(--pw-border) solid var(--pw-color-divider);
+  }
+
+  /* Forced colors keeps border and strips almost everything else, which is
+     the one place this kit's shadow-only edges need a real border. Here the
+     border is already the whole thing, so it only needs a system ink. */
+  @media (forced-colors: active) {
+    .pw-separator { border-color: CanvasText; }
+  }
+}

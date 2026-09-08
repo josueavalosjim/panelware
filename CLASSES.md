@@ -9,7 +9,7 @@ Every class the stylesheet carries a rule for, what it is, and the element it
 goes on. The React components emit all of this for you and you do not need
 this page to use them. It is here for the other entry point: the stylesheet
 works with no React at all, and until this file the README named one class out
-of 72.
+of 80.
 
 Two things a consumer on that path inherits, both of which the components
 otherwise handle:
@@ -207,6 +207,86 @@ Field wraps the pair in a real <label>, so the words operate the control. That i
   </button>
   <span class="pw-label">Always on top</span>
 </label>
+```
+
+## Switch
+
+Not a toggle. A toggle is a button that stays pressed and answers "is this mode on"; a switch is a thing you throw, with its label beside it, and the state is where the thumb is. aria-pressed against aria-checked, and a screen reader says "pressed" for one and "on" for the other. If it belongs in a toolbar it is a toggle; if it belongs in a settings list it is a switch.
+
+| Class | Element | What it is |
+| --- | --- | --- |
+| `.pw-switch` | `<button>` | The track. role="switch" with aria-checked and a matching data-state. Its hit area is a centred pseudo-element, so it is on the corner-clip opt-out list with the checkbox and the slider grip. |
+| `.pw-switch-thumb` | `<span>` | The part that moves. Its travel is the track's width minus its height, which is one expression at any padding, and the position is what carries the state: the tint on the track is a second signal, because the cyber skin resolves its accents to one ink and a tint can end up saying nothing. |
+
+```html
+<label class="pw-field">
+  <button class="pw-switch" type="button" role="switch"
+          aria-checked="true" data-state="checked">
+    <span class="pw-switch-thumb" data-state="checked"></span>
+  </button>
+  <span class="pw-label">Reconnect automatically</span>
+</label>
+```
+
+## Collapsible
+
+A disclosure row and the thing it discloses. The height is deliberately not animated: height is a layout property and animating it reflows the document every frame, so the chevron turns instead, which is the affordance anyone actually reads and costs one composited property.
+
+| Class | Element | What it is |
+| --- | --- | --- |
+| `.pw-collapsible` | `<div>` | The wrapper. |
+| `.pw-collapsible-trigger` | `<button>` | The row you press. Flat rather than bevelled, like the menu bar's trigger, and it needs aria-expanded plus aria-controls pointing at the content's id. The chevron inside it turns a quarter when open. |
+| `.pw-collapsible-content` | `<div>` | What opens. Its id is what the trigger controls. |
+
+```html
+<div class="pw-collapsible" data-state="open">
+  <button class="pw-collapsible-trigger" type="button"
+          aria-expanded="true" aria-controls="adv" data-state="open">
+    <span class="pw-icon" data-icon="chevron-right" aria-hidden="true"></span>Advanced
+  </button>
+  <div class="pw-collapsible-content" id="adv" data-state="open">…</div>
+</div>
+```
+
+## Toolbar
+
+One tab stop with the arrow keys moving inside it, which is the whole reason to reach for this rather than a row of buttons: eleven buttons in a plain row is eleven tab stops. Flat, like the menu bar, because the controls inside are already bevelled and a tray under them would be a frame around a frame. The transport is this primitive with a fixed set of buttons in it.
+
+| Class | Element | What it is |
+| --- | --- | --- |
+| `.pw-toolbar` | `<div>` | The tray. role="toolbar", and it needs a name. Its buttons wear .pw-button: a button in a toolbar is a button, and a second class would be a second set of rules to keep in step for no visual difference. |
+
+```html
+<div class="pw-toolbar" role="toolbar" aria-label="Formatting">
+  <button class="pw-button" type="button">Bold</button>
+  <div class="pw-separator" role="separator" data-orientation="vertical"></div>
+  <button class="pw-button" type="button">Align</button>
+</div>
+```
+
+## Separator
+
+The only thing that reads --pw-color-divider, which is that token's reason for existing: it was declared in every palette from the start and read by nothing. Its contrast tier is 2:1 rather than 3:1, because removing a grouping line identifies nothing and changes no state, so 1.4.11 does not reach it. The menu's own separator stays engraved from the bevel pair, which is a different job: a groove between two rows of a bevelled popup is the period drawing.
+
+| Class | Element | What it is |
+| --- | --- | --- |
+| `.pw-separator` | `<div>` | A rule. data-orientation is "horizontal" or "vertical". role="separator", and it should be decorative unless the line carries meaning the words do not, because announcing "separator" between every pair of sections is noise. |
+
+```html
+<div class="pw-separator" role="none" data-orientation="horizontal"></div>
+<div class="pw-separator" role="none" data-orientation="vertical"></div>
+```
+
+## Tooltip
+
+A tooltip is not a label. A control whose only name is its tooltip has no name to a touch user, who cannot hover, and no name to anyone else until focus reaches it. Every icon-only control in this kit carries an aria-label for that reason, and a tooltip on top of one is a convenience. No arrow: an arrow is an SVG and every edge in this kit is an inset box-shadow, so a skinned arrow would be a hand-drawn second description of the frame that no token controls.
+
+| Class | Element | What it is |
+| --- | --- | --- |
+| `.pw-tooltip` | `<div>` | The box. Raised, like the menu, because it is the same kind of thing: something above the page rather than part of it. *(only exists while open)* |
+
+```html
+<div class="pw-tooltip" role="tooltip">Stops after this track</div>
 ```
 
 ## Slider

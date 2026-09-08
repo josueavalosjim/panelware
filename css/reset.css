@@ -15,7 +15,8 @@
        .pw-badge, .pw-slider, .pw-slider-track, .pw-slider-range,
        .pw-slider-thumb, .pw-lcd, .pw-lcd-render, .pw-lcd-cell,
        .pw-tab-list, .pw-tab-panel, .pw-overlay,
-       .pw-input, .pw-textarea) {
+       .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb,
+       .pw-tooltip, .pw-separator, .pw-toolbar) {
   box-sizing: border-box;
 }
 
@@ -36,7 +37,7 @@
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button,
        .pw-transport-button, .pw-menubar-trigger,
        .pw-checkbox, .pw-radio, .pw-select,
-       .pw-input, .pw-textarea) {
+       .pw-input, .pw-textarea, .pw-switch, .pw-collapsible-trigger) {
   appearance: none;
   border: 0;
   margin: 0;
@@ -71,7 +72,7 @@
 :where(.pw-button, .pw-toggle, .pw-tab, .pw-title-button, .pw-transport-button,
        .pw-menubar-trigger, .pw-checkbox, .pw-radio, .pw-select,
        .pw-slider-thumb, .pw-panel, .pw-list, .pw-lcd-pause,
-       .pw-input, .pw-textarea):focus-visible {
+       .pw-input, .pw-textarea, .pw-switch, .pw-collapsible-trigger):focus-visible {
   --pw-focus-halo: 0 0 0 var(--pw-focus-width) var(--pw-color-focus-contrast);
   outline: var(--pw-focus-width) solid var(--pw-color-focus);
   outline-offset: var(--pw-focus-width);

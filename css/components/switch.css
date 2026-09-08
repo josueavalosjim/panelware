@@ -1,0 +1,99 @@
+/**
+ * SWITCH.
+ *
+ * Not a toggle, and the difference is worth stating because the kit now ships
+ * both. A toggle is a button that stays pressed: it answers "is this mode on",
+ * and its own face carries the state. A switch is a thing you throw, and the
+ * state is WHERE THE THUMB IS. That is why one is a <button aria-pressed> and
+ * the other is a <button role="switch" aria-checked>, and why a switch reads
+ * correctly at a glance from across a settings panel while a pressed button
+ * does not.
+ *
+ * ── Position is the carrier, and it has to be ────────────────────────────
+ * The track tints when it is on, and that tint is the second signal rather
+ * than the first. It has to be, twice over. The house rule is that no state
+ * in this kit is carried by colour alone, and the cyber skin makes that
+ * concrete rather than theoretical: it resolves error, success and warning to
+ * one accent on purpose, so a skin can arrive where the tint says nothing.
+ * The thumb has moved half the track's width either way.
+ *
+ * ── The travel is one expression at any padding ──────────────────────────
+ * The thumb is square and as tall as the track's inside, so its width is the
+ * track height minus twice the padding, and the distance it has to cover is
+ * the track width minus twice the padding minus that. The paddings cancel:
+ * the travel is always width minus height. Which matters because the padding
+ * is --pw-bevel-1, so it is a pixel under the chrome skin and zero under a
+ * flat one, and the same declaration has to be right for both.
+ */
+
+@layer pw.components {
+  .pw-switch {
+    /* A well with something sitting in it, exactly as the checkbox is. */
+    --pw-elev: var(--pw-shadow-sunken);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    width: var(--pw-switch-w);
+    height: var(--pw-switch-h);
+    padding: var(--pw-bevel-1);
+    background-color: var(--pw-color-base-300);
+    border-radius: var(--pw-radius-control);
+    cursor: pointer;
+  }
+
+  /* The ink is 36x20 and a finger is not. Same split as the checkbox, the
+     radio and the slider grip: a centred ::after carries the target, which is
+     also why this control is on the corner-clip opt-out list. */
+  .pw-switch::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--pw-control-h));
+    height: var(--pw-control-h);
+    transform: translate(-50%, -50%);
+  }
+
+  .pw-switch-thumb {
+    --pw-elev: var(--pw-shadow-raised);
+    display: block;
+    height: 100%;
+    aspect-ratio: 1;
+    background-color: var(--pw-color-base-200);
+    border-radius: var(--pw-radius-control);
+    box-shadow: var(--pw-elev);
+    transition: transform var(--pw-duration-fast) var(--pw-ease-state);
+  }
+
+  /* Both spellings, for the reason the toggle gives: the CSS keyed off one
+     and the accessibility tree off the other, with nothing binding them, and
+     this kit also ships as standalone CSS where a consumer wires the
+     attributes by hand. */
+  .pw-switch[data-state="checked"],
+  .pw-switch[aria-checked="true"] {
+    background-color: var(--pw-color-primary);
+  }
+
+  .pw-switch[data-state="checked"] .pw-switch-thumb,
+  .pw-switch[aria-checked="true"] .pw-switch-thumb {
+    transform: translateX(calc(var(--pw-switch-w) - var(--pw-switch-h)));
+  }
+
+  .pw-switch:disabled,
+  .pw-switch[data-disabled] { cursor: default; }
+
+  /* The travel survives, only its duration goes. The rule this kit follows is
+     that a state change is not motion for its own sake: a switch that does not
+     move has not told anyone anything. */
+  @media (prefers-reduced-motion: reduce) {
+    .pw-switch-thumb { transition-duration: 1ms; }
+  }
+
+  @media (forced-colors: active) {
+    /* background-color is forced and box-shadow is stripped, so the tint that
+       says "on" is gone and the thumb's own edge with it. The position still
+       reads, and a border puts the thumb back. */
+    .pw-switch-thumb { border: var(--pw-border) solid ButtonText; }
+  }
+}

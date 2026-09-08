@@ -77,6 +77,11 @@ const GEOM = `(() => {
       select: box('#field .pw-select'),
       input: box('#field .pw-input'),
       textarea: box('#field .pw-textarea'),
+      switchTrack: box('#structure .pw-switch'),
+      switchThumb: box('#structure .pw-switch-thumb'),
+      toolbar: box('#structure .pw-toolbar'),
+      collapsibleTrigger: box('#structure .pw-collapsible-trigger'),
+      separator: box('#structure .pw-separator'),
     },
     /* Not sizes: what the pointer actually lands on. Null rather than absent
        when there is no thumb, because 'thumb' above already reports that and

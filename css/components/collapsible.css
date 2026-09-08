@@ -1,0 +1,65 @@
+/**
+ * COLLAPSIBLE.
+ *
+ * A disclosure row and the thing it discloses. Radix owns the aria-expanded
+ * and aria-controls pair, which is the part that is easy to write and easy to
+ * write wrong: a trigger whose aria-controls points at an id that is not in
+ * the document looks perfectly correct in the markup and tells a screen reader
+ * nothing.
+ *
+ * ── The height is not animated, and that is the house rule rather than a
+ *    shortcut ─────────────────────────────────────────────────────────────
+ * Radix publishes --radix-collapsible-content-height precisely so the open and
+ * close can be tweened, and every kit in this genre uses it. This one does
+ * not, because height is a layout property: animating it reflows the document
+ * on every frame, and the kit's motion rule is transform and opacity only.
+ *
+ * The chevron turns instead. That is a transform, it is the affordance anyone
+ * actually reads, and it costs one composited property rather than a reflow.
+ */
+
+@layer pw.components {
+  .pw-collapsible { display: block; }
+
+  /* Flat, like the menu bar's trigger. It is a row you press, not a control
+     sitting on a surface, and a bevel here would make every disclosure look
+     like a button that had been left out of a toolbar. The focus ring still
+     reaches it: reset.css draws that for the classes it lists, whether or not
+     they are in the elevation slot. */
+  .pw-collapsible-trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--pw-control-gap);
+    width: 100%;
+    min-height: var(--pw-control-h);
+    padding: 0 var(--pw-control-pad-x) 0 0;
+    background: none;
+    color: var(--pw-color-base-content);
+    text-align: left;
+  }
+
+  .pw-collapsible-trigger:disabled,
+  .pw-collapsible-trigger[data-disabled] {
+    color: var(--pw-color-disabled-content);
+    cursor: default;
+  }
+
+  /* The one moving part. Pointing right when shut and down when open is the
+     convention every file tree has used since Explorer, and a quarter turn is
+     exact on a square lattice, which the icon sheet cares about: the chevron
+     is pixel art and 90 degrees resamples nothing. */
+  .pw-collapsible-trigger .pw-icon {
+    transition: transform var(--pw-duration-fast) var(--pw-ease-state);
+  }
+
+  .pw-collapsible-trigger[data-state="open"] .pw-icon,
+  .pw-collapsible-trigger[aria-expanded="true"] .pw-icon {
+    transform: rotate(90deg);
+  }
+
+  .pw-collapsible-content { display: block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-collapsible-trigger .pw-icon { transition-duration: 1ms; }
+  }
+}

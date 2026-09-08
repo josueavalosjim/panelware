@@ -106,10 +106,18 @@ component would be verifying a shape that never ships.
 
 ## What is in it
 
-Button, toggle, toggle group, tabs, dialog, window chrome, menu bar,
-transport, seek, slider, equaliser, list, status badge, metadata, icon,
-segment readout, and the form controls: text field, textarea, checkbox, radio
-group, select, and the label they share.
+Button, toggle, toggle group, tabs, dialog, window chrome, menu bar, toolbar,
+transport, seek, slider, equaliser, list, collapsible, separator, tooltip,
+status badge, metadata, icon, segment readout, and the form controls: text
+field, textarea, switch, checkbox, radio group, select, and the label they
+share.
+
+A **switch** is not a toggle, and the kit ships both on purpose. A toggle is a
+button that stays pressed: it answers "is this mode on", it carries its label
+inside itself, and `aria-pressed` is what a screen reader announces. A switch
+is a thing you throw: the label sits beside it, the state is where the thumb
+is, and `aria-checked` makes it "on" rather than "pressed". If it belongs in a
+toolbar it is a toggle; if it belongs in a settings list it is a switch.
 
 Two themes, `chrome` light and dark, and two densities, `comfortable` (44px
 targets) and `compact` (32px). Skin, theme and density are three independent
