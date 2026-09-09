@@ -3169,7 +3169,7 @@
    "fg": "--pw-color-primary-content",
    "bg": "--pw-color-primary",
    "note": "the primary action's label",
-   "ratio": 8.15,
+   "ratio": 13.19,
    "min": 4.5,
    "pass": true
   },
@@ -3178,7 +3178,7 @@
    "fg": "--pw-color-titlebar-content",
    "bg": "--pw-color-titlebar",
    "note": "a window title against its own bar",
-   "ratio": 11.36,
+   "ratio": 15.85,
    "min": 4.5,
    "pass": true
   },
@@ -3187,7 +3187,7 @@
    "fg": "--pw-color-primary-content",
    "bg": "--pw-gloss-lit-primary",
    "note": "the same label once the gloss has lifted the face",
-   "ratio": 8.15,
+   "ratio": 13.19,
    "min": 4.5,
    "pass": true
   },
@@ -3241,7 +3241,7 @@
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-200",
    "note": "focus ring on the control it rings",
-   "ratio": 6.43,
+   "ratio": 6.62,
    "min": 3,
    "pass": true
   },
@@ -3250,7 +3250,7 @@
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-100",
    "note": "focus ring on the page it offsets onto",
-   "ratio": 7.23,
+   "ratio": 7.45,
    "min": 3,
    "pass": true
   },
@@ -3259,7 +3259,7 @@
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-primary",
    "note": "the ring's other half, on the accent bar where the first half vanishes",
-   "ratio": 8.15,
+   "ratio": 13.19,
    "min": 3,
    "pass": true
   },
@@ -3268,7 +3268,7 @@
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-focus",
    "note": "the two halves against each other, which is what makes the pair work on any ground",
-   "ratio": 8.15,
+   "ratio": 7.45,
    "min": 3,
    "pass": true
   },
@@ -3286,7 +3286,7 @@
    "fg": "--pw-color-range",
    "bg": "--pw-color-base-300",
    "note": "the filled part of a slider",
-   "ratio": 4.88,
+   "ratio": 5.64,
    "min": 3,
    "pass": true
   },
@@ -3295,7 +3295,7 @@
    "fg": "--pw-color-success-content",
    "bg": "--pw-color-success",
    "note": "",
-   "ratio": 8.7,
+   "ratio": 12,
    "min": 4.5,
    "pass": true
   },
@@ -3333,15 +3333,6 @@
    "note": "the same ring on a field inside a panel",
    "ratio": 6.53,
    "min": 3,
-   "pass": true
-  },
-  {
-   "theme": "paper-light",
-   "fg": "--pw-color-base-content",
-   "bg": "--pw-dither-ink",
-   "note": "the second ground a halftone surface has, which a computed background-color cannot see",
-   "ratio": 8.58,
-   "min": 4.5,
    "pass": true
   },
   {
@@ -3385,7 +3376,7 @@
    "fg": "--pw-color-primary-content",
    "bg": "--pw-color-primary",
    "note": "the primary action's label",
-   "ratio": 7.09,
+   "ratio": 12,
    "min": 4.5,
    "pass": true
   },
@@ -3394,7 +3385,7 @@
    "fg": "--pw-color-titlebar-content",
    "bg": "--pw-color-titlebar",
    "note": "a window title against its own bar",
-   "ratio": 10.07,
+   "ratio": 13.19,
    "min": 4.5,
    "pass": true
   },
@@ -3403,7 +3394,7 @@
    "fg": "--pw-color-primary-content",
    "bg": "--pw-gloss-lit-primary",
    "note": "the same label once the gloss has lifted the face",
-   "ratio": 7.09,
+   "ratio": 12,
    "min": 4.5,
    "pass": true
   },
@@ -3457,7 +3448,7 @@
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-200",
    "note": "focus ring on the control it rings",
-   "ratio": 5.9,
+   "ratio": 8.71,
    "min": 3,
    "pass": true
   },
@@ -3466,7 +3457,7 @@
    "fg": "--pw-color-focus",
    "bg": "--pw-color-base-100",
    "note": "focus ring on the page it offsets onto",
-   "ratio": 7.09,
+   "ratio": 10.47,
    "min": 3,
    "pass": true
   },
@@ -3475,7 +3466,7 @@
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-primary",
    "note": "the ring's other half, on the accent bar where the first half vanishes",
-   "ratio": 7.09,
+   "ratio": 12,
    "min": 3,
    "pass": true
   },
@@ -3484,7 +3475,7 @@
    "fg": "--pw-color-focus-contrast",
    "bg": "--pw-color-focus",
    "note": "the two halves against each other, which is what makes the pair work on any ground",
-   "ratio": 7.09,
+   "ratio": 10.47,
    "min": 3,
    "pass": true
   },
@@ -3511,7 +3502,7 @@
    "fg": "--pw-color-success-content",
    "bg": "--pw-color-success",
    "note": "",
-   "ratio": 4.51,
+   "ratio": 8.56,
    "min": 4.5,
    "pass": true
   },
@@ -3549,15 +3540,6 @@
    "note": "the same ring on a field inside a panel",
    "ratio": 8.71,
    "min": 3,
-   "pass": true
-  },
-  {
-   "theme": "paper-dark",
-   "fg": "--pw-color-base-content",
-   "bg": "--pw-dither-ink",
-   "note": "the second ground a halftone surface has, which a computed background-color cannot see",
-   "ratio": 8.04,
-   "min": 4.5,
    "pass": true
   }
  ]

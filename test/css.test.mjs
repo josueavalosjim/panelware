@@ -572,6 +572,88 @@ describe('the published reference data', () => {
     }
   });
 
+  test('a screened surface is legible and calm on every ground it lands on', () => {
+    /* The contrast gate cannot do this one, and its refusal is correct: a
+       translucent screen has nothing definite to measure against, because what
+       it measures against is whatever it was printed on.
+
+       That is also why the screen was wrong twice. It was a fixed colour, and
+       a fixed colour has a different local contrast on every ground: a warm
+       grey dot measured 1.64:1 on paper stock and 3.91:1 on the primary, so
+       the button looked like it had a rash while the panel looked fine.
+       Softening the ink fixed the panel and did nothing for the button.
+
+       So this composites what the browser will paint and checks two things per
+       ground. Legibility, which is the floor the gate would have applied. And
+       CALMNESS, which is the thing nobody could gate and which took two
+       attempts and somebody looking at it: a screen whose dot stands more than
+       a little away from its own ground stops reading as a tone and starts
+       reading as dots. That number is 1.4:1, and it is a proxy rather than a
+       law, but it is a proxy that would have caught both mistakes. */
+    const literals = new Map([...read('css/tokens/primitive.paper.css')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .matchAll(/(--pw-[\w-]+)\s*:\s*(#[0-9a-f]{6})/gi)].map((m) => [m[1], m[2]]));
+    assert.ok(literals.size >= 12, `only ${literals.size} paper shades found`);
+
+    const semantic = read('css/tokens/semantic.paper.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    const skin = read('css/tokens/skin.paper.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    const blockOf = (css, selector) => {
+      const i = css.indexOf(selector);
+      assert.ok(i >= 0, `no ${selector} block`);
+      return css.slice(i, css.indexOf('}', i));
+    };
+    const tokenIn = (block, name) => {
+      const m = block.match(new RegExp(`${name}\\s*:\\s*([^;]+);`));
+      assert.ok(m, `${name} is not declared in that block`);
+      const v = m[1].trim();
+      const ref = v.match(/^var\((--pw-[\w-]+)\)$/);
+      return ref ? literals.get(ref[1]) : v;
+    };
+
+    const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+    const lin = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+    const lum = (h) => { const [r, g, b] = rgb(h).map((v) => lin(v / 255));
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+    const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+      return (x + 0.05) / (y + 0.05); };
+    const screened = (ground, ink) => {
+      const m = ink.match(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/);
+      assert.ok(m, `the screen is ${ink}, which is not a translucent colour. A screen that ` +
+        'names an opaque ink has a different local contrast on every ground it is printed on.');
+      const a = Number(m[4]);
+      const over = rgb(`#${[1, 2, 3].map((i) => Number(m[i]).toString(16).padStart(2, '0')).join('')}`);
+      return `#${rgb(ground).map((v, i) => Math.round(over[i] * a + v * (1 - a))
+        .toString(16).padStart(2, '0')).join('')}`;
+    };
+
+    const looks = [
+      ['light', '[data-skin="paper"],', '[data-skin="paper"],'],
+      ['dark', '[data-skin="paper"][data-theme="dark"]', '[data-skin="paper"][data-theme="dark"]'],
+    ];
+    let checked = 0;
+    for (const [name, semSel, skinSel] of looks) {
+      const sem = blockOf(semantic, semSel);
+      const ink = tokenIn(blockOf(skin, skinSel), '--pw-dither-ink');
+      const text = tokenIn(sem, '--pw-color-base-content');
+      const grounds = [
+        ['base-100', tokenIn(sem, '--pw-color-base-100'), text],
+        ['base-200', tokenIn(sem, '--pw-color-base-200'), text],
+        ['base-300', tokenIn(sem, '--pw-color-base-300'), text],
+        ['primary', tokenIn(sem, '--pw-color-primary'), tokenIn(sem, '--pw-color-primary-content')],
+      ];
+      for (const [where, ground, fg] of grounds) {
+        const dot = screened(ground, ink);
+        checked += 1;
+        assert.ok(ratio(fg, dot) >= 4.5,
+          `${name}: text on the screened ${where} is ${ratio(fg, dot).toFixed(2)}:1`);
+        assert.ok(ratio(dot, ground) <= 1.4,
+          `${name}: the screen on ${where} is ${ratio(dot, ground).toFixed(2)}:1 against its own ` +
+          'ground, which reads as dots rather than as a tone');
+      }
+    }
+    assert.equal(checked, 8, `only ${checked} screened grounds measured`);
+  });
+
   test('the demo offers every look the tokens declare', () => {
     /* The same drift the check scripts had, in the one place a visitor meets
        it. demo/index.html hand-maintains two lists: the skin picker's

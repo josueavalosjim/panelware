@@ -1485,53 +1485,49 @@
  * wins under every skin, which is how the chrome skin spent three releases
  * painting its warning ink in the cyber skin's amber.
  *
- * A duotone is a stock and two inks, and that is what these are. --pw-paper-*
- * is the stock, from the sheet through to the ink it is printed with;
- * --pw-ink-* is the blue and --pw-warm-* the orange, which is reference 7's
- * pairing rather than a preference.
+ * ── Two inks, and the second one is spent carefully ──────────────────────
+ * A duotone is a stock and two inks. The first version of this skin read that
+ * as "orange and blue", which is what reference 7 shows, and it was the wrong
+ * reading: that image is a photograph screened in two colours, not an
+ * interface. A saturated blue primary sitting next to a warm accent had no
+ * relationship to paper and no relationship to the rest of the skin either.
+ *
+ * So the ink is graphite, which is what a two-colour print job is actually
+ * made of: the black plate, and one spot colour bought for the things worth
+ * spending it on. --pw-paper-* runs stock to graphite and is the whole of the
+ * first plate. --pw-warm-* is the spot, and it is reserved for attention:
+ * focus, the range, the selected row, warning, and error. Nothing decorative
+ * gets it.
  *
  * The phosphor ramp is deliberately absent. The readout is a lit display and
  * does not follow the skin, so it is read from the base file, which is also
  * what the cyber skin does.
  *
- * Every value here was chosen against the contrast pairs rather than by eye.
- * Four moved after the first static pass and two more after the runtime one,
- * which measures what is painted rather than what is declared: the list's
- * quiet second line is set at 0.75 opacity, and on this skin's selected row
- * and its dark well it landed at 4.35 and 4.28 against a 4.5 floor. Neither
- * was visible to the static pairs, because neither ground is named in one.
- * --pw-paper-800 exists for the second of those: --pw-paper-700 was already
- * the divider and the dither ink, and one shade doing three jobs is a shade
- * that cannot be tuned for any of them. A halftone skin has a second ground
- * nothing else in the kit has, and that is checked too. See skin.paper.css.
+ * Every value was chosen against the contrast pairs rather than by eye, and
+ * several moved: four after the first static pass, two after the runtime pass
+ * (which measures what is painted, and caught the list's 0.75-opacity second
+ * line at 4.35 and 4.28), and the spot once more when the same line landed at
+ * 4.39 on the selected row.
  */
 
 [data-skin="paper"] {
-  /* The stock. 050 is the sheet, 950 is the ink it is printed with. */
+  /* The first plate: stock through to graphite. */
   --pw-paper-000: #ffffff;
   --pw-paper-050: #f5f1e8;
   --pw-paper-100: #eae4d6;
   --pw-paper-200: #dbd3c1;
-  --pw-paper-250: #bdb39b;
   --pw-paper-300: #a89d82;
   --pw-paper-500: #847b6a;
   --pw-paper-700: #61594a;
-  --pw-paper-750: #4f4839;
   --pw-paper-800: #4a4438;
   --pw-paper-900: #2b271f;
   --pw-paper-950: #1a1712;
 
-  /* First ink: process blue. */
-  --pw-ink-100: #d8e2f2;
-  --pw-ink-300: #7ea6d8;
-  --pw-ink-700: #2b4f88;
-  --pw-ink-800: #1d3a66;
-
-  /* Second ink: warm. It carries the range and the two alarm states, which is
-     the whole of what a second ink is for in a duotone. */
+  /* The spot. Four shades, because a spot colour still needs a tint for its
+     ground and a solid for its ink, in both themes. */
   --pw-warm-100: #f8e2cd;
   --pw-warm-300: #f2bc84;
-  --pw-warm-700: #8a430d;
+  --pw-warm-700: #7d3b09;
   --pw-warm-800: #78400f;
 }
 
@@ -1542,13 +1538,16 @@
  * states only its differences inherits the other one's decisions for
  * everything it forgot, silently and correctly-looking.
  *
- * ── Two inks doing the work of five ──────────────────────────────────────
- * A duotone has a stock and two inks, so success, warning, and error cannot
- * each have a hue of their own. Warning and error share the warm ink and
- * success takes the blue, which leaves the badge's glyph carrying the
- * difference between the two warm states. That is the same argument the cyber
- * skin makes for collapsing all three, one ink further along: shape says
- * which, colour says how loud.
+ ── Where the spot colour goes ──────────────────────────────────────────
+ * A two-colour print job is a black plate and one spot, and the spot is what
+ * you spend on the things that need it. Here that is focus, the range, the
+ * selected row, warning, and error. Everything structural is graphite: the
+ * primary, the title bar, the whole chassis.
+ *
+ * Success is plain ink, deliberately. A thing that went right does not need
+ * the expensive colour. Warning and error share the spot and the badge's own
+ * glyph carries the difference, which is the argument the cyber skin makes
+ * one ink further along: shape says which, colour says how loud.
  *
  * ── Dark ─────────────────────────────────────────────────────────────────
  * A light ground is what reference 7 actually is, and the kit requires both
@@ -1565,20 +1564,22 @@
   --pw-color-base-content: var(--pw-paper-950);
   --pw-color-disabled-content: var(--pw-paper-500);
 
-  --pw-color-primary: var(--pw-ink-700);
-  --pw-color-primary-content: var(--pw-paper-000);
-  --pw-color-titlebar: var(--pw-ink-800);
-  --pw-color-titlebar-content: var(--pw-paper-000);
-  --pw-color-focus: var(--pw-ink-700);
-  --pw-color-focus-contrast: var(--pw-paper-000);
+  --pw-color-primary: var(--pw-paper-900);
+  --pw-color-primary-content: var(--pw-paper-050);
+  --pw-color-titlebar: var(--pw-paper-950);
+  --pw-color-titlebar-content: var(--pw-paper-050);
+  --pw-color-focus: var(--pw-warm-700);
+  --pw-color-focus-contrast: var(--pw-paper-050);
   --pw-color-range: var(--pw-warm-700);
 
   /* The readout does not follow the skin. */
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
 
-  --pw-color-success: var(--pw-ink-100);
-  --pw-color-success-content: var(--pw-ink-800);
+  /* Success is plain ink. In a two-colour job the spot is what you spend on
+     the thing that needs attention, and a thing that went right does not. */
+  --pw-color-success: var(--pw-paper-200);
+  --pw-color-success-content: var(--pw-paper-950);
   --pw-color-warning: var(--pw-warm-100);
   --pw-color-warning-content: var(--pw-warm-800);
   --pw-color-error: var(--pw-warm-100);
@@ -1597,7 +1598,7 @@
   --pw-color-divider: var(--pw-paper-300);
 
   --pw-gloss-lit-base-200: var(--pw-paper-100);
-  --pw-gloss-lit-primary: var(--pw-ink-700);
+  --pw-gloss-lit-primary: var(--pw-paper-900);
   --pw-color-scrim: rgba(26, 23, 18, 0.58);
 }
 
@@ -1611,19 +1612,19 @@
   --pw-color-base-content: var(--pw-paper-050);
   --pw-color-disabled-content: var(--pw-paper-500);
 
-  --pw-color-primary: var(--pw-ink-300);
+  --pw-color-primary: var(--pw-paper-200);
   --pw-color-primary-content: var(--pw-paper-950);
-  --pw-color-titlebar: var(--pw-ink-800);
+  --pw-color-titlebar: var(--pw-paper-900);
   --pw-color-titlebar-content: var(--pw-paper-050);
-  --pw-color-focus: var(--pw-ink-300);
+  --pw-color-focus: var(--pw-warm-300);
   --pw-color-focus-contrast: var(--pw-paper-950);
   --pw-color-range: var(--pw-warm-300);
 
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
 
-  --pw-color-success: var(--pw-ink-800);
-  --pw-color-success-content: var(--pw-ink-300);
+  --pw-color-success: var(--pw-paper-800);
+  --pw-color-success-content: var(--pw-paper-050);
   --pw-color-warning: var(--pw-warm-800);
   --pw-color-warning-content: var(--pw-warm-300);
   --pw-color-error: var(--pw-warm-800);
@@ -1637,7 +1638,7 @@
   --pw-color-divider: var(--pw-paper-700);
 
   --pw-gloss-lit-base-200: var(--pw-paper-900);
-  --pw-gloss-lit-primary: var(--pw-ink-300);
+  --pw-gloss-lit-primary: var(--pw-paper-200);
   --pw-color-scrim: rgba(5, 4, 3, 0.62);
 }
 
@@ -1686,26 +1687,30 @@
   /* Nothing glows. Ink is not a light source. */
   --pw-glow-intensity: 0;
   --pw-glow-radius: 0px;
-  --pw-glow-color: var(--pw-ink-700);
+  --pw-glow-color: var(--pw-paper-900);
 
   --pw-glass-blur: 0px;
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
-  /* The dot. Held to the text floor and declared as a pair, because it is the
-     second ground and the gate cannot see it.
+  /* THE SCREEN IS THE SURFACE, DARKENED. Not an ink of its own.
 
-     Its own shade rather than the divider's, and that is the fix for the first
-     version of this skin. The screen was printed at 38% ink in a colour 2.12:1
-     against its own ground, which is not a halftone, it is polka dots: at
-     reading size the dots stayed dots and the type sat on top of them. A
-     halftone reads as a TONE, and the number that decides whether it does is
-     the local contrast between the dot and the paper, not the average.
+     Two versions of this were wrong before it was right, and both were wrong
+     the same way. The screen was a fixed colour, and a fixed colour printed on
+     every surface has a different local contrast on each one: a warm grey dot
+     measured 1.64:1 on paper stock and 3.91:1 on the primary. The primary
+     looked like it had a rash. Softening the ink fixed the paper and did
+     nothing for the button, because the button was never the same problem.
 
-     1.64:1 now, at 20% ink. The contrast pair was never the problem and never
-     caught it: text on this ink measured 6.6:1 at its worst, comfortably over
-     the floor, while being genuinely hard to read. A gate can tell you a pair
-     is legible and cannot tell you a surface is calm. */
-  --pw-dither-ink: var(--pw-paper-250);
+     Ink does not work that way. A screen is the surface's own colour at
+     partial coverage, so it is a translucent black here and a translucent
+     white in dark, and the dot is whatever it lands on with less light coming
+     back. Local contrast is then constant everywhere: 1.25:1 on the stock,
+     1.14:1 on the primary, 1.15:1 on the spot.
+
+     This is the pattern glow.css already used for the cyber skin's scanlines,
+     which are rgba(0, 0, 0, ...) rather than a named ink. The kit had solved
+     it once and I did not look. */
+  --pw-dither-ink: rgba(0, 0, 0, 0.10);
 
   /* Square, and no chamfer either. A cut corner is the HUD lineage; print is
      a rule and a right angle. */
@@ -1742,8 +1747,8 @@
      screen. */
   --pw-color-vis-bg: var(--pw-paper-100);
   --pw-color-vis-grid: var(--pw-paper-300);
-  --pw-color-vis-low: var(--pw-ink-300);
-  --pw-color-vis-mid: var(--pw-ink-700);
+  --pw-color-vis-low: var(--pw-paper-300);
+  --pw-color-vis-mid: var(--pw-paper-700);
   --pw-color-vis-high: var(--pw-warm-700);
   --pw-color-vis-peak: var(--pw-paper-950);
 }
@@ -1766,12 +1771,14 @@
 
   --pw-glow-intensity: 0;
   --pw-glow-radius: 0px;
-  --pw-glow-color: var(--pw-ink-300);
+  --pw-glow-color: var(--pw-paper-200);
 
   --pw-glass-blur: 0px;
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
-  --pw-dither-ink: var(--pw-paper-750);
+  /* White, not black. A darkening screen on a near-black stock does
+     nothing at all. */
+  --pw-dither-ink: rgba(255, 255, 255, 0.09);
 
   --pw-radius-control: 0;
   --pw-radius-box: 0;
@@ -1797,8 +1804,8 @@
 
   --pw-color-vis-bg: var(--pw-paper-900);
   --pw-color-vis-grid: var(--pw-paper-700);
-  --pw-color-vis-low: var(--pw-ink-300);
-  --pw-color-vis-mid: var(--pw-ink-100);
+  --pw-color-vis-low: var(--pw-paper-500);
+  --pw-color-vis-mid: var(--pw-paper-200);
   --pw-color-vis-high: var(--pw-warm-300);
   --pw-color-vis-peak: var(--pw-paper-050);
 }

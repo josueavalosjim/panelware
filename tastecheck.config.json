@@ -223,16 +223,6 @@
         "bg": "--pw-color-base-200",
         "min": 3.0,
         "label": "the same ring on a field inside a panel"
-      },
-      {
-        "fg": "--pw-color-base-content",
-        "bg": "--pw-dither-ink",
-        "min": 4.5,
-        "label": "the second ground a halftone surface has, which a computed background-color cannot see",
-        "themes": [
-          "paper-light",
-          "paper-dark"
-        ]
       }
     ]
   },

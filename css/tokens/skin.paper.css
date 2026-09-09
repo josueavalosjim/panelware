@@ -43,26 +43,30 @@
   /* Nothing glows. Ink is not a light source. */
   --pw-glow-intensity: 0;
   --pw-glow-radius: 0px;
-  --pw-glow-color: var(--pw-ink-700);
+  --pw-glow-color: var(--pw-paper-900);
 
   --pw-glass-blur: 0px;
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
-  /* The dot. Held to the text floor and declared as a pair, because it is the
-     second ground and the gate cannot see it.
+  /* THE SCREEN IS THE SURFACE, DARKENED. Not an ink of its own.
 
-     Its own shade rather than the divider's, and that is the fix for the first
-     version of this skin. The screen was printed at 38% ink in a colour 2.12:1
-     against its own ground, which is not a halftone, it is polka dots: at
-     reading size the dots stayed dots and the type sat on top of them. A
-     halftone reads as a TONE, and the number that decides whether it does is
-     the local contrast between the dot and the paper, not the average.
+     Two versions of this were wrong before it was right, and both were wrong
+     the same way. The screen was a fixed colour, and a fixed colour printed on
+     every surface has a different local contrast on each one: a warm grey dot
+     measured 1.64:1 on paper stock and 3.91:1 on the primary. The primary
+     looked like it had a rash. Softening the ink fixed the paper and did
+     nothing for the button, because the button was never the same problem.
 
-     1.64:1 now, at 20% ink. The contrast pair was never the problem and never
-     caught it: text on this ink measured 6.6:1 at its worst, comfortably over
-     the floor, while being genuinely hard to read. A gate can tell you a pair
-     is legible and cannot tell you a surface is calm. */
-  --pw-dither-ink: var(--pw-paper-250);
+     Ink does not work that way. A screen is the surface's own colour at
+     partial coverage, so it is a translucent black here and a translucent
+     white in dark, and the dot is whatever it lands on with less light coming
+     back. Local contrast is then constant everywhere: 1.25:1 on the stock,
+     1.14:1 on the primary, 1.15:1 on the spot.
+
+     This is the pattern glow.css already used for the cyber skin's scanlines,
+     which are rgba(0, 0, 0, ...) rather than a named ink. The kit had solved
+     it once and I did not look. */
+  --pw-dither-ink: rgba(0, 0, 0, 0.10);
 
   /* Square, and no chamfer either. A cut corner is the HUD lineage; print is
      a rule and a right angle. */
@@ -99,8 +103,8 @@
      screen. */
   --pw-color-vis-bg: var(--pw-paper-100);
   --pw-color-vis-grid: var(--pw-paper-300);
-  --pw-color-vis-low: var(--pw-ink-300);
-  --pw-color-vis-mid: var(--pw-ink-700);
+  --pw-color-vis-low: var(--pw-paper-300);
+  --pw-color-vis-mid: var(--pw-paper-700);
   --pw-color-vis-high: var(--pw-warm-700);
   --pw-color-vis-peak: var(--pw-paper-950);
 }
@@ -123,12 +127,14 @@
 
   --pw-glow-intensity: 0;
   --pw-glow-radius: 0px;
-  --pw-glow-color: var(--pw-ink-300);
+  --pw-glow-color: var(--pw-paper-200);
 
   --pw-glass-blur: 0px;
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
-  --pw-dither-ink: var(--pw-paper-750);
+  /* White, not black. A darkening screen on a near-black stock does
+     nothing at all. */
+  --pw-dither-ink: rgba(255, 255, 255, 0.09);
 
   --pw-radius-control: 0;
   --pw-radius-box: 0;
@@ -154,8 +160,8 @@
 
   --pw-color-vis-bg: var(--pw-paper-900);
   --pw-color-vis-grid: var(--pw-paper-700);
-  --pw-color-vis-low: var(--pw-ink-300);
-  --pw-color-vis-mid: var(--pw-ink-100);
+  --pw-color-vis-low: var(--pw-paper-500);
+  --pw-color-vis-mid: var(--pw-paper-200);
   --pw-color-vis-high: var(--pw-warm-300);
   --pw-color-vis-peak: var(--pw-paper-050);
 }

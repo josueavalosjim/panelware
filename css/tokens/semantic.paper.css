@@ -5,13 +5,16 @@
  * states only its differences inherits the other one's decisions for
  * everything it forgot, silently and correctly-looking.
  *
- * ── Two inks doing the work of five ──────────────────────────────────────
- * A duotone has a stock and two inks, so success, warning, and error cannot
- * each have a hue of their own. Warning and error share the warm ink and
- * success takes the blue, which leaves the badge's glyph carrying the
- * difference between the two warm states. That is the same argument the cyber
- * skin makes for collapsing all three, one ink further along: shape says
- * which, colour says how loud.
+ ── Where the spot colour goes ──────────────────────────────────────────
+ * A two-colour print job is a black plate and one spot, and the spot is what
+ * you spend on the things that need it. Here that is focus, the range, the
+ * selected row, warning, and error. Everything structural is graphite: the
+ * primary, the title bar, the whole chassis.
+ *
+ * Success is plain ink, deliberately. A thing that went right does not need
+ * the expensive colour. Warning and error share the spot and the badge's own
+ * glyph carries the difference, which is the argument the cyber skin makes
+ * one ink further along: shape says which, colour says how loud.
  *
  * ── Dark ─────────────────────────────────────────────────────────────────
  * A light ground is what reference 7 actually is, and the kit requires both
@@ -28,20 +31,22 @@
   --pw-color-base-content: var(--pw-paper-950);
   --pw-color-disabled-content: var(--pw-paper-500);
 
-  --pw-color-primary: var(--pw-ink-700);
-  --pw-color-primary-content: var(--pw-paper-000);
-  --pw-color-titlebar: var(--pw-ink-800);
-  --pw-color-titlebar-content: var(--pw-paper-000);
-  --pw-color-focus: var(--pw-ink-700);
-  --pw-color-focus-contrast: var(--pw-paper-000);
+  --pw-color-primary: var(--pw-paper-900);
+  --pw-color-primary-content: var(--pw-paper-050);
+  --pw-color-titlebar: var(--pw-paper-950);
+  --pw-color-titlebar-content: var(--pw-paper-050);
+  --pw-color-focus: var(--pw-warm-700);
+  --pw-color-focus-contrast: var(--pw-paper-050);
   --pw-color-range: var(--pw-warm-700);
 
   /* The readout does not follow the skin. */
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
 
-  --pw-color-success: var(--pw-ink-100);
-  --pw-color-success-content: var(--pw-ink-800);
+  /* Success is plain ink. In a two-colour job the spot is what you spend on
+     the thing that needs attention, and a thing that went right does not. */
+  --pw-color-success: var(--pw-paper-200);
+  --pw-color-success-content: var(--pw-paper-950);
   --pw-color-warning: var(--pw-warm-100);
   --pw-color-warning-content: var(--pw-warm-800);
   --pw-color-error: var(--pw-warm-100);
@@ -60,7 +65,7 @@
   --pw-color-divider: var(--pw-paper-300);
 
   --pw-gloss-lit-base-200: var(--pw-paper-100);
-  --pw-gloss-lit-primary: var(--pw-ink-700);
+  --pw-gloss-lit-primary: var(--pw-paper-900);
   --pw-color-scrim: rgba(26, 23, 18, 0.58);
 }
 
@@ -74,19 +79,19 @@
   --pw-color-base-content: var(--pw-paper-050);
   --pw-color-disabled-content: var(--pw-paper-500);
 
-  --pw-color-primary: var(--pw-ink-300);
+  --pw-color-primary: var(--pw-paper-200);
   --pw-color-primary-content: var(--pw-paper-950);
-  --pw-color-titlebar: var(--pw-ink-800);
+  --pw-color-titlebar: var(--pw-paper-900);
   --pw-color-titlebar-content: var(--pw-paper-050);
-  --pw-color-focus: var(--pw-ink-300);
+  --pw-color-focus: var(--pw-warm-300);
   --pw-color-focus-contrast: var(--pw-paper-950);
   --pw-color-range: var(--pw-warm-300);
 
   --pw-color-lcd: var(--pw-phos-950);
   --pw-color-lcd-content: var(--pw-phos-300);
 
-  --pw-color-success: var(--pw-ink-800);
-  --pw-color-success-content: var(--pw-ink-300);
+  --pw-color-success: var(--pw-paper-800);
+  --pw-color-success-content: var(--pw-paper-050);
   --pw-color-warning: var(--pw-warm-800);
   --pw-color-warning-content: var(--pw-warm-300);
   --pw-color-error: var(--pw-warm-800);
@@ -100,6 +105,6 @@
   --pw-color-divider: var(--pw-paper-700);
 
   --pw-gloss-lit-base-200: var(--pw-paper-900);
-  --pw-gloss-lit-primary: var(--pw-ink-300);
+  --pw-gloss-lit-primary: var(--pw-paper-200);
   --pw-color-scrim: rgba(5, 4, 3, 0.62);
 }
