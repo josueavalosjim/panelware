@@ -16,7 +16,9 @@
       "css/tokens/presets/deck.css",
       "css/tokens/primitive.paper.css",
       "css/tokens/semantic.paper.css",
-      "css/tokens/skin.paper.css"
+      "css/tokens/skin.paper.css",
+      "css/tokens/presets/redline.css",
+      "css/tokens/presets/newsprint.css"
     ],
     "themes": [
       {
@@ -85,6 +87,40 @@
           ":root",
           "[data-skin=\"paper\"]",
           "[data-skin=\"paper\"][data-theme=\"dark\"]"
+        ]
+      },
+      {
+        "name": "cyber-redline-light",
+        "scopes": [
+          ":root",
+          "[data-skin=\"cyber\"]",
+          "[data-skin=\"cyber\"][data-preset=\"redline\"]"
+        ]
+      },
+      {
+        "name": "cyber-redline-dark",
+        "scopes": [
+          ":root",
+          "[data-skin=\"cyber\"]",
+          "[data-skin=\"cyber\"][data-preset=\"redline\"]",
+          "[data-skin=\"cyber\"][data-preset=\"redline\"][data-theme=\"dark\"]"
+        ]
+      },
+      {
+        "name": "paper-newsprint-light",
+        "scopes": [
+          ":root",
+          "[data-skin=\"paper\"]",
+          "[data-skin=\"paper\"][data-preset=\"newsprint\"]"
+        ]
+      },
+      {
+        "name": "paper-newsprint-dark",
+        "scopes": [
+          ":root",
+          "[data-skin=\"paper\"]",
+          "[data-skin=\"paper\"][data-preset=\"newsprint\"]",
+          "[data-skin=\"paper\"][data-preset=\"newsprint\"][data-theme=\"dark\"]"
         ]
       }
     ],
@@ -249,7 +285,9 @@
       "css/tokens/primitive.paper.css",
       "css/tokens/semantic.paper.css",
       "css/tokens/skin.paper.css",
-      "css/treatment/halftone.css"
+      "css/treatment/halftone.css",
+      "css/tokens/presets/redline.css",
+      "css/tokens/presets/newsprint.css"
     ],
     "allowPrefixes": [
       "--radix-"

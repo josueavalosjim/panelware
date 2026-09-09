@@ -24,6 +24,11 @@
    token being overridden is invisible to a check that only asks whether every
    token has a reader.
 
+   The amber ramp used to be here and was read by nothing: four shades that
+   existed only to collide with the chrome skin's four, which is how the chrome
+   skin spent three releases painting its warning ink in this file's amber.
+   Deleted rather than scoped, because a ramp nobody reads is not a ramp.
+
    The phosphor ramp is deliberately not redeclared here. The readout is a lit
    display and does not follow the skin, so cyber reads --pw-phos-* from the
    base file by inheritance, which is the same reason display.css exists. */
@@ -45,12 +50,11 @@
   --pw-cyan-800: #0a4f63;    /* light primary, 7.35:1 on the light page */
   --pw-cyan-900: #062029;    /* dark status chip, the collapsed ground */
 
-  /* Amber survives the collapse and mint and rose did not, which looks
-     arbitrary and is not: the status roles all resolve to cyan now, and what
-     is left of this ramp is the readout, which is amber because a segment
-     display is. Two greens and two reds went with the roles that used them. */
-  --pw-amber-100: #f8ecc9;
-  --pw-amber-300: #f5c542;
-  --pw-amber-800: #6b4a05;
-  --pw-amber-900: #2e2408;
+  /* The amber ramp stood here with a comment explaining that it survived the
+     collapse to one accent because the readout needed it, "which is amber
+     because a segment display is". The readout is --pw-phos-300 and always
+     has been, in this palette and in every other, because a lit display does
+     not follow the skin. So the reason was false when it was written, nothing
+     ever read the ramp, and a plausible sentence kept four dead shades alive
+     for three releases and collided them with the chrome skin's on the way. */
 }

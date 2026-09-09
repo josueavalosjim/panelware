@@ -1,0 +1,136 @@
+/**
+ * PRESET — newsprint, for the paper skin.
+ *
+ * The paper skin is a two-colour job: a graphite plate and one spot bought for
+ * the things worth spending it on. This is the one-colour job, which is what
+ * most printing actually was: cheap cool stock, one plate, and a coarser screen
+ * because the paper cannot hold a fine one.
+ *
+ * That is the whole idea and every value follows from it.
+ *
+ * ── There is no spot ─────────────────────────────────────────────────────
+ * So warning and error are graphite like everything else, and the badge's own
+ * glyph is the only thing left saying which. The kit has made that trade twice
+ * before, in the cyber skin and again in paper's success role, and it is the
+ * same argument each time: shape survives a palette losing a hue, and colour
+ * does not.
+ *
+ * It is also the honest version of a rule this kit states everywhere and only
+ * really tests here. A skin with three status hues can claim it never leans on
+ * colour alone without ever being asked to prove it. A palette with one ink has
+ * no way to cheat.
+ *
+ * ── The screen is coarser ────────────────────────────────────────────────
+ * --pw-dither-ink is a skin knob rather than part of the treatment, so a preset
+ * may move it and this one does: newsprint takes more ink and holds less
+ * detail. What it cannot move is --pw-fill-raised and --pw-fill-sunken, which
+ * are the treatment, which is what keeps this a preset. The dot gets heavier;
+ * the process stays halftone.
+ */
+
+[data-skin="paper"][data-preset="newsprint"],
+[data-skin="paper"][data-preset="newsprint"][data-theme="light"] {
+  /* Cool and cheap, against the warm stock of the skin it sits in. */
+  --pw-news-000: #ffffff;
+  --pw-news-050: #eeeeec;
+  --pw-news-100: #e2e2df;
+  --pw-news-200: #d0d0cc;
+  --pw-news-300: #9d9d97;
+  --pw-news-500: #787872;
+  --pw-news-700: #55554f;
+  --pw-news-800: #3d3d38;
+  --pw-news-900: #242422;
+  --pw-news-950: #141413;
+
+  --pw-color-base-100: var(--pw-news-050);
+  --pw-color-base-200: var(--pw-news-100);
+  --pw-color-base-300: var(--pw-news-200);
+  --pw-color-base-content: var(--pw-news-950);
+  --pw-color-disabled-content: var(--pw-news-500);
+
+  --pw-color-primary: var(--pw-news-900);
+  --pw-color-primary-content: var(--pw-news-050);
+  --pw-color-titlebar: var(--pw-news-950);
+  --pw-color-titlebar-content: var(--pw-news-050);
+  --pw-color-focus: var(--pw-news-900);
+  --pw-color-focus-contrast: var(--pw-news-050);
+  --pw-color-range: var(--pw-news-700);
+
+  /* One plate. The glyph carries the difference. */
+  --pw-color-success: var(--pw-news-200);
+  --pw-color-success-content: var(--pw-news-950);
+  --pw-color-warning: var(--pw-news-200);
+  --pw-color-warning-content: var(--pw-news-950);
+  --pw-color-error: var(--pw-news-200);
+  --pw-color-error-content: var(--pw-news-950);
+
+  --pw-bevel-light: var(--pw-news-000);
+  --pw-bevel-face: var(--pw-news-100);
+  --pw-bevel-shade: var(--pw-news-300);
+  --pw-bevel-frame: var(--pw-news-500);
+  --pw-bevel-boundary: var(--pw-news-500);
+  --pw-color-divider: var(--pw-news-300);
+
+  --pw-gloss-lit-base-200: var(--pw-news-100);
+  --pw-gloss-lit-primary: var(--pw-news-900);
+  --pw-color-scrim: rgba(20, 20, 19, 0.58);
+
+  --pw-selected-bg: var(--pw-news-900);
+  --pw-selected-content: var(--pw-news-050);
+
+  /* Heavier than the skin's 0.10. Cheap stock takes more ink and spreads it. */
+  --pw-dither-ink: rgba(0, 0, 0, 0.14);
+
+  --pw-color-vis-bg: var(--pw-news-100);
+  --pw-color-vis-grid: var(--pw-news-300);
+  --pw-color-vis-low: var(--pw-news-300);
+  --pw-color-vis-mid: var(--pw-news-700);
+  --pw-color-vis-high: var(--pw-news-950);
+  --pw-color-vis-peak: var(--pw-news-950);
+}
+
+[data-skin="paper"][data-preset="newsprint"][data-theme="dark"] {
+  --pw-color-base-100: var(--pw-news-950);
+  --pw-color-base-200: var(--pw-news-900);
+  --pw-color-base-300: var(--pw-news-800);
+  --pw-color-base-content: var(--pw-news-050);
+  --pw-color-disabled-content: var(--pw-news-500);
+
+  --pw-color-primary: var(--pw-news-200);
+  --pw-color-primary-content: var(--pw-news-950);
+  --pw-color-titlebar: var(--pw-news-900);
+  --pw-color-titlebar-content: var(--pw-news-050);
+  --pw-color-focus: var(--pw-news-200);
+  --pw-color-focus-contrast: var(--pw-news-950);
+  --pw-color-range: var(--pw-news-300);
+
+  --pw-color-success: var(--pw-news-800);
+  --pw-color-success-content: var(--pw-news-050);
+  --pw-color-warning: var(--pw-news-800);
+  --pw-color-warning-content: var(--pw-news-050);
+  --pw-color-error: var(--pw-news-800);
+  --pw-color-error-content: var(--pw-news-050);
+
+  --pw-bevel-light: var(--pw-news-700);
+  --pw-bevel-face: var(--pw-news-900);
+  --pw-bevel-shade: var(--pw-news-950);
+  --pw-bevel-frame: var(--pw-news-500);
+  --pw-bevel-boundary: var(--pw-news-500);
+  --pw-color-divider: var(--pw-news-700);
+
+  --pw-gloss-lit-base-200: var(--pw-news-900);
+  --pw-gloss-lit-primary: var(--pw-news-200);
+  --pw-color-scrim: rgba(6, 6, 6, 0.62);
+
+  --pw-selected-bg: var(--pw-news-200);
+  --pw-selected-content: var(--pw-news-950);
+
+  --pw-dither-ink: rgba(255, 255, 255, 0.12);
+
+  --pw-color-vis-bg: var(--pw-news-900);
+  --pw-color-vis-grid: var(--pw-news-700);
+  --pw-color-vis-low: var(--pw-news-500);
+  --pw-color-vis-mid: var(--pw-news-200);
+  --pw-color-vis-high: var(--pw-news-050);
+  --pw-color-vis-peak: var(--pw-news-050);
+}

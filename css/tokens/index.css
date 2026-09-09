@@ -37,3 +37,5 @@
    imported after every skin so a preset's themed blocks are decided on
    specificity rather than on this list's order. */
 @import "./presets/deck.css";
+@import "./presets/redline.css";
+@import "./presets/newsprint.css";

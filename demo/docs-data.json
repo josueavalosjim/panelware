@@ -3541,6 +3541,834 @@
    "ratio": 8.71,
    "min": 3,
    "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 16.87,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 13.3,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 9.37,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 13.3,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 9.81,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 12.97,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 9.81,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 4.9,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 6.21,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 4.9,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-100",
+   "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
+   "ratio": 3.86,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-200",
+   "note": "the same line drawn inside a panel",
+   "ratio": 3.04,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 6.45,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 8.18,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 9.81,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 9.81,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 4.54,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 7.58,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 7.58,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 7.58,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 8.18,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 6.45,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 16.87,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 16.15,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 15.45,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 16.15,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 6.75,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 5.19,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 6.75,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 5.76,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 6.02,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 5.76,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-100",
+   "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
+   "ratio": 2.48,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-200",
+   "note": "the same line drawn inside a panel",
+   "ratio": 2.38,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 6.47,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 6.75,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 6.75,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 6.75,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 6.19,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 5.19,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 5.19,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 5.19,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 6.75,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "cyber-redline-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 6.47,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 15.87,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 14.2,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 11.92,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 14.2,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 13.39,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 15.87,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 13.39,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 3.42,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 3.82,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 3.42,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-100",
+   "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
+   "ratio": 2.35,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-200",
+   "note": "the same line drawn inside a panel",
+   "ratio": 2.1,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 11.98,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 13.39,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 13.39,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 13.39,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 4.85,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 11.92,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 11.92,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 11.92,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 15.87,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-light",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 14.2,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-100",
+   "note": "text on the page",
+   "ratio": 15.87,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-200",
+   "note": "a control label",
+   "ratio": 13.39,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-color-base-300",
+   "note": "text in a sunken well",
+   "ratio": 9.4,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-base-content",
+   "bg": "--pw-gloss-lit-base-200",
+   "note": "a label over a glossed face",
+   "ratio": 13.39,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-color-primary",
+   "note": "the primary action's label",
+   "ratio": 11.92,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-titlebar-content",
+   "bg": "--pw-color-titlebar",
+   "note": "a window title against its own bar",
+   "ratio": 13.39,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-primary-content",
+   "bg": "--pw-gloss-lit-primary",
+   "note": "the same label once the gloss has lifted the face",
+   "ratio": 11.92,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-disabled-content",
+   "bg": "--pw-color-base-200",
+   "note": "disabled is quiet, not absent",
+   "ratio": 3.5,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-100",
+   "note": "the control boundary, against the page",
+   "ratio": 4.15,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-bevel-boundary",
+   "bg": "--pw-color-base-200",
+   "note": "the control boundary, against a panel",
+   "ratio": 3.5,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-100",
+   "note": "a grouping line, not a control edge. 2:1 is this tier's contract, not a WCAG floor",
+   "ratio": 2.46,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-divider",
+   "bg": "--pw-color-base-200",
+   "note": "the same line drawn inside a panel",
+   "ratio": 2.07,
+   "min": 2,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-200",
+   "note": "focus ring on the control it rings",
+   "ratio": 10.05,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-focus",
+   "bg": "--pw-color-base-100",
+   "note": "focus ring on the page it offsets onto",
+   "ratio": 11.92,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-primary",
+   "note": "the ring's other half, on the accent bar where the first half vanishes",
+   "ratio": 11.92,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-focus-contrast",
+   "bg": "--pw-color-focus",
+   "note": "the two halves against each other, which is what makes the pair work on any ground",
+   "ratio": 11.92,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-lcd-content",
+   "bg": "--pw-color-lcd",
+   "note": "the readout",
+   "ratio": 11.26,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-range",
+   "bg": "--pw-color-base-300",
+   "note": "the filled part of a slider",
+   "ratio": 4.01,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-success-content",
+   "bg": "--pw-color-success",
+   "note": "",
+   "ratio": 9.4,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-warning-content",
+   "bg": "--pw-color-warning",
+   "note": "",
+   "ratio": 9.4,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-error",
+   "note": "",
+   "ratio": 9.4,
+   "min": 4.5,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-100",
+   "note": "an invalid field's ring, against the field it rings",
+   "ratio": 15.87,
+   "min": 3,
+   "pass": true
+  },
+  {
+   "theme": "paper-newsprint-dark",
+   "fg": "--pw-color-error-content",
+   "bg": "--pw-color-base-200",
+   "note": "the same ring on a field inside a panel",
+   "ratio": 13.39,
+   "min": 3,
+   "pass": true
   }
  ]
 }

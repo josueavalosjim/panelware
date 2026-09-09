@@ -120,10 +120,21 @@ is a thing you throw: the label sits beside it, the state is where the thumb
 is, and `aria-checked` makes it "on" rather than "pressed". If it belongs in a
 toolbar it is a toggle; if it belongs in a settings list it is a switch.
 
-Three skins, each in light and dark, plus a preset and two densities.
-`chrome` is the bevelled chassis, `cyber` is a squared terminal in one accent,
-and `paper` is a duotone printed at two screen densities. `deck` is a preset
-inside chrome. Every one of them is the same markup and the same components.
+Three skins, each with a preset, each in light and dark, at two densities.
+Twelve looks on one set of components and one set of markup.
+
+| Skin | | Preset | |
+| --- | --- | --- | --- |
+| `chrome` | the bevelled chassis | `deck` | smaller, plainer, no gloss |
+| `cyber` | a squared terminal in one accent | `redline` | the same, as signage |
+| `paper` | graphite and one spot, screened | `newsprint` | one plate, coarser |
+
+**A note on `cyber`.** It is documented in places as "accessible cyberpunk" and
+it is not one: it is a terminal, which is what its own reference set says in its
+first line. That restraint is the right default and is what makes it usable for
+hours, so it stays. `redline` is where the name gets cashed instead, in
+near-black and one hot ink with the raster and the glow pushed. If you came for
+cyberpunk, that is the one.
 
 They differ in more than palette, deliberately: type, padding, gaps, timing,
 corner geometry, and what carries elevation. A skin that moves all of its
@@ -202,7 +213,7 @@ A skin is a treatment. A preset is a palette inside one.
 of them means something, and each is an attribute you can set on any element
 rather than only on the root. `data-preset` is not orthogonal, and it is
 deliberately not a fourth axis. The deck preset is a palette for the chrome skin; asking
-for it under the cyberpunk skin is not a combination that exists.
+for it under the cyber skin is not a combination that exists.
 
 So a preset is scoped under its skin:
 

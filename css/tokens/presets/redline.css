@@ -1,0 +1,175 @@
+/**
+ * PRESET — redline, for the cyber skin.
+ *
+ * ── Why this exists ──────────────────────────────────────────────────────
+ * The cyber skin is documented as "accessible cyberpunk" and it is not one. It
+ * is a terminal: slate and cyan, one restrained accent, a hairline edge, a
+ * quiet raster. Its own reference note says so in the first line, "terminal,
+ * HUD, and BBS rather than bevelled plastic", and every decision in it follows
+ * that and not the word on the tin.
+ *
+ * That restraint is the right default and it is what makes the skin usable, so
+ * it stays. This is where the name gets cashed instead: near-black stock, one
+ * hot ink, the raster pushed, and the glow turned up. The base skin is the
+ * instrument and this is the signage.
+ *
+ * ── What a preset may and may not do ─────────────────────────────────────
+ * Anything a skin may do except the treatment. So the palette moves, the
+ * raster moves, the glow moves, and the rhythm tightens. What does not move is
+ * what fills the elevation slot: the hairline and the inner shadow are still
+ * glow.css's, which is what keeps this a preset rather than a fourth skin. A
+ * test enforces exactly that.
+ *
+ * ── One ink, harder ──────────────────────────────────────────────────────
+ * The cyber skin already collapses success, warning, and error into one accent
+ * and lets the badge's glyph say which. This keeps that and changes the accent
+ * to a red that carries the whole skin, which is more defensible here than in
+ * most palettes: a signage red on near-black IS the reference, and a second
+ * hue would dilute exactly the thing the preset is for.
+ *
+ * Every value is measured against the same pairs every other look is, in both
+ * themes. The dark theme needed its own boundary and divider shades, because
+ * one mid cannot serve a #f2e8ea ground and a #0a0507 one.
+ */
+
+[data-skin="cyber"][data-preset="redline"],
+[data-skin="cyber"][data-preset="redline"][data-theme="light"] {
+  /* The stock, warmed toward the ink rather than neutral, because a red
+     signage palette on a cold grey reads as an error state. */
+  --pw-neon-000: #ffffff;
+  --pw-neon-050: #f2e8ea;
+  --pw-neon-100: #e2ccd2;
+  --pw-neon-200: #c9a8b1;
+  --pw-neon-300: #8d6c76;
+  --pw-neon-400: #a8828d;
+  --pw-neon-500: #6b4d55;
+  --pw-neon-600: #70424d;
+  --pw-neon-700: #4f2c34;
+  --pw-neon-850: #1c1013;
+  --pw-neon-900: #140b0e;
+  --pw-neon-950: #0a0507;
+
+  --pw-hot-100: #ffd9de;
+  --pw-hot-300: #ff5c6e;
+  --pw-hot-800: #8a0a1c;
+  --pw-hot-900: #4d0611;
+
+  --pw-color-base-100: var(--pw-neon-050);
+  --pw-color-base-200: var(--pw-neon-100);
+  --pw-color-base-300: var(--pw-neon-200);
+  --pw-color-base-content: var(--pw-neon-950);
+  --pw-color-disabled-content: var(--pw-neon-500);
+
+  --pw-color-primary: var(--pw-hot-800);
+  --pw-color-primary-content: var(--pw-neon-000);
+  --pw-color-titlebar: var(--pw-hot-900);
+  --pw-color-titlebar-content: var(--pw-neon-050);
+  --pw-color-focus: var(--pw-hot-800);
+  --pw-color-focus-contrast: var(--pw-neon-000);
+  --pw-color-range: var(--pw-hot-800);
+
+  --pw-color-success: var(--pw-hot-100);
+  --pw-color-success-content: var(--pw-hot-800);
+  --pw-color-warning: var(--pw-hot-100);
+  --pw-color-warning-content: var(--pw-hot-800);
+  --pw-color-error: var(--pw-hot-100);
+  --pw-color-error-content: var(--pw-hot-800);
+
+  --pw-bevel-light: var(--pw-neon-000);
+  --pw-bevel-face: var(--pw-neon-100);
+  --pw-bevel-shade: var(--pw-neon-300);
+  --pw-bevel-frame: var(--pw-neon-500);
+  --pw-bevel-boundary: var(--pw-neon-500);
+  --pw-color-divider: var(--pw-neon-300);
+
+  --pw-gloss-lit-base-200: var(--pw-neon-100);
+  --pw-gloss-lit-primary: var(--pw-hot-800);
+  --pw-color-scrim: rgba(10, 5, 7, 0.7);
+
+  --pw-selected-bg: var(--pw-hot-800);
+  --pw-selected-content: var(--pw-neon-000);
+
+  /* The raster, pushed. The base skin runs its scanlines at 0.055 because a
+     terminal is a surface you read for hours; signage is not. */
+  --pw-texture-opacity: 0.12;
+
+  /* And the glow, which the base skin spends on the readout alone. Here it is
+     the point. */
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 12px;
+  --pw-glow-color: var(--pw-hot-300);
+
+  /* Tighter than the skin it sits in, which is already tighter than chrome. */
+  --pw-control-pad-x: var(--pw-space-xs);
+  --pw-control-gap: var(--pw-space-2xs);
+  --pw-tracking-ui: 0.08em;
+
+  --pw-color-vis-bg: var(--pw-neon-950);
+  --pw-color-vis-grid: var(--pw-neon-850);
+  --pw-color-vis-low: var(--pw-hot-900);
+  --pw-color-vis-mid: var(--pw-hot-800);
+  --pw-color-vis-high: var(--pw-hot-300);
+  --pw-color-vis-peak: var(--pw-neon-050);
+}
+
+/* (0,3,0), so it beats the block above and the density file both. */
+[data-skin="cyber"][data-preset="redline"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-3xs);
+  --pw-control-gap: var(--pw-space-3xs);
+}
+
+[data-skin="cyber"][data-preset="redline"][data-theme="dark"] {
+  --pw-color-base-100: var(--pw-neon-950);
+  --pw-color-base-200: var(--pw-neon-900);
+  --pw-color-base-300: var(--pw-neon-850);
+  --pw-color-base-content: var(--pw-neon-050);
+  /* Its own mid, because one shade cannot sit 3:1 from a #f2e8ea ground and a
+     #0a0507 one. */
+  --pw-color-disabled-content: var(--pw-neon-400);
+
+  --pw-color-primary: var(--pw-hot-300);
+  --pw-color-primary-content: var(--pw-neon-950);
+  --pw-color-titlebar: var(--pw-hot-900);
+  --pw-color-titlebar-content: var(--pw-hot-300);
+  --pw-color-focus: var(--pw-hot-300);
+  --pw-color-focus-contrast: var(--pw-neon-950);
+  --pw-color-range: var(--pw-hot-300);
+
+  --pw-color-success: var(--pw-hot-900);
+  --pw-color-success-content: var(--pw-hot-300);
+  --pw-color-warning: var(--pw-hot-900);
+  --pw-color-warning-content: var(--pw-hot-300);
+  --pw-color-error: var(--pw-hot-900);
+  --pw-color-error-content: var(--pw-hot-300);
+
+  --pw-bevel-light: var(--pw-neon-700);
+  --pw-bevel-face: var(--pw-neon-900);
+  --pw-bevel-shade: var(--pw-neon-950);
+  --pw-bevel-frame: var(--pw-neon-400);
+  --pw-bevel-boundary: var(--pw-neon-400);
+  --pw-color-divider: var(--pw-neon-600);
+
+  --pw-gloss-lit-base-200: var(--pw-neon-900);
+  --pw-gloss-lit-primary: var(--pw-hot-300);
+  --pw-color-scrim: rgba(4, 2, 3, 0.76);
+
+  --pw-selected-bg: var(--pw-hot-800);
+  --pw-selected-content: var(--pw-neon-050);
+
+  --pw-texture-opacity: 0.16;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 12px;
+  --pw-glow-color: var(--pw-hot-300);
+
+  --pw-control-pad-x: var(--pw-space-xs);
+  --pw-control-gap: var(--pw-space-2xs);
+  --pw-tracking-ui: 0.08em;
+
+  --pw-color-vis-bg: var(--pw-neon-950);
+  --pw-color-vis-grid: var(--pw-neon-850);
+  --pw-color-vis-low: var(--pw-hot-900);
+  --pw-color-vis-mid: var(--pw-hot-800);
+  --pw-color-vis-high: var(--pw-hot-300);
+  --pw-color-vis-peak: var(--pw-neon-050);
+}

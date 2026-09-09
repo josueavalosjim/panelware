@@ -168,7 +168,7 @@
       /* Presets are nested under a skin, so the list is per skin and the
          picker resets when the skin changes rather than leaving a value
          selected that no longer means anything. */
-      const PRESETS = { chrome: ['default', 'deck'], cyber: ['default'], paper: ['default'] };
+      const PRESETS = { chrome: ['default', 'deck'], cyber: ['default', 'redline'], paper: ['default', 'newsprint'] };
       /* The analyser's levels. The demo moves them, not the kit: the component
          redraws when its values change and has no timer of its own, which is
          the whole reason WCAG 2.2.2 does not land on it. */
@@ -244,7 +244,7 @@
                 h('span', { className: 'demo-axis-label' }, 'Preset'),
                 h(Select, { label: 'Preset', value: presetAxis, onValueChange: setPresetAxis },
                   ...PRESETS[skinAxis].map((v) =>
-                    h(SelectItem, { value: v, key: v }, v === 'default' ? 'Default' : 'Deck'))))
+                    h(SelectItem, { value: v, key: v }, v === 'default' ? 'Default' : v[0].toUpperCase() + v.slice(1)))))
             : null),
 
         h(Section, {
