@@ -552,6 +552,40 @@ The cyber skin points `--pw-font-ui` at the mono stack, and a fixed pitch is
 what makes a row of controls read as an instrument rather than as a web page.
 A skin that differs only by hue is a theme.
 
+*Proportion and timing*
+
+The knobs most skins forget, and the reason two skins can share a palette
+philosophy and still read as one design. A skin that moves all of its colour
+and none of its rhythm is a theme.
+
+| Token | What it does |
+| --- | --- |
+| `--pw-text-ui`, `--pw-text-micro` | the two rungs every control reads through `--pw-control-text` |
+| `--pw-leading-ui` | how tight a control's line is set |
+| `--pw-control-pad-x`, `--pw-control-gap` | a control's inner rhythm |
+| `--pw-panel-pad`, `--pw-badge-h` | the same for a panel and a chip |
+| `--pw-duration-hover`, `--pw-duration-enter`, `--pw-duration-exit` | how quick |
+| `--pw-ease-press`, `--pw-ease-enter`, `--pw-ease-state` | and how it arrives |
+
+Three rules on those, each of which cost something to learn.
+
+**`--pw-control-h` is not yours.** It is 44px because WCAG 2.5.8 and this kit's
+own floor say so, and `check:a11y` hit-tests it. Density is padding, gaps, and
+type, none of which anybody has to hit.
+
+**Restate anything `density.css` owns at both densities.** `[data-skin="x"]`
+and `[data-density="compact"]` are both (0,1,0) and the skin files import
+later, so a skin setting `--pw-control-pad-x` wins at *both* densities and the
+compact axis quietly stops existing under it. Declare
+`[data-skin="x"][data-density="compact"]` as well, which is (0,2,0) and beats
+both. A test enforces this. The type scale is exempt and deliberately so:
+`--pw-control-text` aliases to the rungs, so moving a rung flows through both.
+
+**Take a value off the scale rather than inventing one.** The cyber skin drops
+the type one rung, the paddings one rung of the space scale, and aliases its
+durations to the snap end of the scale that already exists. Fewer decisions,
+not smaller numbers.
+
 *The analyser*
 
 A skin owns the visualiser's whole palette, and it should take it. The default

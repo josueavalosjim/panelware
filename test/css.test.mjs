@@ -503,6 +503,53 @@ describe('the published reference data', () => {
     assert.deepEqual(offenders, [], offenders.join('\n'));
   });
 
+  test('a skin that moves a density token restates it at both densities', () => {
+    /* [data-skin="x"] and [data-density="compact"] are both (0,1,0), and the
+       skin files import after density.css, so a skin setting a density-owned
+       token wins the tie at BOTH densities and the compact axis quietly stops
+       existing under that skin.
+       
+       Measured when the cyber skin first moved its padding: cyber at compact
+       had the comfortable 8px, and nothing said a word. The axis is documented
+       as orthogonal, so this is the check that keeps it that way.
+       
+       The type scale is deliberately not density-owned. density.css aliases
+       --pw-control-text to --pw-text-ui and --pw-text-micro, so a skin moving
+       those rungs flows through both densities correctly, which is the whole
+       reason the alias is there. */
+    const owned = new Set([...read('css/tokens/density.css')
+      .replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(--pw-[\w-]+)\s*:/g)].map((m) => m[1]));
+    assert.ok(owned.size >= 8, `only ${owned.size} density tokens found`);
+
+    for (const file of readdirSync(join(ROOT, 'css', 'tokens'))) {
+      const m = file.match(/^skin\.([a-z0-9-]+)\.css$/);
+      if (!m) continue;
+      const skin = m[1];
+      const css = read(join('css', 'tokens', file)).replace(/\/\*[\s\S]*?\*\//g, '');
+      const blocks = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+        .map(([, sel, body]) => ({ sel: sel.trim(), body }));
+
+      const moved = new Set();
+      for (const b of blocks) {
+        if (/\[data-density="compact"\]/.test(b.sel)) continue;
+        for (const [, t] of b.body.matchAll(/(--pw-[\w-]+)\s*:/g)) if (owned.has(t)) moved.add(t);
+      }
+      if (!moved.size) continue;
+
+      const compact = blocks.filter((b) => /\[data-density="compact"\]/.test(b.sel));
+      assert.ok(compact.length,
+        `${file} moves ${[...moved].join(', ')}, which density.css owns, and never restates ` +
+        `them under [data-skin="${skin}"][data-density="compact"], so the compact axis is dead ` +
+        'under this skin');
+      const restated = new Set(compact
+        .flatMap((b) => [...b.body.matchAll(/(--pw-[\w-]+)\s*:/g)].map((x) => x[1])));
+      const missing = [...moved].filter((t) => !restated.has(t));
+      assert.deepEqual(missing, [],
+        `${file} moves these at one density and not the other:\n${
+          missing.map((t) => `  ${t}`).join('\n')}`);
+    }
+  });
+
   test('the demo offers every look the tokens declare', () => {
     /* The same drift the check scripts had, in the one place a visitor meets
        it. demo/index.html hand-maintains two lists: the skin picker's
@@ -648,6 +695,13 @@ describe('the published reference data', () => {
        the README actually gives. */
     const NOT_A_KNOB = new Map([
       ['--pw-font-mono', 'a face in the type stack, not a knob; it is what --pw-font-ui is pointed at'],
+      /* A skin picking a rung off the space scale is the scale working. What
+         would be worth documenting is a skin declaring a rung, and none does:
+         these are all on the right-hand side of a padding or a gap. */
+      ['--pw-space-2xs', 'a rung of the space scale, picked from rather than set'],
+      ['--pw-space-xs', 'a rung of the space scale, picked from rather than set'],
+      ['--pw-space-sm', 'a rung of the space scale, picked from rather than set'],
+      ['--pw-space-md', 'a rung of the space scale, picked from rather than set'],
     ]);
 
     const skinFiles = readdirSync(join(ROOT, 'css', 'tokens'))

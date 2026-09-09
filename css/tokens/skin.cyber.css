@@ -38,6 +38,45 @@
   /* No cast shadow: nothing here is a physical object sitting on a surface. */
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
+  /* PROPORTION AND TIMING, WHICH A SKIN OWNS AND THIS ONE HAD NEVER TOUCHED.
+
+     Measured before this landed: the cyber skin overrode 29 of 29 semantic
+     colours, 10 of 10 treatment knobs, 0 of 11 density tokens, and 0 of 18
+     motion tokens. Every control was the same height, the same padding, the
+     same type, and the same timing as the chrome skin's. Two skins differing
+     in all of their colour and none of their rhythm read as one design twice,
+     which is the diagnosis the reference set made and this file half-acted on
+     by swapping the face to mono and stopping.
+
+     A terminal is denser and quicker than a chassis. Nothing here invents a
+     value: the type drops one rung, the paddings drop one rung of the space
+     scale, and the durations alias to the snap end of the scale that already
+     exists. Fewer decisions, not smaller numbers.
+
+     --pw-control-h is deliberately absent. It is 44px because WCAG 2.5.8 and
+     the house floor say so, check:a11y hit-tests it, and no skin gets to be
+     dense at the cost of a hit target. Density here is padding, gaps, and
+     type, which cost nothing anybody has to hit. */
+  --pw-text-ui:    0.8125rem;
+  --pw-text-micro: 0.6875rem;
+  --pw-leading-ui: 1.15;
+
+  --pw-control-pad-x: var(--pw-space-sm);
+  --pw-control-gap:   var(--pw-space-xs);
+  --pw-badge-h:       1.375rem;
+  --pw-panel-pad:     var(--pw-space-lg);
+
+  /* Snap rather than settle. The durations stay inside the house 100 to 300ms
+     band and simply sit at its floor, and the ease is sharper than chrome's
+     soft landing: fast out of the gate, hard stop, which is what a readout
+     updating does and what a moulded button does not. Not linear. */
+  --pw-duration-hover: var(--pw-duration-snap);
+  --pw-duration-enter: var(--pw-duration-snap);
+  --pw-duration-exit:  var(--pw-duration-snap);
+  --pw-ease-press: var(--pw-ease-hud);
+  --pw-ease-enter: var(--pw-ease-hud);
+  --pw-ease-state: var(--pw-ease-hud);
+
   /* THE ANALYSER, IN ONE ACCENT.
 
      The default ramp is green, amber, red, which is the chrome skin's status
@@ -179,6 +218,28 @@
     linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
       right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
 
+}
+
+/* THE DENSITY AXIS, RESTATED FOR THIS SKIN.
+   
+   Not optional and not tidiness. [data-skin="cyber"] and
+   [data-density="compact"] are both (0,1,0), and this file imports after
+   density.css, so the block above wins the tie and every density-owned token
+   it sets would hold at BOTH densities. Measured before this existed: cyber
+   at compact had the comfortable 8px padding, so the compact axis was silently
+   dead under this skin for everything the skin had touched.
+   
+   Only the four tokens density.css owns are restated. The type scale is not
+   here on purpose: density aliases --pw-control-text to --pw-text-ui and
+   --pw-text-micro, so moving those rungs above flows through both densities
+   correctly and restating them here would break the alias rather than help it.
+   
+   (0,2,0), so it beats both. */
+[data-skin="cyber"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-xs);
+  --pw-control-gap:   var(--pw-space-2xs);
+  --pw-badge-h:       1.125rem;
+  --pw-panel-pad:     var(--pw-space-md);
 }
 
 [data-skin="cyber"][data-theme="dark"] {

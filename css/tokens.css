@@ -776,6 +776,70 @@
   --pw-panel-pad:      var(--pw-space-lg);
 }
 
+/* Base scales, before any skin. A skin overriding a duration declares under
+   [data-skin="x"], which is (0,1,0) and ties with this file's :root, so
+   importing motion after the skins would have let the base win every time and
+   a skin's timing would have been silently ignored. */
+/**
+ * MOTION — a locked scale, and open role assignments.
+ *
+ * The scale is the house scale and a skin may not add to it. What a skin may
+ * do is re-point a role at a different rung: a skin that wants a heavier
+ * press sets --pw-duration-press to --pw-duration-fast. That is the whole
+ * difference between motion being a system and motion being seven numbers
+ * scattered across seven component files.
+ *
+ * Only transform and opacity are ever transitioned in this kit. box-shadow is
+ * a paint property, so animating the bevel would drop every press off the
+ * compositor — and a real bevelled button never eased anyway. It flipped.
+ */
+
+:root {
+  /* The scale. Locked. */
+  --pw-duration-snap: 100ms;   /* the floor; under this reads as instant */
+  --pw-duration-fast: 150ms;
+  --pw-duration-base: 200ms;
+  --pw-duration-slow: 300ms;
+
+  /* Never linear. Linear is for progress, not for interface. */
+  --pw-ease-out:    cubic-bezier(0.23, 1, 0.32, 1);   /* arrives, settles */
+  --pw-ease-in:     cubic-bezier(0.5, 0, 0.75, 0);    /* gets out of the way */
+  --pw-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Fast out of the gate and a hard stop, for a skin that snaps rather than
+     settles. On the base scale rather than invented inside a skin file,
+     because an easing is a house value and a skin choosing one from the scale
+     is the point of having a scale. */
+  --pw-ease-hud:    cubic-bezier(0.2, 0, 0, 1);   /* stays on screen */
+
+  /* Roles. Re-point these, do not invent a sixth duration.
+
+     Exit is 150 against an enter of 200. The rule of thumb is 0.8x, which
+     would be 160ms, and 160ms is not on the scale. Staying on the scale
+     matters more than hitting the ratio exactly, and 0.75x still leaves
+     first. */
+  --pw-duration-press: var(--pw-duration-snap);
+  --pw-duration-hover: var(--pw-duration-fast);
+  --pw-duration-enter: var(--pw-duration-base);
+  --pw-duration-exit:  var(--pw-duration-fast);
+
+  --pw-ease-press: var(--pw-ease-out);
+  --pw-ease-enter: var(--pw-ease-out);
+  --pw-ease-exit:  var(--pw-ease-in);
+  --pw-ease-state: var(--pw-ease-in-out);
+
+  /* Continuous motion, which the duration table above does not govern: it
+     measures how long a transition takes to finish, and a marquee does not
+     finish. It is exempt from the scale and it is NOT exempt from reduced
+     motion, where it stops outright rather than speeding up. */
+  --pw-duration-marquee: 12s;
+  /* Eight frames, so one revolution is 800ms and a frame holds for 100ms,
+     which is --pw-duration-snap and the point below which a step reads as
+     instant rather than as a step. Faster than this and the arc smears into
+     a ring; slower and it reads as a stutter rather than a spin. */
+  --pw-duration-spin: 800ms;
+  --pw-duration-spin-reduced: 2400ms;
+}
+
 /**
  * SKIN — the chrome skin's own knobs.
  *
@@ -1107,6 +1171,45 @@
   /* No cast shadow: nothing here is a physical object sitting on a surface. */
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
+  /* PROPORTION AND TIMING, WHICH A SKIN OWNS AND THIS ONE HAD NEVER TOUCHED.
+
+     Measured before this landed: the cyber skin overrode 29 of 29 semantic
+     colours, 10 of 10 treatment knobs, 0 of 11 density tokens, and 0 of 18
+     motion tokens. Every control was the same height, the same padding, the
+     same type, and the same timing as the chrome skin's. Two skins differing
+     in all of their colour and none of their rhythm read as one design twice,
+     which is the diagnosis the reference set made and this file half-acted on
+     by swapping the face to mono and stopping.
+
+     A terminal is denser and quicker than a chassis. Nothing here invents a
+     value: the type drops one rung, the paddings drop one rung of the space
+     scale, and the durations alias to the snap end of the scale that already
+     exists. Fewer decisions, not smaller numbers.
+
+     --pw-control-h is deliberately absent. It is 44px because WCAG 2.5.8 and
+     the house floor say so, check:a11y hit-tests it, and no skin gets to be
+     dense at the cost of a hit target. Density here is padding, gaps, and
+     type, which cost nothing anybody has to hit. */
+  --pw-text-ui:    0.8125rem;
+  --pw-text-micro: 0.6875rem;
+  --pw-leading-ui: 1.15;
+
+  --pw-control-pad-x: var(--pw-space-sm);
+  --pw-control-gap:   var(--pw-space-xs);
+  --pw-badge-h:       1.375rem;
+  --pw-panel-pad:     var(--pw-space-lg);
+
+  /* Snap rather than settle. The durations stay inside the house 100 to 300ms
+     band and simply sit at its floor, and the ease is sharper than chrome's
+     soft landing: fast out of the gate, hard stop, which is what a readout
+     updating does and what a moulded button does not. Not linear. */
+  --pw-duration-hover: var(--pw-duration-snap);
+  --pw-duration-enter: var(--pw-duration-snap);
+  --pw-duration-exit:  var(--pw-duration-snap);
+  --pw-ease-press: var(--pw-ease-hud);
+  --pw-ease-enter: var(--pw-ease-hud);
+  --pw-ease-state: var(--pw-ease-hud);
+
   /* THE ANALYSER, IN ONE ACCENT.
 
      The default ramp is green, amber, red, which is the chrome skin's status
@@ -1248,6 +1351,28 @@
     linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
       right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
 
+}
+
+/* THE DENSITY AXIS, RESTATED FOR THIS SKIN.
+   
+   Not optional and not tidiness. [data-skin="cyber"] and
+   [data-density="compact"] are both (0,1,0), and this file imports after
+   density.css, so the block above wins the tie and every density-owned token
+   it sets would hold at BOTH densities. Measured before this existed: cyber
+   at compact had the comfortable 8px padding, so the compact axis was silently
+   dead under this skin for everything the skin had touched.
+   
+   Only the four tokens density.css owns are restated. The type scale is not
+   here on purpose: density aliases --pw-control-text to --pw-text-ui and
+   --pw-text-micro, so moving those rungs above flows through both densities
+   correctly and restating them here would break the alias rather than help it.
+   
+   (0,2,0), so it beats both. */
+[data-skin="cyber"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-xs);
+  --pw-control-gap:   var(--pw-space-2xs);
+  --pw-badge-h:       1.125rem;
+  --pw-panel-pad:     var(--pw-space-md);
 }
 
 [data-skin="cyber"][data-theme="dark"] {
@@ -1549,59 +1674,4 @@
   --pw-glass-blur: 0px;
 
   --pw-shadow-outer-color: rgba(0, 0, 0, 0.55);
-}
-
-/**
- * MOTION — a locked scale, and open role assignments.
- *
- * The scale is the house scale and a skin may not add to it. What a skin may
- * do is re-point a role at a different rung: a skin that wants a heavier
- * press sets --pw-duration-press to --pw-duration-fast. That is the whole
- * difference between motion being a system and motion being seven numbers
- * scattered across seven component files.
- *
- * Only transform and opacity are ever transitioned in this kit. box-shadow is
- * a paint property, so animating the bevel would drop every press off the
- * compositor — and a real bevelled button never eased anyway. It flipped.
- */
-
-:root {
-  /* The scale. Locked. */
-  --pw-duration-snap: 100ms;   /* the floor; under this reads as instant */
-  --pw-duration-fast: 150ms;
-  --pw-duration-base: 200ms;
-  --pw-duration-slow: 300ms;
-
-  /* Never linear. Linear is for progress, not for interface. */
-  --pw-ease-out:    cubic-bezier(0.23, 1, 0.32, 1);   /* arrives, settles */
-  --pw-ease-in:     cubic-bezier(0.5, 0, 0.75, 0);    /* gets out of the way */
-  --pw-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* stays on screen */
-
-  /* Roles. Re-point these, do not invent a sixth duration.
-
-     Exit is 150 against an enter of 200. The rule of thumb is 0.8x, which
-     would be 160ms, and 160ms is not on the scale. Staying on the scale
-     matters more than hitting the ratio exactly, and 0.75x still leaves
-     first. */
-  --pw-duration-press: var(--pw-duration-snap);
-  --pw-duration-hover: var(--pw-duration-fast);
-  --pw-duration-enter: var(--pw-duration-base);
-  --pw-duration-exit:  var(--pw-duration-fast);
-
-  --pw-ease-press: var(--pw-ease-out);
-  --pw-ease-enter: var(--pw-ease-out);
-  --pw-ease-exit:  var(--pw-ease-in);
-  --pw-ease-state: var(--pw-ease-in-out);
-
-  /* Continuous motion, which the duration table above does not govern: it
-     measures how long a transition takes to finish, and a marquee does not
-     finish. It is exempt from the scale and it is NOT exempt from reduced
-     motion, where it stops outright rather than speeding up. */
-  --pw-duration-marquee: 12s;
-  /* Eight frames, so one revolution is 800ms and a frame holds for 100ms,
-     which is --pw-duration-snap and the point below which a step reads as
-     instant rather than as a step. Faster than this and the arc smears into
-     a ring; slower and it reads as a stutter rather than a spin. */
-  --pw-duration-spin: 800ms;
-  --pw-duration-spin-reduced: 2400ms;
 }

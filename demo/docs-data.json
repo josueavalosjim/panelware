@@ -1568,6 +1568,15 @@
      }
     },
     {
+     "name": "--pw-ease-hud",
+     "values": {
+      "both": {
+       "declared": "cubic-bezier(0.2, 0, 0, 1)",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-duration-press",
      "values": {
       "both": {

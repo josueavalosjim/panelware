@@ -22,7 +22,12 @@
   /* Never linear. Linear is for progress, not for interface. */
   --pw-ease-out:    cubic-bezier(0.23, 1, 0.32, 1);   /* arrives, settles */
   --pw-ease-in:     cubic-bezier(0.5, 0, 0.75, 0);    /* gets out of the way */
-  --pw-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* stays on screen */
+  --pw-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Fast out of the gate and a hard stop, for a skin that snaps rather than
+     settles. On the base scale rather than invented inside a skin file,
+     because an easing is a house value and a skin choosing one from the scale
+     is the point of having a scale. */
+  --pw-ease-hud:    cubic-bezier(0.2, 0, 0, 1);   /* stays on screen */
 
   /* Roles. Re-point these, do not invent a sixth duration.
 
