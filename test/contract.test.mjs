@@ -553,7 +553,10 @@ describe('tokens nothing reads', () => {
     ['--pw-text-heading', 'a rung of the type scale'],
     ['--pw-leading-tight', 'a rung of the leading scale'],
     ['--pw-tracking-display', 'the tracking that pairs with --pw-text-display'],
-    ['--pw-duration-slow', 'a rung of the duration scale'],
+    /* --pw-duration-slow was here as an unused rung of the scale. The paper
+       skin reads it: ink drifts, so its enter is the slow one. The list works
+       in the direction that is easy to forget, and this is the second token to
+       come off it that way. */
 
     /* Role slots whose role has not happened yet. Both halves of the exit
        pair are declared because a component that animates out will want them

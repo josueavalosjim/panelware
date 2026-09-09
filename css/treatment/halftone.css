@@ -1,0 +1,73 @@
+/**
+ * TREATMENT — the paper skin's elevation, which is not a shadow.
+ *
+ * This file is the reason the elevation slot was split, and the answer to the
+ * question the token contract was built to ask. The kit's claim is that a skin
+ * replaces the treatment without touching a component. It had been proved
+ * twice and both times with a box-shadow, because --pw-elev is consumed as
+ * one, so the claim had only ever been tested in the shape it was built for.
+ *
+ * Elevation here is DITHER DENSITY. A raised surface is printed at a coarse
+ * screen and a sunken one at a fine, faint one, which is what a halftone does
+ * with depth and what no box-shadow can express. It goes in --pw-fill-raised
+ * and --pw-fill-sunken, and no component knows.
+ *
+ * ── The hairline is not decoration ───────────────────────────────────────
+ * Both states carry the same 1px boundary and the density is the only thing
+ * that changes. That is deliberate: WCAG 1.4.11 asks 3:1 of the edge that says
+ * where a control ends, a screen of dots does not make a crisp edge at any
+ * density, and a skin that expressed its whole boundary as a halftone would be
+ * a skin whose controls have no identifiable edge. The dots carry depth, the
+ * line carries the boundary, and they are different jobs.
+ *
+ * ── The pitch is literal ─────────────────────────────────────────────────
+ * 4px, written here rather than tokenised, which is what glow.css does with
+ * its own 1px hairline and inner shadow. A treatment's geometry belongs to the
+ * treatment; what the skin owns is the ink, and that is --pw-dither-ink.
+ *
+ * The selector list is bevel.css's derivation list, copied, and a test holds
+ * every treatment to the same one: a surface that reaches the slot in one skin
+ * and not another is flat in exactly one skin with nothing reporting it.
+ */
+
+@layer pw.treatment {
+  [data-skin="paper"] :where(.pw-button,
+         .pw-toggle,
+         .pw-tab,
+         .pw-panel,
+         .pw-badge,
+         .pw-slider-track,
+         .pw-slider-thumb,
+         .pw-lcd,
+         .pw-tab-panel,
+         .pw-title-button,
+         .pw-window,
+         .pw-transport-button,
+         .pw-progress,
+         .pw-eq,
+         .pw-menu,
+         .pw-list,
+         .pw-checkbox,
+         .pw-radio,
+         .pw-select,
+         .pw-select-list,
+         .pw-input,
+         .pw-textarea,
+         .pw-switch,
+         .pw-switch-thumb,
+         .pw-tooltip,
+         .pw-visualiser,
+         .pw-raised,
+         .pw-sunken) {
+    /* One line, both states. See the header. */
+    --pw-shadow-raised: inset 0 0 0 1px var(--pw-bevel-boundary);
+    --pw-shadow-sunken: inset 0 0 0 1px var(--pw-bevel-boundary);
+
+    /* And the depth, as a screen. Coarse for raised, fine and faint for
+       sunken, on the same 4px pitch so the two read as one process at two
+       densities rather than as two different patterns. */
+    --pw-fill-raised: radial-gradient(var(--pw-dither-ink) 1.4px, transparent 1.5px);
+    --pw-fill-sunken: radial-gradient(var(--pw-dither-ink) 0.6px, transparent 0.7px);
+    --pw-fill-size: 4px 4px;
+  }
+}

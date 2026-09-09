@@ -1,6 +1,6 @@
 # panelware
 
-An accessible component kit with a chrome and LCD skin.
+An accessible component kit with three skins on one set of components.
 
 Most kits in this genre are decorative. They ship a convincing surface over a
 div with a click handler, and the keyboard, the screen reader and the contrast
@@ -12,8 +12,9 @@ panelware is the two halves put together on purpose. Radix UI owns the
 interaction, the ARIA and the focus management, because owning those from
 scratch is years of work that has already been done twice. This owns the
 surface: stacked inset bevels, a Web 2.0 gloss, a sprite-sheet segment
-readout, and a token contract a second skin can replace without touching a
-component.
+readout, and a token contract another skin replaces without touching a
+component. Three of them do: a chrome and LCD chassis, a cyber terminal, and a
+dithered duotone whose depth is not a shadow at all.
 
 The palette is not asserted to be accessible. It is measured, in CI, by
 `taste-check`, and there is a fixture in the repo whose whole job is to fail
@@ -119,8 +120,17 @@ is a thing you throw: the label sits beside it, the state is where the thumb
 is, and `aria-checked` makes it "on" rather than "pressed". If it belongs in a
 toolbar it is a toggle; if it belongs in a settings list it is a switch.
 
-Two themes, `chrome` light and dark, and two densities, `comfortable` (44px
-targets) and `compact` (32px). Skin, theme and density are three independent
+Three skins, each in light and dark, plus a preset and two densities.
+`chrome` is the bevelled chassis, `cyber` is a squared terminal in one accent,
+and `paper` is a duotone printed at two screen densities. `deck` is a preset
+inside chrome. Every one of them is the same markup and the same components.
+
+They differ in more than palette, deliberately: type, padding, gaps, timing,
+corner geometry, and what carries elevation. A skin that moves all of its
+colour and none of its rhythm reads as the same design twice.
+
+`comfortable` (44px targets) and `compact` (32px) are the densities, and no
+skin moves the 44. Skin, theme and density are three independent
 attributes on any element, not just the root, so a dark toolbar inside a light
 page is one `data-theme` away.
 
@@ -464,6 +474,15 @@ two different properties. Fill `--pw-fill-raised` and `--pw-fill-sunken`
 instead, with `--pw-fill-size` for the tile. Both pairs exist and a skin may
 use either or both.
 
+**A fill-based skin has a second ground, and the gate cannot see it.** The
+contrast check reads a computed `background-color`, which on a halftone surface
+is the stock and not the dot, so text sitting on the dots is measured against a
+ground it only partly sits on. Give the ink a token, hold it to the same floor
+the stock is held to, and declare it as a pair. The paper skin's
+`--pw-dither-ink` is in `tastecheck.config.json` against
+`--pw-color-base-content` at 4.5 for exactly this, and it is the one pair no
+shadow-based skin needs.
+
 There is one more background layer above those, `--pw-ornament` with
 `--pw-ornament-size`, for a mark no component draws: corner ticks, a bracketed
 frame, a hatched border. A treatment cannot add elements, because
@@ -554,7 +573,7 @@ reinventing it:
 | `--pw-font-ui` | the face the controls are set in |
 | `--pw-tracking-ui` | the tracking that face wants |
 
-These are the two that stop a second skin reading as the first one recoloured.
+These are the two that stop another skin reading as the first one recoloured.
 The cyber skin points `--pw-font-ui` at the mono stack, and a fixed pitch is
 what makes a row of controls read as an instrument rather than as a web page.
 A skin that differs only by hue is a theme.

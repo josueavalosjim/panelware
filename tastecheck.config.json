@@ -13,7 +13,10 @@
       "css/tokens/theme-auto.css",
       "css/tokens/primitive.cyber.css",
       "css/tokens/semantic.cyber.css",
-      "css/tokens/presets/deck.css"
+      "css/tokens/presets/deck.css",
+      "css/tokens/primitive.paper.css",
+      "css/tokens/semantic.paper.css",
+      "css/tokens/skin.paper.css"
     ],
     "themes": [
       {
@@ -67,6 +70,21 @@
           ":root",
           "[data-skin=\"chrome\"][data-preset=\"deck\"]",
           "[data-skin=\"chrome\"][data-preset=\"deck\"][data-theme=\"dark\"]"
+        ]
+      },
+      {
+        "name": "paper-light",
+        "scopes": [
+          ":root",
+          "[data-skin=\"paper\"]"
+        ]
+      },
+      {
+        "name": "paper-dark",
+        "scopes": [
+          ":root",
+          "[data-skin=\"paper\"]",
+          "[data-skin=\"paper\"][data-theme=\"dark\"]"
         ]
       }
     ],
@@ -205,6 +223,16 @@
         "bg": "--pw-color-base-200",
         "min": 3.0,
         "label": "the same ring on a field inside a panel"
+      },
+      {
+        "fg": "--pw-color-base-content",
+        "bg": "--pw-dither-ink",
+        "min": 4.5,
+        "label": "the second ground a halftone surface has, which a computed background-color cannot see",
+        "themes": [
+          "paper-light",
+          "paper-dark"
+        ]
       }
     ]
   },
@@ -227,7 +255,11 @@
       "css/tokens/skin.cyber.css",
       "css/tokens/presets/deck.css",
       "css/tokens/display.css",
-      "css/components/visualiser.css"
+      "css/components/visualiser.css",
+      "css/tokens/primitive.paper.css",
+      "css/tokens/semantic.paper.css",
+      "css/tokens/skin.paper.css",
+      "css/treatment/halftone.css"
     ],
     "allowPrefixes": [
       "--radix-"

@@ -1507,6 +1507,320 @@
 
 }
 
+/* The third skin, and the one the elevation slot was split for: its depth is
+   dither density rather than a shadow. */
+/**
+ * PRIMITIVE — the paper skin's raw ramps.
+ *
+ * Scoped to the skin, not to :root, for the reason primitive.cyber.css gives
+ * at length: two ramps on a bare :root tie at (0,1,0) and the later import
+ * wins under every skin, which is how the chrome skin spent three releases
+ * painting its warning ink in the cyber skin's amber.
+ *
+ * A duotone is a stock and two inks, and that is what these are. --pw-paper-*
+ * is the stock, from the sheet through to the ink it is printed with;
+ * --pw-ink-* is the blue and --pw-warm-* the orange, which is reference 7's
+ * pairing rather than a preference.
+ *
+ * The phosphor ramp is deliberately absent. The readout is a lit display and
+ * does not follow the skin, so it is read from the base file, which is also
+ * what the cyber skin does.
+ *
+ * Every value here was chosen against the contrast pairs rather than by eye.
+ * Four moved after the first static pass and two more after the runtime one,
+ * which measures what is painted rather than what is declared: the list's
+ * quiet second line is set at 0.75 opacity, and on this skin's selected row
+ * and its dark well it landed at 4.35 and 4.28 against a 4.5 floor. Neither
+ * was visible to the static pairs, because neither ground is named in one.
+ * --pw-paper-800 exists for the second of those: --pw-paper-700 was already
+ * the divider and the dither ink, and one shade doing three jobs is a shade
+ * that cannot be tuned for any of them. A halftone skin has a second ground
+ * nothing else in the kit has, and that is checked too. See skin.paper.css.
+ */
+
+[data-skin="paper"] {
+  /* The stock. 050 is the sheet, 950 is the ink it is printed with. */
+  --pw-paper-000: #ffffff;
+  --pw-paper-050: #f5f1e8;
+  --pw-paper-100: #eae4d6;
+  --pw-paper-200: #dbd3c1;
+  --pw-paper-300: #a89d82;
+  --pw-paper-500: #847b6a;
+  --pw-paper-700: #61594a;
+  --pw-paper-800: #4a4438;
+  --pw-paper-900: #2b271f;
+  --pw-paper-950: #1a1712;
+
+  /* First ink: process blue. */
+  --pw-ink-100: #d8e2f2;
+  --pw-ink-300: #7ea6d8;
+  --pw-ink-700: #2b4f88;
+  --pw-ink-800: #1d3a66;
+
+  /* Second ink: warm. It carries the range and the two alarm states, which is
+     the whole of what a second ink is for in a duotone. */
+  --pw-warm-100: #f8e2cd;
+  --pw-warm-300: #f2bc84;
+  --pw-warm-700: #8a430d;
+  --pw-warm-800: #78400f;
+}
+
+/**
+ * SEMANTIC — the paper skin's colour roles.
+ *
+ * Every role the chrome skin declares, declared again, because a skin that
+ * states only its differences inherits the other one's decisions for
+ * everything it forgot, silently and correctly-looking.
+ *
+ * ── Two inks doing the work of five ──────────────────────────────────────
+ * A duotone has a stock and two inks, so success, warning, and error cannot
+ * each have a hue of their own. Warning and error share the warm ink and
+ * success takes the blue, which leaves the badge's glyph carrying the
+ * difference between the two warm states. That is the same argument the cyber
+ * skin makes for collapsing all three, one ink further along: shape says
+ * which, colour says how loud.
+ *
+ * ── Dark ─────────────────────────────────────────────────────────────────
+ * A light ground is what reference 7 actually is, and the kit requires both
+ * themes of every skin. So dark is not an inverted sheet, it is a darker
+ * stock: the same two inks printed on card rather than on paper, with the
+ * inks moving up their ramps to stay legible on it.
+ */
+
+[data-skin="paper"],
+[data-skin="paper"][data-theme="light"] {
+  --pw-color-base-100: var(--pw-paper-050);
+  --pw-color-base-200: var(--pw-paper-100);
+  --pw-color-base-300: var(--pw-paper-200);
+  --pw-color-base-content: var(--pw-paper-950);
+  --pw-color-disabled-content: var(--pw-paper-500);
+
+  --pw-color-primary: var(--pw-ink-700);
+  --pw-color-primary-content: var(--pw-paper-000);
+  --pw-color-titlebar: var(--pw-ink-800);
+  --pw-color-titlebar-content: var(--pw-paper-000);
+  --pw-color-focus: var(--pw-ink-700);
+  --pw-color-focus-contrast: var(--pw-paper-000);
+  --pw-color-range: var(--pw-warm-700);
+
+  /* The readout does not follow the skin. */
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+
+  --pw-color-success: var(--pw-ink-100);
+  --pw-color-success-content: var(--pw-ink-800);
+  --pw-color-warning: var(--pw-warm-100);
+  --pw-color-warning-content: var(--pw-warm-800);
+  --pw-color-error: var(--pw-warm-100);
+  --pw-color-error-content: var(--pw-warm-800);
+
+  /* The bevel pair is declared and unused: --pw-bevel-depth is 0 in this skin,
+     so every offset collapses and the four inks paint nothing. Declared
+     anyway, because the treatment reads --pw-bevel-boundary for the hairline
+     that carries 1.4.11 and a half-declared pair is how the other three end up
+     resolving somewhere nobody looked. */
+  --pw-bevel-light: var(--pw-paper-000);
+  --pw-bevel-face: var(--pw-paper-100);
+  --pw-bevel-shade: var(--pw-paper-300);
+  --pw-bevel-frame: var(--pw-paper-500);
+  --pw-bevel-boundary: var(--pw-paper-500);
+  --pw-color-divider: var(--pw-paper-300);
+
+  --pw-gloss-lit-base-200: var(--pw-paper-100);
+  --pw-gloss-lit-primary: var(--pw-ink-700);
+  --pw-color-scrim: rgba(26, 23, 18, 0.58);
+}
+
+[data-skin="paper"][data-theme="dark"] {
+  --pw-color-base-100: var(--pw-paper-950);
+  --pw-color-base-200: var(--pw-paper-900);
+  /* Not --pw-paper-700, which is the divider and the dither ink. A well is the
+     one ground the list's 0.75-opacity second line sits on, and at 700 it
+     measured 4.28 against a 4.5 floor. */
+  --pw-color-base-300: var(--pw-paper-800);
+  --pw-color-base-content: var(--pw-paper-050);
+  --pw-color-disabled-content: var(--pw-paper-500);
+
+  --pw-color-primary: var(--pw-ink-300);
+  --pw-color-primary-content: var(--pw-paper-950);
+  --pw-color-titlebar: var(--pw-ink-800);
+  --pw-color-titlebar-content: var(--pw-paper-050);
+  --pw-color-focus: var(--pw-ink-300);
+  --pw-color-focus-contrast: var(--pw-paper-950);
+  --pw-color-range: var(--pw-warm-300);
+
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+
+  --pw-color-success: var(--pw-ink-800);
+  --pw-color-success-content: var(--pw-ink-300);
+  --pw-color-warning: var(--pw-warm-800);
+  --pw-color-warning-content: var(--pw-warm-300);
+  --pw-color-error: var(--pw-warm-800);
+  --pw-color-error-content: var(--pw-warm-300);
+
+  --pw-bevel-light: var(--pw-paper-700);
+  --pw-bevel-face: var(--pw-paper-900);
+  --pw-bevel-shade: var(--pw-paper-950);
+  --pw-bevel-frame: var(--pw-paper-500);
+  --pw-bevel-boundary: var(--pw-paper-500);
+  --pw-color-divider: var(--pw-paper-700);
+
+  --pw-gloss-lit-base-200: var(--pw-paper-900);
+  --pw-gloss-lit-primary: var(--pw-ink-300);
+  --pw-color-scrim: rgba(5, 4, 3, 0.62);
+}
+
+/**
+ * SKIN — the paper skin's own knobs.
+ *
+ * This is the skin the architecture was waiting for, and the reason it was
+ * chosen over the two easier ones. --pw-elev is consumed as a box-shadow, both
+ * shipped skins answered with one, and the kit's central claim had therefore
+ * only ever been proved in the shape it was built for. Elevation here is
+ * DITHER DENSITY, which is a background-image, and until the fill slots
+ * existed this skin could not have been written at all.
+ *
+ * The other two were rejected for the opposite reason. A BBS skin's double
+ * rule is two inset shadows, so it slots straight in and proves nothing.
+ *
+ * ── The second ground ────────────────────────────────────────────────────
+ * A halftone surface is not one colour, it is two: the stock and the dot. The
+ * contrast gate reads a computed background-color, which is the stock, and it
+ * cannot see the dot at all. So text on a dithered surface is measured against
+ * a ground it only partly sits on.
+ *
+ * The answer is not to keep the dither away from text, which would put it
+ * nowhere useful. It is to hold the DOT to the same floor the stock is held
+ * to, and to declare it as a pair so the gate measures it. --pw-dither-ink is
+ * in tastecheck.config.json against --pw-color-base-content at 4.5, which is
+ * the one pair no other skin in this kit needs and the one thing a fill-based
+ * skin has to get right.
+ *
+ * ── Print does not move much ─────────────────────────────────────────────
+ * Chrome settles, cyber snaps, and this drifts: the slowest of the three and
+ * the softest easing, because ink does not have a mechanism.
+ */
+
+[data-skin="paper"],
+[data-skin="paper"][data-theme="light"] {
+  /* No bevel and no gloss. The whole stacked-inset treatment collapses, which
+     is what --pw-bevel-depth: 0 has always claimed it would do, and the
+     halftone fill is what arrives in its place. */
+  --pw-bevel-depth: 0;
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  /* Nothing glows. Ink is not a light source. */
+  --pw-glow-intensity: 0;
+  --pw-glow-radius: 0px;
+  --pw-glow-color: var(--pw-ink-700);
+
+  --pw-glass-blur: 0px;
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  /* The dot. Held to the text floor and declared as a pair, because it is the
+     second ground and the gate cannot see it. */
+  --pw-dither-ink: var(--pw-paper-300);
+
+  /* Square, and no chamfer either. A cut corner is the HUD lineage; print is
+     a rule and a right angle. */
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+
+  /* Selection is the second ink laid over the row, which is what a duotone
+     does with emphasis, and the chrome inversion is close enough to right
+     that only the ground changes. */
+  --pw-selected-bg: var(--pw-warm-700);
+  --pw-selected-content: var(--pw-paper-000);
+  --pw-selected-mark: none;
+
+  /* Generous, which is the third rhythm. Chrome is 12px and cyber is 8; print
+     has margins. */
+  --pw-control-pad-x: var(--pw-space-lg);
+  --pw-control-gap: var(--pw-space-md);
+  --pw-panel-pad: var(--pw-space-xl);
+  --pw-leading-ui: 1.35;
+  --pw-tracking-ui: 0.01em;
+
+  /* Ink drifts. The slowest of the three skins and the softest easing. */
+  --pw-duration-hover: var(--pw-duration-base);
+  --pw-duration-enter: var(--pw-duration-slow);
+  --pw-ease-press: var(--pw-ease-in-out);
+  --pw-ease-enter: var(--pw-ease-in-out);
+  --pw-ease-state: var(--pw-ease-in-out);
+
+  /* The analyser is a duotone too: one ink from quiet to hot, and the stock
+     behind it rather than a phosphor face, because a printed chart is not a
+     screen. */
+  --pw-color-vis-bg: var(--pw-paper-100);
+  --pw-color-vis-grid: var(--pw-paper-300);
+  --pw-color-vis-low: var(--pw-ink-300);
+  --pw-color-vis-mid: var(--pw-ink-700);
+  --pw-color-vis-high: var(--pw-warm-700);
+  --pw-color-vis-peak: var(--pw-paper-950);
+}
+
+/* Restated at compact, because [data-skin="paper"] beats
+   [data-density="compact"] and the axis would otherwise be dead under this
+   skin. (0,2,0), so it beats both. */
+[data-skin="paper"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-md);
+  --pw-control-gap: var(--pw-space-sm);
+  --pw-panel-pad: var(--pw-space-lg);
+}
+
+[data-skin="paper"][data-theme="dark"] {
+  --pw-bevel-depth: 0;
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 0;
+  --pw-glow-radius: 0px;
+  --pw-glow-color: var(--pw-ink-300);
+
+  --pw-glass-blur: 0px;
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  --pw-dither-ink: var(--pw-paper-700);
+
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+
+  --pw-selected-bg: var(--pw-warm-800);
+  --pw-selected-content: var(--pw-paper-050);
+  --pw-selected-mark: none;
+
+  --pw-control-pad-x: var(--pw-space-lg);
+  --pw-control-gap: var(--pw-space-md);
+  --pw-panel-pad: var(--pw-space-xl);
+  --pw-leading-ui: 1.35;
+  --pw-tracking-ui: 0.01em;
+
+  --pw-duration-hover: var(--pw-duration-base);
+  --pw-duration-enter: var(--pw-duration-slow);
+  --pw-ease-press: var(--pw-ease-in-out);
+  --pw-ease-enter: var(--pw-ease-in-out);
+  --pw-ease-state: var(--pw-ease-in-out);
+
+  --pw-color-vis-bg: var(--pw-paper-900);
+  --pw-color-vis-grid: var(--pw-paper-700);
+  --pw-color-vis-low: var(--pw-ink-300);
+  --pw-color-vis-mid: var(--pw-ink-100);
+  --pw-color-vis-high: var(--pw-warm-300);
+  --pw-color-vis-peak: var(--pw-paper-050);
+}
+
 /* Presets: palettes within a skin, scoped under the skin they belong to, so
    an incoherent pairing matches nothing rather than rendering. One file each,
    imported after every skin so a preset's themed blocks are decided on
@@ -2325,6 +2639,81 @@
                              .pw-menubar-trigger,
                              .pw-title) {
     text-transform: uppercase;
+  }
+}
+
+/* The third skin's elevation, and the first that is not a box-shadow. */
+/**
+ * TREATMENT — the paper skin's elevation, which is not a shadow.
+ *
+ * This file is the reason the elevation slot was split, and the answer to the
+ * question the token contract was built to ask. The kit's claim is that a skin
+ * replaces the treatment without touching a component. It had been proved
+ * twice and both times with a box-shadow, because --pw-elev is consumed as
+ * one, so the claim had only ever been tested in the shape it was built for.
+ *
+ * Elevation here is DITHER DENSITY. A raised surface is printed at a coarse
+ * screen and a sunken one at a fine, faint one, which is what a halftone does
+ * with depth and what no box-shadow can express. It goes in --pw-fill-raised
+ * and --pw-fill-sunken, and no component knows.
+ *
+ * ── The hairline is not decoration ───────────────────────────────────────
+ * Both states carry the same 1px boundary and the density is the only thing
+ * that changes. That is deliberate: WCAG 1.4.11 asks 3:1 of the edge that says
+ * where a control ends, a screen of dots does not make a crisp edge at any
+ * density, and a skin that expressed its whole boundary as a halftone would be
+ * a skin whose controls have no identifiable edge. The dots carry depth, the
+ * line carries the boundary, and they are different jobs.
+ *
+ * ── The pitch is literal ─────────────────────────────────────────────────
+ * 4px, written here rather than tokenised, which is what glow.css does with
+ * its own 1px hairline and inner shadow. A treatment's geometry belongs to the
+ * treatment; what the skin owns is the ink, and that is --pw-dither-ink.
+ *
+ * The selector list is bevel.css's derivation list, copied, and a test holds
+ * every treatment to the same one: a surface that reaches the slot in one skin
+ * and not another is flat in exactly one skin with nothing reporting it.
+ */
+
+@layer pw.treatment {
+  [data-skin="paper"] :where(.pw-button,
+         .pw-toggle,
+         .pw-tab,
+         .pw-panel,
+         .pw-badge,
+         .pw-slider-track,
+         .pw-slider-thumb,
+         .pw-lcd,
+         .pw-tab-panel,
+         .pw-title-button,
+         .pw-window,
+         .pw-transport-button,
+         .pw-progress,
+         .pw-eq,
+         .pw-menu,
+         .pw-list,
+         .pw-checkbox,
+         .pw-radio,
+         .pw-select,
+         .pw-select-list,
+         .pw-input,
+         .pw-textarea,
+         .pw-switch,
+         .pw-switch-thumb,
+         .pw-tooltip,
+         .pw-visualiser,
+         .pw-raised,
+         .pw-sunken) {
+    /* One line, both states. See the header. */
+    --pw-shadow-raised: inset 0 0 0 1px var(--pw-bevel-boundary);
+    --pw-shadow-sunken: inset 0 0 0 1px var(--pw-bevel-boundary);
+
+    /* And the depth, as a screen. Coarse for raised, fine and faint for
+       sunken, on the same 4px pitch so the two read as one process at two
+       densities rather than as two different patterns. */
+    --pw-fill-raised: radial-gradient(var(--pw-dither-ink) 1.4px, transparent 1.5px);
+    --pw-fill-sunken: radial-gradient(var(--pw-dither-ink) 0.6px, transparent 0.7px);
+    --pw-fill-size: 4px 4px;
   }
 }
 

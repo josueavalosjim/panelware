@@ -1,0 +1,55 @@
+/**
+ * PRIMITIVE — the paper skin's raw ramps.
+ *
+ * Scoped to the skin, not to :root, for the reason primitive.cyber.css gives
+ * at length: two ramps on a bare :root tie at (0,1,0) and the later import
+ * wins under every skin, which is how the chrome skin spent three releases
+ * painting its warning ink in the cyber skin's amber.
+ *
+ * A duotone is a stock and two inks, and that is what these are. --pw-paper-*
+ * is the stock, from the sheet through to the ink it is printed with;
+ * --pw-ink-* is the blue and --pw-warm-* the orange, which is reference 7's
+ * pairing rather than a preference.
+ *
+ * The phosphor ramp is deliberately absent. The readout is a lit display and
+ * does not follow the skin, so it is read from the base file, which is also
+ * what the cyber skin does.
+ *
+ * Every value here was chosen against the contrast pairs rather than by eye.
+ * Four moved after the first static pass and two more after the runtime one,
+ * which measures what is painted rather than what is declared: the list's
+ * quiet second line is set at 0.75 opacity, and on this skin's selected row
+ * and its dark well it landed at 4.35 and 4.28 against a 4.5 floor. Neither
+ * was visible to the static pairs, because neither ground is named in one.
+ * --pw-paper-800 exists for the second of those: --pw-paper-700 was already
+ * the divider and the dither ink, and one shade doing three jobs is a shade
+ * that cannot be tuned for any of them. A halftone skin has a second ground
+ * nothing else in the kit has, and that is checked too. See skin.paper.css.
+ */
+
+[data-skin="paper"] {
+  /* The stock. 050 is the sheet, 950 is the ink it is printed with. */
+  --pw-paper-000: #ffffff;
+  --pw-paper-050: #f5f1e8;
+  --pw-paper-100: #eae4d6;
+  --pw-paper-200: #dbd3c1;
+  --pw-paper-300: #a89d82;
+  --pw-paper-500: #847b6a;
+  --pw-paper-700: #61594a;
+  --pw-paper-800: #4a4438;
+  --pw-paper-900: #2b271f;
+  --pw-paper-950: #1a1712;
+
+  /* First ink: process blue. */
+  --pw-ink-100: #d8e2f2;
+  --pw-ink-300: #7ea6d8;
+  --pw-ink-700: #2b4f88;
+  --pw-ink-800: #1d3a66;
+
+  /* Second ink: warm. It carries the range and the two alarm states, which is
+     the whole of what a second ink is for in a duotone. */
+  --pw-warm-100: #f8e2cd;
+  --pw-warm-300: #f2bc84;
+  --pw-warm-700: #8a430d;
+  --pw-warm-800: #78400f;
+}

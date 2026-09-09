@@ -98,7 +98,13 @@ describe('the published reference data', () => {
   test('publishes every pair the gate checks, and none of them failing', () => {
     const onDisk = JSON.parse(read('demo/docs-data.json'));
     const config = JSON.parse(read('tastecheck.config.json'));
-    const expected = config.contrast.pairs.length * config.contrast.themes.length;
+    /* Not pairs times themes. A pair may name the themes it applies to, which
+       the paper skin's dither ink does because it is the only skin with a
+       second ground and a pair naming a token a theme does not declare is a
+       hard failure rather than a skip. Multiplying would have quietly expected
+       more rows than the gate produces, so the count is summed per pair. */
+    const expected = config.contrast.pairs.reduce(
+      (n, p) => n + (p.themes ? p.themes.length : config.contrast.themes.length), 0);
     assert.equal(onDisk.contrast.length, expected,
       'the published table is not the whole table');
     assert.deepEqual(onDisk.contrast.filter((r) => !r.pass), []);
@@ -336,10 +342,23 @@ describe('the published reference data', () => {
       assert.ok(m, `${file} has no shared-slot selector list`);
       return m[1].replace(/\s+/g, ' ').split(',').map((x) => x.trim()).filter(Boolean).sort();
     };
-    const bevel = listOf('css/treatment/bevel.css');
-    const glow = listOf('css/treatment/glow.css');
-    assert.ok(bevel.length >= 20, `only ${bevel.length} components in the slot`);
-    assert.deepEqual(glow, bevel, 'the two skins fill the slot for different components');
+    /* Every treatment, derived, not the two this was written against. It named
+       bevel.css and glow.css, so the day a third arrived it went on comparing
+       the first two and reporting a clean run: the halftone skin could have
+       reached the slot for a different set of surfaces and been flat in
+       exactly one skin, which is the failure this test exists for. */
+    const files = readdirSync(join(ROOT, 'css', 'treatment'))
+      .filter((f) => f.endsWith('.css'))
+      .map((f) => join('css', 'treatment', f))
+      .filter((f) => read(f).includes('pw-select-list'));
+    assert.ok(files.length >= 3, `only ${files.length} treatment(s) fill the slot`);
+
+    const base = listOf(files[0]);
+    assert.ok(base.length >= 20, `only ${base.length} components in the slot`);
+    for (const file of files.slice(1)) {
+      assert.deepEqual(listOf(file), base,
+        `${file} fills the slot for a different set of surfaces than ${files[0]}`);
+    }
   });
 
   test('the cyber skin turns the chrome treatment off rather than avoiding it', () => {
@@ -720,6 +739,7 @@ describe('the published reference data', () => {
       ['--pw-space-xs', 'a rung of the space scale, picked from rather than set'],
       ['--pw-space-sm', 'a rung of the space scale, picked from rather than set'],
       ['--pw-space-md', 'a rung of the space scale, picked from rather than set'],
+      ['--pw-space-xl', 'a rung of the space scale, picked from rather than set'],
     ]);
 
     const skinFiles = readdirSync(join(ROOT, 'css', 'tokens'))

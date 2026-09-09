@@ -1,0 +1,149 @@
+/**
+ * SKIN — the paper skin's own knobs.
+ *
+ * This is the skin the architecture was waiting for, and the reason it was
+ * chosen over the two easier ones. --pw-elev is consumed as a box-shadow, both
+ * shipped skins answered with one, and the kit's central claim had therefore
+ * only ever been proved in the shape it was built for. Elevation here is
+ * DITHER DENSITY, which is a background-image, and until the fill slots
+ * existed this skin could not have been written at all.
+ *
+ * The other two were rejected for the opposite reason. A BBS skin's double
+ * rule is two inset shadows, so it slots straight in and proves nothing.
+ *
+ * ── The second ground ────────────────────────────────────────────────────
+ * A halftone surface is not one colour, it is two: the stock and the dot. The
+ * contrast gate reads a computed background-color, which is the stock, and it
+ * cannot see the dot at all. So text on a dithered surface is measured against
+ * a ground it only partly sits on.
+ *
+ * The answer is not to keep the dither away from text, which would put it
+ * nowhere useful. It is to hold the DOT to the same floor the stock is held
+ * to, and to declare it as a pair so the gate measures it. --pw-dither-ink is
+ * in tastecheck.config.json against --pw-color-base-content at 4.5, which is
+ * the one pair no other skin in this kit needs and the one thing a fill-based
+ * skin has to get right.
+ *
+ * ── Print does not move much ─────────────────────────────────────────────
+ * Chrome settles, cyber snaps, and this drifts: the slowest of the three and
+ * the softest easing, because ink does not have a mechanism.
+ */
+
+[data-skin="paper"],
+[data-skin="paper"][data-theme="light"] {
+  /* No bevel and no gloss. The whole stacked-inset treatment collapses, which
+     is what --pw-bevel-depth: 0 has always claimed it would do, and the
+     halftone fill is what arrives in its place. */
+  --pw-bevel-depth: 0;
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  /* Nothing glows. Ink is not a light source. */
+  --pw-glow-intensity: 0;
+  --pw-glow-radius: 0px;
+  --pw-glow-color: var(--pw-ink-700);
+
+  --pw-glass-blur: 0px;
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  /* The dot. Held to the text floor and declared as a pair, because it is the
+     second ground and the gate cannot see it. */
+  --pw-dither-ink: var(--pw-paper-300);
+
+  /* Square, and no chamfer either. A cut corner is the HUD lineage; print is
+     a rule and a right angle. */
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+
+  /* Selection is the second ink laid over the row, which is what a duotone
+     does with emphasis, and the chrome inversion is close enough to right
+     that only the ground changes. */
+  --pw-selected-bg: var(--pw-warm-700);
+  --pw-selected-content: var(--pw-paper-000);
+  --pw-selected-mark: none;
+
+  /* Generous, which is the third rhythm. Chrome is 12px and cyber is 8; print
+     has margins. */
+  --pw-control-pad-x: var(--pw-space-lg);
+  --pw-control-gap: var(--pw-space-md);
+  --pw-panel-pad: var(--pw-space-xl);
+  --pw-leading-ui: 1.35;
+  --pw-tracking-ui: 0.01em;
+
+  /* Ink drifts. The slowest of the three skins and the softest easing. */
+  --pw-duration-hover: var(--pw-duration-base);
+  --pw-duration-enter: var(--pw-duration-slow);
+  --pw-ease-press: var(--pw-ease-in-out);
+  --pw-ease-enter: var(--pw-ease-in-out);
+  --pw-ease-state: var(--pw-ease-in-out);
+
+  /* The analyser is a duotone too: one ink from quiet to hot, and the stock
+     behind it rather than a phosphor face, because a printed chart is not a
+     screen. */
+  --pw-color-vis-bg: var(--pw-paper-100);
+  --pw-color-vis-grid: var(--pw-paper-300);
+  --pw-color-vis-low: var(--pw-ink-300);
+  --pw-color-vis-mid: var(--pw-ink-700);
+  --pw-color-vis-high: var(--pw-warm-700);
+  --pw-color-vis-peak: var(--pw-paper-950);
+}
+
+/* Restated at compact, because [data-skin="paper"] beats
+   [data-density="compact"] and the axis would otherwise be dead under this
+   skin. (0,2,0), so it beats both. */
+[data-skin="paper"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-md);
+  --pw-control-gap: var(--pw-space-sm);
+  --pw-panel-pad: var(--pw-space-lg);
+}
+
+[data-skin="paper"][data-theme="dark"] {
+  --pw-bevel-depth: 0;
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 0;
+  --pw-glow-radius: 0px;
+  --pw-glow-color: var(--pw-ink-300);
+
+  --pw-glass-blur: 0px;
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  --pw-dither-ink: var(--pw-paper-700);
+
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+
+  --pw-selected-bg: var(--pw-warm-800);
+  --pw-selected-content: var(--pw-paper-050);
+  --pw-selected-mark: none;
+
+  --pw-control-pad-x: var(--pw-space-lg);
+  --pw-control-gap: var(--pw-space-md);
+  --pw-panel-pad: var(--pw-space-xl);
+  --pw-leading-ui: 1.35;
+  --pw-tracking-ui: 0.01em;
+
+  --pw-duration-hover: var(--pw-duration-base);
+  --pw-duration-enter: var(--pw-duration-slow);
+  --pw-ease-press: var(--pw-ease-in-out);
+  --pw-ease-enter: var(--pw-ease-in-out);
+  --pw-ease-state: var(--pw-ease-in-out);
+
+  --pw-color-vis-bg: var(--pw-paper-900);
+  --pw-color-vis-grid: var(--pw-paper-700);
+  --pw-color-vis-low: var(--pw-ink-300);
+  --pw-color-vis-mid: var(--pw-ink-100);
+  --pw-color-vis-high: var(--pw-warm-300);
+  --pw-color-vis-peak: var(--pw-paper-050);
+}

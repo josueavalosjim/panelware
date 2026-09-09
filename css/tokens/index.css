@@ -26,6 +26,12 @@
 @import "./semantic.cyber.css";
 @import "./skin.cyber.css";
 
+/* The third skin, and the one the elevation slot was split for: its depth is
+   dither density rather than a shadow. */
+@import "./primitive.paper.css";
+@import "./semantic.paper.css";
+@import "./skin.paper.css";
+
 /* Presets: palettes within a skin, scoped under the skin they belong to, so
    an incoherent pairing matches nothing rather than rendering. One file each,
    imported after every skin so a preset's themed blocks are decided on

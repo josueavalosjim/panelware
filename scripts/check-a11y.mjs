@@ -69,6 +69,7 @@ const LOOKS = [
   { skin: 'chrome' },
   { skin: 'chrome', preset: 'deck' },
   { skin: 'cyber' },
+  { skin: 'paper' },
 ];
 
 const failures = [];

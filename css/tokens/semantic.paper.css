@@ -1,0 +1,105 @@
+/**
+ * SEMANTIC — the paper skin's colour roles.
+ *
+ * Every role the chrome skin declares, declared again, because a skin that
+ * states only its differences inherits the other one's decisions for
+ * everything it forgot, silently and correctly-looking.
+ *
+ * ── Two inks doing the work of five ──────────────────────────────────────
+ * A duotone has a stock and two inks, so success, warning, and error cannot
+ * each have a hue of their own. Warning and error share the warm ink and
+ * success takes the blue, which leaves the badge's glyph carrying the
+ * difference between the two warm states. That is the same argument the cyber
+ * skin makes for collapsing all three, one ink further along: shape says
+ * which, colour says how loud.
+ *
+ * ── Dark ─────────────────────────────────────────────────────────────────
+ * A light ground is what reference 7 actually is, and the kit requires both
+ * themes of every skin. So dark is not an inverted sheet, it is a darker
+ * stock: the same two inks printed on card rather than on paper, with the
+ * inks moving up their ramps to stay legible on it.
+ */
+
+[data-skin="paper"],
+[data-skin="paper"][data-theme="light"] {
+  --pw-color-base-100: var(--pw-paper-050);
+  --pw-color-base-200: var(--pw-paper-100);
+  --pw-color-base-300: var(--pw-paper-200);
+  --pw-color-base-content: var(--pw-paper-950);
+  --pw-color-disabled-content: var(--pw-paper-500);
+
+  --pw-color-primary: var(--pw-ink-700);
+  --pw-color-primary-content: var(--pw-paper-000);
+  --pw-color-titlebar: var(--pw-ink-800);
+  --pw-color-titlebar-content: var(--pw-paper-000);
+  --pw-color-focus: var(--pw-ink-700);
+  --pw-color-focus-contrast: var(--pw-paper-000);
+  --pw-color-range: var(--pw-warm-700);
+
+  /* The readout does not follow the skin. */
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+
+  --pw-color-success: var(--pw-ink-100);
+  --pw-color-success-content: var(--pw-ink-800);
+  --pw-color-warning: var(--pw-warm-100);
+  --pw-color-warning-content: var(--pw-warm-800);
+  --pw-color-error: var(--pw-warm-100);
+  --pw-color-error-content: var(--pw-warm-800);
+
+  /* The bevel pair is declared and unused: --pw-bevel-depth is 0 in this skin,
+     so every offset collapses and the four inks paint nothing. Declared
+     anyway, because the treatment reads --pw-bevel-boundary for the hairline
+     that carries 1.4.11 and a half-declared pair is how the other three end up
+     resolving somewhere nobody looked. */
+  --pw-bevel-light: var(--pw-paper-000);
+  --pw-bevel-face: var(--pw-paper-100);
+  --pw-bevel-shade: var(--pw-paper-300);
+  --pw-bevel-frame: var(--pw-paper-500);
+  --pw-bevel-boundary: var(--pw-paper-500);
+  --pw-color-divider: var(--pw-paper-300);
+
+  --pw-gloss-lit-base-200: var(--pw-paper-100);
+  --pw-gloss-lit-primary: var(--pw-ink-700);
+  --pw-color-scrim: rgba(26, 23, 18, 0.58);
+}
+
+[data-skin="paper"][data-theme="dark"] {
+  --pw-color-base-100: var(--pw-paper-950);
+  --pw-color-base-200: var(--pw-paper-900);
+  /* Not --pw-paper-700, which is the divider and the dither ink. A well is the
+     one ground the list's 0.75-opacity second line sits on, and at 700 it
+     measured 4.28 against a 4.5 floor. */
+  --pw-color-base-300: var(--pw-paper-800);
+  --pw-color-base-content: var(--pw-paper-050);
+  --pw-color-disabled-content: var(--pw-paper-500);
+
+  --pw-color-primary: var(--pw-ink-300);
+  --pw-color-primary-content: var(--pw-paper-950);
+  --pw-color-titlebar: var(--pw-ink-800);
+  --pw-color-titlebar-content: var(--pw-paper-050);
+  --pw-color-focus: var(--pw-ink-300);
+  --pw-color-focus-contrast: var(--pw-paper-950);
+  --pw-color-range: var(--pw-warm-300);
+
+  --pw-color-lcd: var(--pw-phos-950);
+  --pw-color-lcd-content: var(--pw-phos-300);
+
+  --pw-color-success: var(--pw-ink-800);
+  --pw-color-success-content: var(--pw-ink-300);
+  --pw-color-warning: var(--pw-warm-800);
+  --pw-color-warning-content: var(--pw-warm-300);
+  --pw-color-error: var(--pw-warm-800);
+  --pw-color-error-content: var(--pw-warm-300);
+
+  --pw-bevel-light: var(--pw-paper-700);
+  --pw-bevel-face: var(--pw-paper-900);
+  --pw-bevel-shade: var(--pw-paper-950);
+  --pw-bevel-frame: var(--pw-paper-500);
+  --pw-bevel-boundary: var(--pw-paper-500);
+  --pw-color-divider: var(--pw-paper-700);
+
+  --pw-gloss-lit-base-200: var(--pw-paper-900);
+  --pw-gloss-lit-primary: var(--pw-ink-300);
+  --pw-color-scrim: rgba(5, 4, 3, 0.62);
+}
