@@ -1675,3 +1675,35 @@
 
   --pw-shadow-outer-color: rgba(0, 0, 0, 0.55);
 }
+
+/* PROPORTION. A deck is a smaller instrument than a chassis.
+   
+   A preset may move rhythm now, and this is what that is for. The palette
+   alone made deck a recolour of chrome, and the thing a late-nineties audio
+   deck actually was is tighter: less padding around a control, less air
+   between them, and type a rung down. Winamp's main window was 275 by 116
+   pixels, and none of the proportions here are within a mile of that, but the
+   direction is the point.
+   
+   What it does not move is the treatment. The bevel is chrome's, the easing is
+   chrome's, and the plastic still settles rather than snapping, because this
+   is the same chassis built smaller and plainer rather than a different
+   lineage. That is the line between a preset and a skin, and a test holds it.
+   
+   --pw-control-h is untouched, here for the same reason it is untouched in
+   every skin: 44px is a hit target, not a style. */
+[data-skin="chrome"][data-preset="deck"] {
+  --pw-text-ui:       0.8125rem;
+  --pw-control-pad-x: var(--pw-space-sm);
+  --pw-control-gap:   var(--pw-space-xs);
+  --pw-panel-pad:     var(--pw-space-lg);
+}
+
+/* Restated at compact, because [data-skin][data-preset] beats
+   [data-density="compact"] and the axis would otherwise be dead under this
+   preset. (0,3,0), so it beats the block above as well. */
+[data-skin="chrome"][data-preset="deck"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-xs);
+  --pw-control-gap:   var(--pw-space-2xs);
+  --pw-panel-pad:     var(--pw-space-md);
+}

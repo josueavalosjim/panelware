@@ -521,11 +521,15 @@ describe('the published reference data', () => {
       .replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(--pw-[\w-]+)\s*:/g)].map((m) => m[1]));
     assert.ok(owned.size >= 8, `only ${owned.size} density tokens found`);
 
-    for (const file of readdirSync(join(ROOT, 'css', 'tokens'))) {
-      const m = file.match(/^skin\.([a-z0-9-]+)\.css$/);
-      if (!m) continue;
-      const skin = m[1];
-      const css = read(join('css', 'tokens', file)).replace(/\/\*[\s\S]*?\*\//g, '');
+    const files = [
+      ...readdirSync(join(ROOT, 'css', 'tokens'))
+        .filter((f) => /^skin\..+\.css$/.test(f)).map((f) => ['css/tokens', f]),
+      ...readdirSync(join(ROOT, 'css', 'tokens', 'presets'))
+        .filter((f) => f.endsWith('.css')).map((f) => ['css/tokens/presets', f]),
+    ];
+    for (const [dir, file] of files) {
+      const skin = file.replace(/^skin\.|\.css$/g, '');
+      const css = read(join(dir, file)).replace(/\/\*[\s\S]*?\*\//g, '');
       const blocks = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
         .map(([, sel, body]) => ({ sel: sel.trim(), body }));
 
@@ -539,8 +543,7 @@ describe('the published reference data', () => {
       const compact = blocks.filter((b) => /\[data-density="compact"\]/.test(b.sel));
       assert.ok(compact.length,
         `${file} moves ${[...moved].join(', ')}, which density.css owns, and never restates ` +
-        `them under [data-skin="${skin}"][data-density="compact"], so the compact axis is dead ` +
-        'under this skin');
+        'them at [data-density="compact"], so the compact axis is dead under it');
       const restated = new Set(compact
         .flatMap((b) => [...b.body.matchAll(/(--pw-[\w-]+)\s*:/g)].map((x) => x[1])));
       const missing = [...moved].filter((t) => !restated.has(t));
@@ -596,10 +599,19 @@ describe('the published reference data', () => {
         `the demo does not offer the ${preset} preset under ${skin}, which is the skin it scopes itself to`);
     }
   });
-  test('no preset moves the elevation model', () => {
-    /* A preset may move knobs. The deck preset sets --pw-gloss-opacity to 0,
-       and being able to do that without a class or a codemod is the whole
-       reason gloss is a token.
+  test('no preset moves the treatment, which is what makes it a preset', () => {
+    /* A preset may move anything a skin may move, EXCEPT the treatment. That
+       is the whole line, and it moved: it used to be "whether a treatment file
+       is involved", which stopped being useful the day a preset was allowed to
+       move rhythm as well as palette. The deck preset now sets its own type
+       and padding, and it is still a preset because chrome's bevel is still
+       what paints its depth.
+
+       So the elevation model is the thing under test. --pw-bevel-depth was the
+       original case and the fill slots joined it when elevation stopped being
+       only a shadow: a preset filling --pw-fill-sunken would be shipping a
+       treatment without a treatment file, which is precisely the thing the
+       name is supposed to tell you it does not do.
 
        --pw-bevel-depth is the exception, because it is not a decoration: at 0
        the entire stacked-inset treatment collapses and the controls lose their
@@ -616,8 +628,14 @@ describe('the published reference data', () => {
     for (const file of files) {
       const bare = read(join('css', 'tokens', 'presets', file))
         .replace(/\/\*[\s\S]*?\*\//g, '');
-      assert.doesNotMatch(bare, /--pw-bevel-depth\s*:/,
-        `${file} moves --pw-bevel-depth, which makes it a skin rather than a preset`);
+      for (const token of [
+        '--pw-bevel-depth', '--pw-shadow-raised', '--pw-shadow-sunken',
+        '--pw-fill-raised', '--pw-fill-sunken', '--pw-elev', '--pw-elev-fill',
+      ]) {
+        assert.doesNotMatch(bare, new RegExp(`${token}\\s*:`),
+          `${file} sets ${token}. A preset may move palette, rhythm, type and ` +
+          'timing; the treatment is what separates it from a skin.');
+      }
     }
   });
   test('no block declares the same token twice', () => {

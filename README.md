@@ -210,13 +210,20 @@ markup at once and leaves the markup honest, because the Web 2.0 highlight is a
 2005-and-after artefact and a late-nineties audio deck predates it. That is what
 the knob being a token rather than a class buys.
 
-What a preset should not move is `--pw-bevel-depth`, because that is the
-elevation model rather than a decoration, and a preset that set it to 0 would be
-a different skin wearing a preset's name. A test reads every file under
-`css/tokens/presets/` and fails on a `--pw-bevel-depth` declaration in any of
-them, because prose does not fail a build.
+A preset may also move rhythm. The deck preset sets its own type size, control
+padding and panel padding, because a late-nineties audio deck is a smaller
+instrument than an XP-era chassis and a palette alone left it a recolour.
 
-The line between the two is whether a treatment file is involved. The cyber
+**What a preset may not move is the treatment.** That is the whole line.
+`--pw-bevel-depth`, the shadow pair, the fill pair and the `--pw-elev` slots
+are a skin's, and a preset filling one would be shipping a treatment without a
+treatment file, which is exactly what its name promises it does not do. A test
+reads every file under `css/tokens/presets/` and fails on any of them, because
+prose does not fail a build.
+
+So deck is a preset: chrome's bevel still paints its depth, chrome's easing
+still lets its plastic settle, and it is the same chassis built smaller and
+plainer. The cyber
 skin ships `css/treatment/glow.css` and replaces what goes in the elevation
 slot. The deck preset ships no CSS at all beyond its own values: it takes the
 stacked bevel by simply not being cyber. A preset is one file, and that file is
