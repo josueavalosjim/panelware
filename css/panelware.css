@@ -1544,9 +1544,11 @@
   --pw-paper-050: #f5f1e8;
   --pw-paper-100: #eae4d6;
   --pw-paper-200: #dbd3c1;
+  --pw-paper-250: #bdb39b;
   --pw-paper-300: #a89d82;
   --pw-paper-500: #847b6a;
   --pw-paper-700: #61594a;
+  --pw-paper-750: #4f4839;
   --pw-paper-800: #4a4438;
   --pw-paper-900: #2b271f;
   --pw-paper-950: #1a1712;
@@ -1722,8 +1724,20 @@
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
   /* The dot. Held to the text floor and declared as a pair, because it is the
-     second ground and the gate cannot see it. */
-  --pw-dither-ink: var(--pw-paper-300);
+     second ground and the gate cannot see it.
+
+     Its own shade rather than the divider's, and that is the fix for the first
+     version of this skin. The screen was printed at 38% ink in a colour 2.12:1
+     against its own ground, which is not a halftone, it is polka dots: at
+     reading size the dots stayed dots and the type sat on top of them. A
+     halftone reads as a TONE, and the number that decides whether it does is
+     the local contrast between the dot and the paper, not the average.
+
+     1.64:1 now, at 20% ink. The contrast pair was never the problem and never
+     caught it: text on this ink measured 6.6:1 at its worst, comfortably over
+     the floor, while being genuinely hard to read. A gate can tell you a pair
+     is legible and cannot tell you a surface is calm. */
+  --pw-dither-ink: var(--pw-paper-250);
 
   /* Square, and no chamfer either. A cut corner is the HUD lineage; print is
      a rule and a right angle. */
@@ -1789,7 +1803,7 @@
   --pw-glass-blur: 0px;
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
-  --pw-dither-ink: var(--pw-paper-700);
+  --pw-dither-ink: var(--pw-paper-750);
 
   --pw-radius-control: 0;
   --pw-radius-box: 0;
@@ -2708,11 +2722,21 @@
     --pw-shadow-raised: inset 0 0 0 1px var(--pw-bevel-boundary);
     --pw-shadow-sunken: inset 0 0 0 1px var(--pw-bevel-boundary);
 
-    /* And the depth, as a screen. Coarse for raised, fine and faint for
-       sunken, on the same 4px pitch so the two read as one process at two
-       densities rather than as two different patterns. */
-    --pw-fill-raised: radial-gradient(var(--pw-dither-ink) 1.4px, transparent 1.5px);
-    --pw-fill-sunken: radial-gradient(var(--pw-dither-ink) 0.6px, transparent 0.7px);
+    /* And the depth, as a screen. Both states on the same 4px pitch, so they
+       read as one process at two densities rather than as two patterns.
+
+       20% ink raised and 2% sunken. The first version was 38% and 7%, which
+       is not a screen: at 38% the dots nearly touch, they stay legible AS
+       dots at reading size, and type sits on a field of them. A halftone is
+       supposed to resolve into a tone.
+
+       The depth gap is about 1.09:1 in composited tone, which is subtle by
+       design and is not carrying anything on its own. The 1px boundary above
+       identifies the control, and every state that means something says so
+       twice: the toggle's on state changes its ground and its weight as well
+       as its elevation. */
+    --pw-fill-raised: radial-gradient(var(--pw-dither-ink) 1px, transparent 1.1px);
+    --pw-fill-sunken: radial-gradient(var(--pw-dither-ink) 0.35px, transparent 0.45px);
     --pw-fill-size: 4px 4px;
   }
 }

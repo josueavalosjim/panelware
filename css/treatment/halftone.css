@@ -63,11 +63,21 @@
     --pw-shadow-raised: inset 0 0 0 1px var(--pw-bevel-boundary);
     --pw-shadow-sunken: inset 0 0 0 1px var(--pw-bevel-boundary);
 
-    /* And the depth, as a screen. Coarse for raised, fine and faint for
-       sunken, on the same 4px pitch so the two read as one process at two
-       densities rather than as two different patterns. */
-    --pw-fill-raised: radial-gradient(var(--pw-dither-ink) 1.4px, transparent 1.5px);
-    --pw-fill-sunken: radial-gradient(var(--pw-dither-ink) 0.6px, transparent 0.7px);
+    /* And the depth, as a screen. Both states on the same 4px pitch, so they
+       read as one process at two densities rather than as two patterns.
+
+       20% ink raised and 2% sunken. The first version was 38% and 7%, which
+       is not a screen: at 38% the dots nearly touch, they stay legible AS
+       dots at reading size, and type sits on a field of them. A halftone is
+       supposed to resolve into a tone.
+
+       The depth gap is about 1.09:1 in composited tone, which is subtle by
+       design and is not carrying anything on its own. The 1px boundary above
+       identifies the control, and every state that means something says so
+       twice: the toggle's on state changes its ground and its weight as well
+       as its elevation. */
+    --pw-fill-raised: radial-gradient(var(--pw-dither-ink) 1px, transparent 1.1px);
+    --pw-fill-sunken: radial-gradient(var(--pw-dither-ink) 0.35px, transparent 0.45px);
     --pw-fill-size: 4px 4px;
   }
 }

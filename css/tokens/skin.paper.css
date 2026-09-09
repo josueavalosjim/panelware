@@ -49,8 +49,20 @@
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
   /* The dot. Held to the text floor and declared as a pair, because it is the
-     second ground and the gate cannot see it. */
-  --pw-dither-ink: var(--pw-paper-300);
+     second ground and the gate cannot see it.
+
+     Its own shade rather than the divider's, and that is the fix for the first
+     version of this skin. The screen was printed at 38% ink in a colour 2.12:1
+     against its own ground, which is not a halftone, it is polka dots: at
+     reading size the dots stayed dots and the type sat on top of them. A
+     halftone reads as a TONE, and the number that decides whether it does is
+     the local contrast between the dot and the paper, not the average.
+
+     1.64:1 now, at 20% ink. The contrast pair was never the problem and never
+     caught it: text on this ink measured 6.6:1 at its worst, comfortably over
+     the floor, while being genuinely hard to read. A gate can tell you a pair
+     is legible and cannot tell you a surface is calm. */
+  --pw-dither-ink: var(--pw-paper-250);
 
   /* Square, and no chamfer either. A cut corner is the HUD lineage; print is
      a rule and a right angle. */
@@ -116,7 +128,7 @@
   --pw-glass-blur: 0px;
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
-  --pw-dither-ink: var(--pw-paper-700);
+  --pw-dither-ink: var(--pw-paper-750);
 
   --pw-radius-control: 0;
   --pw-radius-box: 0;
