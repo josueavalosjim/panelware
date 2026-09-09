@@ -444,11 +444,25 @@ reports as a pass. This is the constraint most likely to be violated by
 someone helpful, because it is DaisyUI's idiom and what most autocomplete
 suggests.
 
-**3. Put your elevation in `--pw-elev`.** Components read that one slot and
-never `--pw-shadow-raised`. If your skin has no bevel, set
-`--pw-bevel-depth: 0` and every offset collapses to nothing, then assign
-whatever you do have — an outer glow, a hairline — to `--pw-elev`. The slot
-carries outer shadows as happily as insets.
+**3. Put your elevation in `--pw-elev`, or in `--pw-fill-*` if it is not a
+shadow.** Components read those slots and never `--pw-shadow-raised`. If your
+skin has no bevel, set `--pw-bevel-depth: 0` and every offset collapses to
+nothing, then assign whatever you do have to the right slot.
+
+`--pw-elev` is consumed as a `box-shadow`, so it carries outer shadows as
+happily as insets, and both shipped skins answer with one. A skin whose raised
+and sunken states differ by **dither density, hatch pitch, or any other
+pattern** cannot: that is a `background-image`, and no custom property feeds
+two different properties. Fill `--pw-fill-raised` and `--pw-fill-sunken`
+instead, with `--pw-fill-size` for the tile. Both pairs exist and a skin may
+use either or both.
+
+There is one more background layer above those, `--pw-ornament` with
+`--pw-ornament-size`, for a mark no component draws: corner ticks, a bracketed
+frame, a hatched border. A treatment cannot add elements, because
+`pw.components` sorts after `pw.treatment`, so a slot is the only way a skin
+puts something new on a surface. The order is ornament, then fill, then
+texture.
 
 **4. Turn off what you do not want with tokens, not markup.**
 `--pw-gloss-opacity: 0` silences every `[data-gloss]` in every consumer's

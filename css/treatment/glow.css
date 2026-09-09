@@ -72,6 +72,14 @@
     --pw-shadow-sunken:
       inset 0 0 0 1px var(--pw-bevel-boundary),
       inset 0 2px 6px -2px var(--pw-color-scrim);
+
+    /* No fill elevation. This skin's depth is a line and an inner shadow, both
+       of which are shadows, so the fill pair is declared and empty. Declaring
+       it rather than leaving it to the base is the same rule the rest of this
+       file follows: a skin that states only its differences inherits the other
+       one's decisions for everything it forgot. */
+    --pw-fill-raised: none;
+    --pw-fill-sunken: none;
   }
 
   /* Uppercase, and only where the reference set puts it.

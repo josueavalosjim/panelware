@@ -41,6 +41,7 @@
 
   .pw-slider-track {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     position: relative;
     flex-grow: 1;
     background-color: var(--pw-color-base-300);
@@ -104,6 +105,7 @@
 
   .pw-slider-thumb {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: block;
     /* Static, deliberately. Radix does not position the thumb, it wraps it in
        its own absolutely positioned span and moves that. An absolute on the
@@ -166,6 +168,7 @@
        disabled slider is. The shape rejected for the live state is the
        correct meaning for the dead one. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     background-color: var(--pw-color-base-300);
     cursor: default;
   }

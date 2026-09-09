@@ -58,6 +58,7 @@
 
   .pw-menu {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     min-width: 12rem;
     padding: var(--pw-space-3xs) 0;
     background-color: var(--pw-color-base-200);

@@ -20,6 +20,7 @@
 @layer pw.components {
   .pw-eq {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: flex;
     align-items: stretch;
     gap: var(--pw-eq-gap);

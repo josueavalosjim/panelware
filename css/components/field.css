@@ -68,6 +68,7 @@
        sit in the same form. A text field raised beside a sunken select would
        be two vocabularies in one row. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: inline-block;
     min-width: var(--pw-control-min-w);
     /* The overflow gate runs at 320px and an <input> sizes itself from its
@@ -157,6 +158,7 @@
        kit will not let colour be the only carrier of a state, so the press is
        the same pixel drop every other control uses. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -224,6 +226,7 @@
   /* ── Select ─────────────────────────────────────────────────────────── */
   .pw-select {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: inline-flex;
     align-items: center;
     gap: var(--pw-control-gap);
@@ -251,6 +254,7 @@
      read as a button on a well rather than an arrow drawn on a box. */
   .pw-select-button {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -271,6 +275,7 @@
   .pw-select[data-state="open"] .pw-select-button,
   .pw-select:active .pw-select-button {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
   }
 
   .pw-checkbox:active,
@@ -298,6 +303,7 @@
   /* The open list reuses the menu's surface, because it is one. */
   .pw-select-list {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     min-width: var(--radix-select-trigger-width);
     max-height: var(--radix-select-content-available-height);
     padding: var(--pw-space-3xs) 0;

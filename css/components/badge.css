@@ -30,6 +30,7 @@
   }
   .pw-badge {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: inline-flex;
     align-items: center;
     gap: var(--pw-space-2xs);

@@ -35,6 +35,7 @@
   .pw-visualiser {
     /* A well, like the equaliser's. The display is set into the chassis. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     /* The height of one column, which is what the gradient is sized to. */
     --pw-vis-col: calc(var(--pw-vis-h) - (var(--pw-vis-gap) * 2));
     display: flex;
@@ -45,10 +46,16 @@
     background-color: var(--pw-color-vis-bg);
     /* The dot grid, which is line 1 of the palette this borrows its structure
        from. Drawn rather than tiled from an image: one gradient, no request,
-       and it scales with the pitch token. */
-    background-image:
-      radial-gradient(var(--pw-color-vis-grid) 1px, transparent 1px);
-    background-size: var(--pw-vis-grid-pitch) var(--pw-vis-grid-pitch);
+       and it scales with the pitch token.
+
+       It goes in the ornament slot rather than in a background-image of its
+       own, and that is a fix rather than a preference. Declaring
+       background-image here put a component rule in pw.components over the
+       shared stack in pw.treatment, so this surface silently dropped the
+       elevation fill and the texture: the cyber skin's scanlines never reached
+       the one thing in the kit that is actually a screen. */
+    --pw-ornament: radial-gradient(var(--pw-color-vis-grid) 1px, transparent 1px);
+    --pw-ornament-size: var(--pw-vis-grid-pitch) var(--pw-vis-grid-pitch);
   }
 
   .pw-visualiser-band {

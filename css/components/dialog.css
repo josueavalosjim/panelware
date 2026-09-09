@@ -27,6 +27,7 @@
 
   .pw-panel {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     position: fixed;
     z-index: var(--pw-z-panel);
     top: 50%;

@@ -9,6 +9,7 @@
 @layer pw.components {
   .pw-button {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -28,6 +29,7 @@
 
   .pw-button:active {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     transform: translateY(var(--pw-press-travel));
     opacity: 1;
   }

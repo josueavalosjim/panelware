@@ -434,6 +434,75 @@ describe('the published reference data', () => {
     }
   });
 
+  test('every elevation assignment sets both halves of it', () => {
+    /* Elevation is two properties now, because a skin whose depth is dither
+       density or hatch pitch cannot put that in a box-shadow: it is a
+       background-image, and no custom property feeds two different properties.
+
+       So a component says which state it is in twice, and the failure that
+       makes this worth a test is silent in the worst way. A rule that sets
+       --pw-elev to sunken and leaves --pw-elev-fill on the raised default is
+       correct under both shipped skins, because both fills are none. It only
+       goes wrong under the skin that motivated the split, and by then the
+       component is somebody else's. */
+    const offenders = [];
+    for (const file of readdirSync(join(ROOT, 'css', 'components'))) {
+      if (!file.endsWith('.css')) continue;
+      const css = read(join('css', 'components', file)).replace(/\/\*[\s\S]*?\*\//g, '');
+      for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        const shadow = body.match(/--pw-elev:\s*var\(--pw-shadow-(raised|sunken)\)/);
+        const fill = body.match(/--pw-elev-fill:\s*var\(--pw-fill-(raised|sunken)\)/);
+        const where = `${file}: ${selector.trim().split(/\s+/).join(' ').slice(0, 48)}`;
+        if (shadow && !fill) offenders.push(`${where} sets --pw-elev and not --pw-elev-fill`);
+        else if (fill && !shadow) offenders.push(`${where} sets --pw-elev-fill and not --pw-elev`);
+        else if (shadow && fill && shadow[1] !== fill[1]) {
+          offenders.push(`${where} is ${shadow[1]} in shadow and ${fill[1]} in fill`);
+        }
+      }
+    }
+    assert.deepEqual(offenders, [], offenders.join('\n'));
+  });
+
+  test('nothing in the shared slot paints over the surface stack', () => {
+    /* The slot puts three background layers on every surface: the ornament a
+       skin draws, the elevation fill, and the texture. A component declaring
+       background-image is in pw.components, the slot is in pw.treatment, and
+       components sort later, so the component wins and the whole stack is
+       gone.
+
+       That is the clip-path bug again, in a different property, and it had
+       already happened: .pw-visualiser declared its dot grid as a
+       background-image and silently dropped the cyber skin's scanlines from
+       the one surface in the kit that is actually a screen. It uses the
+       ornament slot now.
+
+       --pw-surface-layers exists so a component that genuinely must paint its
+       own surface can splice the stack in rather than repeat it, which is the
+       escape hatch this allows for. */
+    const slot = read('css/treatment/bevel.css').replace(/\/\*[\s\S]*?\*\//g, '')
+      .match(/:where\(([^)]*)\)\s*\{[^}]*--pw-surface-layers/);
+    assert.ok(slot, 'the shared slot no longer declares --pw-surface-layers');
+    const members = new Set(slot[1].split(',').map((x) => x.trim().replace(/^\./, '')));
+    assert.ok(members.size >= 20, `only ${members.size} surfaces in the slot`);
+
+    const offenders = [];
+    for (const file of readdirSync(join(ROOT, 'css', 'components'))) {
+      if (!file.endsWith('.css')) continue;
+      const css = read(join('css', 'components', file)).replace(/\/\*[\s\S]*?\*\//g, '');
+      for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        if (!/background(-image)?\s*:/.test(body)) continue;
+        if (body.includes('--pw-surface-layers')) continue;
+        const hit = [...selector.matchAll(/\.(pw-[a-z0-9-]+)/g)].map((m) => m[1])
+          .filter((c) => members.has(c));
+        for (const c of hit) {
+          offenders.push(`${file}: .${c} is in the shared slot and declares its own background, ` +
+            'so the ornament, the elevation fill and the texture never reach it');
+        }
+      }
+    }
+    assert.deepEqual(offenders, [], offenders.join('\n'));
+  });
+
   test('the demo offers every look the tokens declare', () => {
     /* The same drift the check scripts had, in the one place a visitor meets
        it. demo/index.html hand-maintains two lists: the skin picker's

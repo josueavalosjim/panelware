@@ -90,6 +90,23 @@
   --pw-texture: none;
   --pw-texture-opacity: 0;
 
+  /* Ornament: a mark a skin draws that no component does. Corner ticks, a
+     bracketed frame, a hatched border. It is a background layer rather than an
+     element because a treatment cannot add elements: pw.components sorts after
+     pw.treatment, so the only things a skin can put on a surface are the ones
+     the surface left a slot for. --pw-selected-mark proved the shape works;
+     this is the general case.
+
+     The size is separate because a tiling mark needs one and background-size
+     repeats its list across layers when it is shorter, which would silently
+     resize the elevation fill and the texture too. */
+  --pw-ornament: none;
+  --pw-ornament-size: auto;
+
+  /* The elevation fill's tile, for the same reason. A dithered elevation is a
+     pattern and a pattern has a pitch. */
+  --pw-fill-size: auto;
+
   /* How far the label half of a metadata pair drops behind its value. */
   --pw-meta-label-opacity: 0.72;
 

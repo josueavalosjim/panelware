@@ -944,6 +944,33 @@
      }
     },
     {
+     "name": "--pw-ornament",
+     "values": {
+      "both": {
+       "declared": "none",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-ornament-size",
+     "values": {
+      "both": {
+       "declared": "auto",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-fill-size",
+     "values": {
+      "both": {
+       "declared": "auto",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-meta-label-opacity",
      "values": {
       "both": {

@@ -30,6 +30,7 @@
   .pw-switch {
     /* A well with something sitting in it, exactly as the checkbox is. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -57,6 +58,7 @@
 
   .pw-switch-thumb {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: block;
     height: 100%;
     aspect-ratio: 1;

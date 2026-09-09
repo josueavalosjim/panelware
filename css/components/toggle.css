@@ -8,6 +8,7 @@
 @layer pw.components {
   .pw-toggle {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -37,6 +38,7 @@
   .pw-toggle[aria-pressed="true"],
   .pw-toggle[aria-checked="true"] {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     background-color: var(--pw-color-base-300);
     font-weight: 600;
   }

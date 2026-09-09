@@ -31,6 +31,7 @@
 
   .pw-tab {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -49,6 +50,7 @@
   .pw-tab[data-state="active"],
   .pw-tab[aria-selected="true"] {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     background-color: var(--pw-color-base-200);
     font-weight: 600;
     /* The fuse: the trigger drops a pixel and then overlaps the panel by the
@@ -72,6 +74,7 @@
      that lands its bottom edge under the panel. */
   .pw-tab:not([data-state="active"]):not([aria-selected="true"]):active {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     transform: translateY(var(--pw-press-travel));
     opacity: 1;
   }
@@ -85,6 +88,7 @@
     padding: var(--pw-panel-pad);
     background-color: var(--pw-color-base-200);
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     border-radius: 0 var(--pw-radius-box) var(--pw-radius-box) var(--pw-radius-box);
     color: var(--pw-color-base-content);
     font-family: var(--pw-font-ui);

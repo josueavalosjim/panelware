@@ -517,6 +517,23 @@
   --pw-texture: none;
   --pw-texture-opacity: 0;
 
+  /* Ornament: a mark a skin draws that no component does. Corner ticks, a
+     bracketed frame, a hatched border. It is a background layer rather than an
+     element because a treatment cannot add elements: pw.components sorts after
+     pw.treatment, so the only things a skin can put on a surface are the ones
+     the surface left a slot for. --pw-selected-mark proved the shape works;
+     this is the general case.
+
+     The size is separate because a tiling mark needs one and background-size
+     repeats its list across layers when it is shorter, which would silently
+     resize the elevation fill and the texture too. */
+  --pw-ornament: none;
+  --pw-ornament-size: auto;
+
+  /* The elevation fill's tile, for the same reason. A dithered elevation is a
+     pattern and a pattern has a pitch. */
+  --pw-fill-size: auto;
+
   /* How far the label half of a metadata pair drops behind its value. */
   --pw-meta-label-opacity: 0.72;
 
@@ -1828,8 +1845,30 @@
       var(--pw-bevel-sunken-outer),
       var(--pw-bevel-sunken-inner);
 
-    /* The default for anything that has not said otherwise. */
+    /* The other half of elevation, for a skin whose depth is not a shadow.
+
+       --pw-elev is consumed as a box-shadow, which was fine while both skins
+       answered with one. A skin whose raised and sunken states differ by
+       DITHER DENSITY, by hatch pitch, or by any other pattern cannot put that
+       in a box-shadow at all: it is a background-image, and no custom property
+       feeds two different properties.
+
+       So the pair is mirrored. The chrome skin has no fill elevation and says
+       so with none, which costs nothing and means the slot below can read it
+       unconditionally rather than guarding every surface.
+
+       Same reason these live on the component rather than on :root: a fill
+       derived from a skin knob has to resolve against whatever the element
+       inherited, not against the document. */
+    --pw-fill-raised: none;
+    --pw-fill-sunken: none;
+
+    /* The defaults for anything that has not said otherwise. A component
+       choosing sunken sets both, and a test holds the two together, because
+       setting one and forgetting the other is a surface that is sunken in one
+       skin and raised in another with nothing reporting it. */
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
   }
 
   /* ── The shared slot ─────────────────────────────────────────────────────
@@ -1857,6 +1896,22 @@
     /* The bevel, plus the focus ring's inner half when there is one.
        --pw-focus-halo is transparent by default and set on :focus-visible. */
     box-shadow: var(--pw-elev), var(--pw-focus-halo);
+    /* The background stack, in one token so a component that paints its own
+       surface can splice the slot in rather than repeating it. The visualiser
+       is the one that does, and before this token existed it simply shadowed
+       the whole stack: the cyber skin's scanlines never reached the one
+       surface in the kit that is literally a screen.
+
+       Ornament on top, then the elevation fill, then the texture underneath.
+       That order is the argument: a mark a skin draws sits over the depth, and
+       the depth sits over the surface pattern. */
+    --pw-surface-layers: var(--pw-ornament), var(--pw-elev-fill), var(--pw-texture);
+    background-image: var(--pw-surface-layers);
+    /* One size per layer, in the same order. background-size repeats a short
+       list across every layer, so a single value here would resize the fill
+       and the texture to whatever the ornament wanted. */
+    --pw-surface-sizes: var(--pw-ornament-size), var(--pw-fill-size), auto;
+    background-size: var(--pw-surface-sizes);
     /* No border. The outer inset shadow IS the frame, which is 98.css's own
        arrangement: it sets border: none on its buttons and lets the four
        insets carry the whole edge.
@@ -1872,7 +1927,6 @@
     border-radius: var(--pw-radius-control);
     clip-path: var(--pw-clip-control);
     background-color: var(--pw-color-base-200);
-    background-image: var(--pw-texture);
     color: var(--pw-color-base-content);
   }
 
@@ -2132,6 +2186,14 @@
     --pw-shadow-sunken:
       inset 0 0 0 1px var(--pw-bevel-boundary),
       inset 0 2px 6px -2px var(--pw-color-scrim);
+
+    /* No fill elevation. This skin's depth is a line and an inner shadow, both
+       of which are shadows, so the fill pair is declared and empty. Declaring
+       it rather than leaving it to the base is the same rule the rest of this
+       file follows: a skin that states only its differences inherits the other
+       one's decisions for everything it forgot. */
+    --pw-fill-raised: none;
+    --pw-fill-sunken: none;
   }
 
   /* Uppercase, and only where the reference set puts it.
@@ -2572,6 +2634,7 @@
 @layer pw.components {
   .pw-button {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2591,6 +2654,7 @@
 
   .pw-button:active {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     transform: translateY(var(--pw-press-travel));
     opacity: 1;
   }
@@ -2638,6 +2702,7 @@
 @layer pw.components {
   .pw-toggle {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2667,6 +2732,7 @@
   .pw-toggle[aria-pressed="true"],
   .pw-toggle[aria-checked="true"] {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     background-color: var(--pw-color-base-300);
     font-weight: 600;
   }
@@ -2758,6 +2824,7 @@
 
   .pw-tab {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2776,6 +2843,7 @@
   .pw-tab[data-state="active"],
   .pw-tab[aria-selected="true"] {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     background-color: var(--pw-color-base-200);
     font-weight: 600;
     /* The fuse: the trigger drops a pixel and then overlaps the panel by the
@@ -2799,6 +2867,7 @@
      that lands its bottom edge under the panel. */
   .pw-tab:not([data-state="active"]):not([aria-selected="true"]):active {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     transform: translateY(var(--pw-press-travel));
     opacity: 1;
   }
@@ -2812,6 +2881,7 @@
     padding: var(--pw-panel-pad);
     background-color: var(--pw-color-base-200);
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     border-radius: 0 var(--pw-radius-box) var(--pw-radius-box) var(--pw-radius-box);
     color: var(--pw-color-base-content);
     font-family: var(--pw-font-ui);
@@ -2866,6 +2936,7 @@
 @layer pw.components {
   .pw-window {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: flex;
     flex-direction: column;
     border-radius: var(--pw-radius-box);
@@ -2914,6 +2985,7 @@
 
   .pw-title-button {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2932,6 +3004,7 @@
   .pw-title-button:hover { opacity: 0.92; }
   .pw-title-button:active {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     transform: translateY(var(--pw-press-travel));
     opacity: 1;
   }
@@ -2987,6 +3060,7 @@
 
   .pw-panel {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     position: fixed;
     z-index: var(--pw-z-panel);
     top: 50%;
@@ -3088,6 +3162,7 @@
 
   .pw-slider-track {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     position: relative;
     flex-grow: 1;
     background-color: var(--pw-color-base-300);
@@ -3151,6 +3226,7 @@
 
   .pw-slider-thumb {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: block;
     /* Static, deliberately. Radix does not position the thumb, it wraps it in
        its own absolutely positioned span and moves that. An absolute on the
@@ -3213,6 +3289,7 @@
        disabled slider is. The shape rejected for the live state is the
        correct meaning for the dead one. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     background-color: var(--pw-color-base-300);
     cursor: default;
   }
@@ -3266,6 +3343,7 @@
 
   .pw-transport-button {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -3282,6 +3360,7 @@
   .pw-transport-button:hover { opacity: 0.92; }
   .pw-transport-button:active {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     transform: translateY(var(--pw-press-travel));
     opacity: 1;
   }
@@ -3300,6 +3379,7 @@
      need a second implementation. */
   .pw-progress {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     position: relative;
     display: block;
     width: 100%;
@@ -3355,6 +3435,7 @@
 @layer pw.components {
   .pw-eq {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: flex;
     align-items: stretch;
     gap: var(--pw-eq-gap);
@@ -3512,6 +3593,7 @@
 
   .pw-menu {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     min-width: 12rem;
     padding: var(--pw-space-3xs) 0;
     background-color: var(--pw-color-base-200);
@@ -3651,6 +3733,7 @@
 @layer pw.components {
   .pw-list {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: block;
     margin: 0;
     padding: 0;
@@ -3824,6 +3907,7 @@
        sit in the same form. A text field raised beside a sunken select would
        be two vocabularies in one row. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: inline-block;
     min-width: var(--pw-control-min-w);
     /* The overflow gate runs at 320px and an <input> sizes itself from its
@@ -3913,6 +3997,7 @@
        kit will not let colour be the only carrier of a state, so the press is
        the same pixel drop every other control uses. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -3980,6 +4065,7 @@
   /* ── Select ─────────────────────────────────────────────────────────── */
   .pw-select {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: inline-flex;
     align-items: center;
     gap: var(--pw-control-gap);
@@ -4007,6 +4093,7 @@
      read as a button on a well rather than an arrow drawn on a box. */
   .pw-select-button {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -4027,6 +4114,7 @@
   .pw-select[data-state="open"] .pw-select-button,
   .pw-select:active .pw-select-button {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
   }
 
   .pw-checkbox:active,
@@ -4054,6 +4142,7 @@
   /* The open list reuses the menu's surface, because it is one. */
   .pw-select-list {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     min-width: var(--radix-select-trigger-width);
     max-height: var(--radix-select-content-available-height);
     padding: var(--pw-space-3xs) 0;
@@ -4130,6 +4219,7 @@
   .pw-switch {
     /* A well with something sitting in it, exactly as the checkbox is. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -4157,6 +4247,7 @@
 
   .pw-switch-thumb {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: block;
     height: 100%;
     aspect-ratio: 1;
@@ -4376,6 +4467,7 @@
 @layer pw.components {
   .pw-tooltip {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     max-width: 20rem;
     padding: var(--pw-space-2xs) var(--pw-space-sm);
     background-color: var(--pw-color-base-200);
@@ -4441,6 +4533,7 @@
   }
   .pw-badge {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: inline-flex;
     align-items: center;
     gap: var(--pw-space-2xs);
@@ -4622,6 +4715,7 @@
 
   .pw-lcd {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     /* The readout is set deeper than anything else in the kit. It is a
        window into a box, not a face on one. */
     --pw-bevel-depth: 2;
@@ -4835,6 +4929,7 @@
   .pw-visualiser {
     /* A well, like the equaliser's. The display is set into the chassis. */
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     /* The height of one column, which is what the gradient is sized to. */
     --pw-vis-col: calc(var(--pw-vis-h) - (var(--pw-vis-gap) * 2));
     display: flex;
@@ -4845,10 +4940,16 @@
     background-color: var(--pw-color-vis-bg);
     /* The dot grid, which is line 1 of the palette this borrows its structure
        from. Drawn rather than tiled from an image: one gradient, no request,
-       and it scales with the pitch token. */
-    background-image:
-      radial-gradient(var(--pw-color-vis-grid) 1px, transparent 1px);
-    background-size: var(--pw-vis-grid-pitch) var(--pw-vis-grid-pitch);
+       and it scales with the pitch token.
+
+       It goes in the ornament slot rather than in a background-image of its
+       own, and that is a fix rather than a preference. Declaring
+       background-image here put a component rule in pw.components over the
+       shared stack in pw.treatment, so this surface silently dropped the
+       elevation fill and the texture: the cyber skin's scanlines never reached
+       the one thing in the kit that is actually a screen. */
+    --pw-ornament: radial-gradient(var(--pw-color-vis-grid) 1px, transparent 1px);
+    --pw-ornament-size: var(--pw-vis-grid-pitch) var(--pw-vis-grid-pitch);
   }
 
   .pw-visualiser-band {

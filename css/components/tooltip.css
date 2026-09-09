@@ -24,6 +24,7 @@
 @layer pw.components {
   .pw-tooltip {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     max-width: 20rem;
     padding: var(--pw-space-2xs) var(--pw-space-sm);
     background-color: var(--pw-color-base-200);

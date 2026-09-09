@@ -21,6 +21,7 @@
 @layer pw.components {
   .pw-list {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     display: block;
     margin: 0;
     padding: 0;

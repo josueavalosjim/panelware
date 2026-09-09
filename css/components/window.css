@@ -22,6 +22,7 @@
 @layer pw.components {
   .pw-window {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: flex;
     flex-direction: column;
     border-radius: var(--pw-radius-box);
@@ -70,6 +71,7 @@
 
   .pw-title-button {
     --pw-elev: var(--pw-shadow-raised);
+    --pw-elev-fill: var(--pw-fill-raised);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -88,6 +90,7 @@
   .pw-title-button:hover { opacity: 0.92; }
   .pw-title-button:active {
     --pw-elev: var(--pw-shadow-sunken);
+    --pw-elev-fill: var(--pw-fill-sunken);
     transform: translateY(var(--pw-press-travel));
     opacity: 1;
   }
