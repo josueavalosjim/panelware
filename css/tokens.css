@@ -643,12 +643,25 @@
  * cyber skin's, resolves them to the same phosphor pair.
  *
  * So the analyser's palette is declared once here rather than four times in
- * the semantic files, and neither shipped skin overrides it. The cyber skin
- * does not, and that is the decision rather than an omission: its own readout
- * is the same green phosphor chrome's is, because the display is a light
- * source and the skin is a chassis around it. A skin that genuinely wants a
- * different scope has the four tokens, the same way --pw-clip-control sits
- * neutral in the structure until a skin says otherwise.
+ * the semantic files, and a skin overrides it the way it overrides
+ * --pw-clip-control: the neutral value sits with the structure until a skin
+ * says otherwise. The cyber skin says otherwise.
+ *
+ * It has to. The ramp below is green, amber, red, which is the chrome skin's
+ * three-ink status vocabulary, and the cyber skin collapses success, warning
+ * and error to a single cyan on purpose: one accent, with shape carrying what
+ * hue used to. An analyser painting three hues under a skin that has no green
+ * and no red anywhere else contradicts that outright.
+ *
+ * The first version of this file argued the opposite, that a lit display is a
+ * light source and does not follow the skin. That argument is real and it is
+ * about THEMES: a readout does not dim because the page went dark. It was
+ * stretched to cover skins, which is a different question. Light against dark
+ * is the room; chrome against cyber is what the device is.
+ *
+ * The ground is its own token rather than --pw-color-lcd, for the same reason.
+ * Borrowing the readout's ground saved a token and coupled two displays that
+ * a skin has to be able to move separately.
  *
  * ── Where the structure comes from ───────────────────────────────────────
  * Strider's 1998 "Unofficial WinAMP Skin Specifications" documents
@@ -667,20 +680,22 @@
  */
 
 :root {
-  /* The ramp, bottom to top: quiet, working, hot. Read at the 300 weight
-     because everything here sits on --pw-color-lcd, which is near-black, and
-     the 100s are tints meant for paper-coloured grounds. */
+  /* The face. Line 0 of the palette this borrows its structure from. */
+  --pw-color-vis-bg: var(--pw-phos-950);
+
+  /* The dot grid, line 1. Dim enough to read as texture rather than as
+     content, which is the one thing that line is doing. */
+  --pw-color-vis-grid: var(--pw-phos-800);
+
+  /* The ramp, bottom to top: quiet, working, hot. Lines 2 to 17, as three
+     anchors. Read at the 300 weight because everything here sits on a
+     near-black face and the 100s are tints meant for paper-coloured grounds. */
   --pw-color-vis-low:  var(--pw-green-300);
   --pw-color-vis-mid:  var(--pw-amber-300);
   --pw-color-vis-high: var(--pw-red-300);
 
-  /* The dot grid. Dim enough to read as texture rather than as content, which
-     is the one thing the original's line 1 is doing. */
-  --pw-color-vis-grid: var(--pw-phos-800);
-
-  /* The peak marker is the readout's own ink. It is the brightest thing on the
-     surface in the original too, and giving it a token of its own would be a
-     fifth value that has to be kept in step with the display it sits on. */
+  /* The peak marker, line 23, and the brightest thing on the surface. */
+  --pw-color-vis-peak: var(--pw-phos-300);
 }
 
 /**
@@ -1075,6 +1090,29 @@
   /* No cast shadow: nothing here is a physical object sitting on a surface. */
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
+  /* THE ANALYSER, IN ONE ACCENT.
+
+     The default ramp is green, amber, red, which is the chrome skin's status
+     vocabulary. This skin collapses success, warning and error to a single
+     cyan on purpose, so three hues on the analyser would contradict the one
+     decision that does most of the work here.
+
+     Magnitude is carried by brightness instead, which is what a phosphor
+     scope does anyway: the ramp is one hue from dim to near-white, and the
+     face goes with it so the bars are not cyan on a green ground.
+
+     The readout is left alone deliberately. It keeps the green phosphor,
+     because a segment display reading a time is a different object from a
+     spectrum, and green is what that object has always been. The two share
+     nothing but a lineage now, which is why the analyser has its own face
+     token rather than borrowing --pw-color-lcd. */
+  --pw-color-vis-bg:   var(--pw-cyan-900);
+  --pw-color-vis-grid: var(--pw-cyan-800);
+  --pw-color-vis-low:  var(--pw-cyan-800);
+  --pw-color-vis-mid:  var(--pw-cyan-300);
+  --pw-color-vis-high: var(--pw-cyan-100);
+  --pw-color-vis-peak: var(--pw-cyan-100);
+
   /* SQUARE, because the lineage has no radius in it.
 
      The notch was only ever half the shape. --pw-clip-control reaches the
@@ -1210,6 +1248,13 @@
   --pw-glass-blur: 0px;
 
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  --pw-color-vis-bg:   var(--pw-cyan-900);
+  --pw-color-vis-grid: var(--pw-cyan-800);
+  --pw-color-vis-low:  var(--pw-cyan-800);
+  --pw-color-vis-mid:  var(--pw-cyan-300);
+  --pw-color-vis-high: var(--pw-cyan-100);
+  --pw-color-vis-peak: var(--pw-cyan-100);
 
   --pw-radius-control: 0;
   --pw-radius-box:     0;

@@ -38,6 +38,29 @@
   /* No cast shadow: nothing here is a physical object sitting on a surface. */
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
 
+  /* THE ANALYSER, IN ONE ACCENT.
+
+     The default ramp is green, amber, red, which is the chrome skin's status
+     vocabulary. This skin collapses success, warning and error to a single
+     cyan on purpose, so three hues on the analyser would contradict the one
+     decision that does most of the work here.
+
+     Magnitude is carried by brightness instead, which is what a phosphor
+     scope does anyway: the ramp is one hue from dim to near-white, and the
+     face goes with it so the bars are not cyan on a green ground.
+
+     The readout is left alone deliberately. It keeps the green phosphor,
+     because a segment display reading a time is a different object from a
+     spectrum, and green is what that object has always been. The two share
+     nothing but a lineage now, which is why the analyser has its own face
+     token rather than borrowing --pw-color-lcd. */
+  --pw-color-vis-bg:   var(--pw-cyan-900);
+  --pw-color-vis-grid: var(--pw-cyan-800);
+  --pw-color-vis-low:  var(--pw-cyan-800);
+  --pw-color-vis-mid:  var(--pw-cyan-300);
+  --pw-color-vis-high: var(--pw-cyan-100);
+  --pw-color-vis-peak: var(--pw-cyan-100);
+
   /* SQUARE, because the lineage has no radius in it.
 
      The notch was only ever half the shape. --pw-clip-control reaches the
@@ -173,6 +196,13 @@
   --pw-glass-blur: 0px;
 
   --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  --pw-color-vis-bg:   var(--pw-cyan-900);
+  --pw-color-vis-grid: var(--pw-cyan-800);
+  --pw-color-vis-low:  var(--pw-cyan-800);
+  --pw-color-vis-mid:  var(--pw-cyan-300);
+  --pw-color-vis-high: var(--pw-cyan-100);
+  --pw-color-vis-peak: var(--pw-cyan-100);
 
   --pw-radius-control: 0;
   --pw-radius-box:     0;

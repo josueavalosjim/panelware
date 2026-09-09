@@ -42,7 +42,7 @@
     gap: var(--pw-vis-gap);
     height: var(--pw-vis-h);
     padding: var(--pw-vis-gap);
-    background-color: var(--pw-color-lcd);
+    background-color: var(--pw-color-vis-bg);
     /* The dot grid, which is line 1 of the palette this borrows its structure
        from. Drawn rather than tiled from an image: one gradient, no request,
        and it scales with the pitch token. */
@@ -88,7 +88,7 @@
     --pw-vis-hold: 0;
     height: var(--pw-border);
     bottom: calc(var(--pw-vis-hold) * 100%);
-    background-color: var(--pw-color-lcd-content);
+    background-color: var(--pw-color-vis-peak);
   }
 
   /* Forced colors strips background-color and background-image both, so the

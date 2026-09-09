@@ -538,6 +538,29 @@ The cyber skin points `--pw-font-ui` at the mono stack, and a fixed pitch is
 what makes a row of controls read as an instrument rather than as a web page.
 A skin that differs only by hue is a theme.
 
+*The analyser*
+
+A skin owns the visualiser's whole palette, and it should take it. The default
+ramp is green, amber, red, which is the chrome skin's status vocabulary, so a
+skin with a different one has to say so or it paints hues it does not otherwise
+own.
+
+| Token | What it does |
+| --- | --- |
+| `--pw-color-vis-bg` | the analyser's face |
+| `--pw-color-vis-grid` | its dot grid |
+| `--pw-color-vis-low` | the ramp at the floor |
+| `--pw-color-vis-mid` | the ramp's middle anchor |
+| `--pw-color-vis-high` | the ramp at the ceiling |
+| `--pw-color-vis-peak` | the held peak marker |
+
+The cyber skin is the worked example: it collapses success, warning and error
+to a single accent, so its analyser carries magnitude by brightness in one hue
+instead of by three. Its face moves with the ramp, which is why the face is a
+token of its own rather than the readout's `--pw-color-lcd`. The readout keeps
+its green phosphor under both skins, deliberately: a segment display reading a
+time is a different object from a spectrum.
+
 *Geometry and surface*
 
 | Token | What it does |
