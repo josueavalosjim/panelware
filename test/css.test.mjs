@@ -654,6 +654,94 @@ describe('the published reference data', () => {
     assert.equal(checked, 8, `only ${checked} screened grounds measured`);
   });
 
+  test('no look crowds a control label against its own edge', () => {
+    /* Horizontal padding only means something as a proportion of the type it
+       is set in, which is why an absolute value is the wrong thing to compare
+       across looks. 12px is roomy at 15px type and tight at 24.
+
+       The redline preset shipped at 6px on 13px type, which is 0.46em, and the
+       label very nearly touched the border. The reasoning was that signage is
+       dense, and it is: dense in the spacing BETWEEN elements and generous
+       inside the lozenge. Getting that backwards is easy and nothing here
+       could see it, because every gate measured colour, geometry, and hit
+       targets, and none of them measured whether a control had room to
+       breathe.
+
+       0.5em is a floor rather than a target, and it is calibrated the way the
+       halftone's calmness number is: to the case that was visibly wrong. It
+       does not know what looks good, it knows what is definitely too tight.
+       The densest look that ships sits at 0.50 and the one that did not clear
+       it was at 0.46.
+
+       Resolved through the space and type scales rather than read as pixels,
+       because that is how the tokens are written. */
+    const files = [
+      ...readdirSync(join(ROOT, 'css', 'tokens'))
+        .filter((f) => /^(skin\.|structural|density)/.test(f) && f.endsWith('.css'))
+        .map((f) => join('css', 'tokens', f)),
+      ...readdirSync(join(ROOT, 'css', 'tokens', 'presets'))
+        .filter((f) => f.endsWith('.css')).map((f) => join('css', 'tokens', 'presets', f)),
+    ];
+    /* Every declaration of the two tokens that matter, plus the scales they
+       resolve through, keyed by the block that declared them. */
+    /* The base scale is structural.css and only structural.css. Reading it from
+       whichever file happened to be walked first put the cyber skin's own type
+       override in as everybody's baseline, which made the chrome numbers wrong
+       by a rung. A skin's override is applied per file below, on top of this. */
+    const scale = new Map([...read('css/tokens/structural.css')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .matchAll(/(--pw-(?:space|text)-[\w-]+)\s*:\s*([^;]+);/g)]
+      .map((m) => [m[1], m[2].trim()]));
+    assert.ok(scale.size >= 10, `only ${scale.size} scale rungs found`);
+
+    const blocks = [];
+    for (const file of files) {
+      const css = read(file).replace(/\/\*[\s\S]*?\*\//g, '');
+      for (const [, sel, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        blocks.push({ file, sel: sel.trim().split(/\s+/).join(' '), body });
+      }
+    }
+    const rem = (v) => {
+      const direct = v.match(/^([\d.]+)rem$/);
+      if (direct) return Number(direct[1]) * 16;
+      const px = v.match(/^([\d.]+)px$/);
+      if (px) return Number(px[1]);
+      const ref = v.match(/^var\((--pw-[\w-]+)\)$/);
+      assert.ok(ref && scale.has(ref[1]), `cannot resolve ${v}`);
+      return rem(scale.get(ref[1]));
+    };
+
+    let checked = 0;
+    for (const b of blocks) {
+      const pad = b.body.match(/--pw-control-pad-x\s*:\s*([^;]+);/);
+      const text = b.body.match(/--pw-control-text\s*:\s*([^;]+);/);
+      if (!pad) continue;
+      /* The type comes from the same block when it sets one, and otherwise
+         from the scale rung this density reads. A block that moves padding and
+         not type is compared against both rungs, since it applies at both. */
+      /* Which rung applies is decided by the selector, not by guessing: a
+         compact block reads --pw-text-micro and everything else reads
+         --pw-text-ui, because that is what density.css aliases
+         --pw-control-text to. A skin that moved the rung is read from
+         wherever it moved it, which is why the scale is collected first. */
+      const compact = /\[data-density="compact"\]/.test(b.sel);
+      const rung = compact ? '--pw-text-micro' : '--pw-text-ui';
+      const moved = blocks
+        .filter((o) => o.file === b.file && new RegExp(`${rung}\\s*:`).test(o.body))
+        .map((o) => o.body.match(new RegExp(`${rung}\\s*:\\s*([^;]+);`))[1].trim());
+      const size = text ? rem(text[1].trim())
+        : rem(moved.length ? moved[0] : `var(${rung})`);
+      for (const _ of [size]) {
+        const ratio = rem(pad[1].trim()) / size;
+        checked += 1;
+        assert.ok(ratio >= 0.5,
+          `${b.file} "${b.sel}" sets --pw-control-pad-x to ${ratio.toFixed(2)}em of its type, ` +
+          'which crowds the label against the edge');
+      }
+    }
+    assert.ok(checked >= 6, `only ${checked} padding declarations measured`);
+  });
+
   test('the demo offers every look the tokens declare', () => {
     /* The same drift the check scripts had, in the one place a visitor meets
        it. demo/index.html hand-maintains two lists: the skin picker's

@@ -99,8 +99,14 @@
   --pw-glow-radius: 12px;
   --pw-glow-color: var(--pw-hot-300);
 
-  /* Tighter than the skin it sits in, which is already tighter than chrome. */
-  --pw-control-pad-x: var(--pw-space-xs);
+  /* Tighter BETWEEN controls, not inside them. The first version took the
+     padding down to 6px as well, which is 0.46em of the type it is set in, and
+     it read as cramped because it was: the label very nearly touched the
+     border. Signage is dense in its spacing and generous in its lozenges, and
+     I had that backwards.
+
+     So the gap tightens and the padding is left to the skin. A preset does not
+     have to win on every axis to be a different thing. */
   --pw-control-gap: var(--pw-space-2xs);
   --pw-tracking-ui: 0.08em;
 
@@ -112,9 +118,10 @@
   --pw-color-vis-peak: var(--pw-neon-050);
 }
 
-/* (0,3,0), so it beats the block above and the density file both. */
+/* (0,3,0), so it beats the block above and the density file both. Only the gap
+   is restated, because the padding is the skin's now and the skin already
+   declares both densities. */
 [data-skin="cyber"][data-preset="redline"][data-density="compact"] {
-  --pw-control-pad-x: var(--pw-space-3xs);
   --pw-control-gap: var(--pw-space-3xs);
 }
 
@@ -162,7 +169,6 @@
   --pw-glow-radius: 12px;
   --pw-glow-color: var(--pw-hot-300);
 
-  --pw-control-pad-x: var(--pw-space-xs);
   --pw-control-gap: var(--pw-space-2xs);
   --pw-tracking-ui: 0.08em;
 
