@@ -1,5 +1,99 @@
 # Changelog
 
+## 0.6.0
+
+A third skin, a preset for each of the three, and the architectural change that
+made the third skin possible.
+
+### The elevation slot opens
+
+`--pw-elev` is consumed as a `box-shadow`. That was fine while both skins
+answered with one, and it is why the kit's central claim, that a skin replaces
+the treatment without touching a component, had only ever been proved in the
+shape it was built for.
+
+The shadow pair is mirrored by `--pw-fill-raised` and `--pw-fill-sunken`, and
+the slot grew a three-layer background stack: ornament, elevation fill, texture.
+`--pw-ornament` is the same mechanism for a mark no component draws, because a
+treatment cannot add elements and a slot is the only way a skin puts something
+new on a surface.
+
+Every rule assigning `--pw-elev` now assigns `--pw-elev-fill`, and a test holds
+the pair together. The failure it exists for is silent: a rule that sets the
+shadow to sunken and leaves the fill on the raised default is correct under both
+shadow skins, because both fills are `none`.
+
+### `paper`, whose depth is not a shadow
+
+Elevation is dither density: a raised surface printed at a coarse screen and a
+sunken one at a fine faint one. Measured, which is the point: a raised button
+and a sunken checkbox have **identical** box-shadows and differ only in their
+`background-image`.
+
+The screen is a translucent black rather than a named ink, which took two
+attempts to get right. A fixed colour has a different local contrast on every
+ground it is printed on: a warm grey dot measured 1.64:1 on the paper stock and
+3.91:1 on the primary. A screen is the surface's own colour at partial coverage.
+
+A halftone surface also has a **second ground** the contrast gate cannot see,
+since it reads a computed `background-color` and that is the stock rather than
+the dot. `check` refuses a translucent background, correctly, so a test
+composites what the browser will paint across eight grounds and checks both
+legibility and calmness.
+
+### Skins move more than colour now
+
+Measured before this release: the cyber skin overrode 29 of 29 semantic
+colours, 10 of 10 treatment knobs, **0 of 11** density tokens and **0 of 18**
+motion tokens. Every control was the same height, padding, type and timing as
+chrome's. A skin that moves all of its colour and none of its rhythm reads as
+the same design twice.
+
+Type, padding, gaps, border and focus weight, and all of motion are a skin's to
+move. `--pw-control-h` is not: 44px is a hit target, not a style, and
+`check:a11y` measures it.
+
+Two ordering traps went with it. `motion.css` imported after every skin, so a
+skin's timing was silently ignored; it imports before them now. And a skin
+moving a density token wins at *both* densities, so the compact axis was dead
+under cyber for everything the skin had touched. Both are guarded.
+
+### A preset may move rhythm, and the line moved
+
+It was "whether a treatment file is involved". It is now: **a preset may change
+anything a skin may change, except the treatment.** `deck` takes the new range
+and is tighter; it is still a preset because chrome's bevel still paints its
+depth.
+
+Two new presets:
+
+- **`redline`**, for cyber. The skin is documented as accessible cyberpunk and
+  is not one: it is a terminal, which its own reference set says in its first
+  line. The restraint is what makes it readable for hours, so the base keeps it
+  and this is where the name gets cashed: near-black stock, one hot ink, the
+  raster at 0.16 against the skin's 0.055, the glow spent on everything.
+- **`newsprint`**, for paper. The one-colour job: cool cheap stock, no spot at
+  all, a heavier screen. Losing the spot is the interesting part, because
+  warning and error go graphite and the badge glyph is the only thing left
+  saying which. A palette with three status hues can claim it never leans on
+  colour alone without ever being asked to prove it.
+
+### Fixes
+
+**The cyber skin declared a whole amber ramp and read none of it**, kept alive
+by a comment saying it survived for "the readout, which is amber because a
+segment display is". The readout is `--pw-phos-300` and always has been. The
+reason was false the day it was written, and those four shades are the ones
+that collided with the chrome skin's amber and painted its warning ink for
+three releases.
+
+**Visible change:** the redline preset no longer crowds its labels. It shipped
+at 0.46em of horizontal padding against the type it is set in, where every
+other look sits between 0.50 and 1.07. There is a floor now.
+
+12 looks. 299 declared pairs across 13 themes, 51384 painted pairs across 6
+looks, 24 axe combinations, 196 tests.
+
 ## 0.5.0
 
 The visualiser, a corner fix that changes how the cyber skin looks, and a
