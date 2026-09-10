@@ -92,8 +92,10 @@ describe('badge', () => {
        the whole meaning, which is the failure this component exists to
        avoid. The cells have to actually differ. */
     const cell = (status) => {
-      const m = render(h(Badge, { status }, 'x')).match(/--pw-icon-x:(\d+);--pw-icon-y:(\d+)/);
-      return `${m[1]},${m[2]}`;
+      const name = render(h(Badge, { status }, 'x')).match(/data-icon="([a-z0-9-]+)"/)?.[1];
+      assert.ok(name, `the ${status} badge names no icon`);
+      const c = ICON_INDEX[name];
+      return `${c.x},${c.y}`;
     };
     const cells = ['success', 'warning', 'error', 'neutral'].map(cell);
     assert.equal(new Set(cells).size, 4, `marks repeat: ${cells.join(' ')}`);
@@ -111,7 +113,12 @@ describe('badge', () => {
        had no pixel grid at all. */
     const html = render(h(Badge, { status: 'success' }, 'Connected'));
     assert.doesNotMatch(html, /[✓×•]/);
-    assert.match(html, /--pw-icon-x:/);
+    /* The cell used to be pushed inline and is now named, with the numbers in
+       the generated icon-index.css. Either way the assertion is the same: the
+       mark resolves to a drawn cell rather than to a glyph the reader's font
+       happens to supply. */
+    const name = html.match(/data-icon="([a-z0-9-]+)"/)?.[1];
+    assert.ok(name && ICON_INDEX[name], `names ${name}, which is not on the sheet`);
   });
 });
 
@@ -283,8 +290,21 @@ describe('window', () => {
 
 describe('spinner', () => {
   const frames = ICON_NAMES.filter((n) => n.startsWith('spinner-'));
-  const declared = (html, side) =>
-    Number(html.match(new RegExp(`--pw-icon-ink-${side}:\\s*(\\d+)`))?.[1]);
+  /* The bearings moved out of the markup and into a generated
+     .pw-spinner .pw-icon rule, because an inline style beats every layer and
+     a skin carrying its own sheet could not correct them. Same numbers, read
+     where they now live. */
+  const rule = readCss('css/components/icon-index.css')
+    .match(/\.pw-spinner\s+\.pw-icon\s*\{([^}]*)\}/)?.[1] ?? '';
+  const declared = (side) =>
+    Number(rule.match(new RegExp(`--pw-icon-ink-${side}:\\s*(\\d+)`))?.[1]);
+
+  test('the spinner still carries the component that reads that rule', () => {
+    /* The precondition. Every assertion below passes against an empty rule,
+       and would report green while measuring nothing. */
+    assert.ok(rule, 'no .pw-spinner .pw-icon rule, so the bearings are nobody\'s');
+    assert.match(render(h(Spinner, null)), /data-icon="spinner-1"/);
+  });
 
   test('its bearings are true of every frame, not of the cell it names', () => {
     /* The bug: it names spinner-1 and paints all eight, because the CSS walks
@@ -295,9 +315,8 @@ describe('spinner', () => {
 
        Not "equals 2": derived from the sheet, so redrawing a frame tighter
        fails this rather than silently making the pull too big again. */
-    const html = render(h(Spinner, null));
     for (const side of ['l', 'r']) {
-      const got = declared(html, side);
+      const got = declared(side);
       for (const frame of frames) {
         assert.ok(got <= ICON_INDEX[frame][side],
           `declares ${side}:${got}, more than ${frame} has (${ICON_INDEX[frame][side]}), `
@@ -309,24 +328,30 @@ describe('spinner', () => {
   test('and are as tight as that allows, rather than zero', () => {
     /* The lazy fix. Dropping the bearings entirely also stops the overlap and
        throws away the even optical gap the whole mechanism exists for. */
-    const html = render(h(Spinner, null));
     for (const side of ['l', 'r']) {
-      assert.equal(declared(html, side), Math.min(...frames.map((f) => ICON_INDEX[f][side])));
+      assert.equal(declared(side), Math.min(...frames.map((f) => ICON_INDEX[f][side])));
     }
   });
 });
 
 describe('icon', () => {
-  test('a caller\'s style is merged, not silently dropped', () => {
-    /* Icon spreads rest and then wrote its own style object after it, so a
-       style prop was accepted, overwritten, and never mentioned. The spinner
-       is the caller that needs to override, since an animated icon is not
-       showing the cell it names. */
+  test('names its cell rather than welding the numbers into the markup', () => {
+    /* This used to push --pw-icon-x, -y and both bearings inline, and a test
+       here guarded that a caller's own style survived the spread. Both are
+       gone on purpose. An inline style beats every layer, pw.overrides
+       included, so a skin pointing --pw-icon-sheet at a different sheet could
+       not correct the bearings its glyphs needed: the first sheet's numbers
+       were in the DOM. The name is now the only thing in the markup and the
+       numbers are in css/components/icon-index.css.
+
+       A caller's style is still merged, because rest is spread and nothing
+       overwrites it afterwards. */
     const html = render(h(Icon, {
       name: 'check', decorative: true, style: { ['--pw-icon-ink-l']: 99 },
     }));
-    assert.match(html, /--pw-icon-ink-l:\s*99/);
-    assert.match(html, /--pw-icon-y:/, 'the cell it computed is gone entirely');
+    assert.match(html, /data-icon="check"/);
+    assert.match(html, /--pw-icon-ink-l:\s*99/, 'a caller\'s style is dropped again');
+    assert.doesNotMatch(html, /--pw-icon-x:/, 'the cell is back in the markup');
   });
 });
 

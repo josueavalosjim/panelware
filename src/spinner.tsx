@@ -37,12 +37,6 @@ import type { HTMLAttributes } from 'react';
 
 import { cx } from './classes.js';
 import { Icon } from './icon.js';
-import { ICON_INDEX, ICON_NAMES, type IconName } from './icons.js';
-
-const FRAMES = ICON_NAMES.filter((n): n is IconName => n.startsWith('spinner-'));
-
-/** The blank every frame has, so the badge's pull is never more than the ink allows. */
-const shared = (side: 'l' | 'r') => Math.min(...FRAMES.map((n) => ICON_INDEX[n][side]));
 
 export interface SpinnerProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
   /** Announced when the spinner appears. Say what is loading, if you know. */
@@ -56,15 +50,12 @@ export function Spinner({ label = 'Loading', className, ...rest }: SpinnerProps)
           matter to the CSS, which walks the whole row from column 0, but it
           has to be a spinner cell so the row is right. Its bearings do not
           survive that walk, so they are replaced with the ones every frame
-          shares rather than left describing the cell this happens to name. */}
-      <Icon
-        name="spinner-1"
-        decorative
-        style={{
-          ['--pw-icon-ink-l' as string]: shared('l'),
-          ['--pw-icon-ink-r' as string]: shared('r'),
-        }}
-      />
+          shares rather than left describing the cell this happens to name.
+
+          That replacement was computed here and pushed inline. It is now a
+          generated .pw-spinner .pw-icon rule, because inline beat every layer
+          and a skin with its own sheet could not correct it. */}
+      <Icon name="spinner-1" decorative />
       <span className="pw-sr-only">{label}</span>
     </span>
   );

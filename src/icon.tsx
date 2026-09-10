@@ -17,7 +17,7 @@
 import type { HTMLAttributes } from 'react';
 
 import { cx } from './classes.js';
-import { ICON_INDEX, type IconName } from './icons.js';
+import type { IconName } from './icons.js';
 
 export type IconProps = Omit<HTMLAttributes<HTMLSpanElement>, 'children'> & {
   name: IconName;
@@ -27,30 +27,25 @@ export type IconProps = Omit<HTMLAttributes<HTMLSpanElement>, 'children'> & {
 );
 
 export function Icon({ name, label, decorative, className, ...rest }: IconProps) {
-  const cell = ICON_INDEX[name];
   return (
     <span
       {...rest}
       className={cx('pw-icon', className)}
+      /* The cell and its bearings come from css/components/icon-index.css,
+         which is generated from the same font data this component used to
+         read. They were pushed inline here, and that had to stop: an inline
+         style beats every layer, pw.overrides included, so a skin carrying
+         its own sprite sheet could not correct the bearings its glyphs
+         needed. The first sheet's numbers were welded into the markup.
+
+         It also means the React path and the CSS-only path are now the same
+         path. Hand-written markup has always said data-icon; this says it
+         too, matches the same (0,2,0) rule, and there is one place where an
+         icon's numbers live. */
+      data-icon={name}
       role={decorative ? undefined : 'img'}
       aria-label={decorative ? undefined : label}
       aria-hidden={decorative ? 'true' : undefined}
-      style={{
-        ['--pw-icon-x' as string]: cell.x,
-        ['--pw-icon-y' as string]: cell.y,
-        /* Unitless, because the stylesheet owns every pixel dimension and
-           taste-check's treatments check would flag a px literal arriving
-           through markup. A component that wants an even optical gap beside
-           a word multiplies these; one that does not, ignores them. */
-        ['--pw-icon-ink-l' as string]: cell.l,
-        ['--pw-icon-ink-r' as string]: cell.r,
-        /* The caller last, so these can be overridden rather than silently
-           dropped. One caller needs to: an icon the CSS animates is not
-           showing the cell it names, so the cell's own bearings are wrong for
-           it. See spinner.tsx. Before this, a style prop passed to Icon was
-           spread in above and then clobbered here without a word. */
-        ...rest.style,
-      }}
     />
   );
 }

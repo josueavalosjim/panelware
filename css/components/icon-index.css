@@ -236,4 +236,9 @@
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 2;
   }
+
+  .pw-spinner .pw-icon {
+    --pw-icon-ink-l: 2;
+    --pw-icon-ink-r: 2;
+  }
 }

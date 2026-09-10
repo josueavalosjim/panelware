@@ -102,11 +102,20 @@ ${names}
  * than the one this fixes: it would look almost right.
  *
  * Specificity is deliberate and the ordering falls out of it. The rule below
- * is (0,2,0), the .pw-icon defaults are (0,1,0), and an inline style beats
- * both, so a data-icon attribute overrides the defaults and the component's
- * own style still overrides the attribute. The spinner depends on exactly
- * that: its frame names a cell whose bearings do not survive the animation,
- * and it replaces them inline.
+ * is (0,2,0) and the .pw-icon defaults are (0,1,0), so a data-icon attribute
+ * overrides the defaults.
+ *
+ * The React component used to push all four numbers inline instead, and that
+ * had to stop before a skin could carry its own sheet. An inline style beats
+ * every layer, pw.overrides included, so a second sheet whose glyphs have
+ * different ink extents could not correct its bearings under React: the first
+ * sheet's numbers were welded into the markup. The component now renders
+ * data-icon and reads this file, which is also one fewer difference between
+ * the React path and the CSS-only one.
+ *
+ * The spinner is the reason the generator emits a rule of its own below. Its
+ * frame names a cell whose bearings do not survive the animation, and it used
+ * to replace them inline for the same reason everything else did.
  */
 export function iconsCss() {
   const rules = ICON_ORDER.map((n, i) => {
@@ -118,6 +127,21 @@ export function iconsCss() {
       `    --pw-icon-ink-r: ${b.r};\n` +
       '  }';
   }).join('\n\n');
+
+  /* The spinner walks a whole row from column 0, so the cell it names is not
+     the cell it shows and that cell's bearings are wrong for it. The tightest
+     bearing common to all eight frames is true of every frame it passes
+     through, and erring tight is the safe direction: too small leaves a hair
+     of extra gap, too large puts the ink through the text.
+
+     At (0,2,0) this ties with the data-icon rule above and wins on order, so
+     it has to stay after it. */
+  const frames = ICON_ORDER.filter((n) => n.startsWith('spinner-'));
+  const shared = (side) => Math.min(...frames.map((n) => bearings(n)[side]));
+  const spinner = `  .pw-spinner .pw-icon {\n` +
+    `    --pw-icon-ink-l: ${shared('l')};\n` +
+    `    --pw-icon-ink-r: ${shared('r')};\n` +
+    '  }';
 
   return `/**
  * Icon name to sheet cell, as CSS.
@@ -135,6 +159,8 @@ export function iconsCss() {
 
 @layer pw.components {
 ${rules}
+
+${spinner}
 }
 `;
 }

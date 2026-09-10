@@ -476,6 +476,10 @@ describe('a chevron points where its name says', () => {
     assert.match(rule[0], /margin-right:\s*calc\([^)]*--pw-icon-ink-r/);
     /* Scaled, or the correction is wrong at --pw-icon-scale: 2. */
     assert.match(rule[0], /--pw-icon-scale/);
-    assert.match(read('src/icon.tsx'), /--pw-icon-ink-l/);
+    /* And something has to declare what the badge subtracts. That used to be
+       icon.tsx, inline; it is the generated index now, because inline beat
+       every layer and a skin with its own sheet could not correct a bearing
+       welded into the markup. */
+    assert.match(read('css/components/icon-index.css'), /--pw-icon-ink-l:\s*\d+/);
   });
 });
