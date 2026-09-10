@@ -1382,6 +1382,19 @@
      }
     },
     {
+     "name": "--pw-icon-sheet",
+     "values": {
+      "light": {
+       "declared": "url(\"../../assets/icons.svg\")",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "url(\"../../assets/icons.svg\")",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-gloss-opacity",
      "values": {
       "light": {

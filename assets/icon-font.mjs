@@ -26,11 +26,16 @@
  * here can drift half a pixel off the grid under a transform.
  */
 
-export const ICON_W = 16;
-export const ICON_H = 16;
-export const ICON_COLS = 8;
+import {
+  ICON_COLS, ICON_H, ICON_ORDER, ICON_ROWS, ICON_W, derive, rectsOf,
+} from './icon-lattice.mjs';
 
-const I = {
+/* Re-exported rather than redeclared, so this file and every skin's sheet
+   agree about the grid by construction. See icon-lattice.mjs for why a second
+   sheet gets no say in any of it. */
+export { ICON_COLS, ICON_H, ICON_ORDER, ICON_ROWS, ICON_W };
+
+const drawn = {
   /* Transport. The triangles carry a two-pixel apex, which needs an EVEN
      height to be possible at all: a shape symmetric about the middle of an
      odd number of rows has exactly one middle row, so its point is one pixel.
@@ -614,65 +619,14 @@ const I = {
   ],
 };
 
-/** Sheet order, left to right then top to bottom. */
-export const ICON_ORDER = [
-  'play', 'pause', 'stop', 'previous', 'next', 'eject', 'close', 'minimize',
-  'maximize', 'restore', 'chevron-down', 'chevron-up', 'chevron-right',
-  'chevron-left', 'check', 'exclamation', 'dot', 'minus', 'plus',
-  'caret-down', 'search', 'info', 'question', 'ellipsis',
-  'spinner-1', 'spinner-2', 'spinner-3', 'spinner-4',
-  'spinner-5', 'spinner-6', 'spinner-7', 'spinner-8',
-];
-
-export const ICON_ROWS = Math.ceil(ICON_ORDER.length / ICON_COLS);
-
-/* ── Derived glyphs ───────────────────────────────────────────────────────
-   Rotations and mirrors, computed rather than copied. A 90 degree rotation
-   and a horizontal flip are both exact on a square lattice, so there is
-   nothing to lose by deriving them and one obvious thing to lose by not:
-   these three chevrons and this `next` were all hand copies that had quietly
-   drifted from the shape they claimed to be. */
-const rot90 = (r) => r[0].split('').map((_, x) => r.map((row) => row[x]).reverse().join(''));
-const flipX = (r) => r.map((row) => [...row].reverse().join(''));
-
-/* rot90 here turns clockwise, so the first turn of a down chevron points
-   LEFT. Assigning it to chevron-right produced four glyphs that were exact
-   rotations of each other and two of which were labelled the wrong way
-   round, which the rotation test above cannot see: consistent and
-   mislabelled is still consistent. There is a separate test for which way
-   each one actually points. */
-I['chevron-left'] = rot90(I['chevron-down']);
-I['chevron-up'] = rot90(I['chevron-left']);
-I['chevron-right'] = rot90(I['chevron-up']);
-I.next = flipX(I.previous);
-
-/* A plus is a minus and its own quarter turn, so it cannot end up with a
-   different stroke width or a different extent from the glyph it pairs with
-   in a tree view. */
-const union = (a, b) => a.map((row, y) => [...row]
-  .map((c, x) => (c === '#' || b[y][x] === '#' ? '#' : '.')).join(''));
-I.plus = union(I.minus, rot90(I.minus));
-
-/* Two quarter turns is 180 degrees, exact, and it is what makes the second
-   half of the spin the first half's opposite by construction rather than by
-   a careful hand. */
-const rot180 = (r) => rot90(rot90(r));
-for (const k of [1, 2, 3, 4]) I[`spinner-${k + 4}`] = rot180(I[`spinner-${k}`]);
+/* The nine derived glyphs, the sheet order and the lattice operations all
+   live in icon-lattice.mjs now, because a skin's sheet has to derive its own
+   chevrons from its own chevron-down rather than inherit this one's. */
+const I = derive(drawn);
 
 /** The rectangles an icon paints, in cell-local pixels, runs merged per row. */
 export function iconRects(name) {
-  const rows = I[name];
-  if (!rows) throw new Error(`no icon named ${JSON.stringify(name)}`);
-  const out = [];
-  rows.forEach((row, y) => {
-    let run = 0;
-    for (let x = 0; x <= ICON_W; x += 1) {
-      if (row[x] === '#') { run += 1; continue; }
-      if (run) out.push({ x: x - run, y, w: run, h: 1 });
-      run = 0;
-    }
-  });
-  return out;
+  return rectsOf(I[name], name);
 }
 
 /** Every declared icon, so a test can catch one drawn but never listed. */

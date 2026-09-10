@@ -14,6 +14,9 @@
  */
 import { ICON_COLS, ICON_ORDER } from '../assets/icon-font.mjs';
 
+/* Which skins ship a sheet of their own, and the file each one ships. */
+const SKIN_SHEETS = [['cyber', 'icons.cyber.svg']];
+
 import { rendered, report, withDemo } from './browser.mjs';
 
 /* The cell each icon name should resolve to, straight from the font data
@@ -60,6 +63,7 @@ const FLOOR = 150;
 const failures = [];
 let seen = 0;
 let named = 0;
+let sheets = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
     await p.goto(`${base}/${page}`);
@@ -102,8 +106,43 @@ await withDemo(async (p, base) => {
           `and the sheet puts it at ${want.x},${want.y}`);
       }
     }
+
+    /* A skin may point --pw-icon-sheet at its own drawings, and the way that
+       fails is silent in a way nothing else here is. The token spent three
+       releases declared inside icon.css, which is pw.components, while every
+       skin declares its knobs in pw.tokens. pw.components sorts later, so the
+       component file won every time: a skin could set the token, the rule
+       parsed, the cascade discarded it, and the skin kept the first sheet.
+       The documentation said it was a skin's to set the whole time.
+
+       So this asks the browser what the mask actually resolved to under each
+       skin, rather than whether a declaration exists. */
+    for (const [skin, file] of SKIN_SHEETS) {
+      const got = await p.evaluate(`(() => {
+        const root = document.documentElement;
+        const before = root.getAttribute('data-skin');
+        root.setAttribute('data-skin', ${JSON.stringify(skin)});
+        const e = document.querySelector('.pw-icon');
+        const url = e && getComputedStyle(e).maskImage.match(/url\\("?([^")]+)"?\\)/);
+        if (before === null) root.removeAttribute('data-skin');
+        else root.setAttribute('data-skin', before);
+        return url ? url[1] : null;
+      })()`);
+      if (got === null) continue;
+      sheets += 1;
+      if (!got.endsWith(file)) {
+        failures.push(`${page}: under data-skin="${skin}" the mask resolves to ${got.split('/').pop()} ` +
+          `and that skin ships ${file}, so its sheet is being discarded by the cascade`);
+      }
+    }
   }
 });
+
+/* The same precondition the cell probe has, for the same reason. */
+if (sheets < SKIN_SHEETS.length) {
+  failures.push(`only ${sheets} of ${SKIN_SHEETS.length} skin sheets were resolved on either page, `
+    + 'so the sheet swap was unmeasured');
+}
 
 /* A probe that matched nothing reports a clean run. Both scales of the demo's
    icon gallery are on states.html, so every name should be found twice. */

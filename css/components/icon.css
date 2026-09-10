@@ -43,7 +43,13 @@
     --pw-icon-cols: 8;
     --pw-icon-rows: 4;
     --pw-icon-scale: 1;
-    --pw-icon-sheet: url("../../assets/icons.svg");
+    /* --pw-icon-sheet is NOT here, and that is the fix rather than an
+       omission. It lived in this block, which is pw.components, and a skin
+       declares its knobs in pw.tokens. pw.components sorts later, so this
+       file won every time and a skin pointing the token at its own sheet was
+       silently ignored: the token had been documented as a skin's to set
+       since it was written and could never actually be set. It is a skin knob
+       now, declared by each skin file the way every other knob is. */
   }
 
   .pw-icon {

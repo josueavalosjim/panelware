@@ -9,8 +9,10 @@ import { fileURLToPath } from 'node:url';
 
 import { withGallery } from '../scripts/build-icon-gallery.mjs';
 import { ICON_COLS, ICON_H, ICON_NAMES, ICON_ORDER, ICON_ROWS, ICON_W, iconRects } from '../assets/icon-font.mjs';
-import { iconSheet } from '../scripts/build-sprites.mjs';
-import { iconsCss, iconsIndex } from '../scripts/build-icons-index.mjs';
+import { SKIN_SHEETS, iconSheet } from '../scripts/build-sprites.mjs';
+import { SKIN_FONTS, iconsCss, iconsIndex, skinIconsCss } from '../scripts/build-icons-index.mjs';
+import * as baseFont from '../assets/icon-font.mjs';
+import * as cyberFont from '../assets/icon-font.cyber.mjs';
 import { ICON_INDEX, ICON_NAMES as INDEX_NAMES } from '../dist/icons.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -481,5 +483,180 @@ describe('a chevron points where its name says', () => {
        every layer and a skin with its own sheet could not correct a bearing
        welded into the markup. */
     assert.match(read('css/components/icon-index.css'), /--pw-icon-ink-l:\s*\d+/);
+  });
+});
+
+describe('every sheet, not just the first one', () => {
+  /* A skin may point --pw-icon-sheet at its own drawings, and the moment a
+     second set exists every rule the first set is held to becomes a rule
+     about the first set only. That is the shape of mistake this repo keeps
+     finding: a check that names a fixed set, asked nothing about what happens
+     when the set grows.
+
+     So the set-level invariants run over every sheet here. The chrome sheet
+     is in the list too, deliberately, because a test that only ever runs
+     against the new thing stops covering the old one. */
+  const SHEETS = [
+    ['chrome', baseFont],
+    ['cyber', cyberFont],
+  ];
+
+  const gridOf = (font, name) => {
+    const g = Array.from({ length: ICON_H }, () => Array(ICON_W).fill(0));
+    for (const r of font.iconRects(name)) {
+      for (let x = r.x; x < r.x + r.w; x += 1) g[r.y][x] = 1;
+    }
+    return g;
+  };
+  const boxOf = (g) => {
+    let x0 = 99, x1 = -1, y0 = 99, y1 = -1;
+    g.forEach((row, y) => row.forEach((v, x) => {
+      if (!v) return;
+      x0 = Math.min(x0, x); x1 = Math.max(x1, x);
+      y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+    }));
+    return { x0, x1, y0, y1 };
+  };
+
+  test('there is more than one sheet to compare', () => {
+    /* The precondition. Every test below is vacuously true of a list of one,
+       and this file has already shipped a test that passed while measuring
+       nothing. */
+    assert.ok(SHEETS.length >= 2, `only ${SHEETS.length} sheet, so the rest of this compares nothing`);
+  });
+
+  test('every sheet draws every name, and no name the order does not have', () => {
+    /* The cell a name resolves to is its index in ICON_ORDER, so a sheet that
+       drew a different set would paint every name after the difference as its
+       neighbour. Nothing would error. */
+    for (const [skin, font] of SHEETS) {
+      assert.deepEqual([...font.ICON_NAMES].sort(), [...ICON_ORDER].sort(), skin);
+    }
+  });
+
+  test('every sheet fills the cell it is given and no more', () => {
+    for (const [skin, font] of SHEETS) {
+      for (const name of ICON_ORDER) {
+        const rects = font.iconRects(name);
+        assert.ok(rects.length > 0, `${skin}: ${name} is blank`);
+        for (const r of rects) {
+          assert.ok(r.x >= 0 && r.x + r.w <= ICON_W, `${skin}: ${name} overflows horizontally`);
+          assert.ok(r.y >= 0 && r.y + r.h <= ICON_H, `${skin}: ${name} overflows vertically`);
+        }
+      }
+    }
+  });
+
+  test('every sheet keeps the 12x12 live area, play excepted', () => {
+    for (const [skin, font] of SHEETS) {
+      for (const name of ICON_ORDER) {
+        if (name === 'play') continue;
+        const { x0, x1, y0, y1 } = boxOf(gridOf(font, name));
+        assert.ok(x0 >= 2 && x1 <= 13 && y0 >= 2 && y1 <= 13,
+          `${skin}: ${name} leaves the live area: x ${x0}-${x1}, y ${y0}-${y1}`);
+      }
+    }
+  });
+
+  test('no sheet joins two parts of a glyph at a corner and nowhere else', () => {
+    /* The rule that constrains a thin set hardest, and the reason the cyber
+       diagonals are staircases two pixels wide where they turn. A one-pixel
+       diagonal is not a stroke on this lattice: it is a column of pixels
+       touching at their corners, which survives at 11x and renders as a
+       dotted line at 1x. */
+    const offenders = [];
+    for (const [skin, font] of SHEETS) {
+      for (const name of ICON_ORDER) {
+        const g = gridOf(font, name);
+        const id = Array.from({ length: ICON_H }, () => Array(ICON_W).fill(-1));
+        let next = 0;
+        for (let y = 0; y < ICON_H; y += 1) {
+          for (let x = 0; x < ICON_W; x += 1) {
+            if (!g[y][x] || id[y][x] >= 0) continue;
+            const stack = [[x, y]];
+            id[y][x] = next;
+            while (stack.length) {
+              const [cx, cy] = stack.pop();
+              for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+                const nx = cx + dx, ny = cy + dy;
+                if (nx < 0 || ny < 0 || nx >= ICON_W || ny >= ICON_H) continue;
+                if (g[ny][nx] && id[ny][nx] < 0) { id[ny][nx] = next; stack.push([nx, ny]); }
+              }
+            }
+            next += 1;
+          }
+        }
+        for (let y = 0; y < ICON_H; y += 1) {
+          for (let x = 0; x < ICON_W - 1; x += 1) {
+            for (const [dx, dy] of [[1, 1], [1, -1]]) {
+              const nx = x + dx, ny = y + dy;
+              if (ny < 0 || ny >= ICON_H) continue;
+              if (!g[y][x] || !g[ny][nx]) continue;
+              if (g[y][nx] || g[ny][x]) continue;
+              if (id[y][x] !== id[ny][nx]) {
+                offenders.push(`${skin}: ${name} (${x},${y}) touches (${nx},${ny}) only at a corner`);
+              }
+            }
+          }
+        }
+      }
+    }
+    assert.deepEqual(offenders, []);
+  });
+
+  test('no sheet lets a stroke fatten as it converges', () => {
+    for (const [skin, font] of SHEETS) {
+      for (const name of ['check', 'close']) {
+        const perRow = gridOf(font, name)
+          .map((row) => row.reduce((a, v) => a + v, 0)).filter(Boolean);
+        const ratio = Math.max(...perRow) / Math.min(...perRow);
+        assert.ok(ratio <= 2,
+          `${skin}: ${name}'s ink swells ${ratio}x across its rows: ${perRow.join(' ')}`);
+      }
+    }
+  });
+
+  test('every sheet derives its own nine, rather than inheriting the first sheet\'s', () => {
+    /* A chevron has to be a rotation of ITS OWN sheet's chevron-down. Copying
+       the derivation results across would give the cyber sheet four chrome
+       chevrons and nothing would report it. */
+    for (const [skin, font] of SHEETS) {
+      const g = (n) => gridOf(font, n).map((r) => r.join('')).join('|');
+      const rot = (n) => {
+        const src = gridOf(font, n);
+        return src[0].map((_, x) => src.map((row) => row[x]).reverse().join('')).join('|');
+      };
+      assert.equal(g('chevron-left'), rot('chevron-down'), `${skin}: chevron-left`);
+      assert.equal(g('chevron-up'), rot('chevron-left'), `${skin}: chevron-up`);
+      assert.equal(g('chevron-right'), rot('chevron-up'), `${skin}: chevron-right`);
+      const flipped = gridOf(font, 'previous').map((r) => [...r].reverse().join('')).join('|');
+      assert.equal(g('next'), flipped, `${skin}: next is not previous mirrored`);
+    }
+  });
+
+  test('a skin\'s committed sheet is what its font data draws', () => {
+    for (const [file, rects] of SKIN_SHEETS) {
+      assert.equal(read(join('assets', file)), iconSheet(rects), file);
+    }
+    assert.ok(SKIN_SHEETS.length >= 1, 'no skin sheet is generated, so this compared nothing');
+  });
+
+  test('a skin\'s bearing overrides are what the generator writes', () => {
+    for (const [skin, rects] of SKIN_FONTS) {
+      assert.equal(read(join('css', 'skins', skin, 'icon-index.css')), skinIconsCss(skin, rects));
+    }
+  });
+
+  test('a skin only overrides the bearings its drawings actually moved', () => {
+    /* Cells are never in a skin's file, because every sheet shares ICON_ORDER
+       and the base index already has them right. A skin file that carried
+       --pw-icon-x would be stating something it cannot know better than the
+       generator does. */
+    for (const [skin] of SKIN_FONTS) {
+      const css = read(join('css', 'skins', skin, 'icon-index.css'));
+      assert.doesNotMatch(css, /--pw-icon-x|--pw-icon-y/,
+        `${skin} overrides a cell, and the cell is the one thing a sheet may not move`);
+      assert.match(css, /--pw-icon-ink-l/, `${skin} overrides nothing, so it is drawn identically`);
+    }
   });
 });

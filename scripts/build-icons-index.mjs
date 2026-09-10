@@ -20,6 +20,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { ICON_COLS, ICON_ORDER, ICON_W, iconRects } from '../assets/icon-font.mjs';
+import { iconRects as cyberRects } from '../assets/icon-font.cyber.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -37,12 +38,67 @@ const HERE = dirname(fileURLToPath(import.meta.url));
  * a mark beside a word can subtract the bearing and get an even optical gap
  * without hard-coding anything about which mark it was given.
  */
-function bearings(name) {
-  const rects = iconRects(name);
-  if (!rects.length) return { l: 0, r: 0 };
-  const left = Math.min(...rects.map((r) => r.x));
-  const right = Math.max(...rects.map((r) => r.x + r.w));
+function bearings(name, rects = iconRects) {
+  const r = rects(name);
+  if (!r.length) return { l: 0, r: 0 };
+  const left = Math.min(...r.map((x) => x.x));
+  const right = Math.max(...r.map((x) => x.x + x.w));
   return { l: left, r: ICON_W - right };
+}
+
+/**
+ * A skin's sheet, as the differences from the first one.
+ *
+ * The cell never moves, because every sheet shares ICON_ORDER, so --pw-icon-x
+ * and --pw-icon-y are already right for any sheet. The BEARINGS do move: they
+ * measure the blank either side of the ink, and drawing the same name thinner
+ * or wider changes it. A badge subtracts them to get an even optical gap, so a
+ * sheet using the first one's numbers pulls its marks into or away from the
+ * word beside them.
+ *
+ * Only the names whose ink actually moved get a rule. A skin that redrew four
+ * glyphs ships four rules rather than thirty-two, and the diff says which
+ * four.
+ *
+ * This is the file that could not exist until Icon stopped pushing the cell
+ * inline: an inline style beats every layer, so the first sheet's bearings
+ * were in the DOM and no rule anywhere could correct them.
+ */
+export function skinIconsCss(skin, rects) {
+  const moved = ICON_ORDER
+    .map((n) => [n, bearings(n), bearings(n, rects)])
+    .filter(([, a, b]) => a.l !== b.l || a.r !== b.r);
+
+  const rules = moved.map(([n, , b]) => `  [data-skin="${skin}"] .pw-icon[data-icon="${n}"] {\n` +
+    `    --pw-icon-ink-l: ${b.l};\n` +
+    `    --pw-icon-ink-r: ${b.r};\n` +
+    '  }').join('\n\n');
+
+  const frames = ICON_ORDER.filter((n) => n.startsWith('spinner-'));
+  const shared = (side) => Math.min(...frames.map((n) => bearings(n, rects)[side]));
+  const spinner = `  [data-skin="${skin}"] .pw-spinner .pw-icon {\n` +
+    `    --pw-icon-ink-l: ${shared('l')};\n` +
+    `    --pw-icon-ink-r: ${shared('r')};\n` +
+    '  }';
+
+  return `/**
+ * What the ${skin} skin's own sprite sheet does to the optical gaps.
+ *
+ * GENERATED from assets/icon-font.${skin}.mjs by scripts/build-icons-index.mjs.
+ * Do not edit by hand: edit the font data and run \`npm run generate\`.
+ *
+ * Cells are not here and never will be. Every sheet shares ICON_ORDER, so the
+ * cell a name resolves to is the same under every skin and the base index
+ * already carries it. Only the ink bearings move, and only for the ${moved.length} names
+ * whose drawing actually changed width.
+ */
+
+@layer pw.skin {
+${rules}
+
+${spinner}
+}
+`;
 }
 
 export function iconsIndex() {
@@ -165,9 +221,18 @@ ${spinner}
 `;
 }
 
+/** Every skin that ships a sheet of its own, by name. */
+export const SKIN_FONTS = [['cyber', cyberRects]];
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   writeFileSync(join(HERE, '..', 'src', 'icons.ts'), iconsIndex());
   writeFileSync(join(HERE, '..', 'css', 'components', 'icon-index.css'), iconsCss());
   console.log(`src/icons.ts    ${ICON_ORDER.length} icons`);
   console.log(`css/components/icon-index.css  ${ICON_ORDER.length} named cells`);
+  for (const [skin, rects] of SKIN_FONTS) {
+    const rel = join('css', 'skins', skin, 'icon-index.css');
+    writeFileSync(join(HERE, '..', rel), skinIconsCss(skin, rects));
+    const n = (skinIconsCss(skin, rects).match(/data-icon=/g) ?? []).length;
+    console.log(`${rel}  ${n} redrawn bearings`);
+  }
 }

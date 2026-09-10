@@ -34,6 +34,7 @@
      ellipse highlight at 7-15%. Translated to a plain alpha composite here,
      because a blend mode against an unknown consumer background is not a
      value anything can measure. */
+  --pw-icon-sheet: url("../../assets/icons.svg");
   --pw-gloss-opacity: 1;
   --pw-gloss-glare-alpha: 0.35;   /* the 120deg sweep, at its brightest stop */
   --pw-gloss-cap-alpha:   0.28;   /* the inset top-highlight capsule */
@@ -64,6 +65,7 @@
 [data-skin="chrome"][data-theme="dark"] {
   --pw-bevel-depth: 1;
 
+  --pw-icon-sheet: url("../../assets/icons.svg");
   --pw-gloss-opacity: 1;
   /* The glare is dimmer in dark. A 35% white sweep that reads as a sheen on
      silver reads as a grey smear on a dark face, because the same amount of

@@ -876,6 +876,7 @@
      ellipse highlight at 7-15%. Translated to a plain alpha composite here,
      because a blend mode against an unknown consumer background is not a
      value anything can measure. */
+  --pw-icon-sheet: url("../assets/icons.svg");
   --pw-gloss-opacity: 1;
   --pw-gloss-glare-alpha: 0.35;   /* the 120deg sweep, at its brightest stop */
   --pw-gloss-cap-alpha:   0.28;   /* the inset top-highlight capsule */
@@ -906,6 +907,7 @@
 [data-skin="chrome"][data-theme="dark"] {
   --pw-bevel-depth: 1;
 
+  --pw-icon-sheet: url("../assets/icons.svg");
   --pw-gloss-opacity: 1;
   /* The glare is dimmer in dark. A 35% white sweep that reads as a sheen on
      silver reads as a grey smear on a dark face, because the same amount of
@@ -1335,6 +1337,19 @@
      reference note: mono uppercase for structure, and only there. */
   --pw-font-ui: var(--pw-font-mono);
   --pw-tracking-ui: 0.045em;
+
+  /* The skin's own sprite sheet. --pw-icon-sheet has been a token since the
+     icon system was written and no skin had ever pointed it anywhere, so the
+     three skins shared one set of solid 16x16 marks drawn for a toolbar of
+     pressable objects. This set is drawn open: outlines where the first one
+     fills, right angles where it curves, and a square where it draws a
+     circle, because a HUD's dot is a cell on a grid.
+
+     Same cell, same eight columns, same ICON_ORDER, so every name still
+     resolves to the cell the index computed for it. Only the pixels change,
+     and the bearings that fall out of them, which are generated into
+     css/skins/cyber/icon-index.css. */
+  --pw-icon-sheet: url("../assets/icons.cyber.svg");
   --pw-selected-bg: transparent;
   --pw-selected-content: inherit;
   --pw-selected-mark:
@@ -1457,6 +1472,19 @@
      reference note: mono uppercase for structure, and only there. */
   --pw-font-ui: var(--pw-font-mono);
   --pw-tracking-ui: 0.045em;
+
+  /* The skin's own sprite sheet. --pw-icon-sheet has been a token since the
+     icon system was written and no skin had ever pointed it anywhere, so the
+     three skins shared one set of solid 16x16 marks drawn for a toolbar of
+     pressable objects. This set is drawn open: outlines where the first one
+     fills, right angles where it curves, and a square where it draws a
+     circle, because a HUD's dot is a cell on a grid.
+
+     Same cell, same eight columns, same ICON_ORDER, so every name still
+     resolves to the cell the index computed for it. Only the pixels change,
+     and the bearings that fall out of them, which are generated into
+     css/skins/cyber/icon-index.css. */
+  --pw-icon-sheet: url("../assets/icons.cyber.svg");
   --pw-selected-bg: transparent;
   --pw-selected-content: inherit;
   --pw-selected-mark:
@@ -1683,6 +1711,7 @@
      is what --pw-bevel-depth: 0 has always claimed it would do, and the
      halftone fill is what arrives in its place. */
   --pw-bevel-depth: 0;
+  --pw-icon-sheet: url("../assets/icons.svg");
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
   --pw-gloss-cap-alpha: 0;
@@ -1768,6 +1797,7 @@
 
 [data-skin="paper"][data-theme="dark"] {
   --pw-bevel-depth: 0;
+  --pw-icon-sheet: url("../assets/icons.svg");
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
   --pw-gloss-cap-alpha: 0;

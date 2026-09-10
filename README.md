@@ -650,6 +650,33 @@ token of its own rather than the readout's `--pw-color-lcd`. The readout keeps
 its green phosphor under both skins, deliberately: a segment display reading a
 time is a different object from a spectrum.
 
+*Icons*
+
+| Token | What it does |
+| --- | --- |
+| `--pw-icon-sheet` | the sprite sheet every mark in the kit is masked out of |
+
+The cheapest large change available to a skin, and for three releases nothing
+used it. The sheet is a `mask-image` painted in `currentColor`, so pointing it
+somewhere else costs one token and inherits every ink colour you already set.
+
+What a second sheet may not change: the cell stays 16x16, the sheet stays eight
+columns, and the order stays `ICON_ORDER`, because the cell a name resolves to
+is computed from its index in that order and a reordered sheet paints every
+name as its neighbour. Only the pixels inside a cell change. `assets/icon-lattice.mjs`
+holds all three and a test compares them to what `icon.css` declares.
+
+Draw it as a second data file next to `assets/icon-font.mjs`, hand-draw the
+twenty-three glyphs and let `derive()` compute the other nine, and
+`npm run generate` writes both the sheet and the bearing overrides your
+drawings imply. The bearings are the part worth knowing about: they measure the
+blank either side of the ink, a badge subtracts them to get an even optical
+gap, and a sheet drawn thinner than the first one needs its own or its marks
+sit wrong beside a word. The generator emits a rule only for the names whose
+ink actually moved.
+
+The cyber skin is the worked example, in `assets/icon-font.cyber.mjs`.
+
 *Geometry and surface*
 
 | Token | What it does |

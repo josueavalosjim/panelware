@@ -107,5 +107,7 @@
    restructures, so a component file never learns a skin's name and a skin's
    whole surface area is one directory. Nothing here may add an element or
    take one away: see the contract above. */
+/* Generated: the bearings this skin's own sprite sheet moves. */
+@import "./skins/cyber/icon-index.css";
 @import "./skins/cyber/field.css";
 @import "./skins/paper/field.css";

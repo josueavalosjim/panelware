@@ -25,6 +25,7 @@ import {
 import {
   ICON_COLS, ICON_H, ICON_ORDER, ICON_ROWS, ICON_W, iconRects,
 } from '../assets/icon-font.mjs';
+import { iconRects as cyberRects } from '../assets/icon-font.cyber.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ASSETS = join(HERE, '..', 'assets');
@@ -64,20 +65,36 @@ export function glyphSheet() {
   return sheet(GLYPH_COLS * GLYPH_W, GLYPH_ROWS * GLYPH_H, body);
 }
 
-export function iconSheet() {
+/**
+ * One sheet, from whichever set of drawings it is handed.
+ *
+ * A skin points --pw-icon-sheet at a different file and nothing else moves:
+ * same cell, same eight columns, same ICON_ORDER, so a name still resolves to
+ * the cell the index computed for it. Only the pixels inside change. Taking
+ * the rects reader as an argument is what keeps that true, because there is
+ * one placement rule here rather than one per sheet.
+ */
+export function iconSheet(rects = iconRects) {
   const body = ICON_ORDER.map((name, i) => {
     const dx = (i % ICON_COLS) * ICON_W;
     const dy = Math.floor(i / ICON_COLS) * ICON_H;
-    return iconRects(name).map((r) => rect(r, dx, dy)).join('');
+    return rects(name).map((r) => rect(r, dx, dy)).join('');
   });
   return sheet(ICON_COLS * ICON_W, ICON_ROWS * ICON_H, body);
 }
+
+/** The sheets a skin can point at, by the file each is written to. */
+export const SKIN_SHEETS = [
+  ['icons.cyber.svg', cyberRects],
+];
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   writeFileSync(join(ASSETS, 'lcd-digits.svg'), digitSheet());
   writeFileSync(join(ASSETS, 'lcd-glyphs.svg'), glyphSheet());
   writeFileSync(join(ASSETS, 'icons.svg'), iconSheet());
+  for (const [file, rects] of SKIN_SHEETS) writeFileSync(join(ASSETS, file), iconSheet(rects));
   console.log(`lcd-digits.svg  ${DIGIT_CELLS.length * DIGIT_W}x${DIGIT_H}, ${DIGIT_CELLS.length} cells`);
   console.log(`lcd-glyphs.svg  ${GLYPH_COLS * GLYPH_W}x${GLYPH_ROWS * GLYPH_H}, ${GLYPH_ORDER.length} glyphs in ${GLYPH_COLS}x${GLYPH_ROWS}`);
   console.log(`icons.svg       ${ICON_COLS * ICON_W}x${ICON_ROWS * ICON_H}, ${ICON_ORDER.length} icons in ${ICON_COLS}x${ICON_ROWS}`);
+  for (const [file] of SKIN_SHEETS) console.log(`${file.padEnd(16)}${ICON_COLS * ICON_W}x${ICON_ROWS * ICON_H}, ${ICON_ORDER.length} icons`);
 }

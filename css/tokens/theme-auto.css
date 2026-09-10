@@ -77,6 +77,7 @@
     --pw-color-scrim: rgba(0, 0, 0, 0.62);
 
     --pw-bevel-depth: 1;
+    --pw-icon-sheet: url("../../assets/icons.svg");
     --pw-gloss-opacity: 1;
     --pw-gloss-glare-alpha: 0.16;
     --pw-gloss-cap-alpha:   0.12;
