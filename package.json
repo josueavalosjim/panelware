@@ -1,6 +1,6 @@
 {
   "name": "@josueavalosjim/panelware",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "An accessible component kit with a chrome-and-LCD skin. Radix UI does the interaction; this does the surface. Stacked inset bevels, Web 2.0 gloss, and a sprite-sheet segment readout. Skins are data-attribute swaps, not separate installs. No runtime dependencies.",
   "keywords": [
     "accessibility",
@@ -43,8 +43,8 @@
     "src",
     "css",
     "assets",
-    "demo",
-    "!demo/vendor",
+    "demo/states.html",
+    "demo/demo.css",
     "README.md",
     "CLASSES.md",
     "CHANGELOG.md",

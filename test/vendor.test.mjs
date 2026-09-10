@@ -95,9 +95,20 @@ describe('the vendored runtime', () => {
 
   test('the vendored runtime stays out of the published package', () => {
     /* Half a megabyte of React in a CSS kit's tarball, in every consumer's
-       node_modules, for a demo they did not ask for. */
+       node_modules, for a page they are never told to open from there.
+
+       Publishing the directory and excluding the bundles was the first
+       attempt, and it shipped demo/index.html pointing at an import map whose
+       every target was missing: a page that used to work from node_modules,
+       because it fetched React from a CDN, and now 404s. So the tarball
+       carries the page that needs neither a bundler nor a network, and
+       nothing that needs either. */
     const files = JSON.parse(read('package.json')).files;
-    assert.ok(files.includes('demo'), 'the demo is no longer published at all');
-    assert.ok(files.includes('!demo/vendor'), 'demo/vendor is not excluded from the tarball');
+    assert.ok(files.includes('demo/states.html'), 'the CSS-only page is no longer published');
+    for (const entry of files) {
+      assert.notEqual(entry, 'demo', 'the whole demo directory is published again');
+      assert.doesNotMatch(entry, /^demo\/(vendor|index\.html|docs)/,
+        `${entry} publishes something that needs the vendored React`);
+    }
   });
 });

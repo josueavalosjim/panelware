@@ -168,11 +168,21 @@ describe('the class reference', () => {
   test('the package ships the reference and the page it points at', () => {
     /* CLASSES.md tells a consumer to open demo/states.html from inside
        node_modules. That page was framed in the README as the standing proof
-       the CSS needs no React, and it was not in the tarball. */
+       the CSS needs no React, and it was not in the tarball.
+
+       The entry is that page and its stylesheet rather than the whole demo
+       directory, and that is deliberate. demo/index.html boots React from
+       bundles under demo/vendor/, which are not published: half a megabyte of
+       React in a CSS kit's tarball, for a page nobody is told to open from
+       node_modules. Shipping the directory and excluding the bundles was
+       tried, and it ships a page that 404s on its own import map. */
     const files = JSON.parse(read('package.json')).files;
-    for (const entry of ['CLASSES.md', 'demo']) {
+    for (const entry of ['CLASSES.md', 'demo/states.html', 'demo/demo.css']) {
       assert.ok(files.includes(entry), `${entry} is not in the package's files array`);
     }
+    assert.ok(!files.includes('demo'),
+      'the whole demo directory is published again, which puts demo/index.html in the '
+      + 'tarball pointing at vendor bundles that are not');
     assert.match(read('CLASSES.md'), /demo\/states\.html/);
   });
 });

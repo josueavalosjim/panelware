@@ -1,5 +1,43 @@
 # Changelog
 
+## 0.7.2
+
+No component and no visual change: `git diff v0.7.1..v0.7.2 -- src/ css/` is
+empty. This is about what the demo depends on and what the package publishes.
+
+### The demo no longer needs a CDN
+
+`demo/index.html` booted React and Radix from esm.sh through an import map,
+which put a third party in the path of six checks. That is not theoretical: the
+0.7.1 publish workflow failed on `check:a11y` with nine of twenty-four
+combinations scanned and **zero** opened surfaces, because the React page had
+not booted and every interactive element "never appeared". The identical commit
+had passed the same gate on the main push minutes earlier. A release gate that
+fails on somebody else's uptime teaches people to re-run it until it goes green,
+which is how a real failure gets waved through.
+
+React and Radix are bundled into `demo/vendor/` now, built from the versions
+`package-lock.json` already pins, so `npm run generate` needs no network and
+neither does any check. It is the first bundler in this repo, and the reason is
+narrow: React 19 ships CommonJS and no browser ESM at all, so something has to
+do the transform, and the choice was a bundler here or a CDN doing it at request
+time.
+
+### The package publishes less
+
+`demo/states.html` and `demo/demo.css` rather than the whole `demo` directory.
+
+The README has always told consumers to open `states.html` from `node_modules`,
+and it is the page that needs neither a bundler nor a network. `index.html` is
+the hosted documentation and now depends on the vendored bundles, so publishing
+it would mean either shipping half a megabyte of React to every consumer of a
+CSS kit, or shipping a page whose import map 404s. Neither is worth it, and the
+hosted demo is a link away.
+
+**If you opened `node_modules/@josueavalosjim/panelware/demo/index.html`**, that
+file is no longer in the package. `states.html` is, unchanged, and every
+reference in it resolves. The tarball is smaller than 0.7.1's.
+
 ## 0.7.1
 
 One visual fix, found by looking at the screen rather than by any gate.

@@ -45,9 +45,9 @@ the stylesheet ships, what it is, and the element it goes on. It is generated
 from the stylesheet, so it cannot be short, and a test holds each element claim
 to what the components actually render.
 
-The package also ships the demo. `demo/states.html` renders every component in
-every state an attribute can reach with **no JavaScript at all**, so it is both
-the standing proof the CSS does not need React and the working version of the
+The package ships `demo/states.html`, which renders every component in every
+state an attribute can reach with **no JavaScript at all**, so it is both the
+standing proof the CSS does not need React and the working version of the
 reference:
 
 ```bash
@@ -834,6 +834,11 @@ three axes built out of the kit's own ToggleGroup, the copy-paste source for
 every example, the full token table, and every contrast pair with the ratio
 the gate measured. `demo/states.html` is the same components with no
 JavaScript at all.
+
+Only `states.html` is published. `index.html` boots React from bundles in
+`demo/vendor/`, and putting half a megabyte of React in this package for a page
+nobody is told to open from `node_modules` is a poor trade. Read it at
+[the hosted demo](https://josueavalosjim.github.io/panelware/demo/index.html).
 
 `npm run check` reads files and takes about half a second. `check:runtime`
 needs a Chromium and refuses to run without one, rather than skipping quietly.
