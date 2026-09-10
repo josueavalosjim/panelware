@@ -885,16 +885,21 @@ describe('the release', () => {
 
   test('the demo runs the peers the package asks consumers to install', () => {
     /* Every browser check here drives demo/index.html, and that page does not
-       use the installed node_modules. It boots React and Radix from esm.sh
-       through an import map with the versions written into the HTML, so the
-       Radix those checks measure is whichever one that map names.
+       import the installed node_modules at runtime. It boots React and Radix
+       through an import map.
 
-       Nothing held the two together. The map could pin a Radix a major behind
+       Nothing held the two together. The demo could run a Radix a major behind
        the peer range and every check would go on passing, having measured a
        library no consumer of this package would get. The Select
        aria-hidden-focus exemption in check-a11y is the sharpest case: it is an
        assertion about upstream behaviour, and an assertion about upstream is
        only worth the version it was made against.
+
+       The version used to be read out of an esm.sh URL in the map. The demo
+       is vendored now, so it comes from the versions the bundler actually
+       built against, and test/vendor.test.mjs rebuilds the bundles and
+       compares them byte for byte, which is what stops that being a claim
+       about node_modules rather than about the files the page loads.
 
        Ranges here are carets and nothing else, so this compares carets rather
        than taking a semver dependency for one test. A range that stops being a
@@ -904,22 +909,17 @@ describe('the release', () => {
     assert.ok(map, 'demo/index.html has no import map');
     const imports = JSON.parse(map[1]).imports;
 
-    const pinned = new Map();
-    for (const url of Object.values(imports)) {
-      const m = url.match(/^https:\/\/esm\.sh\/((?:@[^/]+\/)?[^@/]+)@([0-9]+\.[0-9]+\.[0-9]+)/);
-      assert.ok(m, `${url} is not an esm.sh URL pinned to an exact version`);
-      const [, name, version] = m;
-      const seen = pinned.get(name);
-      assert.ok(seen === undefined || seen === version,
-        `the import map pins ${name} at both ${seen} and ${version}`);
-      pinned.set(name, version);
+    for (const [spec, target] of Object.entries(imports)) {
+      assert.match(target, /^\.\/vendor\//,
+        `the import map sends ${spec} to ${target}, which is not the vendored bundle`);
     }
 
     const parts = (v) => v.split('.').map(Number);
     const checked = [];
     for (const [name, range] of Object.entries(pkg.peerDependencies)) {
-      const version = pinned.get(name);
-      assert.ok(version, `${name} is a peer dependency and the demo's import map never loads it`);
+      assert.ok(Object.keys(imports).some((spec) => spec === name || spec.startsWith(`${name}/`)),
+        `${name} is a peer dependency and the demo's import map never loads it`);
+      const version = JSON.parse(read(join('node_modules', name, 'package.json'))).version;
       assert.match(range, /^\^\d/, `${name}'s peer range "${range}" is not a caret, so this cannot judge it`);
       const floor = parts(range.slice(1));
       const got = parts(version);
@@ -932,6 +932,7 @@ describe('the release', () => {
     }
     assert.deepEqual(checked.sort(), Object.keys(pkg.peerDependencies).sort());
   });
+
   test('the README describes the module system the package actually has', () => {
     /* The README now documents two errors a consumer will hit: a CommonJS
        require gets ERR_PACKAGE_PATH_NOT_EXPORTED, and importing without the

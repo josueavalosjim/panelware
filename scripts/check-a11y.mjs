@@ -209,13 +209,19 @@ const KNOWN = [
 ];
 
 /* Which Radix this actually measured. The demo boots it from esm.sh through
-   an import map, so node_modules is not the answer and the HTML is. It goes
-   in the green line beside the axe version for the same reason: an exemption
+   an import map, and it used to name an esm.sh URL that carried the version in
+   its path. The demo is vendored now, so the version comes from the package
+   the bundle was built from, and test/vendor.test.mjs rebuilds those bundles
+   and compares them byte for byte, which is what keeps this a fact about the
+   files the page loads rather than about node_modules.
+
+   It goes in the green line beside the axe version because an exemption
    recorded against upstream is worth the version it was recorded against, and
    a run that does not say which one leaves the next reader guessing at how
-   stale it is. A test holds this pin to the package's own peer range. */
-const RADIX = readFileSync(new URL('../demo/index.html', import.meta.url), 'utf8')
-  .match(/esm\.sh\/radix-ui@([0-9.]+)/)?.[1] ?? 'an unreadable version';
+   stale it is. A test holds this to the package's own peer range. */
+const RADIX = JSON.parse(
+  readFileSync(new URL('../node_modules/radix-ui/package.json', import.meta.url), 'utf8'),
+).version ?? 'an unreadable version';
 
 const SURFACES = [
   { name: 'menu', open: '#menubar .pw-menubar-trigger', reveals: ['pw-menu', 'pw-menu-item'] },
