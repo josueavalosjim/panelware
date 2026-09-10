@@ -36,7 +36,17 @@ export function createDemoServer() {
     return createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');
     let path = decodeURIComponent(url.pathname);
-    if (path === '/') path = '/demo/index.html';
+    /* The repo's own front door, which is what Pages serves here, rather than
+       the demo's content under the demo's name.
+
+       This used to alias / straight to demo/index.html. The file was right and
+       the URL was not: the document stayed at /, so the demo's
+       fetch('./docs-data.json') resolved to /docs-data.json and 404ed, and
+       every local visit to the bare port logged a console error that could not
+       be reproduced on the deployed site. index.html redirects, so the
+       convenience is unchanged and the base URL is now the one the page was
+       written for. */
+    if (path === '/') path = '/index.html';
     /* normalize before joining, so ../ cannot walk out of the repo */
     const file = join(ROOT, normalize(path).replace(/^(\.\.[/\\])+/, ''));
     if (!file.startsWith(ROOT)) { res.writeHead(403).end('no'); return; }
