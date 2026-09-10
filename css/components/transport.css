@@ -74,12 +74,15 @@
     height: var(--pw-track-h);
     background-color: var(--pw-color-base-300);
     border-radius: var(--pw-radius-control);
-    overflow: hidden;
   }
 
   .pw-progress-fill {
     display: block;
     height: 100%;
+    /* The track used to clip this with overflow: hidden, which put a clip on a
+       shared-slot member. Rounding the fill itself keeps the corners and takes
+       the clip off the surface that carries the elevation. */
+    border-radius: inherit;
     background-color: var(--pw-color-range);
     /* Width, which is a layout property, would be the obvious way to animate
        this and would drop it off the compositor on every tick. transform on

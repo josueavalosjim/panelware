@@ -264,7 +264,6 @@
     margin: var(--pw-bevel-2);
     background-color: var(--pw-color-base-200);
     border-radius: var(--pw-radius-control);
-    box-shadow: var(--pw-elev);
     pointer-events: none;
   }
 
@@ -326,9 +325,22 @@
     user-select: none;
     outline: none;
   }
+  /* The highlighted option, painted through the selection slot rather than
+     out of the palette. It used to name --pw-color-primary directly, which is
+     what .pw-list-item and .pw-menu-item both stopped doing when the slot was
+     introduced, so the cyber skin's corner brackets reached a list and a menu
+     and never reached an open select. */
   .pw-select-item[data-highlighted] {
-    background-color: var(--pw-color-primary);
-    color: var(--pw-color-primary-content);
+    background-color: var(--pw-selected-bg);
+    color: var(--pw-selected-content);
+  }
+
+  .pw-select-item[data-highlighted]::before {
+    content: '';
+    position: absolute;
+    inset: var(--pw-bracket-inset);
+    pointer-events: none;
+    background: var(--pw-selected-mark);
   }
   .pw-select-item[data-disabled] { color: var(--pw-color-disabled-content); }
 

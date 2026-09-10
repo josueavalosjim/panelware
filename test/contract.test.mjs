@@ -631,8 +631,15 @@ describe('tokens nothing reads', () => {
 });
 
 describe('what would block the second skin', () => {
-  const componentCss = ['button', 'toggle', 'tabs', 'dialog', 'slider', 'badge', 'lcd']
-    .map((n) => [`css/components/${n}.css`, read(`css/components/${n}.css`)]);
+  /* Every component file, discovered rather than listed. The list used to name
+     seven of the twenty-two by hand, and the three with the most chrome baked
+     into them, field, window and menubar, were all outside it. A check naming a
+     fixed set has to be asked what happens when the set grows, and this one had
+     never been asked: .pw-select-button and .pw-switch-thumb were both writing
+     box-shadow in plain sight. */
+  const componentCss = readdirSync(join(ROOT, 'css', 'components'))
+    .filter((f) => f.endsWith('.css'))
+    .map((f) => [`css/components/${f}`, read(join('css', 'components', f))]);
 
   test('no component writes box-shadow; they assign the slot', () => {
     /* --pw-elev is role neutral on purpose. The second skin puts an outer
@@ -710,15 +717,37 @@ describe('what would block the second skin', () => {
   });
 
   test('no component sets overflow: hidden on a bevelled surface', () => {
-    /* It is the obvious fix for a 1px corner artefact and it would clip the
-       second skin's outer glow dead. The gloss clips its own pseudo-elements
-       instead. The readout's marquee is the one legitimate use, and it is on
-       a wrapper that carries no elevation. */
+    /* It is the obvious fix for a 1px corner artefact and it clips whatever a
+       skin hangs off the edge of the box. The gloss clips its own
+       pseudo-elements instead.
+
+       This asks which element rather than which file, which is what its own
+       title always claimed. The file-level version had to name lcd.css as an
+       exemption to let the readout's marquee wrapper through, and a comment
+       justifying an exemption is where dead things hide: it was also letting
+       every other rule in that file through unread. Membership of the shared
+       slot is the real question, and four of the five hits are ellipsis
+       truncation on text wrappers that carry no elevation at all. */
+    /* members() keeps the leading dot and the scan below does not, and a set
+       of ".pw-x" queried for "pw-x" answers no to everything. This test passed
+       green against a slot of 26 while matching literally nothing. */
+    const slot = new Set(members(
+      bare(read('css/treatment/bevel.css'))
+        .match(/:where\(([^)]*)\)\s*\{[^}]*--pw-surface-layers/)?.[1] ?? '',
+    ).map((x) => x.replace(/^\./, '')));
+    assert.ok(slot.has('pw-progress'), 'the slot no longer names a surface this test knows is in it');
+    assert.ok(slot.size >= 20, `only ${slot.size} surfaces in the slot, so this scanned nothing`);
+
+    const offenders = [];
     for (const [rel, css] of componentCss) {
-      if (rel.endsWith('lcd.css')) continue;
-      const stripped = css.replace(/\/\*[\s\S]*?\*\//g, '');
-      assert.equal(/overflow\s*:\s*hidden/.test(stripped), false, `${rel} sets overflow: hidden`);
+      for (const [, selector, body] of bare(css).matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        if (!/overflow\s*:\s*hidden/.test(body)) continue;
+        for (const c of [...selector.matchAll(/\.(pw-[a-z0-9-]+)/g)].map((m) => m[1])) {
+          if (slot.has(c)) offenders.push(`${rel}: .${c} is in the shared slot and clips`);
+        }
+      }
     }
+    assert.deepEqual(offenders, [], offenders.join('\n'));
   });
 
   test('no component declares a literal colour', () => {

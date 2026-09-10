@@ -64,7 +64,12 @@
     aspect-ratio: 1;
     background-color: var(--pw-color-base-200);
     border-radius: var(--pw-radius-control);
-    box-shadow: var(--pw-elev);
+    /* No box-shadow here. The thumb is in the shared slot, which declares
+       box-shadow: var(--pw-elev), var(--pw-focus-halo), and pw.components
+       sorts after pw.treatment, so saying it again here won and dropped the
+       halo layer. Nothing was visibly wrong, because the thumb is not
+       focusable and the halo is only set on :focus-visible, but it is the
+       fourth time a component has redeclared a property the slot owns. */
     transition: transform var(--pw-duration-fast) var(--pw-ease-state);
   }
 

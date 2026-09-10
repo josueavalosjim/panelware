@@ -2550,7 +2550,7 @@
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
-         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
+         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list, .pw-select-button,
          .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
          .pw-visualiser,
          .pw-raised, .pw-sunken) {
@@ -2650,7 +2650,7 @@
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
-         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
+         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list, .pw-select-button,
          .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
          .pw-visualiser) {
     /* The bevel, plus the focus ring's inner half when there is one.
@@ -2700,7 +2700,7 @@
            .pw-slider-track, .pw-slider-thumb, .pw-lcd,
            .pw-tab-panel, .pw-title-button, .pw-window,
            .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
-           .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
+           .pw-checkbox, .pw-radio, .pw-select, .pw-select-list, .pw-select-button,
            .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
            .pw-visualiser) {
       border: var(--pw-border) solid ButtonBorder;
@@ -2923,6 +2923,7 @@
          .pw-radio,
          .pw-select,
          .pw-select-list,
+         .pw-select-button,
          .pw-input,
          .pw-textarea,
          .pw-switch,
@@ -3040,6 +3041,7 @@
          .pw-radio,
          .pw-select,
          .pw-select-list,
+         .pw-select-button,
          .pw-input,
          .pw-textarea,
          .pw-switch,
@@ -4231,12 +4233,15 @@
     height: var(--pw-track-h);
     background-color: var(--pw-color-base-300);
     border-radius: var(--pw-radius-control);
-    overflow: hidden;
   }
 
   .pw-progress-fill {
     display: block;
     height: 100%;
+    /* The track used to clip this with overflow: hidden, which put a clip on a
+       shared-slot member. Rounding the fill itself keeps the corners and takes
+       the clip off the surface that carries the elevation. */
+    border-radius: inherit;
     background-color: var(--pw-color-range);
     /* Width, which is a layout property, would be the obvious way to animate
        this and would drop it off the compositor on every tick. transform on
@@ -4948,7 +4953,6 @@
     margin: var(--pw-bevel-2);
     background-color: var(--pw-color-base-200);
     border-radius: var(--pw-radius-control);
-    box-shadow: var(--pw-elev);
     pointer-events: none;
   }
 
@@ -5010,9 +5014,22 @@
     user-select: none;
     outline: none;
   }
+  /* The highlighted option, painted through the selection slot rather than
+     out of the palette. It used to name --pw-color-primary directly, which is
+     what .pw-list-item and .pw-menu-item both stopped doing when the slot was
+     introduced, so the cyber skin's corner brackets reached a list and a menu
+     and never reached an open select. */
   .pw-select-item[data-highlighted] {
-    background-color: var(--pw-color-primary);
-    color: var(--pw-color-primary-content);
+    background-color: var(--pw-selected-bg);
+    color: var(--pw-selected-content);
+  }
+
+  .pw-select-item[data-highlighted]::before {
+    content: '';
+    position: absolute;
+    inset: var(--pw-bracket-inset);
+    pointer-events: none;
+    background: var(--pw-selected-mark);
   }
   .pw-select-item[data-disabled] { color: var(--pw-color-disabled-content); }
 
@@ -5098,7 +5115,12 @@
     aspect-ratio: 1;
     background-color: var(--pw-color-base-200);
     border-radius: var(--pw-radius-control);
-    box-shadow: var(--pw-elev);
+    /* No box-shadow here. The thumb is in the shared slot, which declares
+       box-shadow: var(--pw-elev), var(--pw-focus-halo), and pw.components
+       sorts after pw.treatment, so saying it again here won and dropped the
+       halo layer. Nothing was visibly wrong, because the thumb is not
+       focusable and the halo is only set on :focus-visible, but it is the
+       fourth time a component has redeclared a property the slot owns. */
     transition: transform var(--pw-duration-fast) var(--pw-ease-state);
   }
 

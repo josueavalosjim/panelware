@@ -47,7 +47,7 @@
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
-         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
+         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list, .pw-select-button,
          .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
          .pw-visualiser,
          .pw-raised, .pw-sunken) {
@@ -147,7 +147,7 @@
          .pw-slider-track, .pw-slider-thumb, .pw-lcd,
          .pw-tab-panel, .pw-title-button, .pw-window,
          .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
-         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
+         .pw-checkbox, .pw-radio, .pw-select, .pw-select-list, .pw-select-button,
          .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
          .pw-visualiser) {
     /* The bevel, plus the focus ring's inner half when there is one.
@@ -197,7 +197,7 @@
            .pw-slider-track, .pw-slider-thumb, .pw-lcd,
            .pw-tab-panel, .pw-title-button, .pw-window,
            .pw-transport-button, .pw-progress, .pw-eq, .pw-menu, .pw-list,
-           .pw-checkbox, .pw-radio, .pw-select, .pw-select-list,
+           .pw-checkbox, .pw-radio, .pw-select, .pw-select-list, .pw-select-button,
            .pw-input, .pw-textarea, .pw-switch, .pw-switch-thumb, .pw-tooltip,
            .pw-visualiser) {
       border: var(--pw-border) solid ButtonBorder;
