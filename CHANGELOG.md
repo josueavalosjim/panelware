@@ -1,5 +1,101 @@
 # Changelog
 
+## 0.7.0
+
+A fifth cascade layer, so a skin can change shape rather than only colour, and
+the first three sprite sheets to differ from one another.
+
+### `pw.skin`, and what a skin still may not do
+
+Every component in this kit was drawn for the chrome skin, and the other two
+were that structure recoloured. A skin could not fix that: `pw.components`
+sorts after `pw.treatment`, so a treatment can only fill slots a component
+left. The layer order is now `pw.reset, pw.tokens, pw.treatment, pw.components,
+pw.skin, pw.overrides`, and a file in `css/skins/<skin>/` may restyle what a
+component painted. Components never learn a skin's name and the DOM stays
+single, so `check:parity` still compares the same shapes on both demo pages.
+
+The prohibitions are narrower than the ones on a component, because winning a
+declaration the shared slot made is the entire point of this layer. Two
+properties are still off: `background`/`background-image` carries the ornament,
+the elevation fill and the texture as one list, and `box-shadow` carries
+`--pw-elev` and `--pw-focus-halo` as one list. Writing either replaces the whole
+list. Assign the slots instead. Borders, radii, colours and layout are a skin's
+to take.
+
+**The window is the worked example of what this refuses.** The obvious first use
+was hiding the minimise, maximise and close cluster under a skin that has no
+title bar. Those are real buttons carrying real accessible names, so hiding them
+leaves three named controls in the tab order and invisible on screen. Replacing
+them needs an element, and a skin does not get one. Six tests hold the layer to
+all of it.
+
+The select is the example of what it allows: under `cyber` the drop button loses
+its elevation and becomes a bracketed caret drawn on the field, and under
+`paper` the well becomes a value on a ruled line.
+
+### Three sprite sheets, differing by weight
+
+`--pw-icon-sheet` is a token a skin sets. The three skins shared one set of
+solid 16x16 marks drawn for a toolbar of pressable objects, which is the right
+vocabulary for exactly one of them.
+
+- **cyber** is drawn open: outlines where chrome fills, right angles where it
+  curves, and a square where it draws a circle, because a HUD's dot is a cell on
+  a grid rather than a dab of ink. Its magnifier has a rectangular lens and
+  stops reading as a magnifier, which is correct: a scan selects an area.
+- **paper** is the heaviest of the three: three-pixel strokes, round bullets,
+  and a circular lens again. Print has no elevation and no glow, so a mark there
+  carries entirely by weight.
+
+A sheet gets the pixels inside a cell and nothing else. The cell stays 16x16,
+the sheet stays eight columns, and the order stays `ICON_ORDER`, because the
+cell a name resolves to is computed from its index in that order and a reordered
+sheet paints every name as its neighbour. `assets/icon-lattice.mjs` holds all
+three, and every set-level test now runs over every sheet rather than the first
+one.
+
+One rule shapes any thin set. A one-pixel diagonal is not a stroke on this
+lattice, it is a column of pixels touching at their corners: it survives at 11x
+and renders as a dotted line at 1x. Every diagonal is a staircase whose steps
+share an edge.
+
+### Fixes
+
+**`--pw-icon-sheet` was documented as a skin's to set and could not be set.** It
+was declared inside `icon.css`, which is `pw.components`, while a skin declares
+its knobs in `pw.tokens`. `pw.components` sorts later, so the component file won
+every time: the rule parsed, the cascade discarded it, and the skin kept the
+first sheet. Three releases of a hook that did nothing, reported by no test and
+no gate. `check:cssom` now asks the browser what the mask actually resolved to
+under each skin rather than whether a declaration exists.
+
+**The box-shadow guard named seven component files out of twenty-two, by hand**,
+and the three with the most chrome baked into them were all outside it. Widening
+it to every file found two: `.pw-switch-thumb` was redeclaring a property the
+shared slot owns and dropping the focus halo with it, and `.pw-select-button`
+was outside the slot entirely and painting its own elevation, which is why a
+fill-based skin never reached it.
+
+**`overflow: hidden` was being asked file-wide.** It had to name `lcd.css` as an
+exemption to let the readout's marquee wrapper through, which let every other
+rule in that file through unread. It asks which element now. Four of five hits
+are ellipsis truncation on text wrappers; the fifth, `.pw-progress`, is a slot
+member, so the clip moved to its fill.
+
+**`.pw-select-item` painted its highlight from `--pw-color-primary` directly**,
+where the list and the menu both read the selection slot. The cyber skin's
+corner brackets reached a list and a menu and never reached an open select.
+
+### For consumers
+
+`Icon` renders `data-icon` and no longer writes the sprite cell into a `style`
+attribute. An inline style beats every layer, `pw.overrides` included, so the
+first sheet's numbers were welded into the markup and no skin could correct
+them. The numbers come from `css/components/icon-index.css`, which already
+carried them for hand-written markup, and the React and CSS-only paths are now
+one path. Nothing about `Icon`'s props changed.
+
 ## 0.6.0
 
 A third skin, a preset for each of the three, and the architectural change that
