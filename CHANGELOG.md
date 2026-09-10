@@ -1,5 +1,49 @@
 # Changelog
 
+## 0.7.1
+
+One visual fix, found by looking at the screen rather than by any gate.
+
+### The equaliser's zero line was eight pixels low
+
+The rule every band is read against was not level with the bands. It drew at
+80px while the fader sitting on zero drew at 72px, on the one component whose
+whole reason for existing is that you can see which bands are cut and which are
+boosted without reading a number.
+
+The rule is a pseudo-element on `.pw-eq-well`, and the well is taller than the
+fader travel by a label row. It took its fraction of the well rather than of the
+travel, so it landed half a label row plus half a gap too low.
+
+Everything around it was right, which is why nothing caught it. The markup was
+correct, every rule matched, the contrast gate was happy, and the thumb and the
+fill agreed with each other: Radix positions the thumb along the track and
+`.pw-eq-fill` lives inside the track, so both were fractions of the travel
+already. Only the line drawn between them was measuring a different box.
+
+`--pw-eq-zero` is now a unitless fraction rather than a percentage, so the label
+row can be taken off before it is applied. `--pw-eq-label-space` is the band's
+gap plus the label's own height, derived from the two tokens the layout actually
+uses rather than stated as a number, because both move per skin: the label sets
+`line-height: 1` on `--pw-text-micro`, so its height is that token. Under `cyber`
+the rule lands half a pixel off where it does under `chrome` and the thumbs
+follow it there, which is the derivation working rather than a coincidence.
+
+`check:cssom` now measures the rule against the band on zero under every skin.
+
+**If you set `--pw-eq-zero` yourself**, it takes `0.5` where it used to take
+`50%`. It is set inline by the component and is not a documented knob, so this
+is a patch rather than a break, but it is the one value that changed shape.
+
+### Internal
+
+The dev server aliased `/` to `demo/index.html`'s content, so the document URL
+stayed at `/` and the demo's `fetch('./docs-data.json')` resolved one directory
+too high and 404ed. Three console errors on every local visit to the bare port,
+reproducible nowhere else, because Pages serves the real `index.html` there and
+its redirect leaves the base URL correct. `/` serves `index.html` now, the same
+as Pages. Nothing in the published package changes.
+
 ## 0.7.0
 
 A fifth cascade layer, so a skin can change shape rather than only colour, and
