@@ -15,7 +15,7 @@
 import { ICON_COLS, ICON_ORDER } from '../assets/icon-font.mjs';
 
 /* Which skins ship a sheet of their own, and the file each one ships. */
-const SKIN_SHEETS = [['cyber', 'icons.cyber.svg']];
+const SKIN_SHEETS = [['cyber', 'icons.cyber.svg'], ['paper', 'icons.paper.svg']];
 
 import { rendered, report, withDemo } from './browser.mjs';
 

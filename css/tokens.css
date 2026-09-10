@@ -1711,7 +1711,7 @@
      is what --pw-bevel-depth: 0 has always claimed it would do, and the
      halftone fill is what arrives in its place. */
   --pw-bevel-depth: 0;
-  --pw-icon-sheet: url("../assets/icons.svg");
+  --pw-icon-sheet: url("../assets/icons.paper.svg");
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
   --pw-gloss-cap-alpha: 0;
@@ -1797,7 +1797,7 @@
 
 [data-skin="paper"][data-theme="dark"] {
   --pw-bevel-depth: 0;
-  --pw-icon-sheet: url("../assets/icons.svg");
+  --pw-icon-sheet: url("../assets/icons.paper.svg");
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
   --pw-gloss-cap-alpha: 0;

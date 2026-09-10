@@ -13,6 +13,7 @@ import { SKIN_SHEETS, iconSheet } from '../scripts/build-sprites.mjs';
 import { SKIN_FONTS, iconsCss, iconsIndex, skinIconsCss } from '../scripts/build-icons-index.mjs';
 import * as baseFont from '../assets/icon-font.mjs';
 import * as cyberFont from '../assets/icon-font.cyber.mjs';
+import * as paperFont from '../assets/icon-font.paper.mjs';
 import { ICON_INDEX, ICON_NAMES as INDEX_NAMES } from '../dist/icons.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -499,6 +500,7 @@ describe('every sheet, not just the first one', () => {
   const SHEETS = [
     ['chrome', baseFont],
     ['cyber', cyberFont],
+    ['paper', paperFont],
   ];
 
   const gridOf = (font, name) => {

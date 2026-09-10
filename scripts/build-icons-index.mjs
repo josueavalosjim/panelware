@@ -21,6 +21,7 @@ import { fileURLToPath } from 'node:url';
 
 import { ICON_COLS, ICON_ORDER, ICON_W, iconRects } from '../assets/icon-font.mjs';
 import { iconRects as cyberRects } from '../assets/icon-font.cyber.mjs';
+import { iconRects as paperRects } from '../assets/icon-font.paper.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
@@ -222,7 +223,7 @@ ${spinner}
 }
 
 /** Every skin that ships a sheet of its own, by name. */
-export const SKIN_FONTS = [['cyber', cyberRects]];
+export const SKIN_FONTS = [['cyber', cyberRects], ['paper', paperRects]];
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   writeFileSync(join(HERE, '..', 'src', 'icons.ts'), iconsIndex());

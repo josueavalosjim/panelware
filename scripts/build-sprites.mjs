@@ -26,6 +26,7 @@ import {
   ICON_COLS, ICON_H, ICON_ORDER, ICON_ROWS, ICON_W, iconRects,
 } from '../assets/icon-font.mjs';
 import { iconRects as cyberRects } from '../assets/icon-font.cyber.mjs';
+import { iconRects as paperRects } from '../assets/icon-font.paper.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ASSETS = join(HERE, '..', 'assets');
@@ -86,6 +87,7 @@ export function iconSheet(rects = iconRects) {
 /** The sheets a skin can point at, by the file each is written to. */
 export const SKIN_SHEETS = [
   ['icons.cyber.svg', cyberRects],
+  ['icons.paper.svg', paperRects],
 ];
 
 if (import.meta.url === `file://${process.argv[1]}`) {

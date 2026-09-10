@@ -675,7 +675,17 @@ gap, and a sheet drawn thinner than the first one needs its own or its marks
 sit wrong beside a word. The generator emits a rule only for the names whose
 ink actually moved.
 
-The cyber skin is the worked example, in `assets/icon-font.cyber.mjs`.
+Two worked examples, and they differ in weight rather than in hue. The cyber
+set in `assets/icon-font.cyber.mjs` is drawn open: outlines where the chrome
+set fills, and a square where it draws a circle, because a HUD's dot is a cell
+on a grid. The paper set in `assets/icon-font.paper.mjs` is the heaviest of the
+three, three-pixel strokes and round bullets, because print has no elevation
+and no glow and a mark carries entirely by weight.
+
+One rule shapes any thin set you draw. A one-pixel diagonal is not a stroke on
+this lattice, it is a column of pixels touching at their corners: it survives
+at 11x and renders as a dotted line at 1x. Every diagonal has to be a staircase
+whose steps share an edge, and a test rejects the alternative.
 
 *Geometry and surface*
 
