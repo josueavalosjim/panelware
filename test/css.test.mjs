@@ -945,3 +945,119 @@ describe('the published reference data', () => {
     }
   });
 });
+
+describe('the skin layer', () => {
+  /* pw.skin sorts after pw.components, which is the point of it: a skin can
+     restyle what a component painted rather than only fill what it left
+     blank. That is also what makes it dangerous, so the contract in
+     css/_panelware.css is held here rather than trusted.
+
+     Every rule below is one a skin file would break silently. A skin that
+     writes background-image erases its own elevation and still renders. A
+     skin that hides a focusable control leaves it in the tab order and looks
+     fine on screen. Neither announces itself. */
+  const nostrip = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const files = readdirSync(join(ROOT, 'css', 'skins'), { recursive: true })
+    .map((f) => join('css', 'skins', f))
+    .filter((f) => f.endsWith('.css'))
+    .map((rel) => [rel, nostrip(read(rel))]);
+
+  test('there is a skin layer to check at all', () => {
+    /* The precondition, re-checked here rather than assumed, because every
+       test below passes trivially against an empty list and would report
+       green while measuring nothing. */
+    assert.ok(files.length >= 2, `only ${files.length} skin files, so the rest of this scanned nothing`);
+    const statement = nostrip(read('css/_panelware.css'))
+      .match(/@layer\s+([^;]+);/)?.[1] ?? '';
+    const order = statement.split(',').map((x) => x.trim());
+    assert.deepEqual(order, ['pw.reset', 'pw.tokens', 'pw.treatment', 'pw.components', 'pw.skin', 'pw.overrides'],
+      'the layer order moved, and pw.skin only works where it is');
+  });
+
+  test('every skin file declares the layer it belongs to, and only that one', () => {
+    for (const [rel, css] of files) {
+      const layers = [...css.matchAll(/@layer\s+([\w.]+)\s*\{/g)].map((m) => m[1]);
+      assert.deepEqual(layers, ['pw.skin'],
+        `${rel} opens ${layers.join(', ') || 'no layer'}, so it lands wherever it was imported`);
+    }
+  });
+
+  test('no skin paints over the surface stack or writes box-shadow', () => {
+    /* background and background-image carry the ornament, the elevation fill
+       and the texture together; box-shadow carries --pw-elev and
+       --pw-focus-halo together. Writing either replaces the whole list. Both
+       have slots, and the slots are the supported way in. */
+    const offenders = [];
+    for (const [rel, css] of files) {
+      for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        if (/box-shadow\s*:/.test(body)) {
+          offenders.push(`${rel}: ${selector.trim()} writes box-shadow, so assign --pw-elev instead`);
+        }
+        if (/background(-image)?\s*:/.test(body) && !body.includes('--pw-surface-layers')) {
+          offenders.push(`${rel}: ${selector.trim()} paints its own background, `
+            + 'so the ornament, the elevation fill and the texture never reach it');
+        }
+      }
+    }
+    assert.deepEqual(offenders, [], offenders.join('\n'));
+  });
+
+  test('no skin hides anything that draws a focus ring', () => {
+    /* The case this rule was written for: the cyber skin has no title bar, so
+       the obvious first use of this layer was hiding the window's minimise,
+       maximise and close cluster. Those are real buttons with real accessible
+       names, so hiding them leaves three named controls in the tab order and
+       invisible on screen. A skin does not get to add the corner label that
+       would replace them, which is where this layer stops. */
+    const ringed = new Set(
+      [...nostrip(read('css/reset.css')).matchAll(/:where\(([^)]*)\):focus-visible/g)]
+        .flatMap((m) => m[1].split(',').map((x) => x.trim().replace(/^\./, ''))),
+    );
+    assert.ok(ringed.size > 8, `only ${ringed.size} classes draw a ring, so this scanned nothing`);
+
+    const offenders = [];
+    for (const [rel, css] of files) {
+      for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        if (!/(display\s*:\s*none|visibility\s*:\s*hidden)/.test(body)) continue;
+        for (const c of [...selector.matchAll(/\.(pw-[a-z0-9-]+)/g)].map((m) => m[1])) {
+          if (ringed.has(c)) {
+            offenders.push(`${rel}: .${c} takes focus and draws a ring, and this hides it`);
+          }
+        }
+      }
+    }
+    assert.deepEqual(offenders, [], offenders.join('\n'));
+  });
+
+  test('every class a skin names is a class something renders', () => {
+    /* A skin file is the one place in this kit where a typo is completely
+       silent: the rule parses, matches nothing, and the skin simply looks
+       like it did before. */
+    const shipped = new Set(
+      [...read('css/panelware.css').matchAll(/\.(pw-[a-z0-9-]+)/g)].map((m) => m[1]),
+    );
+    const offenders = [];
+    for (const [rel, css] of files) {
+      for (const [, selector] of css.matchAll(/([^{}]+)\{[^{}]*\}/g)) {
+        for (const c of [...selector.matchAll(/\.(pw-[a-z0-9-]+)/g)].map((m) => m[1])) {
+          if (!shipped.has(c)) offenders.push(`${rel}: .${c} is styled by no component`);
+        }
+      }
+    }
+    assert.deepEqual(offenders, [], offenders.join('\n'));
+  });
+
+  test('a skin file names the skin it is filed under', () => {
+    /* The directory is the skin, so a rule in skins/paper/ that scopes itself
+       to [data-skin="cyber"] is filed where nobody will look for it. */
+    for (const [rel, css] of files) {
+      const skin = rel.split('/')[2];
+      for (const [, selector] of css.matchAll(/([^{}]+)\{[^{}]*\}/g)) {
+        if (!selector.includes('[data-skin=')) continue;
+        for (const named of [...selector.matchAll(/\[data-skin="([^"]+)"\]/g)].map((m) => m[1])) {
+          assert.equal(named, skin, `${rel} carries a rule scoped to ${named}`);
+        }
+      }
+    }
+  });
+});

@@ -1,0 +1,60 @@
+/**
+ * SKIN — the select, under cyber.
+ *
+ * field.css says outright what the select is: "a sunken field with a raised
+ * drop button on its right edge". That is a period combo box, it is correct
+ * for chrome, and it is a thing a HUD has never had. A HUD's field is a
+ * bracketed run of text with a caret at the end, and the caret is a mark
+ * rather than an object sitting on the surface.
+ *
+ * This is presentation only. The DOM is the same DOM: .pw-select-button is a
+ * <span> with pointer-events: none, so it carries no name, takes no focus,
+ * and nothing here changes what a screen reader or the keyboard sees. Radix
+ * still owns the combobox entire.
+ *
+ * The button keeps its box. The field pays for it with asymmetric padding
+ * (field.css: "No right padding: the drop button occupies that edge"), so
+ * collapsing the box to nothing would pull the caret onto the text.
+ */
+@layer pw.skin {
+  [data-skin="cyber"] .pw-select-button {
+    /* No elevation. The caret is drawn on the field, not raised off it, so
+       the slot gets nothing to paint rather than a flattened shadow. */
+    --pw-elev: none;
+    --pw-elev-fill: none;
+    background-color: transparent;
+    /* The bevel's own thickness, which was insetting a raised object from
+       the well around it. There is no object now. */
+    margin: 0;
+    /* The bracket that replaces the button's right edge. One hairline in the
+       accent, matching the arm weight the selection brackets use, so a field
+       and a selected row are marked by the same vocabulary.
+
+       In the ornament slot rather than a border-left, which is what this was
+       first. A border is outside the box unless something says otherwise, and
+       measuring it found the button 46px wide against chrome's 44, so the
+       caret cell moved between skins for no reason anyone asked for. The
+       ornament is a background layer the slot already composites, so it costs
+       no width at all. */
+    --pw-ornament: linear-gradient(
+      to right,
+      var(--pw-color-primary) var(--pw-bracket-weight),
+      transparent var(--pw-bracket-weight)
+    );
+  }
+
+  /* Open and pressed are the same picture on purpose, which field.css argues
+     for and this keeps. The chrome version says it by sinking the button.
+     With no button to sink, the bracket brightens instead. */
+  [data-skin="cyber"] .pw-select[data-state="open"] .pw-select-button,
+  [data-skin="cyber"] .pw-select:active .pw-select-button {
+    --pw-elev: none;
+    --pw-elev-fill: none;
+    background-color: var(--pw-selected-bg);
+    --pw-ornament: linear-gradient(
+      to right,
+      var(--pw-color-primary) var(--pw-bracket-arm),
+      transparent var(--pw-bracket-arm)
+    );
+  }
+}

@@ -29,8 +29,47 @@
  * layer(pw.tokens) resolves exactly as a bare :root would, and the config
  * does not name the layer. Leaving it unnamed is deliberate, so renaming a
  * layer later cannot silently turn a scope into an unmatched one.
+ *
+ * ── pw.skin, and what it may not do ─────────────────────────────────
+ * Every component in this kit was drawn for the chrome skin, and the other
+ * two are that same structure recoloured. A skin could not fix that, because
+ * pw.components sorts after pw.treatment and a treatment can only fill slots
+ * a component left. pw.skin sorts after pw.components, so a skin can restyle
+ * what a component painted rather than only what it left blank.
+ *
+ * What it buys: a skin may change an element's box, its order within a flex
+ * or grid parent, its background, its border, and its visibility.
+ *
+ * What it may not do, and these are not style preferences:
+ *
+ *   Hide or unhide anything focusable. The obvious first use of this layer
+ *   was hiding the window's minimise, maximise, and close cluster under the
+ *   cyber skin, which has no title bar. Those are real buttons carrying real
+ *   accessible names, conditional on a handler being passed, so hiding them
+ *   leaves three named controls in the tab order and invisible on screen.
+ *   Replacing them with a corner label needs an element, and a skin does not
+ *   get to add one. That case is why this rule exists.
+ *
+ *   Paint over the surface stack, or write box-shadow. Winning a declaration
+ *   the shared slot made is the whole point of this layer, so the ban is
+ *   narrower than the one on pw.components and it is about two properties
+ *   rather than all of them. background and background-image carry the
+ *   ornament, the elevation fill, and the texture, so a skin that writes
+ *   either without splicing --pw-surface-layers back in erases its own
+ *   elevation. box-shadow carries --pw-elev and --pw-focus-halo together, so
+ *   writing it drops the focus ring. Both have slots: assign --pw-elev,
+ *   --pw-elev-fill, --pw-ornament, or --pw-texture instead. Borders, radii,
+ *   colours, and layout are a skin's to take.
+ *
+ *   Take a control below --pw-control-h, or reach a member of the focus-ring
+ *   list with clip-path. Both are measured, not promised.
+ *
+ *   Name a class no component renders.
+ *
+ * A test holds every file under css/skins/ to those. The layer is a comment
+ * until something enforces it.
  */
-@layer pw.reset, pw.tokens, pw.treatment, pw.components, pw.overrides;
+@layer pw.reset, pw.tokens, pw.treatment, pw.components, pw.skin, pw.overrides;
 
 @layer pw.tokens {
 /**
@@ -5866,5 +5905,131 @@
     .pw-visualiser { border: var(--pw-border) solid CanvasText; }
     .pw-visualiser-bar { border: var(--pw-border) solid CanvasText; }
     .pw-visualiser-peak { background-color: Highlight; forced-color-adjust: none; }
+  }
+}
+
+/* The skin layer. One directory per skin, one file per component it
+   restructures, so a component file never learns a skin's name and a skin's
+   whole surface area is one directory. Nothing here may add an element or
+   take one away: see the contract above. */
+/**
+ * SKIN — the select, under cyber.
+ *
+ * field.css says outright what the select is: "a sunken field with a raised
+ * drop button on its right edge". That is a period combo box, it is correct
+ * for chrome, and it is a thing a HUD has never had. A HUD's field is a
+ * bracketed run of text with a caret at the end, and the caret is a mark
+ * rather than an object sitting on the surface.
+ *
+ * This is presentation only. The DOM is the same DOM: .pw-select-button is a
+ * <span> with pointer-events: none, so it carries no name, takes no focus,
+ * and nothing here changes what a screen reader or the keyboard sees. Radix
+ * still owns the combobox entire.
+ *
+ * The button keeps its box. The field pays for it with asymmetric padding
+ * (field.css: "No right padding: the drop button occupies that edge"), so
+ * collapsing the box to nothing would pull the caret onto the text.
+ */
+@layer pw.skin {
+  [data-skin="cyber"] .pw-select-button {
+    /* No elevation. The caret is drawn on the field, not raised off it, so
+       the slot gets nothing to paint rather than a flattened shadow. */
+    --pw-elev: none;
+    --pw-elev-fill: none;
+    background-color: transparent;
+    /* The bevel's own thickness, which was insetting a raised object from
+       the well around it. There is no object now. */
+    margin: 0;
+    /* The bracket that replaces the button's right edge. One hairline in the
+       accent, matching the arm weight the selection brackets use, so a field
+       and a selected row are marked by the same vocabulary.
+
+       In the ornament slot rather than a border-left, which is what this was
+       first. A border is outside the box unless something says otherwise, and
+       measuring it found the button 46px wide against chrome's 44, so the
+       caret cell moved between skins for no reason anyone asked for. The
+       ornament is a background layer the slot already composites, so it costs
+       no width at all. */
+    --pw-ornament: linear-gradient(
+      to right,
+      var(--pw-color-primary) var(--pw-bracket-weight),
+      transparent var(--pw-bracket-weight)
+    );
+  }
+
+  /* Open and pressed are the same picture on purpose, which field.css argues
+     for and this keeps. The chrome version says it by sinking the button.
+     With no button to sink, the bracket brightens instead. */
+  [data-skin="cyber"] .pw-select[data-state="open"] .pw-select-button,
+  [data-skin="cyber"] .pw-select:active .pw-select-button {
+    --pw-elev: none;
+    --pw-elev-fill: none;
+    background-color: var(--pw-selected-bg);
+    --pw-ornament: linear-gradient(
+      to right,
+      var(--pw-color-primary) var(--pw-bracket-arm),
+      transparent var(--pw-bracket-arm)
+    );
+  }
+}
+
+/**
+ * SKIN — the select, under paper.
+ *
+ * A printed form does not have a raised drop button, because print has no
+ * raised anything. It has a value on a ruled line and a mark at the end of
+ * it. The well goes, the rule arrives, and the caret stays a caret.
+ *
+ * This is presentation only. .pw-select-button is a <span> with
+ * pointer-events: none, so nothing here is reachable by focus or announced.
+ *
+ * The reason the drop button needed this at all: until the change that landed
+ * with this layer it was outside the shared slot and painted its own
+ * elevation, so a skin whose depth is dither density rather than a shadow
+ * could not reach it and it stayed a chrome object on a printed sheet. It is
+ * in the slot now, which is what makes --pw-elev: none below do anything.
+ */
+@layer pw.skin {
+  [data-skin="paper"] .pw-select-button {
+    --pw-elev: none;
+    --pw-elev-fill: none;
+    background-color: transparent;
+    margin: 0;
+    /* The field below puts its rule in the ornament slot, and custom
+       properties inherit, so without this the button draws the same rule
+       across its own box and the field ends with two hairlines meeting at a
+       corner. Measured, not guessed: the button's computed background-image
+       was the field's gradient. */
+    --pw-ornament: none;
+  }
+
+  /* The field stops being a well and becomes a ruled value. The rule is the
+     boundary ink rather than the accent, because newsprint has no spot colour
+     at all and a form rule is not an accent anywhere. */
+  [data-skin="paper"] .pw-select {
+    --pw-elev: none;
+    --pw-elev-fill: none;
+    background-color: transparent;
+    border-radius: 0;
+    /* The rule goes in the ornament slot rather than in a border, because the
+       ornament is a background layer the slot already composites and a border
+       is not. --pw-ornament is what structural.css calls "a mark a skin draws
+       that no component does", and until now no skin drew one. */
+    --pw-ornament: linear-gradient(
+      to top,
+      var(--pw-color-base-content) var(--pw-border),
+      transparent var(--pw-border)
+    );
+  }
+
+  /* Pressed and open, without a shadow to move. Ink gets heavier or it does
+     nothing, so the rule thickens rather than the surface sinking. */
+  [data-skin="paper"] .pw-select[data-state="open"],
+  [data-skin="paper"] .pw-select:active {
+    --pw-ornament: linear-gradient(
+      to top,
+      var(--pw-color-base-content) var(--pw-bracket-weight),
+      transparent var(--pw-bracket-weight)
+    );
   }
 }

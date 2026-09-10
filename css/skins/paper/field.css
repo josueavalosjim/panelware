@@ -1,0 +1,60 @@
+/**
+ * SKIN — the select, under paper.
+ *
+ * A printed form does not have a raised drop button, because print has no
+ * raised anything. It has a value on a ruled line and a mark at the end of
+ * it. The well goes, the rule arrives, and the caret stays a caret.
+ *
+ * This is presentation only. .pw-select-button is a <span> with
+ * pointer-events: none, so nothing here is reachable by focus or announced.
+ *
+ * The reason the drop button needed this at all: until the change that landed
+ * with this layer it was outside the shared slot and painted its own
+ * elevation, so a skin whose depth is dither density rather than a shadow
+ * could not reach it and it stayed a chrome object on a printed sheet. It is
+ * in the slot now, which is what makes --pw-elev: none below do anything.
+ */
+@layer pw.skin {
+  [data-skin="paper"] .pw-select-button {
+    --pw-elev: none;
+    --pw-elev-fill: none;
+    background-color: transparent;
+    margin: 0;
+    /* The field below puts its rule in the ornament slot, and custom
+       properties inherit, so without this the button draws the same rule
+       across its own box and the field ends with two hairlines meeting at a
+       corner. Measured, not guessed: the button's computed background-image
+       was the field's gradient. */
+    --pw-ornament: none;
+  }
+
+  /* The field stops being a well and becomes a ruled value. The rule is the
+     boundary ink rather than the accent, because newsprint has no spot colour
+     at all and a form rule is not an accent anywhere. */
+  [data-skin="paper"] .pw-select {
+    --pw-elev: none;
+    --pw-elev-fill: none;
+    background-color: transparent;
+    border-radius: 0;
+    /* The rule goes in the ornament slot rather than in a border, because the
+       ornament is a background layer the slot already composites and a border
+       is not. --pw-ornament is what structural.css calls "a mark a skin draws
+       that no component does", and until now no skin drew one. */
+    --pw-ornament: linear-gradient(
+      to top,
+      var(--pw-color-base-content) var(--pw-border),
+      transparent var(--pw-border)
+    );
+  }
+
+  /* Pressed and open, without a shadow to move. Ink gets heavier or it does
+     nothing, so the rule thickens rather than the surface sinking. */
+  [data-skin="paper"] .pw-select[data-state="open"],
+  [data-skin="paper"] .pw-select:active {
+    --pw-ornament: linear-gradient(
+      to top,
+      var(--pw-color-base-content) var(--pw-bracket-weight),
+      transparent var(--pw-bracket-weight)
+    );
+  }
+}

@@ -26,8 +26,47 @@
  * layer(pw.tokens) resolves exactly as a bare :root would, and the config
  * does not name the layer. Leaving it unnamed is deliberate, so renaming a
  * layer later cannot silently turn a scope into an unmatched one.
+ *
+ * ── pw.skin, and what it may not do ─────────────────────────────────
+ * Every component in this kit was drawn for the chrome skin, and the other
+ * two are that same structure recoloured. A skin could not fix that, because
+ * pw.components sorts after pw.treatment and a treatment can only fill slots
+ * a component left. pw.skin sorts after pw.components, so a skin can restyle
+ * what a component painted rather than only what it left blank.
+ *
+ * What it buys: a skin may change an element's box, its order within a flex
+ * or grid parent, its background, its border, and its visibility.
+ *
+ * What it may not do, and these are not style preferences:
+ *
+ *   Hide or unhide anything focusable. The obvious first use of this layer
+ *   was hiding the window's minimise, maximise, and close cluster under the
+ *   cyber skin, which has no title bar. Those are real buttons carrying real
+ *   accessible names, conditional on a handler being passed, so hiding them
+ *   leaves three named controls in the tab order and invisible on screen.
+ *   Replacing them with a corner label needs an element, and a skin does not
+ *   get to add one. That case is why this rule exists.
+ *
+ *   Paint over the surface stack, or write box-shadow. Winning a declaration
+ *   the shared slot made is the whole point of this layer, so the ban is
+ *   narrower than the one on pw.components and it is about two properties
+ *   rather than all of them. background and background-image carry the
+ *   ornament, the elevation fill, and the texture, so a skin that writes
+ *   either without splicing --pw-surface-layers back in erases its own
+ *   elevation. box-shadow carries --pw-elev and --pw-focus-halo together, so
+ *   writing it drops the focus ring. Both have slots: assign --pw-elev,
+ *   --pw-elev-fill, --pw-ornament, or --pw-texture instead. Borders, radii,
+ *   colours, and layout are a skin's to take.
+ *
+ *   Take a control below --pw-control-h, or reach a member of the focus-ring
+ *   list with clip-path. Both are measured, not promised.
+ *
+ *   Name a class no component renders.
+ *
+ * A test holds every file under css/skins/ to those. The layer is a comment
+ * until something enforces it.
  */
-@layer pw.reset, pw.tokens, pw.treatment, pw.components, pw.overrides;
+@layer pw.reset, pw.tokens, pw.treatment, pw.components, pw.skin, pw.overrides;
 
 @import "./tokens/index.css"        layer(pw.tokens);
 @import "./reset.css"               layer(pw.reset);
@@ -63,3 +102,10 @@
 @import "./components/meta.css";
 @import "./components/lcd.css";
 @import "./components/visualiser.css";
+
+/* The skin layer. One directory per skin, one file per component it
+   restructures, so a component file never learns a skin's name and a skin's
+   whole surface area is one directory. Nothing here may add an element or
+   take one away: see the contract above. */
+@import "./skins/cyber/field.css";
+@import "./skins/paper/field.css";

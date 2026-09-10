@@ -455,9 +455,13 @@ the second, pass `aria-disabled` and handle the value yourself rather than
 ## Writing a skin
 
 The kit's whole claim is that a skin is a set of token values rather than a
-fork, so here is the actual procedure. It is four files and no component
-changes; if you find yourself editing something under `css/components/`, the
-token you needed is missing and that is a bug worth reporting.
+fork, so here is the actual procedure. It is four files of tokens and no
+component changes; if you find yourself editing something under
+`css/components/`, the token you needed is missing and that is a bug worth
+reporting.
+
+Tokens cannot move structure, though, and for a while that was the end of the
+sentence. A fifth file can: see **When tokens are not enough** below.
 
 **1. Ship a complete set, not a diff.** Copy `css/tokens/semantic.chrome.css`
 and `css/tokens/skin.chrome.css` and change the values. Every skin x theme
@@ -690,6 +694,42 @@ and run `npm run check`. Every pair is measured against your values, and a
 token your skin forgot to declare is a hard failure rather than a silent
 fallback. `npm test` will also hold your blocks to declaring the same token
 set as every other, and will tell you if your bevel ends up lit from below.
+
+### When tokens are not enough
+
+Every component in this kit was drawn for the chrome skin. `field.css` says so
+in its own header: the select is "a sunken field with a raised drop button on
+its right edge", which is a period combo box. It is correct for chrome and it
+is a thing a HUD has never had. Recolouring it does not fix that, and neither
+does another token, because the difference is shape.
+
+So there is a fifth layer, `pw.skin`, sorting after `pw.components`. A file
+under `css/skins/<your skin>/` may restyle what a component painted rather than
+only fill what it left blank: an element's box, its order within a flex or grid
+parent, its background, its border, its visibility. Components never learn a
+skin's name, the DOM stays single, and a skin's whole surface area is one
+directory.
+
+The worked example is the select, in `css/skins/cyber/field.css` and
+`css/skins/paper/field.css`. Under cyber the drop button loses its elevation
+and becomes a bracketed caret drawn on the field; under paper the well becomes
+a value on a ruled line. Same markup, same roles, same tab order.
+
+**What a skin file may not do**, all of it enforced by `npm test` rather than
+asked for politely:
+
+| Rule | Why |
+| --- | --- |
+| Not hide or unhide anything focusable | The first thing anyone tries is hiding the window's minimise, maximise, and close cluster under a skin with no title bar. Those are real buttons with real accessible names, so hiding them leaves three named controls in the tab order and invisible on screen. Replacing them with a corner label needs an element, and a skin does not get one. That case is why the rule exists |
+| Not write `background`, `background-image`, or `box-shadow` | Those three carry the ornament, the elevation fill, the texture, and the focus halo as single lists, so writing one replaces the whole list. Assign `--pw-elev`, `--pw-elev-fill`, `--pw-ornament`, or `--pw-texture` instead |
+| Not reach below `--pw-control-h`, or clip a focus ring | Both are measured by `check:a11y`, not promised |
+| Not name a class no component renders | A skin file is the one place a typo is completely silent: the rule parses, matches nothing, and the skin looks like it did before |
+
+Borders, radii, colours, and layout are yours. If you want a mark no component
+draws, `--pw-ornament` is a background layer the shared slot already
+composites, which costs no width and survives whatever you do to elevation.
+Both shipped skin files use it in preference to a border for exactly that
+reason.
 
 ## Motion
 
