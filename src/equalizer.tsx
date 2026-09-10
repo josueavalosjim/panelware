@@ -84,8 +84,8 @@ export function Equalizer({
 }: EqualizerProps) {
   const groupId = useId();
   const spansZero = min < 0 && max > 0;
-  /* Where the rule sits, as a percentage from the top of the well. Computed
-     here because only this component knows the range. */
+  /* Where the rule sits, as a percentage from the top of the fader travel.
+     Computed here because only this component knows the range. */
   const zeroPercent = spansZero ? ((max - 0) / (max - min)) * 100 : 100;
   /* A value's distance from the top of the well, as a percentage. */
   const pct = (v: number) => ((max - v) / (max - min)) * 100;
@@ -100,7 +100,12 @@ export function Equalizer({
       <div
         className="pw-eq-well"
         data-zero={showZero && spansZero ? '' : undefined}
-        style={{ ['--pw-eq-zero' as string]: `${zeroPercent}%` }}
+        /* A unitless fraction rather than a percentage. The rule is drawn on
+           the well and the well is taller than the fader travel by a label
+           row, so a percentage resolved against the wrong box and drew zero
+           eight pixels below where the thumbs put it. equalizer.css takes the
+           label row off and applies this to what is left. */
+        style={{ ['--pw-eq-zero' as string]: zeroPercent / 100 }}
       >
         {bands.map((band) => (
           <div className="pw-eq-band" key={band.id}>

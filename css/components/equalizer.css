@@ -48,15 +48,37 @@
   }
 
   /* The zero line. A pseudo-element on the well rather than a border on
-     anything, so it spans the bands and the gaps between them alike. */
+     anything, so it spans the bands and the gaps between them alike.
+
+     ── Which box the fraction is of ────────────────────────────────────────
+     The well is taller than the fader travel, because each band stacks a
+     slider and its frequency label. So a fraction of the WELL is not where
+     zero is: measured at 160px well and 144px track, the rule drew at 80px
+     while the thumb and the fill both put zero at 72px. Eight pixels, which
+     is exactly half the label row plus its gap, and it read as a zero line
+     that was not level with the faders sitting on it.
+
+     The thumb and the fill were right and agreed with each other. Radix
+     positions the thumb along the track, and .pw-eq-fill is inside the track,
+     so both are fractions of the travel. Only the rule was measuring the
+     wrong box, because it is the one thing drawn on the well.
+
+     So take the label row back off before applying the fraction. It is the
+     band's gap plus the label's own height, and --pw-eq-label-space in
+     structural.css is exactly that, derived from the two tokens the layout
+     below actually uses. Both move per skin and per density and this follows
+     them. check:cssom measures the rule against the band on zero, under every
+     skin, so this cannot drift back. */
   .pw-eq-well[data-zero]::before {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
-    /* Set inline as a percentage by the component, because where zero sits
-       depends on the range and only the component knows it. */
-    top: var(--pw-eq-zero, 50%);
+    /* Set inline as a unitless fraction by the component, because where zero
+       sits depends on the range and only the component knows it. A fraction
+       rather than a percentage so it can be applied to the travel here,
+       rather than to whatever box it happens to be declared on. */
+    top: calc((100% - var(--pw-eq-label-space)) * var(--pw-eq-zero, 0.5));
     height: var(--pw-border);
     background-color: var(--pw-bevel-boundary);
     opacity: 0.6;

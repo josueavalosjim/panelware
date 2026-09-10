@@ -17,6 +17,10 @@ import { ICON_COLS, ICON_ORDER } from '../assets/icon-font.mjs';
 /* Which skins ship a sheet of their own, and the file each one ships. */
 const SKIN_SHEETS = [['cyber', 'icons.cyber.svg'], ['paper', 'icons.paper.svg']];
 
+/* Every skin, because the zero rule's correction is derived from tokens that
+   move per skin. */
+const EQ_SKINS = ['chrome', 'cyber', 'paper'];
+
 import { rendered, report, withDemo } from './browser.mjs';
 
 /* The cell each icon name should resolve to, straight from the font data
@@ -64,6 +68,7 @@ const failures = [];
 let seen = 0;
 let named = 0;
 let sheets = 0;
+let zeros = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
     await p.goto(`${base}/${page}`);
@@ -135,10 +140,66 @@ await withDemo(async (p, base) => {
           `and that skin ships ${file}, so its sheet is being discarded by the cascade`);
       }
     }
+
+    /* The equaliser's zero rule, against the band that is actually on zero.
+       They are drawn by different things against different boxes: Radix
+       positions the thumb along the track and .pw-eq-fill lives inside it,
+       while the rule is a pseudo-element on the well, which is taller than
+       the track by a label row. The rule used to take its fraction of the
+       well and drew eight pixels below where the faders put zero, on the one
+       component whose whole reason for existing is that you can see which
+       bands are cut and which are boosted without reading a number.
+
+       Nothing here could have caught that except measuring it. The markup was
+       right, every rule matched, the contrast gate was happy, and the fill and
+       the thumb agreed with each other and disagreed with the line drawn
+       between them.
+
+       Per skin, because the correction is the band's gap plus the label's own
+       height and both move per skin: cyber sets a smaller --pw-text-micro and
+       lands half a pixel off chrome, correctly, its thumbs following. */
+    for (const skin of EQ_SKINS) {
+      const got = await p.evaluate(`(() => {
+        const root = document.documentElement;
+        const before = root.getAttribute('data-skin');
+        root.setAttribute('data-skin', ${JSON.stringify(skin)});
+        const well = document.querySelector('.pw-eq-well[data-zero]');
+        let out = null;
+        if (well) {
+          const wr = well.getBoundingClientRect();
+          const rule = parseFloat(getComputedStyle(well, '::before').top);
+          const thumbs = [...well.querySelectorAll('.pw-slider-thumb')];
+          const zero = thumbs.find((t) => t.getAttribute('aria-valuenow') === '0');
+          if (zero && Number.isFinite(rule)) {
+            const r = zero.getBoundingClientRect();
+            out = { rule, thumb: (r.top + r.height / 2) - wr.top };
+          }
+        }
+        if (before === null) root.removeAttribute('data-skin');
+        else root.setAttribute('data-skin', before);
+        return out;
+      })()`);
+      if (!got) continue;
+      zeros += 1;
+      /* One pixel, because the rule is --pw-border tall and positioned from
+         its top edge while the thumb is measured at its centre. Eight was the
+         bug, and half a pixel is the rule being as centred as an odd number
+         of device pixels allows. */
+      if (Math.abs(got.rule - got.thumb) > 1) {
+        failures.push(`${page}: under data-skin="${skin}" the equaliser's zero rule sits at `
+          + `${got.rule}px and the band on zero sits at ${got.thumb}px, so the line every band `
+          + 'is read against is not level with them');
+      }
+    }
   }
 });
 
 /* The same precondition the cell probe has, for the same reason. */
+if (zeros < EQ_SKINS.length) {
+  failures.push(`only ${zeros} of ${EQ_SKINS.length} equaliser zero rules were measured, `
+    + 'so the alignment was unchecked');
+}
+
 if (sheets < SKIN_SHEETS.length) {
   failures.push(`only ${sheets} of ${SKIN_SHEETS.length} skin sheets were resolved on either page, `
     + 'so the sheet swap was unmeasured');

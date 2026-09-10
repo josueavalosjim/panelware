@@ -227,7 +227,15 @@
      with the symmetric default and overwritten inline by the component,
      because only the component knows the range: a -12 to +12 scale puts zero
      in the middle, a 0 to 24 scale puts it at the bottom. */
-  --pw-eq-zero:   50%;
+  --pw-eq-zero:   0.5;      /* a fraction of the fader travel, not of the well */
+
+  /* What the well has below the faders: the band's gap and its frequency
+     label. The rule is drawn on the well and has to be placed along the
+     TRAVEL, so this is what comes off first. Derived from the two tokens the
+     band and the label actually use rather than stated, because both move per
+     skin: the label sets line-height: 1 on --pw-text-micro, so its height is
+     that token exactly. */
+  --pw-eq-label-space: calc(var(--pw-space-2xs) + var(--pw-text-micro));
 
   /* ── Stacking ──────────────────────────────────────────────────────────
      Two numbers, and they are tokens because a consumer's page has its own

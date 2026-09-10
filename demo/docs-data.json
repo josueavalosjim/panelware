@@ -1190,7 +1190,16 @@
      "name": "--pw-eq-zero",
      "values": {
       "both": {
-       "declared": "50%",
+       "declared": "0.5",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-eq-label-space",
+     "values": {
+      "both": {
+       "declared": "calc(var(--pw-space-2xs) + var(--pw-text-micro))",
        "resolved": null
       }
      }
