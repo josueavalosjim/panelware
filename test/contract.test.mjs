@@ -21,6 +21,8 @@ import { exportedPaths, missingFromPack, packedFiles } from '../scripts/check-ex
 import { disagreements, scannedLine } from '../scripts/check-parity.mjs';
 import { blockers, changelogVersion } from '../scripts/release.mjs';
 
+import { LOOKS, matrix } from '../scripts/looks.mjs';
+
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8');
 
@@ -268,6 +270,60 @@ describe('the skin contract', () => {
           `${rule.selector.split('\n')[0]} is written below the ${name} compact block ` +
           'and carries a density knob, so it wins the tie and the axis goes dead');
       }
+    }
+  });
+});
+
+/**
+ * The looks, declared once.
+ *
+ * A look is a skin and an optional preset, and the list of them was written
+ * out four times: twice in JavaScript, twice in tastecheck.config.json. The
+ * two JS copies now import scripts/looks.mjs. The two JSON copies cannot,
+ * because they are data a tool reads, so these tests are what keeps them
+ * honest.
+ *
+ * The gap this closed was not hypothetical. runtime.states covered three of
+ * the six looks, so the paper skin and two presets were checked against their
+ * declared tokens and never against what the browser painted, which is the
+ * whole difference between the contrast block and the runtime one.
+ */
+describe('the looks are declared once', () => {
+  const config = JSON.parse(read('tastecheck.config.json'));
+  const want = matrix();
+
+  /* The auto theme is not a look. It is the dark block reached through
+     prefers-color-scheme instead of through the attribute, and it is measured
+     because css.mjs skips @media unless a scope names it. */
+  const EXTRA = ['chrome-dark-auto'];
+
+  test('contrast.themes carries every look in both themes', () => {
+    const got = config.contrast.themes.map((t) => t.name);
+    assert.deepEqual(want.filter((n) => !got.includes(n)), [],
+      'a look is declared in scripts/looks.mjs and measured by nothing in the contrast block');
+    assert.deepEqual(got.filter((n) => !want.includes(n) && !EXTRA.includes(n)), [],
+      'the contrast block names a theme that is not a look and not on the documented list');
+  });
+
+  test('runtime.states carries every look in both themes', () => {
+    const got = config.runtime.states.map((s) => s.name);
+    assert.deepEqual(got.sort(), [...want].sort(),
+      'the runtime check and the look list disagree, so some look is measured ' +
+      'from its declared tokens and never from what the browser painted');
+  });
+
+  test('no check keeps its own copy of the list', () => {
+    for (const rel of ['scripts/check-colour.mjs', 'scripts/check-a11y.mjs']) {
+      const src = read(rel);
+      assert.doesNotMatch(src, /const LOOKS = \[/, `${rel} has grown its own copy again`);
+      assert.match(src, /from '\.\/looks\.mjs'/, `${rel} does not read the shared list`);
+    }
+  });
+
+  test('every look names a skin the kit ships a token file for', () => {
+    for (const look of LOOKS) {
+      assert.ok(read(`css/tokens/skin.${look.skin}.css`).length > 0);
+      if (look.preset) assert.ok(read(`css/tokens/presets/${look.preset}.css`).length > 0);
     }
   });
 });

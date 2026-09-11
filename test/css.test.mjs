@@ -384,12 +384,18 @@ describe('the published reference data', () => {
   test('the page checks cover every look the tokens declare', () => {
     /* Both skin-aware checks once carried a hard-coded pair, so the day a
        third look landed they went on reporting a clean run for two, printing
-       "2 skins" while three were shipping.
+       "2 skins" while three were shipping. They carried a hard-coded SIX after
+       that, in two places, alongside two more copies in the config, which is
+       the same failure with more copies of it.
 
-       The set is derived from the files rather than listed: a skin is a
+       There is one list now, scripts/looks.mjs, and both checks import it.
+       test/contract.test.mjs holds the config's two copies to it and holds the
+       checks to not growing their own again. What is left for this test is the
+       direction none of those cover: the list against the FILES. A skin is a
        skin.*.css, a preset is a file under presets/, and a preset counts as
-       its own look because it is a different palette on the same treatment
-       and the palette is what these two measure. */
+       its own look because it is a different palette on the same treatment and
+       the palette is what these checks measure. Ship a skin file, forget the
+       list, and this is what says so. */
     const skins = new Set();
     for (const file of readdirSync(join(ROOT, 'css', 'tokens'))) {
       const m = file.match(/^skin\.([a-z0-9-]+)\.css$/);
@@ -400,19 +406,18 @@ describe('the published reference data', () => {
     assert.ok(skins.size >= 2, `only ${skins.size} skin file(s) found`);
     assert.ok(presets.length >= 1, 'no preset files found');
 
-    for (const script of ['scripts/check-colour.mjs', 'scripts/check-a11y.mjs']) {
-      const src = read(script);
-      const block = src.match(/const LOOKS = \[([\s\S]*?)\];/);
-      assert.ok(block, `${script} has no LOOKS list`);
-      const covered = block[1];
-      for (const skin of skins) {
-        assert.ok(covered.includes(`'${skin}'`), `${script} does not check the ${skin} skin`);
-      }
-      for (const preset of presets) {
-        assert.ok(covered.includes(`preset: '${preset}'`), `${script} does not check the ${preset} preset`);
-      }
+    const listed = read('scripts/looks.mjs');
+    for (const skin of skins) {
+      assert.match(listed, new RegExp(`skin: '${skin}'`),
+        `css/tokens/skin.${skin}.css ships and scripts/looks.mjs does not list it, ` +
+        'so every page check walks straight past it');
+    }
+    for (const preset of presets) {
+      assert.match(listed, new RegExp(`preset: '${preset}'`),
+        `css/tokens/presets/${preset}.css ships and scripts/looks.mjs does not list it`);
     }
   });
+
   test('a second skin\'s ramp cannot reach the first skin', () => {
     /* Both primitive files declared on a bare :root and this one is imported
        second. :root and [data-skin="cyber"] are both (0,1,0), so wherever the
