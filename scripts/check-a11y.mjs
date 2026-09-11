@@ -26,6 +26,7 @@ import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 
 import { ROOT, counted, present, rendered, report, withDemo } from './browser.mjs';
+import { LOOKS, label } from './looks.mjs';
 
 const require = createRequire(import.meta.url);
 const AXE = readFileSync(require.resolve('axe-core'), 'utf8');
@@ -65,21 +66,13 @@ const RUN_OPEN = RUN.replace('region: { enabled: false },',
    skin is not a combination that exists. */
 const PAGES = ['demo/states.html', 'demo/index.html'];
 
-const LOOKS = [
-  { skin: 'chrome' },
-  { skin: 'chrome', preset: 'deck' },
-  { skin: 'cyber' },
-  { skin: 'cyber', preset: 'redline' },
-  { skin: 'paper' },
-  { skin: 'paper', preset: 'newsprint' },
-];
 
 const failures = [];
 let checked = 0;
 await withDemo(async (p, base) => {
   for (const page of PAGES) {
     for (const look of LOOKS) {
-      const skin = look.preset ? `${look.skin}+${look.preset}` : look.skin;
+      const skin = label(look);
       for (const theme of ['light', 'dark']) {
       await p.goto(`${base}/${page}`);
       if (!(await p.ready(rendered()))) {

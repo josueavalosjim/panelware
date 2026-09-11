@@ -35,6 +35,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { ROOT, counted, rendered, report, withDemo } from './browser.mjs';
+import { LOOKS, label } from './looks.mjs';
 
 const MEASURE = `(() => {
   const MARKED = '.pw-list-item[aria-selected="true"], .pw-select-item[data-highlighted], .pw-menu-item[data-highlighted]';
@@ -227,24 +228,13 @@ const floorFor = (row, tokens) => {
   return row.large ? 3 : 4.5;
 };
 
-/* Every look the kit ships, as a skin and an optional preset. Not a cross
-   product: a preset is nested inside its skin, so pairing one with another
-   skin is not a combination that exists. */
-const LOOKS = [
-  { skin: 'chrome' },
-  { skin: 'chrome', preset: 'deck' },
-  { skin: 'cyber' },
-  { skin: 'cyber', preset: 'redline' },
-  { skin: 'paper' },
-  { skin: 'paper', preset: 'newsprint' },
-];
 
 const failures = [];
 let scanned = 0;
 await withDemo(async (p, base) => {
   for (const page of ['demo/states.html', 'demo/index.html']) {
     for (const look of LOOKS) {
-      const skin = look.preset ? `${look.skin}+${look.preset}` : look.skin;
+      const skin = label(look);
       for (const theme of ['light', 'dark']) {
       await p.goto(`${base}/${page}`);
       if (!(await p.ready(rendered()))) {

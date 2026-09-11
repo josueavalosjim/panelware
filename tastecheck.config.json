@@ -322,12 +322,20 @@
     "url": "about:blank",
     "states": [
       {
-        "name": "light"
+        "name": "chrome-light"
       },
       {
-        "name": "dark",
+        "name": "chrome-dark",
         "$comment": "after, not before. before runs ahead of the page's own scripts, which means ahead of the document existing, so document.documentElement is null and the attribute is never set. The check then measures the light palette and reports a clean pass for a theme it never entered. It did exactly that here before this line moved.",
         "after": "document.documentElement.setAttribute('data-theme', 'dark')"
+      },
+      {
+        "name": "chrome-deck-light",
+        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'deck')"
+      },
+      {
+        "name": "chrome-deck-dark",
+        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'deck'); document.documentElement.setAttribute('data-theme', 'dark')"
       },
       {
         "name": "cyber-light",
@@ -339,12 +347,29 @@
         "after": "document.documentElement.setAttribute('data-skin', 'cyber'); document.documentElement.setAttribute('data-theme', 'dark')"
       },
       {
-        "name": "chrome-deck-light",
-        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'deck')"
+        "name": "cyber-redline-light",
+        "after": "document.documentElement.setAttribute('data-skin', 'cyber'); document.documentElement.setAttribute('data-preset', 'redline')"
       },
       {
-        "name": "chrome-deck-dark",
-        "after": "document.documentElement.setAttribute('data-skin', 'chrome'); document.documentElement.setAttribute('data-preset', 'deck'); document.documentElement.setAttribute('data-theme', 'dark')"
+        "name": "cyber-redline-dark",
+        "after": "document.documentElement.setAttribute('data-skin', 'cyber'); document.documentElement.setAttribute('data-preset', 'redline'); document.documentElement.setAttribute('data-theme', 'dark')"
+      },
+      {
+        "name": "paper-light",
+        "after": "document.documentElement.setAttribute('data-skin', 'paper')",
+        "$comment": "The remaining three looks. This block covered chrome, cyber, and the deck preset and stopped there, so the paper skin and two presets were measured from their declared tokens by the contrast block and never from what the browser actually painted: the exact gap this check exists to close. test/contract.test.mjs now holds these names to scripts/looks.mjs, so a fourth skin cannot be added without them."
+      },
+      {
+        "name": "paper-dark",
+        "after": "document.documentElement.setAttribute('data-skin', 'paper'); document.documentElement.setAttribute('data-theme', 'dark')"
+      },
+      {
+        "name": "paper-newsprint-light",
+        "after": "document.documentElement.setAttribute('data-skin', 'paper'); document.documentElement.setAttribute('data-preset', 'newsprint')"
+      },
+      {
+        "name": "paper-newsprint-dark",
+        "after": "document.documentElement.setAttribute('data-skin', 'paper'); document.documentElement.setAttribute('data-preset', 'newsprint'); document.documentElement.setAttribute('data-theme', 'dark')"
       }
     ],
     "targets": [
