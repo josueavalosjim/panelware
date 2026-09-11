@@ -1,5 +1,91 @@
 # Changelog
 
+## 0.8.0
+
+A blind audit, four cold reviewers with no project context, read the kit at
+0.7.2. Five live bugs, and one systemic problem underneath them.
+
+### Breaking: `Badge` requires `children`
+
+`<Badge status="error" />` used to type-check, because `children` came from
+`HTMLAttributes` where it is optional. It rendered a coloured mark and no word,
+which is the one thing the component exists to forbid and says so in its own
+header. `children` is required now. `glyph={false}` also rendered no mark at
+all, because `glyph ?? default` falls back on null and undefined only; the
+fallback is `||`, so `false` and `''` get the default too.
+
+The fix for a call site is to pass the word. If you genuinely want a mark with
+no text, you want an `Icon`, not a `Badge`.
+
+### Four more live bugs
+
+**`List` pointed at rows that were not there.** The active row was seeded once
+in a state initialiser and moved only by an arrow key or a click, so a consumer
+who dropped it from `rows`, or who moved `selected` from outside, left
+`aria-activedescendant` naming an id the page no longer held. It is derived
+every render now.
+
+**`paper` plus `dark` killed the compact density axis.** Both densities
+computed `1rem`. The skin's dark block restates the density knobs, as every
+skin block in this kit does, and it sat below the compact block at the same
+specificity, so it won the tie. Each skin's compact block moves to the bottom of
+its file, and a contract test holds it there.
+
+**`cyber` plus `redline` made selection invisible.** The preset set
+`--pw-color-primary` and `--pw-selected-bg` to the same hot ink, and the cyber
+skin draws selection as brackets painted in the primary, so the marks landed on
+their own colour at 1:1. The preset no longer restates selection, which hands
+the brackets the hot ink for free.
+
+**The readout's pause button was dead under `prefers-reduced-motion`** and
+still focusable. Nothing moves there, so WCAG 2.2.2 is already satisfied and
+the control was a named button with no function. It is gone in that mode.
+
+### The gates that would have caught them
+
+Four of the five passed every check in this repo, so four checks grew.
+
+`check-colour.mjs` measures a selection mark against its ground at 3:1. It
+measured foregrounds against backgrounds, and a mark drawn on a `::before` is
+neither. `check-interaction.mjs` emulates both motion preferences. Three new
+contract tests hold every skin to chrome's knob set, hold each skin's dark
+block to its light block's set, and hold the density block to being the last
+word in its file. `test/icons.test.mjs` declares which drawings a skin's sheet
+shares with chrome's, by name.
+
+`scripts/looks.mjs` is now the single list of skin by preset by theme, and a
+test holds `tastecheck.config.json`'s two copies of it to that list. The gap
+that found: `runtime.states` covered three of six looks, so the paper skin and
+two presets were measured from their declared tokens and never from what the
+browser painted. Twelve states now.
+
+### The comments were a second source of truth
+
+The audit's real finding. Three arguments were written out twice in two files,
+in two voices, and both copies of one of them had drifted into a falsehood:
+Radix does not set `touch-action` on a slider and never did. This kit sets it.
+Each argument now lives once, beside the code that keeps it.
+
+Four claims were simply false and are corrected: the contract test
+`css/tokens/index.css` named did not exist, `skin.cyber.css` counted ten tokens
+where there were never ten, `--pw-dither-ink` is not a pair in
+`tastecheck.config.json` and cannot be, and a skin is three token files rather
+than four. `lcd.css` described a visually hidden mirror span that was deleted
+two releases ago and reasoned from it.
+
+### Icons
+
+`cyber`'s `restore` was a trapezoid: its front frame was seven wide at the top
+and nine at the bottom. `paper`'s `restore` was two solid slabs meeting at a
+corner with nothing in front of anything. Both redrawn. `cyber`'s `maximize`
+gains a title rule, because that set tells `stop` from `maximize` by nothing but
+size once both are outlines.
+
+The bearing correction moves to `--pw-icon-bearing` on `.pw-icon`, default `0`.
+Eighty-two generated bearing rules reached one selector, because spending them
+meant copying two `calc()`s. Set `--pw-icon-bearing: 1` on any wrapper where an
+icon sits inline beside a word.
+
 ## 0.7.2
 
 No component and no visual change: `git diff v0.7.1..v0.7.2 -- src/ css/` is
