@@ -86,8 +86,20 @@
   --pw-gloss-lit-primary: var(--pw-hot-800);
   --pw-color-scrim: rgba(10, 5, 7, 0.7);
 
-  --pw-selected-bg: var(--pw-hot-800);
-  --pw-selected-content: var(--pw-neon-000);
+  /* Selection is NOT restated here, and that is the decision rather than an
+     omission. The cyber skin takes the wash off and draws four corner
+     brackets in --pw-color-primary instead, which is what every reference in
+     its set does and the chrome inversion is what they all avoid. This preset
+     moves the primary to the hot ink, so leaving --pw-selected-bg and
+     --pw-selected-content alone hands the brackets that ink for free.
+
+     Restating them made the ground the SAME hot ink the brackets are drawn
+     in: rgb(138,10,28) on rgb(138,10,28) in the light theme, selection
+     invisible, and a preset quietly reverting its skin's most distinctive
+     decision back into the inversion that skin exists to reject. The dark
+     theme survived it on luck, because the primary moves to hot-300 there and
+     the pair happened to separate. check-colour.mjs measures the mark against
+     its ground at 3:1 now, so neither can come back. */
 
   /* The raster, pushed. The base skin runs its scanlines at 0.055 because a
      terminal is a surface you read for hours; signage is not. */
@@ -160,8 +172,7 @@
   --pw-gloss-lit-primary: var(--pw-hot-300);
   --pw-color-scrim: rgba(4, 2, 3, 0.76);
 
-  --pw-selected-bg: var(--pw-hot-800);
-  --pw-selected-content: var(--pw-neon-050);
+  /* Not restated, for the reason written at the light block above. */
 
   --pw-texture-opacity: 0.16;
 

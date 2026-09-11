@@ -88,6 +88,32 @@ function declarations(css, at) {
   return out;
 }
 
+/**
+ * Every top-level rule in a token file, in source order, as
+ * `{ selector, at, decls }`. Order matters here in a way it does not for the
+ * other tests in this file: two blocks that tie on specificity are decided by
+ * which one is written last, and one of the skin bugs this suite now guards
+ * was exactly that tie going the wrong way.
+ */
+function rules(css) {
+  const source = bare(css);
+  const out = [];
+  let i = 0;
+  while (true) {
+    const open = source.indexOf('{', i);
+    if (open < 0) return out;
+    const selector = source.slice(i, open).trim();
+    let depth = 0;
+    let end = open;
+    for (let j = open; j < source.length; j += 1) {
+      if (source[j] === '{') depth += 1;
+      if (source[j] === '}') { depth -= 1; if (!depth) { end = j; break; } }
+    }
+    out.push({ selector, at: open, decls: declarations(source, i) });
+    i = end + 1;
+  }
+}
+
 describe('the theme contract', () => {
   const semantic = read('css/tokens/semantic.chrome.css');
   const skin = read('css/tokens/skin.chrome.css');
@@ -164,6 +190,83 @@ describe('the density axis', () => {
         if (!name.startsWith('--pw-control-') && !name.startsWith('--pw-thumb')) continue;
         assert.doesNotMatch(value, /var\(--pw-(?:control|thumb)/,
           `${name} derives from another density token`);
+      }
+    }
+  });
+});
+
+/**
+ * The skin contract.
+ *
+ * css/tokens/index.css claimed for a long time that a contract test held every
+ * skin to chrome's token set. There was no such test, and by the time anyone
+ * looked the counts were chrome 11, cyber 41 and paper 35. These three are that
+ * test, written to what the architecture actually needs rather than to what the
+ * comment happened to say.
+ */
+describe('the skin contract', () => {
+  const SKINS = ['chrome', 'cyber', 'paper'];
+  const files = new Map(SKINS.map((n) => [n, read(`css/tokens/skin.${n}.css`)]));
+  /* The base block is the first rule in each file, and the dark one is the
+     rule whose selector names the dark theme. Found rather than named, because
+     chrome's selector lists are not shaped like the other two's. */
+  const baseOf = (n) => rules(files.get(n))[0];
+  const darkOf = (n) => rules(files.get(n)).find((r) => r.selector.includes('[data-theme="dark"]'));
+  const compactOf = (n) => rules(files.get(n)).find((r) => r.selector.includes('[data-density="compact"]'));
+  const DENSITY = new Set(block(read('css/tokens/density.css'), '[data-density="compact"]').keys());
+
+  test('every skin declares at least the knobs chrome declares', () => {
+    /* Not "the identical set", which is what the comment used to promise and
+       what no skin has ever done: cyber and paper both reach for knobs chrome
+       has no use for, and that is the point of a skin. What a skin may not do
+       is leave one of chrome's out, because chrome's block includes :root and
+       the missing knob would then be inherited from it: a decision the
+       consumer's markup makes rather than one the skin makes. */
+    const chrome = [...baseOf('chrome').decls.keys()];
+    for (const name of SKINS) {
+      const has = baseOf(name).decls;
+      assert.deepEqual(chrome.filter((t) => !has.has(t)), [],
+        `the ${name} skin leaves one of chrome's knobs to be inherited`);
+    }
+  });
+
+  test("every skin's dark block declares its light block's set", () => {
+    /* The rule the theme contract already holds chrome's semantic file to,
+       applied to the skins, and cyber was failing it by thirteen tokens. A
+       skin x theme block that carries only its differences ties on (0,2,0)
+       with the skin's own base block and is decided by source order, silently,
+       and only for the tokens it left out. */
+    for (const name of SKINS) {
+      const light = [...baseOf(name).decls.keys()].sort();
+      const dark = [...darkOf(name).decls.keys()].sort();
+      assert.deepEqual(dark, light, `the ${name} skin's dark block is a diff, not a block`);
+    }
+  });
+
+  test('the density axis is the last word in every skin file', () => {
+    /* This is the one that would have caught it. A skin restating a density
+       knob writes [data-skin="x"][data-density="compact"], which is (0,2,0),
+       and so is [data-skin="x"][data-theme="dark"]. Ties go to whichever is
+       written last, so a theme block that sits below the density block and
+       carries the same knob turns the whole compact axis off under that
+       theme. paper shipped that: compact and comfortable both computed 1rem
+       under paper+dark, while the comment above the block explained why it
+       could not happen. */
+    for (const name of SKINS) {
+      const all = rules(files.get(name));
+      const compact = compactOf(name);
+      if (!compact) {
+        for (const rule of all) {
+          assert.deepEqual([...rule.decls.keys()].filter((t) => DENSITY.has(t)), [],
+            `the ${name} skin moves a density knob and never restates it at compact`);
+        }
+        continue;
+      }
+      const after = all.filter((r) => r.at > compact.at);
+      for (const rule of after) {
+        assert.deepEqual([...rule.decls.keys()].filter((t) => DENSITY.has(t)), [],
+          `${rule.selector.split('\n')[0]} is written below the ${name} compact block ` +
+          'and carries a density knob, so it wins the tie and the axis goes dead');
       }
     }
   });

@@ -1380,28 +1380,6 @@
 
 }
 
-/* THE DENSITY AXIS, RESTATED FOR THIS SKIN.
-   
-   Not optional and not tidiness. [data-skin="cyber"] and
-   [data-density="compact"] are both (0,1,0), and this file imports after
-   density.css, so the block above wins the tie and every density-owned token
-   it sets would hold at BOTH densities. Measured before this existed: cyber
-   at compact had the comfortable 8px padding, so the compact axis was silently
-   dead under this skin for everything the skin had touched.
-   
-   Only the four tokens density.css owns are restated. The type scale is not
-   here on purpose: density aliases --pw-control-text to --pw-text-ui and
-   --pw-text-micro, so moving those rungs above flows through both densities
-   correctly and restating them here would break the alias rather than help it.
-   
-   (0,2,0), so it beats both. */
-[data-skin="cyber"][data-density="compact"] {
-  --pw-control-pad-x: var(--pw-space-xs);
-  --pw-control-gap:   var(--pw-space-2xs);
-  --pw-badge-h:       1.125rem;
-  --pw-panel-pad:     var(--pw-space-md);
-}
-
 [data-skin="cyber"][data-theme="dark"] {
   --pw-bevel-depth: 0;
 
@@ -1513,6 +1491,63 @@
     linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
       right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
 
+  /* THE REST OF THE SET, RESTATED UNCHANGED.
+
+     None of these move between the themes, which is exactly why they have to
+     be written here. [data-skin="cyber"] and
+     [data-skin="cyber"][data-theme="dark"] tie on (0,2,0) with nothing but
+     source order between them, so the block above is not an ancestor this one
+     inherits from, it is a sibling this one is decided against. A block
+     carrying only its differences leaves every token it omits to whichever
+     rule the bundle happens to import last: silently, and looking correct.
+     This block was thirteen tokens short of its light counterpart, including
+     four the density axis owns.
+
+     The density knobs are restated for that reason, and the compact block at
+     the bottom of this file is what stops them from turning that axis off. */
+  --pw-text-ui: 0.8125rem;
+  --pw-text-micro: 0.6875rem;
+  --pw-leading-ui: 1.15;
+
+  --pw-control-pad-x: var(--pw-space-sm);
+  --pw-control-gap:   var(--pw-space-xs);
+  --pw-badge-h:       1.375rem;
+  --pw-panel-pad:     var(--pw-space-lg);
+
+  --pw-duration-hover: var(--pw-duration-snap);
+  --pw-duration-enter: var(--pw-duration-snap);
+  --pw-duration-exit:  var(--pw-duration-snap);
+  --pw-ease-press: var(--pw-ease-hud);
+  --pw-ease-enter: var(--pw-ease-hud);
+  --pw-ease-state: var(--pw-ease-hud);
+
+}
+
+/* THE DENSITY AXIS, RESTATED FOR THIS SKIN.
+   
+   Not optional and not tidiness. [data-skin="cyber"] and
+   [data-density="compact"] are both (0,1,0), and this file imports after
+   density.css, so the block above wins the tie and every density-owned token
+   it sets would hold at BOTH densities. Measured before this existed: cyber
+   at compact had the comfortable 8px padding, so the compact axis was silently
+   dead under this skin for everything the skin had touched.
+   
+   Only the four tokens density.css owns are restated. The type scale is not
+   here on purpose: density aliases --pw-control-text to --pw-text-ui and
+   --pw-text-micro, so moving those rungs above flows through both densities
+   correctly and restating them here would break the alias rather than help it.
+   
+   (0,2,0) settles the tie with the base block. The POSITION settles the
+   other one, and that half was missing here until paper shipped the bug it
+   prevents: [data-skin="cyber"][data-theme="dark"] is also (0,2,0) and now
+   declares its full set, density knobs included, so a tie on specificity is
+   decided by whichever is written last. This block goes below every theme
+   block for that reason, and test/contract.test.mjs holds it there. */
+[data-skin="cyber"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-xs);
+  --pw-control-gap:   var(--pw-space-2xs);
+  --pw-badge-h:       1.125rem;
+  --pw-panel-pad:     var(--pw-space-md);
 }
 
 /* The third skin, and the one the elevation slot was split for: its depth is
@@ -1794,15 +1829,6 @@
   --pw-color-vis-peak: var(--pw-paper-950);
 }
 
-/* Restated at compact, because [data-skin="paper"] beats
-   [data-density="compact"] and the axis would otherwise be dead under this
-   skin. (0,2,0), so it beats both. */
-[data-skin="paper"][data-density="compact"] {
-  --pw-control-pad-x: var(--pw-space-md);
-  --pw-control-gap: var(--pw-space-sm);
-  --pw-panel-pad: var(--pw-space-lg);
-}
-
 [data-skin="paper"][data-theme="dark"] {
   --pw-bevel-depth: 0;
   --pw-icon-sheet: url("../assets/icons.paper.svg");
@@ -1850,6 +1876,29 @@
   --pw-color-vis-mid: var(--pw-paper-200);
   --pw-color-vis-high: var(--pw-warm-300);
   --pw-color-vis-peak: var(--pw-paper-050);
+}
+
+/* THE DENSITY AXIS, RESTATED FOR THIS SKIN, AND WRITTEN LAST ON PURPOSE.
+
+   [data-skin="paper"] and [data-density="compact"] are both (0,1,0) and this
+   file imports after density.css, so the base block above wins the tie and
+   every density-owned token it sets would hold at both densities. This
+   selector is (0,2,0), which settles that half.
+
+   The position in the file is the other half, and it is the half that was
+   missing. [data-skin="paper"][data-theme="dark"] is ALSO (0,2,0), and it
+   carries the same three knobs, because every skin x theme block in this kit
+   declares its full set rather than its differences. A tie on specificity is
+   decided by whichever is written last. With this block above the dark one,
+   compact and comfortable both computed 1rem under paper+dark: the axis was
+   dead across half the skin while the comment here said it could not be.
+
+   So it goes at the bottom, below every theme block, and
+   test/contract.test.mjs holds it there. */
+[data-skin="paper"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-md);
+  --pw-control-gap: var(--pw-space-sm);
+  --pw-panel-pad: var(--pw-space-lg);
 }
 
 /* Presets: palettes within a skin, scoped under the skin they belong to, so
@@ -2173,8 +2222,20 @@
   --pw-gloss-lit-primary: var(--pw-hot-800);
   --pw-color-scrim: rgba(10, 5, 7, 0.7);
 
-  --pw-selected-bg: var(--pw-hot-800);
-  --pw-selected-content: var(--pw-neon-000);
+  /* Selection is NOT restated here, and that is the decision rather than an
+     omission. The cyber skin takes the wash off and draws four corner
+     brackets in --pw-color-primary instead, which is what every reference in
+     its set does and the chrome inversion is what they all avoid. This preset
+     moves the primary to the hot ink, so leaving --pw-selected-bg and
+     --pw-selected-content alone hands the brackets that ink for free.
+
+     Restating them made the ground the SAME hot ink the brackets are drawn
+     in: rgb(138,10,28) on rgb(138,10,28) in the light theme, selection
+     invisible, and a preset quietly reverting its skin's most distinctive
+     decision back into the inversion that skin exists to reject. The dark
+     theme survived it on luck, because the primary moves to hot-300 there and
+     the pair happened to separate. check-colour.mjs measures the mark against
+     its ground at 3:1 now, so neither can come back. */
 
   /* The raster, pushed. The base skin runs its scanlines at 0.055 because a
      terminal is a surface you read for hours; signage is not. */
@@ -2247,8 +2308,7 @@
   --pw-gloss-lit-primary: var(--pw-hot-300);
   --pw-color-scrim: rgba(4, 2, 3, 0.76);
 
-  --pw-selected-bg: var(--pw-hot-800);
-  --pw-selected-content: var(--pw-neon-050);
+  /* Not restated, for the reason written at the light block above. */
 
   --pw-texture-opacity: 0.16;
 

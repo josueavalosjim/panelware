@@ -44,6 +44,42 @@ describe('the list', () => {
     assert.ok(html.includes(`id="${active[1]}"`), 'points at an id that is not on the page');
   });
 
+  test('never points at a row that is not on the page', () => {
+    /* The active row was seeded once in a state initialiser and moved only by
+       an arrow key or a click, so nothing resynced it. A consumer who drops
+       the active row from `rows`, or who names a selection the list does not
+       hold, left aria-activedescendant pointing at an id that does not exist.
+       Axe calls that, and a screen reader reads it as no active row at all.
+
+       A static render reaches the case through `selected`, which is the same
+       derivation the removal case runs through. */
+    const html = list({ selected: 'gone' });
+    const active = html.match(/aria-activedescendant="([^"]+)"/);
+    assert.ok(active, 'no active row is pointed at');
+    assert.ok(html.includes(`id="${active[1]}"`), 'points at an id that is not on the page');
+    assert.match(html, /data-active=""/, 'and nothing is drawn as the keyboard row');
+  });
+
+  test('the active row is derived every render, not only seeded', () => {
+    /* The removal case needs two renders and these are static, so the guard on
+       it is that the attribute and the keyboard handler read the derived value
+       rather than the stored one. A rerender is what the browser check drives. */
+    const src = read('src/list.tsx');
+    assert.match(src, /const live = rows\.some/);
+    assert.match(src, /aria-activedescendant=\{live \?/);
+    assert.match(src, /const at = enabled\.findIndex\(\(r\) => r\.id === live\)/);
+    assert.doesNotMatch(src, /aria-activedescendant=\{active/, 'the attribute reads the stored value');
+  });
+
+  test('a selection moved from outside takes the keyboard with it', () => {
+    /* Without this the consumer can select row C from a button and the arrow
+       keys carry on from row A, which is two cursors in one list. */
+    const src = read('src/list.tsx');
+    const resync = src.match(/if \(seen !== selected\) \{[\s\S]*?\n  \}/)[0];
+    assert.match(resync, /setActive\(selected\)/);
+    assert.doesNotMatch(src, /useEffect/, 'resyncing after paint ships a frame with the dangling attribute in it');
+  });
+
   test('selected and playing are separate states on separate rows', () => {
     /* You scroll a selection past the playing track constantly. Collapsing
        them into one highlight is the bug this component exists to avoid. */

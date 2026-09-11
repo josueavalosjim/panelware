@@ -233,28 +233,6 @@
 
 }
 
-/* THE DENSITY AXIS, RESTATED FOR THIS SKIN.
-   
-   Not optional and not tidiness. [data-skin="cyber"] and
-   [data-density="compact"] are both (0,1,0), and this file imports after
-   density.css, so the block above wins the tie and every density-owned token
-   it sets would hold at BOTH densities. Measured before this existed: cyber
-   at compact had the comfortable 8px padding, so the compact axis was silently
-   dead under this skin for everything the skin had touched.
-   
-   Only the four tokens density.css owns are restated. The type scale is not
-   here on purpose: density aliases --pw-control-text to --pw-text-ui and
-   --pw-text-micro, so moving those rungs above flows through both densities
-   correctly and restating them here would break the alias rather than help it.
-   
-   (0,2,0), so it beats both. */
-[data-skin="cyber"][data-density="compact"] {
-  --pw-control-pad-x: var(--pw-space-xs);
-  --pw-control-gap:   var(--pw-space-2xs);
-  --pw-badge-h:       1.125rem;
-  --pw-panel-pad:     var(--pw-space-md);
-}
-
 [data-skin="cyber"][data-theme="dark"] {
   --pw-bevel-depth: 0;
 
@@ -366,4 +344,62 @@
     linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
       right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
 
+  /* THE REST OF THE SET, RESTATED UNCHANGED.
+
+     None of these move between the themes, which is exactly why they have to
+     be written here. [data-skin="cyber"] and
+     [data-skin="cyber"][data-theme="dark"] tie on (0,2,0) with nothing but
+     source order between them, so the block above is not an ancestor this one
+     inherits from, it is a sibling this one is decided against. A block
+     carrying only its differences leaves every token it omits to whichever
+     rule the bundle happens to import last: silently, and looking correct.
+     This block was thirteen tokens short of its light counterpart, including
+     four the density axis owns.
+
+     The density knobs are restated for that reason, and the compact block at
+     the bottom of this file is what stops them from turning that axis off. */
+  --pw-text-ui: 0.8125rem;
+  --pw-text-micro: 0.6875rem;
+  --pw-leading-ui: 1.15;
+
+  --pw-control-pad-x: var(--pw-space-sm);
+  --pw-control-gap:   var(--pw-space-xs);
+  --pw-badge-h:       1.375rem;
+  --pw-panel-pad:     var(--pw-space-lg);
+
+  --pw-duration-hover: var(--pw-duration-snap);
+  --pw-duration-enter: var(--pw-duration-snap);
+  --pw-duration-exit:  var(--pw-duration-snap);
+  --pw-ease-press: var(--pw-ease-hud);
+  --pw-ease-enter: var(--pw-ease-hud);
+  --pw-ease-state: var(--pw-ease-hud);
+
+
+}
+
+/* THE DENSITY AXIS, RESTATED FOR THIS SKIN.
+   
+   Not optional and not tidiness. [data-skin="cyber"] and
+   [data-density="compact"] are both (0,1,0), and this file imports after
+   density.css, so the block above wins the tie and every density-owned token
+   it sets would hold at BOTH densities. Measured before this existed: cyber
+   at compact had the comfortable 8px padding, so the compact axis was silently
+   dead under this skin for everything the skin had touched.
+   
+   Only the four tokens density.css owns are restated. The type scale is not
+   here on purpose: density aliases --pw-control-text to --pw-text-ui and
+   --pw-text-micro, so moving those rungs above flows through both densities
+   correctly and restating them here would break the alias rather than help it.
+   
+   (0,2,0) settles the tie with the base block. The POSITION settles the
+   other one, and that half was missing here until paper shipped the bug it
+   prevents: [data-skin="cyber"][data-theme="dark"] is also (0,2,0) and now
+   declares its full set, density knobs included, so a tie on specificity is
+   decided by whichever is written last. This block goes below every theme
+   block for that reason, and test/contract.test.mjs holds it there. */
+[data-skin="cyber"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-xs);
+  --pw-control-gap:   var(--pw-space-2xs);
+  --pw-badge-h:       1.125rem;
+  --pw-panel-pad:     var(--pw-space-md);
 }

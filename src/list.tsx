@@ -71,6 +71,33 @@ export function List({
   const [active, setActive] = useState<string | null>(
     () => selected ?? enabled[0]?.id ?? null,
   );
+  /* That is a seed, not the answer, and for a while it was being read as the
+     answer. `active` moves on an arrow key and on a click and on nothing else,
+     so a consumer who drops the active row from `rows`, or who moves
+     `selected` from outside, left it naming a row that is no longer on the
+     page. aria-activedescendant then points at an id that does not exist,
+     which axe calls and which a screen reader reads as no active row at all.
+
+     Two repairs, both during render rather than in an effect. An effect runs
+     after paint, so it would ship one frame with the dangling attribute still
+     in it, and that frame is the one the accessibility tree is read from.
+
+     First: a selection the consumer moved takes the keyboard with it. Keeping
+     the last selection seen in state is React's own idiom for reacting to a
+     changed prop without an effect. */
+  const [seen, setSeen] = useState(selected);
+  if (seen !== selected) {
+    setSeen(selected);
+    if (selected) setActive(selected);
+  }
+  /* Second: an active row that is no longer in the list falls back to the same
+     answer the seed gives. Derived and never stored, so a row that comes back
+     brings the keyboard back with it, and `rows` rather than `enabled` because
+     a disabled row is still a row with an id on the page: it is somewhere the
+     arrow keys will not land, not somewhere the attribute may not point. */
+  const live = rows.some((r) => r.id === active) ? active
+    : rows.some((r) => r.id === selected) ? selected
+    : enabled[0]?.id ?? null;
   const ref = useRef<HTMLUListElement>(null);
 
   const move = useCallback((to: number) => {
@@ -108,7 +135,7 @@ export function List({
   }, [enabled, baseId]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLUListElement>) => {
-    const at = enabled.findIndex((r) => r.id === active);
+    const at = enabled.findIndex((r) => r.id === live);
     switch (event.key) {
       case 'ArrowDown': event.preventDefault(); move(at + 1); break;
       case 'ArrowUp': event.preventDefault(); move(at - 1); break;
@@ -117,7 +144,7 @@ export function List({
       case ' ':
       case 'Enter':
         event.preventDefault();
-        if (active) { onSelect?.(active); onActivate?.(active); }
+        if (live) { onSelect?.(live); onActivate?.(live); }
         break;
       default: return;
     }
@@ -131,7 +158,7 @@ export function List({
       role="listbox"
       aria-label={label}
       tabIndex={0}
-      aria-activedescendant={active ? rowId(active) : undefined}
+      aria-activedescendant={live ? rowId(live) : undefined}
       onKeyDown={onKeyDown}
     >
       {rows.map((row) => {
@@ -145,7 +172,7 @@ export function List({
             aria-selected={row.id === selected}
             aria-current={isCurrent ? 'true' : undefined}
             aria-disabled={row.disabled ? 'true' : undefined}
-            data-active={row.id === active ? '' : undefined}
+            data-active={row.id === live ? '' : undefined}
             onClick={() => { if (!row.disabled) { setActive(row.id); onSelect?.(row.id); } }}
             onDoubleClick={() => { if (!row.disabled) onActivate?.(row.id); }}
           >

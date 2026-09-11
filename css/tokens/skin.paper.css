@@ -110,15 +110,6 @@
   --pw-color-vis-peak: var(--pw-paper-950);
 }
 
-/* Restated at compact, because [data-skin="paper"] beats
-   [data-density="compact"] and the axis would otherwise be dead under this
-   skin. (0,2,0), so it beats both. */
-[data-skin="paper"][data-density="compact"] {
-  --pw-control-pad-x: var(--pw-space-md);
-  --pw-control-gap: var(--pw-space-sm);
-  --pw-panel-pad: var(--pw-space-lg);
-}
-
 [data-skin="paper"][data-theme="dark"] {
   --pw-bevel-depth: 0;
   --pw-icon-sheet: url("../../assets/icons.paper.svg");
@@ -166,4 +157,27 @@
   --pw-color-vis-mid: var(--pw-paper-200);
   --pw-color-vis-high: var(--pw-warm-300);
   --pw-color-vis-peak: var(--pw-paper-050);
+}
+
+/* THE DENSITY AXIS, RESTATED FOR THIS SKIN, AND WRITTEN LAST ON PURPOSE.
+
+   [data-skin="paper"] and [data-density="compact"] are both (0,1,0) and this
+   file imports after density.css, so the base block above wins the tie and
+   every density-owned token it sets would hold at both densities. This
+   selector is (0,2,0), which settles that half.
+
+   The position in the file is the other half, and it is the half that was
+   missing. [data-skin="paper"][data-theme="dark"] is ALSO (0,2,0), and it
+   carries the same three knobs, because every skin x theme block in this kit
+   declares its full set rather than its differences. A tie on specificity is
+   decided by whichever is written last. With this block above the dark one,
+   compact and comfortable both computed 1rem under paper+dark: the axis was
+   dead across half the skin while the comment here said it could not be.
+
+   So it goes at the bottom, below every theme block, and
+   test/contract.test.mjs holds it there. */
+[data-skin="paper"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-md);
+  --pw-control-gap: var(--pw-space-sm);
+  --pw-panel-pad: var(--pw-space-lg);
 }

@@ -107,6 +107,34 @@ describe('badge', () => {
       /aria-hidden="true"/);
   });
 
+  test('no prop can take the mark away', () => {
+    /* `glyph ?? default` looked like it enforced the rule and did not: `??`
+       falls back on null and undefined only, so glyph={false} rendered a badge
+       with a word and nothing beside it. `false` and `''` are what a caller
+       reaches by accident, from a ternary or a truthiness test, which makes
+       them the shapes worth pinning. */
+    for (const glyph of [false, null, undefined, '']) {
+      const html = render(h(Badge, { status: 'warning', glyph }, 'Low battery'));
+      assert.match(html, /class="pw-icon"/,
+        `glyph={${JSON.stringify(glyph)}} rendered a badge with no mark`);
+    }
+    /* And a mark that IS given still wins, or the override is not an override. */
+    assert.match(render(h(Badge, { status: 'warning', glyph: h('b', null, '!!') }, 'Low')),
+      /<b>!!<\/b>/);
+  });
+
+  test('and no prop can take the word away', () => {
+    /* The other half, and the half that type-checked for a year:
+       `children` comes from HTMLAttributes, where it is optional, so
+       <Badge status="error" /> was a legal call that rendered the coloured dot
+       this component's header says a caller cannot have. Runtime cannot catch
+       an absent child, so the guard is the type and this is what holds the
+       type in place. tsc runs as the first half of `npm test`. */
+    const src = readFileSync(join(ROOT, 'src/badge.tsx'), 'utf8');
+    assert.match(src, /extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'>/);
+    assert.match(src, /\n  children: ReactNode;/);
+  });
+
   test('the mark is a sheet cell, not a character from the reader\'s font', () => {
     /* It used to be '✓', '!', '×' and '•' pulled from whatever font the
        consumer's page was using, so the mark changed shape per platform and

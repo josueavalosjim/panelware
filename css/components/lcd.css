@@ -226,6 +226,20 @@
       animation: none;
       transform: none;
     }
-    .pw-lcd-pause { transition-duration: 1ms; }
+
+    /* And the pause control goes with it, because there is no longer anything
+       for it to pause. It shipped rendered, focusable, and inert: a keyboard
+       user could tab to a button that did nothing, which is the exact thing
+       window.tsx refuses to do with a window control that has no handler.
+
+       WCAG 2.2.2 asks for a mechanism to pause content that moves for more
+       than five seconds. Nothing moves here, so no mechanism is owed, and the
+       button is not a cheap extra: it is a named control with no function.
+
+       display, not visibility or a clip, because only display and visibility
+       take an element out of BOTH the tab order and the accessibility tree.
+       Hiding it any other way is what leaves a named control focusable and
+       invisible, which is worse than either. */
+    .pw-lcd-pause { display: none; }
   }
 }

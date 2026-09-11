@@ -283,6 +283,60 @@ await withDemo(async (p, base) => {
   }
 }, { width: 1100, height: 900 });
 
+/**
+ * THE PAUSE CONTROL, UNDER A READER WHO ASKED FOR NO MOTION.
+ *
+ * lcd.css stops the marquee outright under prefers-reduced-motion, which is
+ * the right call: a marquee at 1ms is a strobe, not a reduced marquee. What
+ * shipped with it was a pause button that kept rendering, kept its accessible
+ * name, kept its place in the tab order, and had nothing left to pause. A
+ * keyboard user could reach it and press it and watch nothing happen, which is
+ * the one thing window.tsx refuses to do with a window control that has no
+ * handler.
+ *
+ * Emulated rather than assumed. The media query is the whole mechanism here,
+ * so a check that does not switch it is checking the default and nothing else.
+ */
+let marquees = 0;
+await withDemo(async (p, base) => {
+  const STATE = `[...document.querySelectorAll('.pw-lcd-marquee .pw-lcd-pause')].map((b) => ({
+    display: getComputedStyle(b).display,
+    laidOut: b.offsetParent !== null || getComputedStyle(b).position === 'fixed',
+    disabled: b.disabled,
+  }))`;
+
+  await p.goto(`${base}/demo/index.html`);
+  if (!(await p.ready(`document.querySelectorAll('.pw-lcd-marquee .pw-lcd-pause').length > 0`))) {
+    failures.push('no marquee readout rendered on index.html, so the pause control was never checked');
+    return;
+  }
+
+  for (const motion of ['no-preference', 'reduce']) {
+    await p.send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'prefers-reduced-motion', value: motion }],
+    });
+    await p.settle(200);
+    const buttons = await p.evaluate(STATE);
+    marquees += buttons.length;
+    for (const b of buttons) {
+      if (b.disabled) continue;
+      if (motion === 'reduce' && (b.display !== 'none' || b.laidOut)) {
+        failures.push('under prefers-reduced-motion the marquee does not move and the pause ' +
+          `control is still rendered (display ${b.display}), so it is a named, focusable ` +
+          'control with nothing to do');
+      }
+      if (motion === 'no-preference' && b.display === 'none') {
+        failures.push('the pause control is hidden when the marquee IS moving, which is ' +
+          '2.2.2 with no mechanism at all');
+      }
+    }
+  }
+  /* Left as it was found, or every check that runs after this one in the same
+     browser inherits an emulation it never asked for. */
+  await p.send('Emulation.setEmulatedMedia', { features: [] });
+}, { width: 1100, height: 900 });
+
 report('interaction', failures,
   `${scanned} sliders driven from the keyboard, ${rings} lists focused, `
-  + `${ringed} focusable controls checked for the kit's own focus ring`);
+  + `${ringed} focusable controls checked for the kit's own focus ring, `
+  + `${marquees} marquee pause controls checked in both motion preferences`);
