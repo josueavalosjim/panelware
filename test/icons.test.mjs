@@ -2,7 +2,7 @@
  * The icon sheet, its generated index, and the badge that now uses it.
  */
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -471,19 +471,50 @@ describe('a chevron points where its name says', () => {
     /* Verified in a browser at the time: all four badges went from 10/6, 15/11,
        11/7 and 13/9 pixels of edge-to-ink and ink-to-word to exactly 8 and 4.
        The rule reads the bearings off the element rather than naming glyphs,
-       so a new mark needs no rule and a redrawn one needs no edit. */
-    const css = read('css/components/badge.css').replace(/\/\*[\s\S]*?\*\//g, '');
-    const rule = css.match(/\.pw-badge \.pw-icon\s*\{[^}]*\}/);
-    assert.ok(rule, 'the badge does not compensate for its mark\'s bearings');
-    assert.match(rule[0], /margin-left:\s*calc\([^)]*--pw-icon-ink-l/);
-    assert.match(rule[0], /margin-right:\s*calc\([^)]*--pw-icon-ink-r/);
+       so a new mark needs no rule and a redrawn one needs no edit.
+
+       The arithmetic moved to icon.css, behind --pw-icon-bearing, because two
+       calc()s copied into one selector is why exactly one context in the kit
+       ever had them. The badge is now the context that switches it on. */
+    const icon = read('css/components/icon.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    const rule = icon.match(/\.pw-icon\s*\{[\s\S]*?\n  \}/);
+    assert.ok(rule, 'no .pw-icon rule to carry the correction');
+    assert.match(rule[0], /margin-left:\s*calc\([\s\S]*?--pw-icon-ink-l[\s\S]*?--pw-icon-bearing/);
+    assert.match(rule[0], /margin-right:\s*calc\([\s\S]*?--pw-icon-ink-r[\s\S]*?--pw-icon-bearing/);
     /* Scaled, or the correction is wrong at --pw-icon-scale: 2. */
     assert.match(rule[0], /--pw-icon-scale/);
+    /* Off by default. It is wrong in a fixed gutter, wrong on a centred
+       icon-only control, and wrong on a chevron that rotates, which is most of
+       the icons in this kit. */
+    assert.match(rule[0], /--pw-icon-bearing:\s*0;/);
+
+    const badge = read('css/components/badge.css').replace(/\/\*[\s\S]*?\*\//g, '');
+    assert.match(badge, /\.pw-badge \{[\s\S]*?--pw-icon-bearing:\s*1;/,
+      'the badge does not compensate for its mark\'s bearings');
+
     /* And something has to declare what the badge subtracts. That used to be
        icon.tsx, inline; it is the generated index now, because inline beat
        every layer and a skin with its own sheet could not correct a bearing
        welded into the markup. */
     assert.match(read('css/components/icon-index.css'), /--pw-icon-ink-l:\s*\d+/);
+  });
+
+  test('no context spends the bearing where it would be wrong', () => {
+    /* A gutter, a centred icon-only control, and a rotating chevron are the
+       three places subtracting a per-glyph bearing breaks something, and they
+       cover nearly every icon this kit places. This pins the opt-in list so
+       switching one on is a decision somebody took rather than a line that
+       drifted in. */
+    const ON = ['.pw-badge'];
+    const found = [];
+    for (const rel of readdirSync(join(ROOT, 'css', 'components'))) {
+      if (!rel.endsWith('.css')) continue;
+      const css = read(join('css/components', rel)).replace(/\/\*[\s\S]*?\*\//g, '');
+      for (const m of css.matchAll(/([^{}]+)\{[^{}]*--pw-icon-bearing:\s*1;/g)) {
+        found.push(m[1].trim().replace(/\s+/g, ' '));
+      }
+    }
+    assert.deepEqual(found.sort(), [...ON].sort());
   });
 });
 
@@ -519,6 +550,34 @@ describe('every sheet, not just the first one', () => {
     }));
     return { x0, x1, y0, y1 };
   };
+
+  test('a sheet that shares a drawing with chrome says which ones', () => {
+    /* "Drawn again for the cyber skin" is the claim both alternate sheets
+       make, and six of cyber's glyphs are chrome's to the pixel. That is not
+       automatically wrong. A chevron is a stroke, so there is nothing for a
+       set whose rule is "outlines where chrome fills" to open, and the same
+       goes for the check and the exclamation. What IS wrong is it being true
+       by accident and nobody able to tell which.
+
+       So the shared list is declared. Redraw one and this fails with the name,
+       which is the moment to decide whether the sheet gained a drawing or lost
+       a reason. Copy one in without meaning to and it fails the same way.
+
+       Measured, not asserted: chrome and paper share pause and nothing else,
+       and six more of cyber's are within eight pixels of chrome's without
+       being identical, which is a different question and not this test's. */
+    const SHARED = {
+      cyber: ['check', 'chevron-down', 'chevron-left', 'chevron-right', 'chevron-up', 'exclamation'],
+      paper: ['pause'],
+    };
+    for (const [name, font] of SHEETS) {
+      if (name === 'chrome') continue;
+      const same = ICON_ORDER.filter((icon) =>
+        JSON.stringify(gridOf(font, icon)) === JSON.stringify(gridOf(baseFont, icon)));
+      assert.deepEqual(same.sort(), [...SHARED[name]].sort(),
+        `the ${name} sheet's overlap with chrome is not the declared one`);
+    }
+  });
 
   test('there is more than one sheet to compare', () => {
     /* The precondition. Every test below is vacuously true of a list of one,

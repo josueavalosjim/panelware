@@ -670,9 +670,10 @@ time is a different object from a spectrum.
 | Token | What it does |
 | --- | --- |
 | `--pw-icon-sheet` | the sprite sheet every mark in the kit is masked out of |
+| `--pw-icon-bearing` | `1` on a context where an icon sits inline beside a word, so the mark's own blank margins are subtracted and the optical gap comes out even. `0` everywhere else, which is the default |
 
-The cheapest large change available to a skin, and for three releases nothing
-used it. The sheet is a `mask-image` painted in `currentColor`, so pointing it
+The sheet is the cheapest large change available to a skin, and for three
+releases nothing used it. The sheet is a `mask-image` painted in `currentColor`, so pointing it
 somewhere else costs one token and inherits every ink colour you already set.
 
 What a second sheet may not change: the cell stays 16x16, the sheet stays eight
@@ -689,6 +690,15 @@ blank either side of the ink, a badge subtracts them to get an even optical
 gap, and a sheet drawn thinner than the first one needs its own or its marks
 sit wrong beside a word. The generator emits a rule only for the names whose
 ink actually moved.
+
+Subtracting them is opt-in, through `--pw-icon-bearing`, and the default is
+off. It is right beside a word and wrong nearly everywhere else in this kit: a
+menu's check and a list's play marker sit in a fixed gutter, and pulling each
+one in by its own ink stops the column being a column; an icon-only control
+centres its mark, and the two bearings differ, so subtracting both shifts it
+off centre; a chevron that rotates has ink where its bearings say it does not.
+If you wrap an icon and a label in a component of your own, set
+`--pw-icon-bearing: 1` on the wrapper.
 
 Two worked examples, and they differ in weight rather than in hue. The cyber
 set in `assets/icon-font.cyber.mjs` is drawn open: outlines where the chrome

@@ -3291,6 +3291,32 @@
        and it renders as nothing at all. */
     --pw-icon-ink-l: 0;
     --pw-icon-ink-r: 0;
+    /* And the switch that spends them. 0 here, so the correction is off
+       everywhere until a context asks for it.
+
+       It has to be opt-in, which is the part worth writing down. Subtracting
+       the bearing is right wherever an icon sits inline beside a word and the
+       gap between them is meant to look even: without it the badge's check
+       measured 10px of inset against the exclamation's 15 and read as
+       inconsistent padding, which it was, just not in the padding. It is
+       WRONG everywhere else in this kit, and the wrongness is not subtle. A
+       menu's check and a list's play marker sit in a fixed gutter, so pulling
+       them in by their own ink moves each one a different distance and the
+       column stops being a column. An icon-only control centres its mark, and
+       the two bearings differ, so subtracting both shifts it off centre. A
+       collapsible's chevron rotates, and a bearing describes the ink of a
+       glyph that is no longer pointing that way, which is the same trap
+       spinner.tsx documents for its own frames.
+
+       So the arithmetic lives here, once, and the answer to "does this
+       context want it" is one custom property rather than two copies of a
+       calc(). A consumer wrapping an icon and a label in their own component
+       sets --pw-icon-bearing: 1 on the wrapper and gets what the badge gets;
+       before this it was two lines of calc() copied out of badge.css, which
+       is why exactly one selector in the kit had them. */
+    --pw-icon-bearing: 0;
+    margin-left: calc(var(--pw-icon-ink-l) * -1px * var(--pw-icon-scale) * var(--pw-icon-bearing));
+    margin-right: calc(var(--pw-icon-ink-r) * -1px * var(--pw-icon-scale) * var(--pw-icon-bearing));
     width: calc(var(--pw-icon-w) * var(--pw-icon-scale));
     height: calc(var(--pw-icon-h) * var(--pw-icon-scale));
     background-color: currentColor;
@@ -5575,12 +5601,13 @@
 
      The bearings come from the sheet through the Icon component rather than
      from a list here, so a redrawn glyph brings its own correction and a new
-     one needs no rule. */
-  .pw-badge .pw-icon {
-    margin-left: calc(var(--pw-icon-ink-l, 0) * -1px * var(--pw-icon-scale));
-    margin-right: calc(var(--pw-icon-ink-r, 0) * -1px * var(--pw-icon-scale));
-  }
+     one needs no rule.
+
+     The arithmetic used to be two calc()s right here, which made this the one
+     selector in the kit that had them. It is in icon.css now and this is the
+     switch. */
   .pw-badge {
+    --pw-icon-bearing: 1;
     --pw-elev: var(--pw-shadow-sunken);
     --pw-elev-fill: var(--pw-fill-sunken);
     display: inline-flex;
