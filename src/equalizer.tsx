@@ -30,11 +30,14 @@
  * one component. A roving group would reduce it to one, and would also make
  * ten independent values behave like one control, which they are not.
  *
- * On touch it is worse and it is not solvable. A vertical slider captures
- * vertical drag, and vertical drag is how a page scrolls. Radix sets
- * touch-action: none on each root, so the equaliser is a region a finger
- * cannot scroll through. No arrangement gives both gestures to one area.
- * Keep it narrow and leave scrollable page either side.
+ * On touch it is worse and it is not solvable, and the argument for why lives
+ * once, beside the rule that causes it, in css/components/slider.css under
+ * "Vertical, and the touch cost". The short version: a vertical slider takes
+ * the vertical gesture, which is also how a page scrolls, so keep the group
+ * narrow and leave scrollable page either side.
+ *
+ * It lived here too, in its own words, until the two copies disagreed: both
+ * credited the rule to Radix and Radix does not ship it.
  */
 import { Slider as RadixSlider } from 'radix-ui';
 import { useId, type HTMLAttributes } from 'react';

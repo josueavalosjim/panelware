@@ -1004,10 +1004,17 @@
   --pw-shadow-outer-color: rgba(0, 0, 0, 0.5);
 }
 
-/* The second skin. Every one of these declares the identical token set its
-   chrome counterpart does, and the contract test holds them to it: a skin that
-   declared only its differences would inherit the other one's decisions for
-   everything it forgot, silently and correctly-looking. */
+/* The second skin. Every one of these declares at least the token set its
+   chrome counterpart does, and test/contract.test.mjs holds them to it under
+   "the skin contract": a skin that declared only its differences would inherit
+   chrome's decisions for everything it forgot, silently and
+   correctly-looking, and chrome's block includes :root.
+
+   At least, not exactly. This comment said "the identical token set" and
+   named a test that did not exist, and by the time anyone counted it was
+   chrome 11, cyber 42, paper 35. A skin reaching for knobs chrome has no use
+   for is the point of a skin; leaving one of chrome's out is the bug. The
+   test now holds the second half of that and not the first. */
 /**
  * PRIMITIVE — the cyber skin's raw ramp.
  *
@@ -1219,11 +1226,15 @@
 /**
  * SKIN — the cyber skin's own knobs.
  *
- * The same ten tokens skin.chrome.css declares, because a skin that declares
- * fewer makes the missing ones a fact about the consumer's markup rather than
- * a fact about the skin. Turning gloss off by not shipping the rule would
- * leave every [data-gloss] in the wild as a dead attribute; setting the
- * opacity to 0 silences all of them at once and keeps the markup honest.
+ * Every knob skin.chrome.css declares, and then some, because a skin that
+ * declares fewer makes the missing ones a fact about the consumer's markup
+ * rather than a fact about the skin. Turning gloss off by not shipping the
+ * rule would leave every [data-gloss] in the wild as a dead attribute; setting
+ * the opacity to 0 silences all of them at once and keeps the markup honest.
+ *
+ * This said "the same ten tokens" for a long time and neither number was ever
+ * ten. The floor is chrome's set, the ceiling is whatever this skin needs, and
+ * test/contract.test.mjs counts rather than trusting the sentence.
  *
  * Two of these are the whole point of the file. --pw-bevel-depth: 0 collapses
  * the entire chrome treatment to nothing, which is the claim the depth knob
@@ -4191,14 +4202,23 @@
     height: auto;
   }
 
-  /* ── Vertical ────────────────────────────────────────────────────────────
-     The touch cost is real and it is not solvable, so it is documented rather
-     than hidden. A vertical slider captures vertical drag, and vertical drag
-     is also how a page scrolls. Radix sets touch-action: none on the root, so
-     a column of ten of these is a band of the page a finger cannot scroll
-     through. There is no arrangement that gives both gestures to one region.
-     Keep the group narrow, leave scrollable page either side of it, and say
-     so in the docs. */
+  /* ── Vertical, and the touch cost ────────────────────────────────────────
+     THIS IS THE ONE COPY OF THIS ARGUMENT. equalizer.tsx points here.
+
+     The cost is real and it is not solvable, so it is documented rather than
+     hidden. A vertical slider captures vertical drag, and vertical drag is
+     also how a page scrolls. The `touch-action: none` on .pw-slider forty
+     lines up is what takes it, so a column of ten of these is a band of the
+     page a finger cannot scroll through. There is no arrangement that gives
+     both gestures to one region. Keep the group narrow, leave scrollable page
+     either side of it, and say so in the docs.
+
+     The rule is THIS KIT'S, which matters because both copies of this
+     paragraph used to credit it to Radix and the credit was wrong. Radix's
+     slider ships no touch-action at all; the only touch-action in the
+     installed radix-ui is in react-toast. A rule attributed to a dependency is
+     a rule nobody here thinks to change, and this one is ours to change: the
+     vertical case below narrows it to pan-x for exactly that reason. */
   .pw-slider[data-orientation="vertical"] {
     /* pan-x, not none.
        A vertical slider needs the vertical gesture and nothing else, so
@@ -4310,23 +4330,15 @@
  *
  * A toolbar of icon-only buttons, and a position bar.
  *
- * ── Why icon-only is allowed here and nowhere else ────────────────────────
- * The badge component exists partly to enforce that a status is never a mark
- * alone. This is the exception, and it is a narrow one: transport symbols are
- * the most standardised iconography in consumer software, a play triangle has
- * meant one thing since the reel-to-reel, and a row of five labelled buttons
- * is not a transport, it is a menu.
+ * Two decisions shape what this file draws, and both are argued once, in
+ * src/transport.tsx: why icon-only is allowed here and nowhere else, and why
+ * a scrubbable position and a watch-only one are two components rather than
+ * one prop. Read them there.
  *
- * The exception is paid for in the component: every transport button requires
- * a label prop, and it becomes the accessible name. Nothing here is unnamed,
- * it is only unlabelled on screen.
- *
- * ── The seek bar is two components, not one ───────────────────────────────
- * A position you can scrub is a slider. A position you can only watch is a
- * progress bar. They look nearly identical and their semantics are opposite:
- * one is role="slider" and focusable, the other is role="progressbar" and is
- * not. Shipping one component with an `interactive` prop would put a focus
- * ring on something a keyboard cannot use, or take it off something it can.
+ * They were argued here as well, at the same length in different words, which
+ * is how a comment becomes a second source of truth: the two copies drift and
+ * a reader has no way to tell which one the code kept. This file explains its
+ * own selectors and leaves the rest to the component.
  */
 
 @layer pw.components {
@@ -5705,10 +5717,13 @@
  * segment display is not a control, it is an image of text.
  *
  * That is also its whole accessibility problem, and the answer is in the
- * markup rather than here: the component renders the real string into a
- * visually hidden span and marks the sprite render aria-hidden. One span
- * with "04:21" in it, never one span per character, or a screen reader
- * spells the time out digit by digit.
+ * markup rather than here. src/readout.tsx carries the argument: the role,
+ * why it is not a live region, and why the pause control disappears under
+ * prefers-reduced-motion. This file draws it.
+ *
+ * Do not restate that argument here. It was stated here, in its own words,
+ * describing a visually hidden mirror span that the role replaced, and the
+ * description outlived the code by two releases. One decision, one copy.
  *
  * ── Why the cell index arrives as a unitless integer ──────────────────────
  * The component writes --pw-cell-x: 4, not background-position: -27px 0.
@@ -5908,10 +5923,18 @@
      in its list, which does not help here: the problem is not a missing
      boundary, it is that the content is gone.
 
-     The screen-reader mirror means this hits only the sighted low-vision
-     user the mode exists for, which makes it the worst place in the kit to
-     have missed. The glow goes too: drop-shadow on a forced colour paints a
-     second smear around every glyph. */
+     Who this reaches is worth being exact about. The string is on the
+     role="img" host as its accessible name, so a screen reader reader still
+     gets "04:21" whatever the cells do. It is the sighted low-vision user,
+     the one forced-colors exists for, who is left with four empty boxes,
+     which makes it the worst place in the kit to have missed.
+
+     (That paragraph used to reason from a visually hidden mirror span. The
+     mirror was deleted when the role took over and the sentence was not, so
+     it went on explaining the behaviour of markup that had left.)
+
+     The glow goes too: drop-shadow on a forced colour paints a second smear
+     around every glyph. */
   @media (forced-colors: active) {
     .pw-lcd      { background-color: Canvas; }
     .pw-lcd-cell { background-color: CanvasText; filter: none; }

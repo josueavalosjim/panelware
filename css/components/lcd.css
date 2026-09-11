@@ -6,10 +6,13 @@
  * segment display is not a control, it is an image of text.
  *
  * That is also its whole accessibility problem, and the answer is in the
- * markup rather than here: the component renders the real string into a
- * visually hidden span and marks the sprite render aria-hidden. One span
- * with "04:21" in it, never one span per character, or a screen reader
- * spells the time out digit by digit.
+ * markup rather than here. src/readout.tsx carries the argument: the role,
+ * why it is not a live region, and why the pause control disappears under
+ * prefers-reduced-motion. This file draws it.
+ *
+ * Do not restate that argument here. It was stated here, in its own words,
+ * describing a visually hidden mirror span that the role replaced, and the
+ * description outlived the code by two releases. One decision, one copy.
  *
  * ── Why the cell index arrives as a unitless integer ──────────────────────
  * The component writes --pw-cell-x: 4, not background-position: -27px 0.
@@ -209,10 +212,18 @@
      in its list, which does not help here: the problem is not a missing
      boundary, it is that the content is gone.
 
-     The screen-reader mirror means this hits only the sighted low-vision
-     user the mode exists for, which makes it the worst place in the kit to
-     have missed. The glow goes too: drop-shadow on a forced colour paints a
-     second smear around every glyph. */
+     Who this reaches is worth being exact about. The string is on the
+     role="img" host as its accessible name, so a screen reader reader still
+     gets "04:21" whatever the cells do. It is the sighted low-vision user,
+     the one forced-colors exists for, who is left with four empty boxes,
+     which makes it the worst place in the kit to have missed.
+
+     (That paragraph used to reason from a visually hidden mirror span. The
+     mirror was deleted when the role took over and the sentence was not, so
+     it went on explaining the behaviour of markup that had left.)
+
+     The glow goes too: drop-shadow on a forced colour paints a second smear
+     around every glyph. */
   @media (forced-colors: active) {
     .pw-lcd      { background-color: Canvas; }
     .pw-lcd-cell { background-color: CanvasText; filter: none; }
