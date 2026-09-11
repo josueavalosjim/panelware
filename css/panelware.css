@@ -6267,20 +6267,26 @@
     );
   }
 
-  /* Open and pressed are the same picture on purpose, which field.css argues
-     for and this keeps. The chrome version says it by sinking the button.
-     With no button to sink, the bracket brightens instead. */
-  [data-skin="cyber"] .pw-select[data-state="open"] .pw-select-button,
-  [data-skin="cyber"] .pw-select:active .pw-select-button {
-    --pw-elev: none;
-    --pw-elev-fill: none;
-    background-color: var(--pw-selected-bg);
-    --pw-ornament: linear-gradient(
-      to right,
-      var(--pw-color-primary) var(--pw-bracket-arm),
-      transparent var(--pw-bracket-arm)
-    );
-  }
+  /* Open and pressed look exactly like closed here, and that is the decision.
+
+     There was a rule that said otherwise. It reached for --pw-bracket-arm,
+     which is the 10px LENGTH of a bracket's arm, where it wanted
+     --pw-bracket-weight, the 2px thickness, so the hairline came out as a
+     10px slab of accent with the caret sitting on it. The comment claimed the
+     bracket brightened. It did not brighten, it swelled.
+
+     Rather than pick a new width, the rule goes. The chrome skin marks open by
+     sinking the drop button, and that is available to it because it HAS a
+     raised button to sink. This skin took the button away on purpose: the
+     caret is a mark on the field, not an object on top of it. What is left to
+     move is the hairline, and every version of moving it was either invisible
+     or too loud. Cyber also has one accent and no brighter rung to reach for,
+     so "brighter" would have cost two new primitives to say something the
+     open listbox is already saying an inch below.
+
+     The state is not unmarked. Radix opens the listbox, which is the largest
+     thing on the screen, and aria-expanded carries it for anyone not looking.
+     Nothing here was ever load-bearing. */
 }
 
 /**
