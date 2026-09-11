@@ -98,11 +98,18 @@ describe('the published reference data', () => {
   test('publishes every pair the gate checks, and none of them failing', () => {
     const onDisk = JSON.parse(read('demo/docs-data.json'));
     const config = JSON.parse(read('tastecheck.config.json'));
-    /* Not pairs times themes. A pair may name the themes it applies to, which
-       the paper skin's dither ink does because it is the only skin with a
-       second ground and a pair naming a token a theme does not declare is a
-       hard failure rather than a skip. Multiplying would have quietly expected
-       more rows than the gate produces, so the count is summed per pair. */
+    /* Not pairs times themes. A pair may name the themes it applies to, and
+       the count is summed per pair so that a pair which does gets counted
+       once per theme it names rather than once per theme that exists.
+
+       No pair in this config uses that yet. It is summed rather than
+       multiplied because the alternative is a count that silently expects
+       more rows than the gate produces the first time one does.
+
+       The paper skin's dither ink is NOT one of these, which this comment
+       claimed for three releases. A pair is two resolved colours and the gate
+       rejects a translucent bg outright, so a screen cannot be a pair at all.
+       The test further down composites it instead. */
     const expected = config.contrast.pairs.reduce(
       (n, p) => n + (p.themes ? p.themes.length : config.contrast.themes.length), 0);
     assert.equal(onDisk.contrast.length, expected,

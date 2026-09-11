@@ -1,11 +1,15 @@
 /**
  * SKIN — the cyber skin's own knobs.
  *
- * The same ten tokens skin.chrome.css declares, because a skin that declares
- * fewer makes the missing ones a fact about the consumer's markup rather than
- * a fact about the skin. Turning gloss off by not shipping the rule would
- * leave every [data-gloss] in the wild as a dead attribute; setting the
- * opacity to 0 silences all of them at once and keeps the markup honest.
+ * Every knob skin.chrome.css declares, and then some, because a skin that
+ * declares fewer makes the missing ones a fact about the consumer's markup
+ * rather than a fact about the skin. Turning gloss off by not shipping the
+ * rule would leave every [data-gloss] in the wild as a dead attribute; setting
+ * the opacity to 0 silences all of them at once and keeps the markup honest.
+ *
+ * This said "the same ten tokens" for a long time and neither number was ever
+ * ten. The floor is chrome's set, the ceiling is whatever this skin needs, and
+ * test/contract.test.mjs counts rather than trusting the sentence.
  *
  * Two of these are the whole point of the file. --pw-bevel-depth: 0 collapses
  * the entire chrome treatment to nothing, which is the claim the depth knob

@@ -455,13 +455,18 @@ the second, pass `aria-disabled` and handle the value yourself rather than
 ## Writing a skin
 
 The kit's whole claim is that a skin is a set of token values rather than a
-fork, so here is the actual procedure. It is four files of tokens and no
-component changes; if you find yourself editing something under
-`css/components/`, the token you needed is missing and that is a bug worth
+fork, so here is the actual procedure. Three files of tokens carry it:
+`primitive.<name>.css`, `semantic.<name>.css`, and `skin.<name>.css`. Nothing
+under `css/components/` should need touching, and if you find yourself editing
+something there, the token you needed is missing and that is a bug worth
 reporting.
 
-Tokens cannot move structure, though, and for a while that was the end of the
-sentence. A fifth file can: see **When tokens are not enough** below.
+Two more files exist for the cases tokens cannot reach, and a skin takes them
+only if it needs them. `css/skins/<name>/*.css` is where a skin's `pw.skin`
+layer rules live, and where its generated icon bearings land if it ships its
+own sheet: see **When tokens are not enough** below, and the icon section for
+the sheet. Both shipped non-chrome skins have one, so "three files" is the
+floor rather than the usual count.
 
 **1. Ship a complete set, not a diff.** Copy `css/tokens/semantic.chrome.css`
 and `css/tokens/skin.chrome.css` and change the values. Every skin x theme
@@ -492,11 +497,21 @@ use either or both.
 **A fill-based skin has a second ground, and the gate cannot see it.** The
 contrast check reads a computed `background-color`, which on a halftone surface
 is the stock and not the dot, so text sitting on the dots is measured against a
-ground it only partly sits on. Give the ink a token, hold it to the same floor
-the stock is held to, and declare it as a pair. The paper skin's
-`--pw-dither-ink` is in `tastecheck.config.json` against
-`--pw-color-base-content` at 4.5 for exactly this, and it is the one pair no
-shadow-based skin needs.
+ground it only partly sits on.
+
+The fix is not a pair in `tastecheck.config.json`, and it is worth saying why,
+because that was the obvious answer and the prose here claimed it for three
+releases. A contrast pair is two resolved colours, and the gate rejects a
+translucent `bg` outright: a ground with alpha is not a ground, and there is no
+DOM in that check to composite it against. A screen is translucent by
+definition, since that is what makes its local contrast constant on every
+surface it is printed on. So the pair cannot be written.
+
+What holds it instead is a bespoke test, `test/css.test.mjs`, which composites
+`--pw-dither-ink` over each of the skin's grounds and measures
+`--pw-color-base-content` against the result, at the same 4.5 the stock is held
+to, in both themes. Give your ink a token, keep it translucent, and add your
+skin to that test's `looks` list.
 
 There is one more background layer above those, `--pw-ornament` with
 `--pw-ornament-size`, for a mark no component draws: corner ticks, a bracketed

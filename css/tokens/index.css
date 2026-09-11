@@ -18,10 +18,17 @@
    a skin's timing would have been silently ignored. */
 @import "./motion.css";
 @import "./skin.chrome.css";
-/* The second skin. Every one of these declares the identical token set its
-   chrome counterpart does, and the contract test holds them to it: a skin that
-   declared only its differences would inherit the other one's decisions for
-   everything it forgot, silently and correctly-looking. */
+/* The second skin. Every one of these declares at least the token set its
+   chrome counterpart does, and test/contract.test.mjs holds them to it under
+   "the skin contract": a skin that declared only its differences would inherit
+   chrome's decisions for everything it forgot, silently and
+   correctly-looking, and chrome's block includes :root.
+
+   At least, not exactly. This comment said "the identical token set" and
+   named a test that did not exist, and by the time anyone counted it was
+   chrome 11, cyber 42, paper 35. A skin reaching for knobs chrome has no use
+   for is the point of a skin; leaving one of chrome's out is the bug. The
+   test now holds the second half of that and not the first. */
 @import "./primitive.cyber.css";
 @import "./semantic.cyber.css";
 @import "./skin.cyber.css";

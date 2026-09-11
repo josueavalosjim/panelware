@@ -75,14 +75,23 @@
     height: auto;
   }
 
-  /* ── Vertical ────────────────────────────────────────────────────────────
-     The touch cost is real and it is not solvable, so it is documented rather
-     than hidden. A vertical slider captures vertical drag, and vertical drag
-     is also how a page scrolls. Radix sets touch-action: none on the root, so
-     a column of ten of these is a band of the page a finger cannot scroll
-     through. There is no arrangement that gives both gestures to one region.
-     Keep the group narrow, leave scrollable page either side of it, and say
-     so in the docs. */
+  /* ── Vertical, and the touch cost ────────────────────────────────────────
+     THIS IS THE ONE COPY OF THIS ARGUMENT. equalizer.tsx points here.
+
+     The cost is real and it is not solvable, so it is documented rather than
+     hidden. A vertical slider captures vertical drag, and vertical drag is
+     also how a page scrolls. The `touch-action: none` on .pw-slider forty
+     lines up is what takes it, so a column of ten of these is a band of the
+     page a finger cannot scroll through. There is no arrangement that gives
+     both gestures to one region. Keep the group narrow, leave scrollable page
+     either side of it, and say so in the docs.
+
+     The rule is THIS KIT'S, which matters because both copies of this
+     paragraph used to credit it to Radix and the credit was wrong. Radix's
+     slider ships no touch-action at all; the only touch-action in the
+     installed radix-ui is in react-toast. A rule attributed to a dependency is
+     a rule nobody here thinks to change, and this one is ours to change: the
+     vertical case below narrows it to pan-x for exactly that reason. */
   .pw-slider[data-orientation="vertical"] {
     /* pan-x, not none.
        A vertical slider needs the vertical gesture and nothing else, so
