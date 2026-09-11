@@ -534,6 +534,8 @@ markup rather than a fact about the skin. Grouped by what turning one does.
 | Token | What it does |
 | --- | --- |
 | `--pw-bevel-depth` | multiplies every bevel offset; 0 collapses the stack to nothing |
+| `--pw-lcd-depth` | how deep the readout is set, separately from everything else. Chrome sinks it to 2, because a segment display is a window into a box rather than a face on one. A flat skin sets 0, and until this was a token it could not: `lcd.css` wrote the number on the element, in a later layer than any skin, so cyber and paper flattened the whole kit and kept a bevelled well around their readout |
+| `--pw-press-travel` | how far a pressed control moves down. 1px on chrome, because its controls are objects you push. 0 on both other skins: a mark on glass does not depress and ink has nowhere to travel to |
 | `--pw-shadow-outer-color` | the cast shadow's colour. Its geometry is derived per element in `bevel.css`. Fully transparent means a skin whose surfaces are not objects sitting on anything |
 | `--pw-glass-blur` | the one place `backdrop-filter` is allowed, and it is 0 in both shipped skins. See the perf note below |
 
@@ -597,6 +599,14 @@ reinventing it:
 | `--pw-bracket-weight` | how thick it is |
 
 *Type*
+
+Type is a skin axis, and for three releases it was not: the paper skin never
+answered `--pw-font-ui`, so a printed sheet was set in the operating system's
+UI sans because nobody had decided it would be. All three skins declare both
+of these now, and a contract test fails if a knob resolves to the same value
+under every skin, which is what "a skin is a set of token values" has to mean
+to be worth saying.
+
 
 | Token | What it does |
 | --- | --- |
@@ -664,6 +674,26 @@ instead of by three. Its face moves with the ramp, which is why the face is a
 token of its own rather than the readout's `--pw-color-lcd`. The readout keeps
 its green phosphor under both skins, deliberately: a segment display reading a
 time is a different object from a spectrum.
+
+*Scrollbar*
+
+Five surfaces in this kit scroll: a list, a panel body, a window body, an open
+select, and the equaliser sideways. Every one of them showed the host OS's own
+scrollbar under every skin, which is the loudest place a skin used to stop at
+the edge of the component.
+
+| Token | What it does |
+| --- | --- |
+| `--pw-scrollbar-width` | `auto` or `thin`, the two values the standard property takes. Chrome takes `auto`, because a period scrollbar is a wide one; the other two take `thin` |
+| `--pw-scrollbar-thumb` | the bar you drag |
+| `--pw-scrollbar-track` | the channel behind it |
+
+These are `scrollbar-width` and `scrollbar-color`, the CSS Scrollbars
+properties, and not `::-webkit-scrollbar`. The prefixed pseudo-elements are
+richer, and a bevelled thumb is genuinely tempting for the chrome skin, but
+Firefox will never implement them, so drawing it that way means a period
+scrollbar in one engine and the host OS's in another. Two scrollbars is worse
+than one. What the slot therefore cannot express is a bevel on the thumb.
 
 *Icons*
 

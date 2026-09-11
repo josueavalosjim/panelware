@@ -235,6 +235,27 @@
     linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
       right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
 
+  /* NOTHING HERE IS AN OBJECT, so nothing here depresses. The chrome skin
+     moves a pressed control one pixel down because it is a thing you push.
+     A HUD's control is a mark on glass: it brightens, it brackets, and it
+     stays exactly where it was. This skin was translating a pixel anyway,
+     because the travel had never been a skin's to set. */
+  --pw-press-travel: 0;
+
+  /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
+     whole treatment, and the readout kept a chrome-bevelled surround through
+     three releases regardless, because lcd.css wrote the depth as a literal
+     in a later layer where no skin could reach it. It is a token now and this
+     is the answer: a screen on an instrument is flush with its panel. */
+  --pw-lcd-depth: 0;
+
+  /* A hairline, in the accent, on the darker of the two grounds. The same
+     move as the field's bracket: the furniture is drawn in the one ink this
+     skin has, at the one weight it draws anything. */
+  --pw-scrollbar-width: thin;
+  --pw-scrollbar-thumb: var(--pw-color-primary);
+  --pw-scrollbar-track: var(--pw-color-base-100);
+
 }
 
 [data-skin="cyber"][data-theme="dark"] {
@@ -377,6 +398,27 @@
   --pw-ease-press: var(--pw-ease-hud);
   --pw-ease-enter: var(--pw-ease-hud);
   --pw-ease-state: var(--pw-ease-hud);
+
+  /* NOTHING HERE IS AN OBJECT, so nothing here depresses. The chrome skin
+     moves a pressed control one pixel down because it is a thing you push.
+     A HUD's control is a mark on glass: it brightens, it brackets, and it
+     stays exactly where it was. This skin was translating a pixel anyway,
+     because the travel had never been a skin's to set. */
+  --pw-press-travel: 0;
+
+  /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
+     whole treatment, and the readout kept a chrome-bevelled surround through
+     three releases regardless, because lcd.css wrote the depth as a literal
+     in a later layer where no skin could reach it. It is a token now and this
+     is the answer: a screen on an instrument is flush with its panel. */
+  --pw-lcd-depth: 0;
+
+  /* A hairline, in the accent, on the darker of the two grounds. The same
+     move as the field's bracket: the furniture is drawn in the one ink this
+     skin has, at the one weight it draws anything. */
+  --pw-scrollbar-width: thin;
+  --pw-scrollbar-thumb: var(--pw-color-primary);
+  --pw-scrollbar-track: var(--pw-color-base-100);
 
 
 }

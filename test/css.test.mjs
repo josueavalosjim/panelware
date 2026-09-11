@@ -353,11 +353,18 @@ describe('the published reference data', () => {
        bevel.css and glow.css, so the day a third arrived it went on comparing
        the first two and reporting a clean run: the halftone skin could have
        reached the slot for a different set of surfaces and been flat in
-       exactly one skin, which is the failure this test exists for. */
+       exactly one skin, which is the failure this test exists for.
+
+       Derived on what the file DECLARES, not on whether it happens to mention
+       .pw-select-list. Naming the class was close enough while every treatment
+       filled the elevation slot, and it stopped being close enough the moment
+       a treatment reached a different slot for a different set of surfaces:
+       scrollbar.css dresses the five things that scroll, which is correctly
+       not the list of things that have an edge, and this read it as drift. */
     const files = readdirSync(join(ROOT, 'css', 'treatment'))
       .filter((f) => f.endsWith('.css'))
       .map((f) => join('css', 'treatment', f))
-      .filter((f) => read(f).includes('pw-select-list'));
+      .filter((f) => read(f).includes('--pw-shadow-raised:'));
     assert.ok(files.length >= 3, `only ${files.length} treatment(s) fill the slot`);
 
     const base = listOf(files[0]);

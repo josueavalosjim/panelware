@@ -58,8 +58,11 @@
     --pw-elev: var(--pw-shadow-sunken);
     --pw-elev-fill: var(--pw-fill-sunken);
     /* The readout is set deeper than anything else in the kit. It is a
-       window into a box, not a face on one. */
-    --pw-bevel-depth: 2;
+       window into a box, not a face on one. The depth is structural.css's
+       --pw-lcd-depth rather than a literal here, because a literal in this
+       layer is unreachable from pw.tokens and two skins spent a release
+       flattening everything except this. */
+    --pw-bevel-depth: var(--pw-lcd-depth);
     display: inline-flex;
     align-items: center;
     gap: calc(var(--pw-lcd-scale) * 1px);
