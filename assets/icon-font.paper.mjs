@@ -17,6 +17,11 @@
  * magnifier gets its circular lens back for the same reason: this is a
  * catalogue's vocabulary rather than a HUD's.
  *
+ * One glyph here is chrome's to the pixel, `pause`, and it is the only one.
+ * Two heavy bars with a gap is what a pause mark is at 16px, and drawing it
+ * again in this set's vocabulary produces the same twelve columns. The overlap
+ * is declared in test/icons.test.mjs by name, so it cannot grow by accident.
+ *
  * ── Round, on a lattice that has no curves ────────────────────────────────
  * A circle at this size is six pixels with its four corners cut, and that is
  * the whole trick. Cutting more reads as an octagon, cutting less reads as a
@@ -191,21 +196,33 @@ const drawn = {
     '................',
   ],
 
+  /* Two cards, one in front, and a knockout between them.
+
+     This was two solid slabs that met at a corner and overlapped nowhere, so
+     nothing was in front of anything: it read as an L, not as a restore. The
+     other two sets both draw a frame clipped behind a frame, and this set has
+     no outlines to clip, so it does what print does instead. The front card is
+     solid and the back card is cut away for one pixel along it, which is a
+     knockout: the channel is the paper showing through, and it is thinner than
+     the strokes on purpose, because that is what a keyline is.
+
+     What stays of the back card is its top band and its right edge, which is
+     the same thing the reader sees in the other two sets. */
   restore: [
     '................',
     '................',
-    '......########..',
-    '......########..',
-    '......########..',
-    '......########..',
-    '......########..',
-    '......########..',
-    '..########......',
-    '..########......',
-    '..########......',
-    '..########......',
-    '..########......',
-    '..########......',
+    '.....#########..',
+    '.....#########..',
+    '............##..',
+    '..#########.##..',
+    '..#########.##..',
+    '..#########.##..',
+    '..#########.##..',
+    '..#########.##..',
+    '..#########.....',
+    '..#########.....',
+    '..#########.....',
+    '..#########.....',
     '................',
     '................',
   ],

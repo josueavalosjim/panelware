@@ -23,12 +23,13 @@
 
      The bearings come from the sheet through the Icon component rather than
      from a list here, so a redrawn glyph brings its own correction and a new
-     one needs no rule. */
-  .pw-badge .pw-icon {
-    margin-left: calc(var(--pw-icon-ink-l, 0) * -1px * var(--pw-icon-scale));
-    margin-right: calc(var(--pw-icon-ink-r, 0) * -1px * var(--pw-icon-scale));
-  }
+     one needs no rule.
+
+     The arithmetic used to be two calc()s right here, which made this the one
+     selector in the kit that had them. It is in icon.css now and this is the
+     switch. */
   .pw-badge {
+    --pw-icon-bearing: 1;
     --pw-elev: var(--pw-shadow-sunken);
     --pw-elev-fill: var(--pw-fill-sunken);
     display: inline-flex;
