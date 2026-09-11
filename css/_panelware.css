@@ -78,6 +78,9 @@
 @import "./treatment/glow.css";
 /* The third skin's elevation, and the first that is not a box-shadow. */
 @import "./treatment/halftone.css";
+/* The scrollbar is a surface treatment on boxes other files drew, and it
+   belongs to no one component: five of them scroll. */
+@import "./treatment/scrollbar.css";
 @import "./components/icon.css";
 /* Generated: one rule per icon name, so hand-written markup can say
    data-icon="check" instead of carrying the sprite cell itself. */
@@ -110,5 +113,6 @@
 /* Generated: the bearings this skin's own sprite sheet moves. */
 @import "./skins/cyber/icon-index.css";
 @import "./skins/cyber/field.css";
+@import "./skins/paper/type.css";
 @import "./skins/paper/icon-index.css";
 @import "./skins/paper/field.css";

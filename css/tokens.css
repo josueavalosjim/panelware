@@ -479,6 +479,23 @@
      what actually reads this. */
   --pw-depth: 1;
 
+  /* HOW DEEP THE READOUT IS SET, as a token rather than as a number in
+     lcd.css, and this is a repair rather than tidying.
+
+     The readout is sunk deeper than anything else in the kit, because it is a
+     window into a box rather than a face on one. That is right for chrome and
+     it was written as `--pw-bevel-depth: 2` on .pw-lcd itself, inside
+     pw.components. A skin declares its knobs in pw.tokens, and a later layer
+     beats an earlier one at any specificity, so no skin could reach it: cyber
+     and paper both flatten the kit to --pw-bevel-depth: 0 and both still got
+     a chrome-bevelled well around their readout. It was the one place in the
+     kit where a component's value was genuinely unreachable, which is the
+     exact failure --pw-elev and the fill slots exist to prevent.
+
+     The number is the same. The difference is that it is now somewhere a
+     skin can answer. */
+  --pw-lcd-depth: 2;
+
   /* Surface texture. Generalised from DaisyUI's --noise, which hard-codes a
      noise SVG. The second skin wants scanlines, not noise, and the honest
      name for the slot is what it is for rather than what chrome puts in it. */
@@ -544,6 +561,19 @@
      Every knob that changes with density lives in density.css instead, so
      each density block can state a complete set. What stays here is what
      density does not move. */
+
+  /* THE SCROLLBAR. Five surfaces in this kit scroll and all three skins used
+     to let the host OS draw all five. treatment/scrollbar.css says why these
+     are the only three knobs there are, and why it is not the webkit prefix.
+
+     The colours point at semantic tokens rather than carrying literals,
+     because a scrollbar is furniture on a surface and a skin that has already
+     said what its surfaces are should not have to say it twice. A skin that
+     wants a scrollbar unlike its own surfaces overrides them, which cyber
+     does. */
+  --pw-scrollbar-width: auto;
+  --pw-scrollbar-thumb: var(--pw-color-base-300);
+  --pw-scrollbar-track: var(--pw-color-base-200);
 
   --pw-focus-width:  2px;
 
@@ -909,6 +939,38 @@
      where it can be derived per element from the inherited depth. Kept quiet:
      this is a control sitting on a surface, not a card floating over a page. */
   --pw-shadow-outer-color: rgba(20, 20, 19, 0.16);
+
+  /* HOW FAR A PRESSED CONTROL TRAVELS, and the readout's depth, and the
+     scrollbar. Three axes every skin declares and none of them used to, which
+     meant three decisions the chrome skin was making on every skin's behalf.
+
+     Chrome is the one that earns the travel: its controls are objects with a
+     lit top edge, and a button that lights up without moving is a picture of a
+     button. One pixel, the period value. */
+  --pw-press-travel: 1px;
+
+  /* A window into a box. The deepest thing in the kit and the only element
+     that overrides the depth at all. */
+  --pw-lcd-depth: 2;
+
+  /* A period scrollbar is a wide one with a raised thumb in it. The thumb
+     cannot be bevelled through the standard properties, which
+     treatment/scrollbar.css explains, so what is left is the width and the
+     two greys, and the greys are the surfaces this skin already declared. */
+  --pw-scrollbar-width: auto;
+  --pw-scrollbar-thumb: var(--pw-color-base-300);
+  --pw-scrollbar-track: var(--pw-color-base-200);
+
+  /* TYPE IS A SKIN AXIS, so the skin says it rather than inheriting the
+     default. structural.css still declares both for a consumer who takes the
+     tokens without a skin; this is chrome making the same call on purpose.
+
+     The OS's own UI face at 15px. That is the period reading and it is also
+     the reason paper looked wrong for three releases: paper never answered
+     this, so a printed sheet was set in system-ui and nobody had decided it
+     would be. */
+  --pw-font-ui: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+  --pw-text-ui: 0.9375rem;
 }
 
 [data-theme="dark"],
@@ -931,6 +993,38 @@
   --pw-glass-blur: 0px;
 
   --pw-shadow-outer-color: rgba(0, 0, 0, 0.5);
+
+  /* HOW FAR A PRESSED CONTROL TRAVELS, and the readout's depth, and the
+     scrollbar. Three axes every skin declares and none of them used to, which
+     meant three decisions the chrome skin was making on every skin's behalf.
+
+     Chrome is the one that earns the travel: its controls are objects with a
+     lit top edge, and a button that lights up without moving is a picture of a
+     button. One pixel, the period value. */
+  --pw-press-travel: 1px;
+
+  /* A window into a box. The deepest thing in the kit and the only element
+     that overrides the depth at all. */
+  --pw-lcd-depth: 2;
+
+  /* A period scrollbar is a wide one with a raised thumb in it. The thumb
+     cannot be bevelled through the standard properties, which
+     treatment/scrollbar.css explains, so what is left is the width and the
+     two greys, and the greys are the surfaces this skin already declared. */
+  --pw-scrollbar-width: auto;
+  --pw-scrollbar-thumb: var(--pw-color-base-300);
+  --pw-scrollbar-track: var(--pw-color-base-200);
+
+  /* TYPE IS A SKIN AXIS, so the skin says it rather than inheriting the
+     default. structural.css still declares both for a consumer who takes the
+     tokens without a skin; this is chrome making the same call on purpose.
+
+     The OS's own UI face at 15px. That is the period reading and it is also
+     the reason paper looked wrong for three releases: paper never answered
+     this, so a printed sheet was set in system-ui and nobody had decided it
+     would be. */
+  --pw-font-ui: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+  --pw-text-ui: 0.9375rem;
 }
 
 /* The second skin. Every one of these declares at least the token set its
@@ -1389,6 +1483,27 @@
     linear-gradient(var(--pw-color-primary), var(--pw-color-primary))
       right bottom / var(--pw-bracket-weight) var(--pw-bracket-arm) no-repeat;
 
+  /* NOTHING HERE IS AN OBJECT, so nothing here depresses. The chrome skin
+     moves a pressed control one pixel down because it is a thing you push.
+     A HUD's control is a mark on glass: it brightens, it brackets, and it
+     stays exactly where it was. This skin was translating a pixel anyway,
+     because the travel had never been a skin's to set. */
+  --pw-press-travel: 0;
+
+  /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
+     whole treatment, and the readout kept a chrome-bevelled surround through
+     three releases regardless, because lcd.css wrote the depth as a literal
+     in a later layer where no skin could reach it. It is a token now and this
+     is the answer: a screen on an instrument is flush with its panel. */
+  --pw-lcd-depth: 0;
+
+  /* A hairline, in the accent, on the darker of the two grounds. The same
+     move as the field's bracket: the furniture is drawn in the one ink this
+     skin has, at the one weight it draws anything. */
+  --pw-scrollbar-width: thin;
+  --pw-scrollbar-thumb: var(--pw-color-primary);
+  --pw-scrollbar-track: var(--pw-color-base-100);
+
 }
 
 [data-skin="cyber"][data-theme="dark"] {
@@ -1531,6 +1646,27 @@
   --pw-ease-press: var(--pw-ease-hud);
   --pw-ease-enter: var(--pw-ease-hud);
   --pw-ease-state: var(--pw-ease-hud);
+
+  /* NOTHING HERE IS AN OBJECT, so nothing here depresses. The chrome skin
+     moves a pressed control one pixel down because it is a thing you push.
+     A HUD's control is a mark on glass: it brightens, it brackets, and it
+     stays exactly where it was. This skin was translating a pixel anyway,
+     because the travel had never been a skin's to set. */
+  --pw-press-travel: 0;
+
+  /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
+     whole treatment, and the readout kept a chrome-bevelled surround through
+     three releases regardless, because lcd.css wrote the depth as a literal
+     in a later layer where no skin could reach it. It is a token now and this
+     is the answer: a screen on an instrument is flush with its panel. */
+  --pw-lcd-depth: 0;
+
+  /* A hairline, in the accent, on the darker of the two grounds. The same
+     move as the field's bracket: the furniture is drawn in the one ink this
+     skin has, at the one weight it draws anything. */
+  --pw-scrollbar-width: thin;
+  --pw-scrollbar-thumb: var(--pw-color-primary);
+  --pw-scrollbar-track: var(--pw-color-base-100);
 
 }
 
@@ -1838,6 +1974,42 @@
   --pw-color-vis-mid: var(--pw-paper-700);
   --pw-color-vis-high: var(--pw-warm-700);
   --pw-color-vis-peak: var(--pw-paper-950);
+
+  /* INK DOES NOT MOVE. A pressed control on a printed sheet has nowhere to
+     travel to, and this skin was travelling a pixel because the travel had
+     never been a skin's to set. Its press state is the second ink laid over
+     the first, which the selection slot already does. */
+  --pw-press-travel: 0;
+
+  /* Nor is the readout a well. Same reason as the bevel: there is no depth on
+     a sheet, and the dither is what arrives in its place. */
+  --pw-lcd-depth: 0;
+
+  /* A rule and a channel, which is what a margin is. Thin, because a printed
+     page's furniture is thinner than its text, and in the stock's own greys
+     rather than in the accent: the warm ink is for emphasis and a scrollbar
+     is not emphasis. */
+  --pw-scrollbar-width: thin;
+  --pw-scrollbar-thumb: var(--pw-paper-300);
+  --pw-scrollbar-track: var(--pw-paper-100);
+
+  /* A SLAB, which is the one face that answers both things this skin already
+     claims. Its icon sheet is documented as the heaviest of the three, three
+     pixel strokes against chrome's two, and as "a catalogue's vocabulary
+     rather than a HUD's". A slab serif is the heaviest serif there is, so it
+     carries the weight argument, and it is unmistakably print, so it carries
+     the catalogue one. It also closes a real gap the audit measured: paper's
+     icons were running about twice the weight of its text, because its text
+     was chrome's system-ui.
+
+     The stack degrades on purpose. Rockwell ships with macOS and with Office
+     on Windows, Roboto Slab is there if the consumer loaded it, and Georgia
+     is on everything. A machine with none of the three lands on a
+     transitional serif, which is the wrong century and the right medium: a
+     book face on a printed sheet is a worse answer than a slab and a much
+     better one than the operating system's UI sans. */
+  --pw-font-ui: 'pw-Rockwell', 'Roboto Slab', Georgia, 'Times New Roman', serif;
+  --pw-text-ui: 0.9375rem;
 }
 
 [data-skin="paper"][data-theme="dark"] {
@@ -1887,6 +2059,32 @@
   --pw-color-vis-mid: var(--pw-paper-200);
   --pw-color-vis-high: var(--pw-warm-300);
   --pw-color-vis-peak: var(--pw-paper-050);
+
+  --pw-press-travel: 0;
+  --pw-lcd-depth: 0;
+  /* The same two rungs, reflected: the stock is near-black here, so the
+     channel is the dark end of the ramp and the rule is a step up from it. */
+  --pw-scrollbar-width: thin;
+  --pw-scrollbar-thumb: var(--pw-paper-500);
+  --pw-scrollbar-track: var(--pw-paper-900);
+
+  /* A SLAB, which is the one face that answers both things this skin already
+     claims. Its icon sheet is documented as the heaviest of the three, three
+     pixel strokes against chrome's two, and as "a catalogue's vocabulary
+     rather than a HUD's". A slab serif is the heaviest serif there is, so it
+     carries the weight argument, and it is unmistakably print, so it carries
+     the catalogue one. It also closes a real gap the audit measured: paper's
+     icons were running about twice the weight of its text, because its text
+     was chrome's system-ui.
+
+     The stack degrades on purpose. Rockwell ships with macOS and with Office
+     on Windows, Roboto Slab is there if the consumer loaded it, and Georgia
+     is on everything. A machine with none of the three lands on a
+     transitional serif, which is the wrong century and the right medium: a
+     book face on a printed sheet is a worse answer than a slab and a much
+     better one than the operating system's UI sans. */
+  --pw-font-ui: 'pw-Rockwell', 'Roboto Slab', Georgia, 'Times New Roman', serif;
+  --pw-text-ui: 0.9375rem;
 }
 
 /* THE DENSITY AXIS, RESTATED FOR THIS SKIN, AND WRITTEN LAST ON PURPOSE.

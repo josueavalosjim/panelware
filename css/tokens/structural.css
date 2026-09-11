@@ -84,6 +84,23 @@
      what actually reads this. */
   --pw-depth: 1;
 
+  /* HOW DEEP THE READOUT IS SET, as a token rather than as a number in
+     lcd.css, and this is a repair rather than tidying.
+
+     The readout is sunk deeper than anything else in the kit, because it is a
+     window into a box rather than a face on one. That is right for chrome and
+     it was written as `--pw-bevel-depth: 2` on .pw-lcd itself, inside
+     pw.components. A skin declares its knobs in pw.tokens, and a later layer
+     beats an earlier one at any specificity, so no skin could reach it: cyber
+     and paper both flatten the kit to --pw-bevel-depth: 0 and both still got
+     a chrome-bevelled well around their readout. It was the one place in the
+     kit where a component's value was genuinely unreachable, which is the
+     exact failure --pw-elev and the fill slots exist to prevent.
+
+     The number is the same. The difference is that it is now somewhere a
+     skin can answer. */
+  --pw-lcd-depth: 2;
+
   /* Surface texture. Generalised from DaisyUI's --noise, which hard-codes a
      noise SVG. The second skin wants scanlines, not noise, and the honest
      name for the slot is what it is for rather than what chrome puts in it. */
@@ -149,6 +166,19 @@
      Every knob that changes with density lives in density.css instead, so
      each density block can state a complete set. What stays here is what
      density does not move. */
+
+  /* THE SCROLLBAR. Five surfaces in this kit scroll and all three skins used
+     to let the host OS draw all five. treatment/scrollbar.css says why these
+     are the only three knobs there are, and why it is not the webkit prefix.
+
+     The colours point at semantic tokens rather than carrying literals,
+     because a scrollbar is furniture on a surface and a skin that has already
+     said what its surfaces are should not have to say it twice. A skin that
+     wants a scrollbar unlike its own surfaces overrides them, which cyber
+     does. */
+  --pw-scrollbar-width: auto;
+  --pw-scrollbar-thumb: var(--pw-color-base-300);
+  --pw-scrollbar-track: var(--pw-color-base-200);
 
   --pw-focus-width:  2px;
 

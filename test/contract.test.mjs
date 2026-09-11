@@ -245,6 +245,41 @@ describe('the skin contract', () => {
     }
   });
 
+  test('every knob a skin declares is a knob some skin actually moves', () => {
+    /* The kit's whole claim, as an assertion: a skin is a set of token values
+       rather than a fork. A knob that resolves to the identical value in all
+       three skins is not carrying that claim. It is a constant with a skin's
+       name on it, and it belongs in structural.css where a reader would look
+       for a constant.
+
+       This is the test the README needed and did not have. "Four files of
+       tokens and no component changes" was the headline for three releases
+       while every skin translated the same pixel on press, every skin sank
+       the readout to the same depth because lcd.css put the number somewhere
+       no skin could reach, and no skin styled a scrollbar at all. None of
+       that failed anything, because nothing was asking.
+
+       Same shape as the theme contract's "every semantic colour differs
+       between the themes, or it is deliberate": the exceptions are named, so
+       an exception is a decision somebody wrote down rather than a gap. */
+    const DELIBERATE = [
+      /* The one place backdrop-filter is allowed, and every shipped skin
+         declines it. Kept as a slot rather than deleted because the cost of
+         the slot is one line and the cost of a consumer forking a component
+         to get glass back is the whole claim. README says so where it is
+         documented. */
+      '--pw-glass-blur',
+    ];
+    const bases = Object.fromEntries(SKINS.map((n) => [n, baseOf(n).decls]));
+    const flat = [];
+    for (const knob of baseOf('chrome').decls.keys()) {
+      const values = SKINS.map((n) => (bases[n].get(knob) ?? '').replace(/\s+/g, ' ').trim());
+      if (new Set(values).size === 1) flat.push(knob);
+    }
+    assert.deepEqual(flat.sort(), [...DELIBERATE].sort(),
+      'these resolve identically under every skin, so they are constants rather than skin knobs');
+  });
+
   test('the density axis is the last word in every skin file', () => {
     /* This is the one that would have caught it. A skin restating a density
        knob writes [data-skin="x"][data-density="compact"], which is (0,2,0),

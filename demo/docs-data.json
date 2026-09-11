@@ -926,6 +926,15 @@
      }
     },
     {
+     "name": "--pw-lcd-depth",
+     "values": {
+      "both": {
+       "declared": "2",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-texture",
      "values": {
       "both": {
@@ -1038,6 +1047,33 @@
      "values": {
       "both": {
        "declared": "2px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-scrollbar-width",
+     "values": {
+      "both": {
+       "declared": "auto",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-scrollbar-thumb",
+     "values": {
+      "both": {
+       "declared": "var(--pw-color-base-300)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-scrollbar-track",
+     "values": {
+      "both": {
+       "declared": "var(--pw-color-base-200)",
        "resolved": null
       }
      }
@@ -1516,6 +1552,97 @@
       },
       "dark": {
        "declared": "rgba(0, 0, 0, 0.5)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-press-travel",
+     "values": {
+      "light": {
+       "declared": "1px",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "1px",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-lcd-depth",
+     "values": {
+      "light": {
+       "declared": "2",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "2",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-scrollbar-width",
+     "values": {
+      "light": {
+       "declared": "auto",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "auto",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-scrollbar-thumb",
+     "values": {
+      "light": {
+       "declared": "var(--pw-color-base-300)",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "var(--pw-color-base-300)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-scrollbar-track",
+     "values": {
+      "light": {
+       "declared": "var(--pw-color-base-200)",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "var(--pw-color-base-200)",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-font-ui",
+     "values": {
+      "light": {
+       "declared": "system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-text-ui",
+     "values": {
+      "light": {
+       "declared": "0.9375rem",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "0.9375rem",
        "resolved": null
       }
      }

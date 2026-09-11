@@ -87,5 +87,37 @@
     --pw-glow-color: var(--pw-phos-300);
     --pw-glass-blur: 0px;
     --pw-shadow-outer-color: rgba(0, 0, 0, 0.5);
+
+    /* HOW FAR A PRESSED CONTROL TRAVELS, and the readout's depth, and the
+       scrollbar. Three axes every skin declares and none of them used to, which
+       meant three decisions the chrome skin was making on every skin's behalf.
+
+       Chrome is the one that earns the travel: its controls are objects with a
+       lit top edge, and a button that lights up without moving is a picture of a
+       button. One pixel, the period value. */
+    --pw-press-travel: 1px;
+
+    /* A window into a box. The deepest thing in the kit and the only element
+       that overrides the depth at all. */
+    --pw-lcd-depth: 2;
+
+    /* A period scrollbar is a wide one with a raised thumb in it. The thumb
+       cannot be bevelled through the standard properties, which
+       treatment/scrollbar.css explains, so what is left is the width and the
+       two greys, and the greys are the surfaces this skin already declared. */
+    --pw-scrollbar-width: auto;
+    --pw-scrollbar-thumb: var(--pw-color-base-300);
+    --pw-scrollbar-track: var(--pw-color-base-200);
+
+    /* TYPE IS A SKIN AXIS, so the skin says it rather than inheriting the
+       default. structural.css still declares both for a consumer who takes the
+       tokens without a skin; this is chrome making the same call on purpose.
+
+       The OS's own UI face at 15px. That is the period reading and it is also
+       the reason paper looked wrong for three releases: paper never answered
+       this, so a printed sheet was set in system-ui and nobody had decided it
+       would be. */
+    --pw-font-ui: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+    --pw-text-ui: 0.9375rem;
   }
 }

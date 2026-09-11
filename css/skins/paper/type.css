@@ -1,0 +1,56 @@
+/**
+ * SKIN — paper's face, and the one thing wrong with it.
+ *
+ * The skin sets --pw-font-ui to a slab, because its own icon sheet is
+ * documented as the heaviest of the three and as "a catalogue's vocabulary
+ * rather than a HUD's", and a slab serif is the one face that answers both.
+ *
+ * ── Rockwell reports metrics that are not true ───────────────────────────
+ * Rockwell is the only real slab installed on a stock Mac, so a stack that
+ * wants a slab there has to name it. It also ships a broken vertical metric:
+ * at 15px it reports a font ascent of 10 and a descent of 5, and its cap
+ * height is 11.04. A reported ascent SHORTER than the cap height is not a
+ * style choice, it is wrong.
+ *
+ * Everything in this kit that centres a label centres the line box, because
+ * that is what `align-items: center` does. Centre a box whose top sits below
+ * the caps and the caps end up high. Measured on .pw-button at 15px, against
+ * the cap-height centre a reader actually judges:
+ *
+ *     system-ui      -0.72px   chrome, fine
+ *     ui-monospace   -0.20px   cyber, fine
+ *     Georgia        -0.30px   this stack's fallback, fine
+ *     Rockwell       +3.02px   four times the next worst, and visible
+ *
+ * ── Why this and not a nudge on the skin ─────────────────────────────────
+ * A per-skin padding or transform would correct Rockwell and then break every
+ * machine that does not have Rockwell, because CSS cannot see which family in
+ * a stack actually won. A consumer on Linux would get Georgia plus a three
+ * pixel shove.
+ *
+ * ascent-override is scoped exactly right instead. It repairs the metrics of
+ * ONE family, and `src: local('Rockwell')` means that if Rockwell is not
+ * installed this @font-face resolves to nothing and the stack falls through
+ * to the next name on its own. The correction and the font it corrects cannot
+ * be separated.
+ *
+ * 97/23 rather than the 66.7/33.3 Rockwell claims: it puts the line box
+ * centre within half a pixel of the cap-height centre, which lands Rockwell
+ * in the same band as the other three faces above. Re-derive it the same way
+ * if the stack ever changes: ascent minus descent should equal the cap
+ * height, and their sum should stay near 1.2em so a descender still fits.
+ */
+/* Inside the layer with every other skin file, which changes nothing about
+   how @font-face resolves: layers order rules that cascade, and this one does
+   not. It is here so the rule that every file under css/skins/ declares its
+   layer stays a rule with no exceptions, and so a rule that DOES cascade can
+   be added below without anyone having to notice the file was unlayered. */
+@layer pw.skin {
+  @font-face {
+    font-family: 'pw-Rockwell';
+    src: local('Rockwell');
+    ascent-override: 97%;
+    descent-override: 23%;
+    line-gap-override: 0%;
+  }
+}

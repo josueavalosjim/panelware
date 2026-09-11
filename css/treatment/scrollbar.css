@@ -1,0 +1,38 @@
+/**
+ * THE SCROLLBAR, as a slot rather than as whatever the host OS ships.
+ *
+ * Five surfaces in this kit scroll: a list, a panel body (which is what a
+ * dialog scrolls), a window body, an open select, and the equaliser sideways. Every one of them showed the
+ * operating system's own scrollbar, in all three skins, which is the single
+ * loudest place the skin stopped at the edge of the component. A bevelled
+ * chrome panel with a macOS overlay bar down its side is not a period
+ * interface, and a printed sheet with one is not a printed sheet.
+ *
+ * ── Why a treatment and not a component ──────────────────────────────────
+ * It fills slots on surfaces other files drew, which is what pw.treatment is
+ * for, and it belongs to no single component: putting it in list.css and
+ * dialog.css and window.css is the duplication this repo keeps paying for.
+ *
+ * ── Why the standard properties and not ::-webkit-scrollbar ──────────────
+ * `scrollbar-width` and `scrollbar-color` are the CSS Scrollbars spec and work
+ * in Firefox and in Chromium 121+. The ::-webkit- pseudo-elements are richer
+ * (you can bevel the thumb, which is very tempting for the chrome skin) and
+ * they are a non-standard prefix Firefox will never take, so a kit that drew
+ * its period scrollbar that way would have a period scrollbar in one engine
+ * and the host OS's in another. Two scrollbars is worse than one.
+ *
+ * So the skin gets a width and two colours, and that is the whole slot. What
+ * that cannot express is a bevel on the thumb. It is written down here rather
+ * than worked around, because the workaround is the prefix.
+ *
+ * ── Why :where() ─────────────────────────────────────────────────────────
+ * Zero specificity, so a consumer takes it back with one class. The same
+ * reason reset.css uses it for the focus ring list.
+ */
+
+@layer pw.treatment {
+  :where(.pw-list, .pw-panel-body, .pw-window-body, .pw-select-list, .pw-eq) {
+    scrollbar-width: var(--pw-scrollbar-width);
+    scrollbar-color: var(--pw-scrollbar-thumb) var(--pw-scrollbar-track);
+  }
+}
