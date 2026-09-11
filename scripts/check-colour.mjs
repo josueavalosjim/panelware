@@ -22,6 +22,9 @@
  *   disabled text   3, because 1.4.3 exempts an inactive control and this kit
  *                   holds it to a floor anyway rather than to nothing
  *   a border        3, per 1.4.11, because a control's edge identifies it
+ *   a selection mark 3, per 1.4.11, on the same reasoning as a border: with
+ *                   the wash gone it is the only thing saying which row is
+ *                   selected
  *   --pw-color-divider  2, its own contract. A grouping line is not a control
  *                   boundary: removing it identifies nothing and changes no
  *                   state, so 1.4.11 does not reach it. An earlier version of
@@ -34,6 +37,7 @@ import { join } from 'node:path';
 import { ROOT, counted, rendered, report, withDemo } from './browser.mjs';
 
 const MEASURE = `(() => {
+  const MARKED = '.pw-list-item[aria-selected="true"], .pw-select-item[data-highlighted], .pw-menu-item[data-highlighted]';
   const parse = (css) => {
     const m = String(css).match(/rgba?\\(([^)]+)\\)/);
     if (!m) return null;
@@ -146,6 +150,34 @@ const MEASURE = `(() => {
       break;
     }
   }
+  /* THE MARK, AGAINST THE GROUND IT IS DRAWN ON.
+
+     A skin may draw selection rather than tint it: --pw-selected-mark is a
+     background shorthand painted on a ::before, which is four corner brackets
+     on cyber and nothing at all on chrome. Everything above this measures a
+     foreground against a background, and a mark is neither, so nothing here
+     could see it. A preset then set --pw-color-primary and --pw-selected-bg
+     to the same ink, the brackets were drawn in that ink on that ground, and
+     selection went invisible in a look this file reported clean.
+
+     1.4.11 at 3:1, because the bracket is the only thing carrying the state
+     once the wash is gone. Read off the pseudo-element rather than off the
+     token, so what is measured is what is painted. */
+  for (const el of document.querySelectorAll(MARKED)) {
+    const image = getComputedStyle(el, '::before').backgroundImage;
+    if (!image || image === 'none') continue;
+    const ink = parse(image);
+    if (!ink || ink.a < 0.99) continue;
+    const bg = ground(el);
+    if (!bg) continue;
+    rows.push({
+      kind: 'mark',
+      id: el.tagName.toLowerCase() +
+        (typeof el.className === 'string' && el.className ? '.' + el.className.trim().split(/\\s+/).join('.') : ''),
+      disabled: false, fg: hex(ink), bg: hex(bg), text: '',
+    });
+  }
+
   return rows;
 })()`;
 
@@ -184,6 +216,10 @@ const ratio = (a, b) => {
 };
 
 const floorFor = (row, tokens) => {
+  /* A selection bracket identifies which row is selected and nothing else
+     carries that once the skin has taken the wash away, so it is 1.4.11's
+     three rather than text's four and a half. */
+  if (row.kind === 'mark') return 3;
   if (row.kind === 'border') {
     return row.grouping || tokens.includes('--pw-color-divider') ? 2 : 3;
   }

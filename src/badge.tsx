@@ -27,18 +27,33 @@ const GLYPH: Record<BadgeStatus, IconName> = {
   neutral: 'dot',
 };
 
-export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
+export interface BadgeProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
   status?: BadgeStatus;
   /** Overrides the default mark. Decorative either way: the word carries it. */
   glyph?: ReactNode;
+  /**
+   * Required. The word. A badge with a mark and no word IS the coloured dot
+   * this component exists to forbid, and `children` inherited from
+   * HTMLAttributes is optional, so `<Badge status="error" />` type-checked and
+   * rendered exactly that.
+   */
+  children: ReactNode;
 }
 
 export function Badge({ status = 'neutral', glyph, className, children, ...rest }: BadgeProps) {
   return (
     <span {...rest} className={cx('pw-badge', className)} data-status={status}>
       {/* Decorative, because the word beside it already says this. A screen
-          reader announcing "check Connected" is worse than "Connected". */}
-      {glyph ?? <Icon name={GLYPH[status]} decorative />}
+          reader announcing "check Connected" is worse than "Connected".
+
+          `||` rather than `??`, and that is not a slip to tidy up. `??` falls
+          back on null and undefined only, so glyph={false} passed through as a
+          renderable nothing and the badge came out with no mark at all: the
+          other half of the rule in the header, and the one a caller reaches by
+          accident rather than on purpose. `||` treats false and the empty
+          string as "no mark given" too, which is the only answer consistent
+          with a caller who wants none not being allowed to have none. */}
+      {glyph || <Icon name={GLYPH[status]} decorative />}
       {children}
     </span>
   );

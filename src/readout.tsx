@@ -21,6 +21,15 @@
  * WCAG 2.2.2 asks for a mechanism to pause anything that moves for more than
  * five seconds. Pausing on hover is not a mechanism: a keyboard user, a
  * switch user and a touch user all have no way to trigger it.
+ *
+ * Under prefers-reduced-motion the button is gone, not disabled. lcd.css stops
+ * the scroll outright there, so the control had nothing left to pause and was
+ * shipping as a named, focusable, inert button: a keyboard user could tab to
+ * it and press it and watch nothing happen. 2.2.2 is satisfied by the stopped
+ * marquee rather than by the control, so the control goes. That is the same
+ * rule window.tsx keeps for a window control with no handler, and the reason
+ * the hiding lives in CSS is that the media query is where the motion is
+ * decided; a matchMedia read here would be a second copy of that decision.
  */
 import { useState, type HTMLAttributes } from 'react';
 
@@ -100,8 +109,8 @@ export function Readout({
         <span className="pw-lcd-window" role="img" aria-label={label ?? value}>
           <span className="pw-lcd-render" aria-hidden="true">
             {cells('a')}
-            {/* A second copy, so the -50% translate loops seamlessly rather
-                than snapping back through an empty box. */}
+            {/* A second copy, so the -50% translate loops without a visible
+                join rather than snapping back through an empty box. */}
             {cells('b')}
           </span>
         </span>
