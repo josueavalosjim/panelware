@@ -62,6 +62,44 @@ const CHECK = `(() => {
 
 /* A stylesheet this size cannot legitimately fall under this. When it broke,
    eleven rules reached the CSSOM. */
+/**
+ * THE BADGE'S OPTICAL GAP, MEASURED RATHER THAN GREPPED.
+ *
+ * Every badge subtracts its mark's own blank margins so the gap from edge to
+ * ink reads the same whatever the mark is: the check carries 2 empty columns
+ * either side and the exclamation carries 7, so without the correction they
+ * measure identically and read nothing alike.
+ *
+ * This is a browser check and not a lint, and that distinction cost a release.
+ * The correction moved behind --pw-icon-bearing, the default was declared on
+ * .pw-icon itself, and a custom property declared on an element beats the same
+ * property inherited from an ancestor: the badge switched it on and the icon
+ * switched it straight back off. A test that read the CSS text passed the
+ * whole time, because both declarations were exactly where it expected them.
+ * Only the computed margin knew.
+ */
+const BEARINGS = `(() => {
+  const rows = [];
+  for (const badge of document.querySelectorAll('.pw-badge')) {
+    const icon = badge.querySelector('.pw-icon');
+    if (!icon) continue;
+    const cs = getComputedStyle(icon);
+    const b = badge.getBoundingClientRect();
+    const i = icon.getBoundingClientRect();
+    const ink = parseFloat(cs.getPropertyValue('--pw-icon-ink-l')) || 0;
+    const scale = parseFloat(cs.getPropertyValue('--pw-icon-scale')) || 1;
+    rows.push({
+      icon: icon.dataset.icon || '?',
+      scale,
+      /* Edge of the badge to the first lit pixel of the mark. */
+      inset: Math.round((i.left + ink * scale - b.left) * 10) / 10,
+      margin: Math.round(parseFloat(cs.marginLeft) * 10) / 10,
+      bearing: parseFloat(cs.getPropertyValue('--pw-icon-bearing')) || 0,
+    });
+  }
+  return rows;
+})()`;
+
 const FLOOR = 150;
 
 const failures = [];
@@ -212,4 +250,38 @@ if (named < ICON_ORDER.length) {
     'so the data-icon rules were mostly unmeasured');
 }
 
-report('cssom', failures, `${seen} rendered classes and ${named} named icon cells across 2 pages`);
+let badges = 0;
+await withDemo(async (p, base) => {
+  for (const page of ['demo/states.html', 'demo/index.html']) {
+    await p.goto(`${base}/${page}`);
+    if (!(await p.ready(`document.querySelectorAll('.pw-badge .pw-icon').length > 1`))) {
+      failures.push(`${page}: no badges rendered, so the optical gap was never measured`);
+      continue;
+    }
+    const rows = await p.evaluate(BEARINGS);
+    badges += rows.length;
+    /* Grouped by scale, because the correction is scaled and a gallery at
+       scale 2 legitimately insets twice as far. */
+    const byScale = new Map();
+    for (const row of rows) {
+      if (!row.bearing) {
+        failures.push(`${page}: the ${row.icon} badge computes --pw-icon-bearing 0, so its mark `
+          + 'is not correcting for its own bearings and the gap is whatever the glyph happened to be');
+        continue;
+      }
+      if (!(byScale.get(row.scale) ?? []).length) byScale.set(row.scale, []);
+      byScale.get(row.scale).push(row);
+    }
+    for (const [scale, group] of byScale) {
+      const insets = [...new Set(group.map((r) => r.inset))];
+      if (insets.length > 1) {
+        failures.push(`${page}: badge marks at scale ${scale} inset to ${insets.join(', ')}px. `
+          + 'One number, or the badges measure the same and read differently: '
+          + group.map((r) => `${r.icon} ${r.inset}`).join(', '));
+      }
+    }
+  }
+}, { width: 1200, height: 900 });
+
+report('cssom', failures, `${seen} rendered classes, ${named} named icon cells and `
+  + `${badges} badge marks measured across 2 pages`);

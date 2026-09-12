@@ -1052,6 +1052,15 @@
      }
     },
     {
+     "name": "--pw-icon-bearing",
+     "values": {
+      "both": {
+       "declared": "0",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-scrollbar-width",
      "values": {
       "both": {

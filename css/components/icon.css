@@ -90,8 +90,16 @@
        calc(). A consumer wrapping an icon and a label in their own component
        sets --pw-icon-bearing: 1 on the wrapper and gets what the badge gets;
        before this it was two lines of calc() copied out of badge.css, which
-       is why exactly one selector in the kit had them. */
-    --pw-icon-bearing: 0;
+       is why exactly one selector in the kit had them.
+
+       The default is declared in structural.css and NOT here, which is the
+       opposite of what the two ink tokens above do and is not an oversight.
+       A custom property declared on this element wins over the same property
+       inherited from an ancestor, so `--pw-icon-bearing: 0` sitting here beat
+       every context that switched it on: the badge asked for the correction,
+       the icon overruled it, and the marks went straight back to 10px of
+       inset against the exclamation's 15. A switch has to live above the
+       thing it switches. */
     margin-left: calc(var(--pw-icon-ink-l) * -1px * var(--pw-icon-scale) * var(--pw-icon-bearing));
     margin-right: calc(var(--pw-icon-ink-r) * -1px * var(--pw-icon-scale) * var(--pw-icon-bearing));
     width: calc(var(--pw-icon-w) * var(--pw-icon-scale));

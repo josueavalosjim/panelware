@@ -642,6 +642,14 @@
      said what its surfaces are should not have to say it twice. A skin that
      wants a scrollbar unlike its own surfaces overrides them, which cyber
      does. */
+  /* Whether an icon subtracts its own blank margins. 0 everywhere, and a
+     context that sets a mark inline beside a word turns it on: the badge
+     does. css/components/icon.css carries the argument for why that is right
+     there and wrong nearly everywhere else, and why this default is here
+     rather than on .pw-icon, which is where it was and where it quietly beat
+     every context that asked for it. */
+  --pw-icon-bearing: 0;
+
   --pw-scrollbar-width: auto;
   --pw-scrollbar-thumb: var(--pw-color-base-300);
   --pw-scrollbar-track: var(--pw-color-base-200);
@@ -3552,8 +3560,16 @@
        calc(). A consumer wrapping an icon and a label in their own component
        sets --pw-icon-bearing: 1 on the wrapper and gets what the badge gets;
        before this it was two lines of calc() copied out of badge.css, which
-       is why exactly one selector in the kit had them. */
-    --pw-icon-bearing: 0;
+       is why exactly one selector in the kit had them.
+
+       The default is declared in structural.css and NOT here, which is the
+       opposite of what the two ink tokens above do and is not an oversight.
+       A custom property declared on this element wins over the same property
+       inherited from an ancestor, so `--pw-icon-bearing: 0` sitting here beat
+       every context that switched it on: the badge asked for the correction,
+       the icon overruled it, and the marks went straight back to 10px of
+       inset against the exclamation's 15. A switch has to live above the
+       thing it switches. */
     margin-left: calc(var(--pw-icon-ink-l) * -1px * var(--pw-icon-scale) * var(--pw-icon-bearing));
     margin-right: calc(var(--pw-icon-ink-r) * -1px * var(--pw-icon-scale) * var(--pw-icon-bearing));
     width: calc(var(--pw-icon-w) * var(--pw-icon-scale));
