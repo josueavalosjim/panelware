@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en" data-skin="chrome" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>panelware showcase</title>
+<!--
+  FIVE 16:9 COMPOSITIONS, FOR POSTING.
+
+  No JavaScript renders a component here. Every comp is the kit's own markup,
+  the same way demo/states.html is, which keeps this page honest: a
+  screenshot of it is a screenshot of what the CSS does, not of what a
+  framework assembled. The script at the bottom only switches which comp is
+  visible, scales the stage, and cycles the attributes in the axes comp.
+
+  The stage is exactly 1920x1080 and scales to fit, so what is on screen and
+  what gets captured are the same composition at two sizes. scripts/shoot.mjs
+  drives this page and writes the PNGs.
+-->
+<link rel="stylesheet" href="../../css/panelware.css">
+<link rel="stylesheet" href="./showcase.css">
+</head>
+<body>
+  <div class="frame">
+    <div class="stage" id="stage" data-backdrop="bliss">
+
+      <div class="comp comp-hero" data-comp="hero" data-on>
+        <section class="pw-window" aria-labelledby="sc-hero">
+            <div class="pw-title-bar" data-gloss>
+              <h3 class="pw-title" id="sc-hero">panelware</h3>
+              <div class="pw-title-controls">
+                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+              </div>
+            </div>
+            <div class="pw-window-body">
+              <p style="margin:0 0 20px">An accessible component kit with a chrome-and-LCD skin.
+              Radix UI does the interaction; this does the surface.</p>
+              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                <button class="pw-button" type="button" data-variant="primary">Install</button>
+                <button class="pw-button" type="button">Read the docs</button>
+                <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>No runtime deps</span>
+              </div></div>
+          </section>
+      </div>
+
+      <div class="comp comp-skins" data-comp="skins">
+        <figure data-skin="chrome">
+          <section class="pw-window" aria-labelledby="sc-skin-chrome">
+            <div class="pw-title-bar" data-gloss>
+              <h3 class="pw-title" id="sc-skin-chrome">panelware</h3>
+              <div class="pw-title-controls">
+                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+              </div>
+            </div>
+            <div class="pw-window-body">
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button class="pw-button" type="button" data-variant="primary">Apply</button>
+                <button class="pw-button" type="button">Cancel</button>
+                <span class="pw-badge" data-status="warning"><span class="pw-icon" aria-hidden="true" data-icon="exclamation"></span>Buffering</span>
+              </div></div>
+          </section>
+          <figcaption class="comp-caption">chrome</figcaption>
+        </figure>
+        <figure data-skin="cyber">
+          <section class="pw-window" aria-labelledby="sc-skin-cyber">
+            <div class="pw-title-bar" data-gloss>
+              <h3 class="pw-title" id="sc-skin-cyber">panelware</h3>
+              <div class="pw-title-controls">
+                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+              </div>
+            </div>
+            <div class="pw-window-body">
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button class="pw-button" type="button" data-variant="primary">Apply</button>
+                <button class="pw-button" type="button">Cancel</button>
+                <span class="pw-badge" data-status="warning"><span class="pw-icon" aria-hidden="true" data-icon="exclamation"></span>Buffering</span>
+              </div></div>
+          </section>
+          <figcaption class="comp-caption">cyber</figcaption>
+        </figure>
+        <figure data-skin="paper">
+          <section class="pw-window" aria-labelledby="sc-skin-paper">
+            <div class="pw-title-bar" data-gloss>
+              <h3 class="pw-title" id="sc-skin-paper">panelware</h3>
+              <div class="pw-title-controls">
+                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+              </div>
+            </div>
+            <div class="pw-window-body">
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button class="pw-button" type="button" data-variant="primary">Apply</button>
+                <button class="pw-button" type="button">Cancel</button>
+                <span class="pw-badge" data-status="warning"><span class="pw-icon" aria-hidden="true" data-icon="exclamation"></span>Buffering</span>
+              </div></div>
+          </section>
+          <figcaption class="comp-caption">paper</figcaption>
+        </figure>
+      </div>
+
+      <div class="comp comp-axes" data-comp="axes">
+        <div class="pw-panel">
+          <div class="pw-panel-body">
+            <p style="margin:0 0 18px">Same markup. Same components. The attributes on
+            &lt;html&gt; are the only thing moving.</p>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+              <button class="pw-button" type="button" data-variant="primary">Save changes</button>
+              <button class="pw-button" type="button">Open</button>
+              <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>Connected</span>
+            </div>
+          </div>
+        </div>
+        <p class="comp-caption" id="axes-caption">data-skin="chrome" &middot; data-theme="light" &middot; data-density="comfortable"</p>
+      </div>
+
+      <div class="comp comp-icons" data-comp="icons">
+        <figure data-skin="chrome">
+          <div class="sheet" data-skin-scope><span class="pw-icon" aria-hidden="true" data-icon="play"></span><span class="pw-icon" aria-hidden="true" data-icon="pause"></span><span class="pw-icon" aria-hidden="true" data-icon="stop"></span><span class="pw-icon" aria-hidden="true" data-icon="previous"></span><span class="pw-icon" aria-hidden="true" data-icon="next"></span><span class="pw-icon" aria-hidden="true" data-icon="eject"></span><span class="pw-icon" aria-hidden="true" data-icon="close"></span><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span><span class="pw-icon" aria-hidden="true" data-icon="restore"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-down"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-up"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-right"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-left"></span><span class="pw-icon" aria-hidden="true" data-icon="check"></span><span class="pw-icon" aria-hidden="true" data-icon="exclamation"></span><span class="pw-icon" aria-hidden="true" data-icon="dot"></span><span class="pw-icon" aria-hidden="true" data-icon="minus"></span><span class="pw-icon" aria-hidden="true" data-icon="plus"></span><span class="pw-icon" aria-hidden="true" data-icon="caret-down"></span><span class="pw-icon" aria-hidden="true" data-icon="search"></span><span class="pw-icon" aria-hidden="true" data-icon="info"></span><span class="pw-icon" aria-hidden="true" data-icon="question"></span><span class="pw-icon" aria-hidden="true" data-icon="ellipsis"></span></div>
+          <figcaption class="comp-caption">chrome</figcaption>
+        </figure>
+        <figure data-skin="cyber">
+          <div class="sheet" data-skin-scope><span class="pw-icon" aria-hidden="true" data-icon="play"></span><span class="pw-icon" aria-hidden="true" data-icon="pause"></span><span class="pw-icon" aria-hidden="true" data-icon="stop"></span><span class="pw-icon" aria-hidden="true" data-icon="previous"></span><span class="pw-icon" aria-hidden="true" data-icon="next"></span><span class="pw-icon" aria-hidden="true" data-icon="eject"></span><span class="pw-icon" aria-hidden="true" data-icon="close"></span><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span><span class="pw-icon" aria-hidden="true" data-icon="restore"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-down"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-up"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-right"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-left"></span><span class="pw-icon" aria-hidden="true" data-icon="check"></span><span class="pw-icon" aria-hidden="true" data-icon="exclamation"></span><span class="pw-icon" aria-hidden="true" data-icon="dot"></span><span class="pw-icon" aria-hidden="true" data-icon="minus"></span><span class="pw-icon" aria-hidden="true" data-icon="plus"></span><span class="pw-icon" aria-hidden="true" data-icon="caret-down"></span><span class="pw-icon" aria-hidden="true" data-icon="search"></span><span class="pw-icon" aria-hidden="true" data-icon="info"></span><span class="pw-icon" aria-hidden="true" data-icon="question"></span><span class="pw-icon" aria-hidden="true" data-icon="ellipsis"></span></div>
+          <figcaption class="comp-caption">cyber</figcaption>
+        </figure>
+        <figure data-skin="paper">
+          <div class="sheet" data-skin-scope><span class="pw-icon" aria-hidden="true" data-icon="play"></span><span class="pw-icon" aria-hidden="true" data-icon="pause"></span><span class="pw-icon" aria-hidden="true" data-icon="stop"></span><span class="pw-icon" aria-hidden="true" data-icon="previous"></span><span class="pw-icon" aria-hidden="true" data-icon="next"></span><span class="pw-icon" aria-hidden="true" data-icon="eject"></span><span class="pw-icon" aria-hidden="true" data-icon="close"></span><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span><span class="pw-icon" aria-hidden="true" data-icon="restore"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-down"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-up"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-right"></span><span class="pw-icon" aria-hidden="true" data-icon="chevron-left"></span><span class="pw-icon" aria-hidden="true" data-icon="check"></span><span class="pw-icon" aria-hidden="true" data-icon="exclamation"></span><span class="pw-icon" aria-hidden="true" data-icon="dot"></span><span class="pw-icon" aria-hidden="true" data-icon="minus"></span><span class="pw-icon" aria-hidden="true" data-icon="plus"></span><span class="pw-icon" aria-hidden="true" data-icon="caret-down"></span><span class="pw-icon" aria-hidden="true" data-icon="search"></span><span class="pw-icon" aria-hidden="true" data-icon="info"></span><span class="pw-icon" aria-hidden="true" data-icon="question"></span><span class="pw-icon" aria-hidden="true" data-icon="ellipsis"></span></div>
+          <figcaption class="comp-caption">paper</figcaption>
+        </figure>
+      </div>
+
+      <div class="comp comp-player" data-comp="player">
+        <iframe id="player-frame" src="../player/index.html?bare=1&amp;skin=chrome&amp;theme=light" title="panelware player"></iframe>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="rig">
+    <label>comp <select id="pick-comp">
+      <option value="hero">hero</option>
+      <option value="skins">skins</option>
+      <option value="axes">axes</option>
+      <option value="icons">icons</option>
+      <option value="player">player</option>
+    </select></label>
+    <label>ground <select id="pick-ground">
+      <option value="bliss">bliss</option>
+      <option value="luna">luna</option>
+      <option value="photo">photo</option>
+    </select></label>
+    <label>skin <select id="pick-skin">
+      <option value="chrome">chrome</option>
+      <option value="cyber">cyber</option>
+      <option value="paper">paper</option>
+    </select></label>
+    <button type="button" id="pick-theme">dark</button>
+  </div>
+
+  <script type="module">
+    const stage = document.getElementById('stage');
+    const frame = document.querySelector('.frame');
+    const root = document.documentElement;
+
+    /* The stage is a fixed 1920x1080 and this is the only thing that makes it
+       fit. Measured from the frame rather than the viewport, so the page works
+       inside an iframe and inside the capture script's 1920 wide window, where
+       the scale lands on exactly 1. */
+    const fit = () => {
+      const r = frame.getBoundingClientRect();
+      stage.style.setProperty('--fit', String(r.width / 1920));
+    };
+    fit();
+    new ResizeObserver(fit).observe(frame);
+
+    const show = (name) => {
+      for (const el of document.querySelectorAll('.comp')) {
+        if (el.dataset.comp === name) el.setAttribute('data-on', '');
+        else el.removeAttribute('data-on');
+      }
+    };
+
+    document.getElementById('pick-comp').addEventListener('change', (e) => show(e.target.value));
+    document.getElementById('pick-ground').addEventListener('change', (e) => {
+      stage.dataset.backdrop = e.target.value;
+    });
+    document.getElementById('pick-skin').addEventListener('change', (e) => {
+      root.dataset.skin = e.target.value;
+      syncCaption();
+    });
+    document.getElementById('pick-theme').addEventListener('click', (e) => {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      e.target.textContent = next === 'dark' ? 'light' : 'dark';
+    });
+
+    /* The axes comp cycles on its own, because the argument it is making is
+       that the attributes are the only thing changing, and a still cannot
+       make it. Paused while the page is being captured so a shot is
+       deterministic. */
+    /* The caption reads the attributes rather than being told what they are.
+       It was written only by the cycler below, so driving the skin from
+       outside, which is what the capture script does, left a still captioned
+       data-skin="chrome" over a panel plainly rendering paper: the one comp
+       whose entire job is to say what the attributes are, saying the wrong
+       thing. */
+    const syncCaption = () => {
+      const el = document.getElementById('axes-caption');
+      if (!el) return;
+      const d = root.dataset;
+      el.textContent = `data-skin="${d.skin ?? 'chrome'}" \u00b7 data-theme="${d.theme ?? 'light'}"`
+        + ` \u00b7 data-density="${d.density ?? 'comfortable'}"`;
+    };
+    syncCaption();
+
+    const AXES = [
+      ['chrome', 'light', 'comfortable'],
+      ['chrome', 'dark', 'comfortable'],
+      ['cyber', 'dark', 'compact'],
+      ['paper', 'light', 'comfortable'],
+    ];
+    let at = 0;
+    setInterval(() => {
+      if (document.body.hasAttribute('data-capture')) return;
+      const comp = document.querySelector('[data-comp="axes"][data-on]');
+      if (!comp) return;
+      at = (at + 1) % AXES.length;
+      const [skin, theme, density] = AXES[at];
+      root.dataset.skin = skin;
+      root.dataset.theme = theme;
+      root.dataset.density = density;
+      syncCaption();
+    }, 2200);
+
+    const look = { skin: 'chrome', theme: 'light' };
+    const reframe = (next) => {
+      Object.assign(look, next);
+      const frame = document.getElementById('player-frame');
+      frame.src = `../player/index.html?bare=1&skin=${look.skin}&theme=${look.theme}`;
+    };
+    document.getElementById('pick-skin').addEventListener('change', (e) => reframe({ skin: e.target.value }));
+    document.getElementById('pick-theme').addEventListener('click', () => {
+      reframe({ theme: root.dataset.theme === 'dark' ? 'dark' : 'light' });
+    });
+
+    /* scripts/shoot.mjs calls these. */
+    window.showcase = {
+      show,
+      ground: (v) => { stage.dataset.backdrop = v; },
+      /* The player is in an iframe, so it is reloaded with the look rather
+         than inheriting it. Everything else on the page reads the attributes
+         on <html> directly. */
+      skin: (v) => { root.dataset.skin = v; syncCaption(); reframe({ skin: v }); },
+      theme: (v) => { root.dataset.theme = v; syncCaption(); reframe({ theme: v }); },
+      capture: (on) => {
+        if (on) document.body.setAttribute('data-capture', '');
+        else document.body.removeAttribute('data-capture');
+      },
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>panelware player</title>
+<!--
+  A WORKING PLAYER, BUILT FROM NOTHING THIS KIT DOES NOT ALREADY SHIP.
+
+  That is the point of the page and it is worth stating before the code. The
+  transport, the seek bar, the equaliser, the analyser, the playlist, the
+  readout and the chassis are all exports from ../dist/index.js at the
+  versions on npm. No component was added, none was forked, and nothing here
+  reaches into css/components/ to make something fit. If the player had needed
+  a component, that absence would be the interesting result.
+
+  ── The audio is real ────────────────────────────────────────────────────
+  Faking this would have been quicker and would have proved nothing. There is
+  an AudioContext, oscillators, a ten-stage biquad chain, a gain node and an
+  analyser, so the bars are a spectrum rather than an animation and the
+  equaliser genuinely filters. Drag band 1 down and the bass leaves.
+
+  Synthesised rather than a file, for two reasons that agree: no licence to
+  clear, and no asset to ship on a page that is meant to load instantly. The
+  source is one function, `voices()`, so pointing it at an <audio> element is
+  a small change if a track is ever worth adding.
+
+  ── What the kit is NOT doing ────────────────────────────────────────────
+  Visualiser takes `values` and draws them. It opens no AudioContext, holds no
+  animation frame and knows nothing about audio, which is the split the README
+  claims: an audio graph belongs to the application, and a kit that opened one
+  would be deciding something on the consumer's behalf. This file is that
+  consumer, and this is what having to supply it actually looks like.
+-->
+<link rel="stylesheet" href="../../css/panelware.css">
+<link rel="stylesheet" href="./player.css">
+<script type="importmap">
+{
+  "imports": {
+    "react": "../vendor/react.js",
+    "react/jsx-runtime": "../vendor/react-jsx-runtime.js",
+    "react-dom": "../vendor/react-dom.js",
+    "react-dom/client": "../vendor/react-dom-client.js",
+    "radix-ui": "../vendor/radix-ui.js"
+  }
+}
+</script>
+</head>
+<body>
+  <main id="root"></main>
+
+  <script type="module">
+    import { createElement as h, useCallback, useEffect, useRef, useState } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import {
+      Button, Equalizer, List, Progress, Readout, Slider, Toggle,
+      Transport, TransportButton, Visualiser, Window,
+    } from '../../dist/index.js';
+
+    /* ── The tracks ────────────────────────────────────────────────────────
+       Each is a set of partials: a frequency in Hz and a relative level. Not
+       music, and not pretending to be. They are chosen to look different
+       through an analyser, because the thing being demonstrated is the
+       analyser, and three tracks that all read as one hump would demonstrate
+       nothing. */
+    const TRACKS = [
+      { id: 'saw',  primary: 'Sawtooth in A',      secondary: '0:30',
+        type: 'sawtooth', root: 110, partials: [1, 2, 3, 4, 6, 8] },
+      { id: 'bell', primary: 'Bell partials',      secondary: '0:30',
+        type: 'sine', root: 220, partials: [1, 2.76, 5.4, 8.93, 13.34] },
+      { id: 'sub',  primary: 'Sub and a fifth',    secondary: '0:30',
+        type: 'triangle', root: 55, partials: [1, 1.5, 3, 4.5] },
+    ];
+
+    const LENGTH = 30;
+
+    /* Ten bands, the Winamp spread, an octave apart from 60Hz. */
+    const BANDS = [60, 120, 240, 480, 960, 1920, 3840, 7680, 12000, 16000];
+    const bandLabel = (hz) => (hz >= 1000 ? `${Math.round(hz / 100) / 10}k` : `${hz}`);
+
+    /* ── The graph ─────────────────────────────────────────────────────────
+       Built once, lazily, because an AudioContext created before a gesture
+       starts suspended in every browser and a context nobody resumed is the
+       most common reason a page like this is silent. */
+    function useAudio() {
+      const ref = useRef(null);
+
+      const build = useCallback(() => {
+        if (ref.current) return ref.current;
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+        /* Ten peaking filters in series. This IS the equaliser: the component
+           reports a gain per band and each one lands on a real filter, so the
+           sound changes rather than the picture. */
+        const filters = BANDS.map((hz) => {
+          const f = ctx.createBiquadFilter();
+          f.type = 'peaking';
+          f.frequency.value = hz;
+          f.Q.value = 1.1;
+          f.gain.value = 0;
+          return f;
+        });
+        filters.forEach((f, i) => { if (i) filters[i - 1].connect(f); });
+
+        const gain = ctx.createGain();
+        gain.gain.value = 0.18;
+
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 1024;
+        analyser.smoothingTimeConstant = 0.78;
+
+        filters[filters.length - 1].connect(gain);
+        gain.connect(analyser);
+        analyser.connect(ctx.destination);
+
+        ref.current = { ctx, filters, gain, analyser, head: filters[0], voices: [] };
+        return ref.current;
+      }, []);
+
+      return { ref, build };
+    }
+
+    function Player() {
+      const { ref, build } = useAudio();
+      const [track, setTrack] = useState(TRACKS[0].id);
+      const [playing, setPlaying] = useState(false);
+      const [elapsed, setElapsed] = useState(0);
+      const [volume, setVolume] = useState(18);
+      const [levels, setLevels] = useState(() => Array(20).fill(0));
+      const [gains, setGains] = useState(() => BANDS.map(() => 0));
+      const [loop, setLoop] = useState(true);
+
+      const started = useRef(0);
+
+      /* Swap the oscillator set without tearing down the chain, so the EQ
+         settings and the analyser survive a track change. */
+      const voices = useCallback((id) => {
+        const a = build();
+        a.voices.forEach((o) => { try { o.stop(); } catch {} });
+        const spec = TRACKS.find((t) => t.id === id);
+        a.voices = spec.partials.map((mult, i) => {
+          const osc = a.ctx.createOscillator();
+          osc.type = spec.type;
+          osc.frequency.value = spec.root * mult;
+          const vg = a.ctx.createGain();
+          vg.gain.value = 0.9 / (i + 1);
+          osc.connect(vg);
+          vg.connect(a.head);
+          osc.start();
+          return osc;
+        });
+      }, [build]);
+
+      /* `playing` follows the AudioContext rather than the click.
+         resume() is a promise and a browser is allowed to refuse it: inside
+         an iframe, or before any gesture, it stays suspended. Setting the
+         flag optimistically made the transport show a pause button and the
+         title bar say "playing" over a display frozen at zero, which is the
+         component telling the reader something untrue about the world. If
+         the context did not start, nothing here claims it did. */
+      const play = useCallback(async () => {
+        const a = build();
+        if (!a.voices.length) voices(track);
+        try { await a.ctx.resume(); } catch { /* refused; state check covers it */ }
+        if (a.ctx.state !== 'running') { setPlaying(false); return; }
+        started.current = a.ctx.currentTime - elapsed;
+        setPlaying(true);
+      }, [build, voices, track, elapsed]);
+
+      const pause = useCallback(() => {
+        const a = ref.current;
+        if (a) a.ctx.suspend();
+        setPlaying(false);
+      }, [ref]);
+
+      const stop = useCallback(() => {
+        const a = ref.current;
+        if (a) {
+          a.voices.forEach((o) => { try { o.stop(); } catch {} });
+          a.voices = [];
+          a.ctx.suspend();
+        }
+        setPlaying(false);
+        setElapsed(0);
+        setLevels(Array(20).fill(0));
+      }, [ref]);
+
+      const choose = useCallback((id) => {
+        setTrack(id);
+        setElapsed(0);
+        const a = ref.current;
+        if (a && playing) { voices(id); started.current = a.ctx.currentTime; }
+      }, [ref, playing, voices]);
+
+      const step = useCallback((by) => {
+        const at = TRACKS.findIndex((t) => t.id === track);
+        choose(TRACKS[(at + by + TRACKS.length) % TRACKS.length].id);
+      }, [track, choose]);
+
+      /* One frame loop for the analyser and the clock.
+
+         Twenty bands out of the 512 the FFT gives, spaced LOGARITHMICALLY
+         between 40Hz and 16kHz. Slicing the bins into twenty equal groups is
+         the obvious way and it is wrong: an FFT is linear in frequency, so
+         with a 48kHz context the first group would cover everything up to
+         about 1.2kHz and the last ten would divide up the hiss above 12k.
+         Measured before this changed: cutting a band by 12dB moved the
+         picture by two percent, because every note in the track was inside
+         bar one. Hearing is logarithmic and an octave is a constant ratio,
+         which is also why the band centres below are an octave apart. */
+      useEffect(() => {
+        if (!playing) return undefined;
+        const a = ref.current;
+        const bins = new Uint8Array(a.analyser.frequencyBinCount);
+        const nyquist = a.ctx.sampleRate / 2;
+        const perBin = nyquist / bins.length;
+        const edges = Array.from({ length: 21 }, (_, i) =>
+          40 * (16000 / 40) ** (i / 20));
+        let raf = 0;
+        const tick = () => {
+          a.analyser.getByteFrequencyData(bins);
+          const out = new Array(20);
+          for (let i = 0; i < 20; i += 1) {
+            const lo = Math.max(0, Math.floor(edges[i] / perBin));
+            const hi = Math.max(lo + 1, Math.min(bins.length, Math.ceil(edges[i + 1] / perBin)));
+            let peak = 0;
+            for (let j = lo; j < hi; j += 1) if (bins[j] > peak) peak = bins[j];
+            out[i] = peak / 255;
+          }
+          setLevels(out);
+
+          const t = a.ctx.currentTime - started.current;
+          if (t >= LENGTH) {
+            if (loop) { started.current = a.ctx.currentTime; setElapsed(0); }
+            else { stop(); return; }
+          } else setElapsed(t);
+
+          raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(raf);
+      }, [playing, loop, ref, stop]);
+
+      useEffect(() => {
+        const a = ref.current;
+        if (a) a.gain.gain.value = volume / 100;
+      }, [volume, ref]);
+
+      const onBand = useCallback((id, value) => {
+        const at = BANDS.findIndex((hz) => String(hz) === id);
+        setGains((was) => was.map((g, i) => (i === at ? value : g)));
+        const a = ref.current;
+        if (a) a.filters[at].gain.value = value;
+      }, [ref]);
+
+      const clock = (s) => {
+        const m = Math.floor(s / 60);
+        const r = Math.floor(s % 60);
+        return `${String(m).padStart(2, '0')}:${String(r).padStart(2, '0')}`;
+      };
+
+      const current = TRACKS.find((t) => t.id === track);
+
+      return h(Window, {
+        title: 'panelware',
+        toolbar: h('span', { className: 'pw-meta' }, playing ? 'playing' : 'stopped'),
+      },
+        h('div', { className: 'player' },
+
+          h('div', { className: 'player-head' },
+            h('div', { className: 'player-screen' },
+              h(Readout, { value: clock(elapsed), mode: 'digits', label: `Elapsed ${clock(elapsed)}` }),
+              /* The marquee is off in bare mode. A still catches it mid-scroll,
+                 and "AWTOOTH IN ASAWT(" reads as a rendering bug rather than
+                 as a marquee to anyone who was not told. */
+              h(Readout, { value: current.primary.toUpperCase(), mode: 'glyphs', marquee: !BARE,
+                label: `Now playing, ${current.primary}` })),
+            h(Visualiser, { values: levels, label: 'Spectrum analyser', peakDecay: 0.04 })),
+
+          h('div', { className: 'player-deck' },
+            h(Transport, { label: 'Transport' },
+              h(TransportButton, { icon: 'previous', label: 'Previous track',
+                onClick: () => step(-1) }),
+              h(TransportButton, { icon: playing ? 'pause' : 'play',
+                label: playing ? 'Pause' : 'Play', onClick: () => (playing ? pause() : play()) }),
+              h(TransportButton, { icon: 'stop', label: 'Stop', onClick: stop }),
+              h(TransportButton, { icon: 'next', label: 'Next track',
+                onClick: () => step(1) })),
+            h('div', { className: 'player-seek' },
+              h(Progress, { value: elapsed, max: LENGTH, label: 'Position',
+                format: (v, m) => `${clock(v)} of ${clock(m)}` }))),
+
+          h('div', { className: 'player-row' },
+            h(Slider, { label: 'Volume', value: [volume], max: 100,
+              onValueChange: ([v]) => setVolume(v), format: (v) => `${v} percent`,
+              className: 'player-volume' }),
+            h(Toggle, { pressed: loop, onPressedChange: setLoop }, 'Repeat')),
+
+          h('div', { className: 'player-split' },
+            h(List, {
+              label: 'Playlist',
+              rows: TRACKS,
+              selected: track,
+              current: playing ? track : null,
+              onSelect: choose,
+              onActivate: (id) => { choose(id); if (!playing) play(); },
+            }),
+            h(Equalizer, {
+              label: 'Equaliser',
+              min: -12, max: 12, step: 1,
+              bands: BANDS.map((hz, i) => ({
+                id: String(hz), label: bandLabel(hz), name: `${hz} hertz`, value: gains[i],
+              })),
+              onBandChange: onBand,
+              format: (v) => `${v > 0 ? '+' : ''}${v} decibels`,
+            }))));
+    }
+
+    /* The showcase loads this page in an iframe with ?bare=1, and with the
+       skin and theme it wants, because an iframe does not inherit the parent
+       document's attributes and a comp that had to postMessage them in would
+       be machinery for one screenshot. */
+    const params = new URLSearchParams(location.search);
+    const BARE = params.has('bare');
+    if (BARE) document.body.setAttribute('data-bare', '');
+
+    function Page() {
+      const [skin, setSkin] = useState(params.get('skin') ?? 'chrome');
+      const [theme, setTheme] = useState(params.get('theme') ?? 'light');
+
+      useEffect(() => {
+        document.documentElement.dataset.skin = skin;
+        document.documentElement.dataset.theme = theme;
+      }, [skin, theme]);
+
+      return h('div', { className: 'player' },
+        h(Player),
+        h('div', { className: 'player-chrome' },
+          ['chrome', 'cyber', 'paper'].map((s) =>
+            h(Button, { key: s, onClick: () => setSkin(s),
+              'data-variant': s === skin ? 'primary' : undefined }, s)),
+          h(Button, { onClick: () => setTheme(theme === 'light' ? 'dark' : 'light') },
+            theme === 'light' ? 'dark' : 'light')),
+        h('p', { className: 'player-hint' },
+          'Real audio. Press play, then drag the 60 band down and listen to the bass '
+          + 'leave: every band is a biquad filter, not a picture of one. Every control '
+          + 'here is an export from the package, unmodified.'));
+    }
+
+    createRoot(document.getElementById('root')).render(h(Page));
+  </script>
+</body>
+</html>

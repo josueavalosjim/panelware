@@ -1,0 +1,127 @@
+/**
+ * LAYOUT ONLY, for demo/player/index.html.
+ *
+ * Not part of the package. Every surface, every colour, every edge in the
+ * player comes from the kit; this file decides where the boxes sit and
+ * nothing else. If a rule here starts describing what something LOOKS like,
+ * the token it wanted is missing and that is worth reporting rather than
+ * patching around.
+ */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background-color: var(--pw-color-base-100);
+  font-family: var(--pw-font-ui);
+  color: var(--pw-color-base-content);
+}
+
+/* The page's inset lives on #root, not on <body>.
+   react-remove-scroll, which is what Radix locks scroll with, zeroes body's
+   three paddings and three margins the moment a select or a dialog opens, to
+   hold the layout still where a classic scrollbar has just gone. On overlay
+   scrollbars there is no scrollbar to make room for, every value computes to
+   zero, and the whole page jumps for as long as the popup is open.
+   test/css.test.mjs lints for it. */
+#root {
+  padding: var(--pw-space-xl);
+  display: grid;
+  place-items: center;
+}
+
+/* ?bare=1, which is what the showcase iframe loads. The page chrome goes and
+   the ground goes transparent, so the comp's backdrop shows through instead
+   of a slab of --pw-color-base-100 sitting on top of it. */
+html:has(body[data-bare]),
+body[data-bare] {
+  background-color: transparent;
+  background-image: none;
+}
+body[data-bare] { min-height: 0; }
+body[data-bare] #root { padding: 0; }
+body[data-bare] .player-chrome,
+body[data-bare] .player-hint { display: none; }
+
+.player {
+  width: min(860px, 100%);
+  display: grid;
+  gap: var(--pw-space-md);
+}
+
+/* The head: readout on the left, analyser filling the rest. The analyser
+   needs a stated height, because it draws bars into whatever box it is given
+   and a grid row sized by its siblings gives it the height of a readout. */
+.player-head {
+  display: grid;
+  grid-template-columns: auto minmax(240px, 1fr);
+  gap: var(--pw-space-md);
+  align-items: stretch;
+}
+
+.player-head .pw-visualiser {
+  min-height: 148px;
+  height: 100%;
+}
+
+.player-screen {
+  display: grid;
+  gap: var(--pw-space-2xs);
+  align-content: center;
+}
+
+.player-deck {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--pw-space-md);
+  align-items: center;
+}
+
+.player-seek {
+  display: grid;
+  gap: var(--pw-space-2xs);
+}
+
+.player-row {
+  display: flex;
+  gap: var(--pw-space-md);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.player-volume { min-width: 160px; flex: 1 1 160px; }
+
+/* The equaliser is ten bands at a 44px touch target and it does not compress,
+   so it gets the column it needs and the playlist takes what is left rather
+   than the two splitting evenly and the tenth band falling off the edge. */
+.player-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--pw-space-md);
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .player-split { grid-template-columns: minmax(0, 1fr); }
+  .player-head  { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The skin switcher is page chrome, not part of the player. */
+.player-chrome {
+  display: flex;
+  gap: var(--pw-space-sm);
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: var(--pw-text-micro);
+}
+
+.player-hint {
+  margin: 0;
+  max-width: 60ch;
+  text-align: center;
+  font-size: var(--pw-text-micro);
+  line-height: var(--pw-leading-body);
+  opacity: 0.8;
+}
