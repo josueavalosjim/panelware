@@ -483,10 +483,18 @@ describe('a chevron points where its name says', () => {
     assert.match(rule[0], /margin-right:\s*calc\([\s\S]*?--pw-icon-ink-r[\s\S]*?--pw-icon-bearing/);
     /* Scaled, or the correction is wrong at --pw-icon-scale: 2. */
     assert.match(rule[0], /--pw-icon-scale/);
-    /* Off by default. It is wrong in a fixed gutter, wrong on a centred
-       icon-only control, and wrong on a chevron that rotates, which is most of
-       the icons in this kit. */
-    assert.match(rule[0], /--pw-icon-bearing:\s*0;/);
+    /* Off by default, and the default is NOT on this rule. That is the whole
+       finding: a custom property declared on an element beats the same
+       property inherited from an ancestor, so `--pw-icon-bearing: 0` here beat
+       .pw-badge asking for 1 and the correction was dead in the one context
+       that wanted it, with this file's text looking exactly right.
+
+       A lint cannot see a cascade, so this half only pins WHERE the default
+       is. check-cssom.mjs measures what it actually computes to. */
+    assert.doesNotMatch(rule[0], /--pw-icon-bearing:\s*0;/,
+      'the default is declared on .pw-icon again, where it beats every context that switches it on');
+    assert.match(read('css/tokens/structural.css'), /--pw-icon-bearing:\s*0;/,
+      'nothing declares the default, so a var() with no declaration anywhere renders as nothing');
 
     const badge = read('css/components/badge.css').replace(/\/\*[\s\S]*?\*\//g, '');
     assert.match(badge, /\.pw-badge \{[\s\S]*?--pw-icon-bearing:\s*1;/,
