@@ -105,15 +105,21 @@
         const gain = ctx.createGain();
         gain.gain.value = 0.18;
 
+        /* Winamp had a balance pot, so there is a real panner here rather than
+           a slider that does nothing. */
+        const pan = ctx.createStereoPanner();
+        pan.pan.value = 0;
+
         const analyser = ctx.createAnalyser();
         analyser.fftSize = 1024;
         analyser.smoothingTimeConstant = 0.78;
 
         filters[filters.length - 1].connect(gain);
-        gain.connect(analyser);
+        gain.connect(pan);
+        pan.connect(analyser);
         analyser.connect(ctx.destination);
 
-        ref.current = { ctx, filters, gain, analyser, head: filters[0], voices: [] };
+        ref.current = { ctx, filters, gain, pan, analyser, head: filters[0], voices: [] };
         return ref.current;
       }, []);
 
@@ -128,7 +134,13 @@
       const [volume, setVolume] = useState(18);
       const [levels, setLevels] = useState(() => Array(20).fill(0));
       const [gains, setGains] = useState(() => BANDS.map(() => 0));
+      const [preamp, setPreamp] = useState(0);
+      const [eqOn, setEqOn] = useState(true);
       const [loop, setLoop] = useState(true);
+      /* Winamp's balance pot. -100 is hard left, 0 centre, 100 hard right. */
+      const [balance, setBalance] = useState(0);
+      const [showEq, setShowEq] = useState(true);
+      const [showList, setShowList] = useState(true);
 
       const started = useRef(0);
 
@@ -243,15 +255,32 @@
 
       useEffect(() => {
         const a = ref.current;
-        if (a) a.gain.gain.value = volume / 100;
-      }, [volume, ref]);
+        if (!a) return;
+        /* Preamp is a second gain in decibels, the way Winamp's is: it rides
+           on top of the master pot rather than replacing it. */
+        a.gain.gain.value = (volume / 100) * 10 ** (preamp / 20);
+      }, [volume, preamp, ref]);
+
+      useEffect(() => {
+        const a = ref.current;
+        if (a) a.pan.pan.value = balance / 100;
+      }, [balance, ref]);
+
+      /* ON/AUTO flattens the chain rather than bypassing it: ten filters at 0dB
+         is the same signal as no filters, and rewiring the graph on a toggle
+         would drop the analyser for a frame. */
+      useEffect(() => {
+        const a = ref.current;
+        if (!a) return;
+        a.filters.forEach((f, i) => { f.gain.value = eqOn ? gains[i] : 0; });
+      }, [eqOn, gains, ref]);
 
       const onBand = useCallback((id, value) => {
         const at = BANDS.findIndex((hz) => String(hz) === id);
         setGains((was) => was.map((g, i) => (i === at ? value : g)));
         const a = ref.current;
-        if (a) a.filters[at].gain.value = value;
-      }, [ref]);
+        if (a && eqOn) a.filters[at].gain.value = value;
+      }, [ref, eqOn]);
 
       const clock = (s) => {
         const m = Math.floor(s / 60);
@@ -261,59 +290,95 @@
 
       const current = TRACKS.find((t) => t.id === track);
 
-      return h(Window, {
-        title: 'panelware',
-        toolbar: h('span', { className: 'pw-meta' }, playing ? 'playing' : 'stopped'),
-      },
-        h('div', { className: 'player' },
+      /* Winamp showed the bitrate and sample rate beside the clock. These are
+         the real numbers off the context, not decoration: an oscillator has no
+         bitrate, so what is honest to show is the sample rate the graph is
+         actually running at and the FFT size the analyser is actually using. */
+      const rate = ref.current ? Math.round(ref.current.ctx.sampleRate / 1000) : 48;
 
-          h('div', { className: 'player-head' },
-            h('div', { className: 'player-screen' },
+      return h('div', { className: 'stack' },
+
+        /* ── The player ─────────────────────────────────────────────── */
+        h(Window, {
+          title: 'panelware',
+          toolbar: h('span', { className: 'pw-meta' }, playing ? 'playing' : 'stopped'),
+        },
+          h('div', { className: 'deck' },
+
+            h('div', { className: 'deck-top' },
+              h(Visualiser, { values: levels, label: 'Spectrum analyser', peakDecay: 0.04 }),
               h(Readout, { value: clock(elapsed), mode: 'digits', label: `Elapsed ${clock(elapsed)}` }),
-              /* The marquee is off in bare mode. A still catches it mid-scroll,
-                 and "AWTOOTH IN ASAWT(" reads as a rendering bug rather than
-                 as a marquee to anyone who was not told. */
-              h(Readout, { value: current.primary.toUpperCase(), mode: 'glyphs', marquee: !BARE,
-                label: `Now playing, ${current.primary}` })),
-            h(Visualiser, { values: levels, label: 'Spectrum analyser', peakDecay: 0.04 })),
+              h('div', { className: 'deck-meta' },
+                h('span', null, `${rate} kHz`),
+                h('span', null, `${ref.current ? ref.current.analyser.fftSize : 1024} pt FFT`),
+                h('span', null, 'stereo'))),
 
-          h('div', { className: 'player-deck' },
-            h(Transport, { label: 'Transport' },
-              h(TransportButton, { icon: 'previous', label: 'Previous track',
-                onClick: () => step(-1) }),
-              h(TransportButton, { icon: playing ? 'pause' : 'play',
-                label: playing ? 'Pause' : 'Play', onClick: () => (playing ? pause() : play()) }),
-              h(TransportButton, { icon: 'stop', label: 'Stop', onClick: stop }),
-              h(TransportButton, { icon: 'next', label: 'Next track',
-                onClick: () => step(1) })),
-            h('div', { className: 'player-seek' },
-              h(Progress, { value: elapsed, max: LENGTH, label: 'Position',
-                format: (v, m) => `${clock(v)} of ${clock(m)}` }))),
-
-          h('div', { className: 'player-row' },
-            h(Slider, { label: 'Volume', value: [volume], max: 100,
-              onValueChange: ([v]) => setVolume(v), format: (v) => `${v} percent`,
-              className: 'player-volume' }),
-            h(Toggle, { pressed: loop, onPressedChange: setLoop }, 'Repeat')),
-
-          h('div', { className: 'player-split' },
-            h(List, {
-              label: 'Playlist',
-              rows: TRACKS,
-              selected: track,
-              current: playing ? track : null,
-              onSelect: choose,
-              onActivate: (id) => { choose(id); if (!playing) play(); },
-            }),
-            h(Equalizer, {
-              label: 'Equaliser',
-              min: -12, max: 12, step: 1,
-              bands: BANDS.map((hz, i) => ({
-                id: String(hz), label: bandLabel(hz), name: `${hz} hertz`, value: gains[i],
+            h('div', { className: 'deck-title' },
+              h(Readout, {
+                value: current.primary.toUpperCase(), mode: 'glyphs', marquee: !BARE,
+                label: `Now playing, ${current.primary}`,
               })),
-              onBandChange: onBand,
-              format: (v) => `${v > 0 ? '+' : ''}${v} decibels`,
-            }))));
+
+            h('div', { className: 'deck-controls' },
+              h(Transport, { label: 'Transport' },
+                h(TransportButton, { icon: 'previous', label: 'Previous track', onClick: () => step(-1) }),
+                h(TransportButton, { icon: playing ? 'pause' : 'play',
+                  label: playing ? 'Pause' : 'Play', onClick: () => (playing ? pause() : play()) }),
+                h(TransportButton, { icon: 'stop', label: 'Stop', onClick: stop }),
+                h(TransportButton, { icon: 'next', label: 'Next track', onClick: () => step(1) }),
+                h(TransportButton, { icon: 'eject', label: 'Open file',
+                  onClick: () => step(1) })),
+              h('div', { className: 'deck-pots' },
+                h(Slider, { label: 'Volume', value: [volume], max: 100,
+                  onValueChange: ([v]) => setVolume(v), format: (v) => `${v} percent` }),
+                h(Slider, { label: 'Balance', value: [balance], min: -100, max: 100,
+                  onValueChange: ([v]) => setBalance(v),
+                  format: (v) => (v === 0 ? 'centred' : `${Math.abs(v)} percent ${v < 0 ? 'left' : 'right'}`) }))),
+
+            h('div', { className: 'deck-seek' },
+              h(Progress, { value: elapsed, max: LENGTH, label: 'Position',
+                format: (v, m) => `${clock(v)} of ${clock(m)}` })),
+
+            h('div', { className: 'deck-windows' },
+              h(Toggle, { pressed: showEq, onPressedChange: setShowEq }, 'EQ'),
+              h(Toggle, { pressed: showList, onPressedChange: setShowList }, 'PL'),
+              h(Toggle, { pressed: loop, onPressedChange: setLoop }, 'Repeat')))),
+
+        /* ── The equaliser, its own window, the way Winamp's was ────── */
+        showEq ? h(Window, { title: 'Equaliser' },
+          h('div', null,
+            h('div', { className: 'eq-switches' },
+              h(Toggle, { pressed: eqOn, onPressedChange: setEqOn }, 'On'),
+              h(Button, { onClick: () => { setGains(BANDS.map(() => 0)); setPreamp(0); } }, 'Flat')),
+            h('div', { className: 'eq-body' },
+              h('div', { className: 'eq-preamp' },
+                h(Equalizer, {
+                  label: 'Preamp',
+                  min: -12, max: 12, step: 1,
+                  bands: [{ id: 'preamp', label: 'PRE', name: 'preamp', value: preamp }],
+                  onBandChange: (_id, v) => setPreamp(v),
+                  format: (v) => `${v > 0 ? '+' : ''}${v} decibels`,
+                })),
+              h(Equalizer, {
+                label: 'Equaliser bands',
+                min: -12, max: 12, step: 1,
+                bands: BANDS.map((hz, i) => ({
+                  id: String(hz), label: bandLabel(hz), name: `${hz} hertz`, value: gains[i],
+                })),
+                onBandChange: onBand,
+                format: (v) => `${v > 0 ? '+' : ''}${v} decibels`,
+              })))) : null,
+
+        /* ── The playlist, the third window ─────────────────────────── */
+        showList ? h(Window, { title: 'Playlist' },
+          h(List, {
+            label: 'Playlist',
+            rows: TRACKS,
+            selected: track,
+            current: playing ? track : null,
+            onSelect: choose,
+            onActivate: (id) => { choose(id); if (!playing) play(); },
+          })) : null);
     }
 
     /* The showcase loads this page in an iframe with ?bare=1, and with the
