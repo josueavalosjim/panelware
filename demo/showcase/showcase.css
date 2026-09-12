@@ -55,40 +55,100 @@ body {
    nothing, and is ours to post. */
 .stage[data-backdrop="bliss"] {
   background:
-    /* The near hill, bright and lit from the left. */
-    radial-gradient(128% 62% at 26% 118%, #8ac63f 0%, #74b332 38%, #5f9a28 64%, transparent 65%),
-    /* A second ridge behind it and to the right, darker and hazier, which is
-       what stops the whole thing reading as one dome. */
-    radial-gradient(96% 40% at 86% 116%, #6ba22c 0%, #5c8d26 52%, transparent 72%),
-    /* Haze along the horizon, so the ridges sit in air rather than on a line. */
-    linear-gradient(to bottom, transparent 60%, rgba(207, 228, 247, 0.55) 72%, transparent 80%),
-    /* Sky. Deep at the top, washed out where it meets the grass. */
-    linear-gradient(to bottom, #2467cf 0%, #3f86e0 30%, #79b4ed 58%, #c2dcf4 72%, #a9cf72 73%, #7cb238 100%);
+    /* THE LAND.
+
+       The geometry is computed rather than nudged, because nudging produced a
+       dome on the first try and a flat green band on the second. An ellipse
+       shows its top arc when its centre sits below the frame, and the numbers
+       that matter are where that arc crosses the left edge, the crest, and the
+       right edge.
+
+       For the near hill: rx 90% of 1920, ry 90% of 1080, centre at 58% 145%.
+       That puts the grass line at 76% of frame height on the left, 55% at the
+       crest, and 65% on the right, which is a shoulder leaving the frame low
+       on the left and staying high on the right. The photograph's is close to
+       that, and a shoulder is the thing a dome was missing.
+
+       One trap, and it cost two attempts. A radial gradient's colour stops
+       run from the centre to the ELLIPSE EDGE, so `transparent 67%` does not
+       end the shape where the 90%/90% radius said it would, it ends it at 67%
+       of that radius. The arithmetic above was right and the hill still came
+       out flat, crest at 85% of the frame instead of 55%, because two thirds
+       of the radius is where the green actually stopped. The transparent stop
+       has to sit at 100% and the colours have to be spaced inside it.
+
+       Which also fixes the shading. The visible band is the radius from about
+       0.46 at the bottom of the frame to 1.0 at the arc, so the stops run
+       dark at the low numbers and bright at the high ones: a hill lit from
+       above is brighter along its crest, and the ramp was previously the
+       wrong way round as well as the wrong length. */
+    radial-gradient(90% 90% at 58% 145%, #58941f 46%, #67a72c 66%, #7bbc34 85%, #8ec93f 99.5%, transparent 100%),
+    /* The far ridge, cresting further right and higher, desaturated and
+       lifted: distance takes contrast before it takes colour. */
+    radial-gradient(70% 62% at 96% 120%, #608c26 40%, #6d9f2e 70%, #7cb037 99.5%, transparent 100%),
+    /* Aerial haze along the join. The single thing that stopped this reading
+       as a flat vector: nothing at that distance ends on a hard line. */
+    linear-gradient(to bottom, transparent 50%, rgba(214, 232, 246, 0.6) 62%, rgba(214, 232, 246, 0.16) 70%, transparent 78%),
+    /* THE SKY, in six stops. A two-stop sky is the other half of why the
+       first version looked like a poster: the real one has a deep band up
+       top, a long even middle, a pale ring at the horizon, and a warm wash
+       just above the grass. */
+    linear-gradient(to bottom,
+      #1d5cc6 0%,
+      #2d72d5 15%,
+      #4a8ee2 32%,
+      #79b2ec 52%,
+      #b0d3f5 66%,
+      #dcebf8 73%,
+      #cfe4f7 100%);
 }
 
-/* The clouds, on their own layer so they can be changed without touching the
-   land. Each one is three overlapping blobs rather than a single ellipse: one
-   ellipse reads as a smudge, and cumulus is lumpy. A blur does the rest,
-   because a hard-edged radial gradient is the tell. */
+/* THE CLOUDS.
+
+   Cumulus, which is lumpy, bright on top and flat underneath, and softer at
+   the edges than any single gradient gets. Each one is three or four
+   overlapping blobs, and the whole layer is blurred, because a hard-edged
+   radial gradient is the tell that gives away every CSS sky.
+
+   Two layers rather than one: a high band of small, sharp clouds and a lower
+   band of larger, softer ones. Cloud size falling off toward the horizon is
+   perspective, and it is most of what makes a flat sky read as deep. */
 .stage[data-backdrop="bliss"]::before {
   content: '';
   position: absolute;
-  inset: 0 0 34% 0;
-  filter: blur(7px);
-  opacity: 0.95;
+  inset: 0 0 32% 0;
+  filter: blur(5px);
   background:
-    radial-gradient(84px 34px at 20% 20%, #fff 0%, rgba(255,255,255,0.9) 55%, transparent 74%),
-    radial-gradient(58px 44px at 17% 17%, #fff 0%, rgba(255,255,255,0.88) 55%, transparent 74%),
-    radial-gradient(48px 30px at 25% 18%, #fff 0%, rgba(255,255,255,0.82) 55%, transparent 74%),
+    /* left group */
+    radial-gradient(92px 30px at 19% 19%, #fff 0%, rgba(255,255,255,0.94) 52%, transparent 72%),
+    radial-gradient(62px 42px at 16% 16%, #fff 0%, rgba(255,255,255,0.92) 52%, transparent 72%),
+    radial-gradient(52px 32px at 24% 17%, #fff 0%, rgba(255,255,255,0.88) 52%, transparent 72%),
+    radial-gradient(120px 14px at 20% 23%, rgba(255,255,255,0.7) 0%, transparent 76%),
+    /* centre, higher and smaller */
+    radial-gradient(64px 22px at 61% 11%, #fff 0%, rgba(255,255,255,0.9) 52%, transparent 72%),
+    radial-gradient(42px 30px at 58% 9%, #fff 0%, rgba(255,255,255,0.88) 52%, transparent 72%),
+    /* right group, the biggest and lowest */
+    radial-gradient(112px 32px at 82% 25%, #fff 0%, rgba(255,255,255,0.86) 52%, transparent 74%),
+    radial-gradient(70px 46px at 78% 22%, #fff 0%, rgba(255,255,255,0.84) 52%, transparent 74%),
+    radial-gradient(56px 30px at 87% 24%, #fff 0%, rgba(255,255,255,0.8) 52%, transparent 74%),
+    radial-gradient(150px 16px at 83% 30%, rgba(255,255,255,0.62) 0%, transparent 78%);
+  pointer-events: none;
+}
 
-    radial-gradient(70px 26px at 62% 13%, #fff 0%, rgba(255,255,255,0.86) 55%, transparent 74%),
-    radial-gradient(46px 34px at 59% 11%, #fff 0%, rgba(255,255,255,0.84) 55%, transparent 74%),
-
-    radial-gradient(104px 34px at 83% 27%, #fff 0%, rgba(255,255,255,0.8) 55%, transparent 76%),
-    radial-gradient(64px 44px at 79% 24%, #fff 0%, rgba(255,255,255,0.78) 55%, transparent 76%),
-
-    radial-gradient(60px 22px at 42% 33%, rgba(255,255,255,0.7) 0%, transparent 74%),
-    radial-gradient(38px 16px at 8% 36%, rgba(255,255,255,0.55) 0%, transparent 74%);
+/* And a second, hazier band nearer the horizon, blurred much harder. Thin
+   cirrus and distance doing the same thing to cloud that it does to the
+   ridge. */
+.stage[data-backdrop="bliss"]::after {
+  content: '';
+  position: absolute;
+  inset: 22% 0 30% 0;
+  filter: blur(11px);
+  opacity: 0.72;
+  background:
+    radial-gradient(180px 12px at 12% 34%, rgba(255,255,255,0.8) 0%, transparent 76%),
+    radial-gradient(130px 10px at 44% 48%, rgba(255,255,255,0.7) 0%, transparent 78%),
+    radial-gradient(210px 13px at 71% 40%, rgba(255,255,255,0.66) 0%, transparent 78%),
+    radial-gradient(120px 9px at 93% 56%, rgba(255,255,255,0.55) 0%, transparent 80%);
   pointer-events: none;
 }
 

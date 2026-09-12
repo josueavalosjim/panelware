@@ -26,6 +26,12 @@ import { ROOT, withPage } from './browser.mjs';
 import { startDemoServer } from './serve.mjs';
 
 const COMPS = ['hero', 'skins', 'axes', 'icons', 'player'];
+
+/* The 275x116 replica is its own page rather than a comp on the stage, and it
+   is shot differently: at its true size and a 4x device pixel ratio, because
+   scaling a masked readout in CSS resamples the mask and loses the bottom of
+   every digit. demo/player/classic.css carries the diagnosis. */
+const CLASSIC = { page: 'demo/player/classic.html', scale: 4, w: 275, h: 116 };
 const GROUNDS = ['bliss', 'luna', 'photo'];
 
 /* Which comps are worth shooting per skin. `skins` and `icons` already show
@@ -137,6 +143,31 @@ await withPage(async (page) => {
     }
   }
 }, { width: 1920, height: 1080, settle: 400 });
+
+/* The replica, on its own terms. A separate withPage because the device
+   metrics are different: the window is the window's real size and the pixel
+   ratio does the magnifying. */
+if (!arg('comp') || arg('comp') === 'classic') {
+  await withPage(async (page) => {
+    await page.send('Emulation.setDeviceMetricsOverride', {
+      width: CLASSIC.w, height: CLASSIC.h, deviceScaleFactor: CLASSIC.scale, mobile: false,
+    });
+    await page.goto(`${server.url}/${CLASSIC.page}`);
+    if (!(await page.ready(`document.querySelectorAll('.pw-lcd-cell').length > 20`))) {
+      throw new Error('the replica never rendered its readout, so nothing was shot');
+    }
+    /* The prose above the window is for a reader, not for the shot. */
+    await page.evaluate(`document.querySelector('.note').style.display = 'none';
+      document.body.style.cssText += ';display:block;padding:0;margin:0;background:#000';
+      document.querySelector('.classic-stage').style.margin = '0';`);
+    await page.settle(400);
+    const { data } = await page.send('Page.captureScreenshot',
+      { format: 'png', captureBeyondViewport: false });
+    writeFileSync(join(out, 'classic-275x116.png'), Buffer.from(data, 'base64'));
+    wrote += 1;
+    console.log(`  classic-275x116.png  (${CLASSIC.w}x${CLASSIC.h} at ${CLASSIC.scale}x)`);
+  }, { width: CLASSIC.w, height: CLASSIC.h, settle: 300 });
+}
 
 await server.close();
 console.log(`\nshot ${wrote} composition${wrote === 1 ? '' : 's'} into shots/`);

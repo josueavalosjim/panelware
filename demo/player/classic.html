@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en" data-skin="chrome" data-theme="dark" data-density="classic">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>panelware, at Winamp's actual size</title>
+<!--
+  275 BY 116, WHICH IS WHAT WINAMP 2 ACTUALLY WAS.
+
+  Every coordinate on this page is one of its real ones, and every surface is
+  painted by the kit's own CSS with nothing forked. What it costs is the one
+  thing the kit will not give up on its own: WCAG 2.5.8's 24px target.
+  Winamp's transport buttons were 23x18 and its title bar buttons were 9x9,
+  so a replica at true size is under the floor by definition.
+
+  The knob overrides therefore live on THIS page, under a data-density value
+  the package does not define. css/tokens/density.css still ships comfortable
+  at 44 and compact at 32, a contract test still holds both over 24, and
+  demo/player/index.html is this same composition at a size that passes. That
+  is the difference between a kit that lets a consumer do this and one that
+  does it to them.
+
+  Static markup, deliberately. The working player is index.html; this page
+  exists to be looked at, and a still of real CSS is what it is for.
+
+  One thing worth noticing: the time display needed no adjusting at all. The
+  kit's seven-segment sheet is 9x13 per digit because it came from the same
+  1998 spec Winamp's did, so at --pw-lcd-scale: 1 it is already the right
+  size. assets/README.md has the provenance.
+-->
+<link rel="stylesheet" href="../../css/panelware.css">
+<link rel="stylesheet" href="./classic.css">
+</head>
+<body>
+  <p class="note">
+    <strong>275 &times; 116, Winamp 2's real size.</strong> Every surface is the kit's
+    own CSS. What it gives up is the 24px touch target: these buttons are 23&times;18
+    because Winamp's were, so this page is knowingly under WCAG 2.5.8 and is left out
+    of <code>check:a11y</code>. The package still ships 44px and 32px only.
+    <a href="./index.html">The same composition at a size that passes</a>.
+    Shown at its true size: use browser zoom to look closer, and
+    <code>scripts/shoot.mjs</code> captures it at a real 4x device pixel ratio,
+    which is how a pixel interface should be photographed.
+  </p>
+
+  <div class="classic-stage">
+    <section class="win pw-window" aria-labelledby="classic-title">
+      <div class="pw-title-bar" data-gloss>
+        <h1 class="pw-title" id="classic-title">PANELWARE</h1>
+        <div class="pw-title-controls">
+          <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+          <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+          <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+        </div>
+      </div>
+
+      <div class="pw-window-body"></div>
+
+        <span class="at at-time pw-lcd">
+          <span class="pw-lcd-render" role="img" aria-label="Elapsed 2 minutes 31 seconds"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 12; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 3; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1; --pw-cell-y: 0"></span></span>
+        </span>
+
+        <div class="at at-vis">
+          <div class="pw-visualiser" role="img" aria-label="Spectrum analyser">
+            <span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.82"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.96"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.74"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.88"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.9"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 1.00"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.66"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.80"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.58"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.72"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.71"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.85"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.5"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.64"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.62"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.76"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.44"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.58"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.55"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.69"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.38"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.52"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.47"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.61"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.3"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.44"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.4"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.54"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.26"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.40"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.33"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.47"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.22"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.36"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.28"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.42"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.18"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.32"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.24"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.38"></span></span>
+          </div>
+        </div>
+
+        <span class="at at-title pw-lcd">
+          <span class="pw-lcd-render" role="img" aria-label="Now playing, Llama Whippin Intro"><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 12; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 7; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 19; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 14; --pw-cell-y: 0"></span></span>
+        </span>
+
+        <span class="at at-kbps">128</span>
+        <span class="at at-khz">44</span>
+        <span class="at at-stereo">STEREO</span>
+
+        <div class="at at-vol pw-slider" role="group" aria-label="Volume">
+          <span class="pw-slider-track"><span class="pw-slider-range" style="width: 72%"></span></span>
+          <span class="pw-slider-thumb" role="slider" tabindex="0" aria-label="Volume" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="left: 72%"></span>
+        </div>
+
+        <div class="at at-bal pw-slider" role="group" aria-label="Balance">
+          <span class="pw-slider-track"><span class="pw-slider-range" style="width: 50%"></span></span>
+          <span class="pw-slider-thumb" role="slider" tabindex="0" aria-label="Balance" aria-valuenow="0" aria-valuemin="-100" aria-valuemax="100" style="left: 50%"></span>
+        </div>
+
+        <div class="at at-eqpl">
+          <button class="pw-toggle" type="button" aria-pressed="true">EQ</button>
+          <button class="pw-toggle" type="button" aria-pressed="true">PL</button>
+        </div>
+
+        <div class="at at-seek pw-slider" role="group" aria-label="Position">
+          <span class="pw-slider-track"><span class="pw-slider-range" style="width: 41%"></span></span>
+          <span class="pw-slider-thumb" role="slider" tabindex="0" aria-label="Position" aria-valuenow="151" aria-valuemin="0" aria-valuemax="369" style="left: 41%"></span>
+        </div>
+
+        <div class="at at-tx pw-transport" role="toolbar" aria-label="Transport">
+          <button class="pw-transport-button" type="button" aria-label="Previous track"><span class="pw-icon" aria-hidden="true" data-icon="previous"></span></button><button class="pw-transport-button" type="button" aria-label="Play"><span class="pw-icon" aria-hidden="true" data-icon="play"></span></button><button class="pw-transport-button" type="button" aria-label="Pause"><span class="pw-icon" aria-hidden="true" data-icon="pause"></span></button><button class="pw-transport-button" type="button" aria-label="Stop"><span class="pw-icon" aria-hidden="true" data-icon="stop"></span></button><button class="pw-transport-button" type="button" aria-label="Next track"><span class="pw-icon" aria-hidden="true" data-icon="next"></span></button><button class="pw-transport-button" type="button" aria-label="Open file"><span class="pw-icon" aria-hidden="true" data-icon="eject"></span></button>
+        </div>
+
+        <div class="at at-shuffle">
+          <button class="pw-toggle" type="button" aria-pressed="false">SHUF</button>
+          <button class="pw-toggle" type="button" aria-pressed="true">REP</button>
+        </div>
+    </section>
+  </div>
+</body>
+</html>

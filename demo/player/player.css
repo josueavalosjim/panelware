@@ -1,11 +1,22 @@
 /**
  * LAYOUT ONLY, for demo/player/index.html.
  *
- * Not part of the package. Every surface, every colour, every edge in the
- * player comes from the kit; this file decides where the boxes sit and
- * nothing else. If a rule here starts describing what something LOOKS like,
- * the token it wanted is missing and that is worth reporting rather than
- * patching around.
+ * Not part of the package. Every surface, colour and edge comes from the kit;
+ * this file decides where the boxes sit. If a rule here starts describing what
+ * something LOOKS like, the token it wanted is missing and that is worth
+ * reporting rather than patching around.
+ *
+ * ── The arrangement is Winamp 2's, block for block ───────────────────────
+ * Three stacked windows: the player, the equaliser, the playlist. Inside the
+ * player, reading down: a small analyser beside the time, the bitrate column
+ * to its right, the title on its own line, then the transport with the volume
+ * and balance beside it, then the seek bar across the bottom.
+ *
+ * What is NOT Winamp's is the scale. Its main window was 275x116 with 23x18
+ * transport buttons, and this kit's floor is a 32px target because WCAG 2.5.8
+ * says so and a contract test holds it. So this is the same composition at
+ * roughly twice the size. demo/player/classic.html is the literal one, and it
+ * says plainly what it gives up to be literal.
  */
 
 body {
@@ -18,12 +29,9 @@ body {
   color: var(--pw-color-base-content);
 }
 
-/* The page's inset lives on #root, not on <body>.
-   react-remove-scroll, which is what Radix locks scroll with, zeroes body's
-   three paddings and three margins the moment a select or a dialog opens, to
-   hold the layout still where a classic scrollbar has just gone. On overlay
-   scrollbars there is no scrollbar to make room for, every value computes to
-   zero, and the whole page jumps for as long as the popup is open.
+/* The page's inset lives here, not on <body>: react-remove-scroll zeroes
+   body's paddings and margins while a popup is open, and on overlay
+   scrollbars every value computes to zero, so the whole page jumps.
    test/css.test.mjs lints for it. */
 #root {
   padding: var(--pw-space-xl);
@@ -31,7 +39,118 @@ body {
   place-items: center;
 }
 
-/* ?bare=1, which is what the showcase iframe loads. The page chrome goes and
+/* 620 rather than a round 600, and the number is measured. Ten bands plus the
+   preamp need 492px of fader at this density, the preamp column takes 60 and
+   the gap 12, so the window has to hand the band strip at least 564 before its
+   own padding. Anything tighter and the 16k band falls off the right edge into
+   .pw-eq's overflow, which is correct behaviour and a bad look. */
+.stack {
+  width: min(620px, 100%);
+  display: grid;
+  gap: var(--pw-space-sm);
+}
+
+/* ── The player window ──────────────────────────────────────────────────── */
+
+.deck {
+  display: grid;
+  gap: var(--pw-space-sm);
+}
+
+/* Analyser, time, bitrate. Winamp's top strip. */
+.deck-top {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: var(--pw-space-sm);
+  align-items: center;
+}
+
+.deck-top .pw-visualiser {
+  width: 92px;
+  min-height: 62px;
+  height: 100%;
+}
+
+.deck-meta {
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+  font-size: var(--pw-text-micro);
+  font-family: var(--pw-font-mono);
+  line-height: 1.2;
+  opacity: 0.85;
+}
+
+/* The title, full width, on its own line. */
+.deck-title { display: grid; }
+
+/* Transport on the left, volume and balance stacked on the right. */
+.deck-controls {
+  display: grid;
+  grid-template-columns: auto minmax(140px, 1fr);
+  gap: var(--pw-space-md);
+  align-items: center;
+}
+
+.deck-pots {
+  display: grid;
+  gap: var(--pw-space-2xs);
+}
+
+/* The seek bar, across the bottom. */
+.deck-seek { display: grid; }
+
+/* The two window toggles, bottom right, the way Winamp sits EQ and PL. */
+.deck-windows {
+  display: flex;
+  gap: var(--pw-space-2xs);
+  justify-content: flex-end;
+}
+
+/* ── The equaliser window ───────────────────────────────────────────────── */
+
+.eq-body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--pw-space-md);
+  align-items: start;
+}
+
+.eq-preamp {
+  display: grid;
+  gap: var(--pw-space-2xs);
+  justify-items: center;
+}
+
+.eq-switches {
+  display: flex;
+  gap: var(--pw-space-2xs);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--pw-space-sm);
+}
+
+/* ── Page chrome, which is not part of any window ───────────────────────── */
+
+.page-chrome {
+  display: flex;
+  gap: var(--pw-space-sm);
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: var(--pw-text-micro);
+}
+
+.page-hint {
+  margin: 0;
+  max-width: 62ch;
+  text-align: center;
+  font-size: var(--pw-text-micro);
+  line-height: var(--pw-leading-body);
+  opacity: 0.8;
+}
+
+/* ?bare=1, which is what the showcase iframe loads: the page chrome goes and
    the ground goes transparent, so the comp's backdrop shows through instead
    of a slab of --pw-color-base-100 sitting on top of it. */
 html:has(body[data-bare]),
@@ -41,87 +160,11 @@ body[data-bare] {
 }
 body[data-bare] { min-height: 0; }
 body[data-bare] #root { padding: 0; }
-body[data-bare] .player-chrome,
-body[data-bare] .player-hint { display: none; }
+body[data-bare] .page-chrome,
+body[data-bare] .page-hint { display: none; }
 
-.player {
-  width: min(860px, 100%);
-  display: grid;
-  gap: var(--pw-space-md);
-}
-
-/* The head: readout on the left, analyser filling the rest. The analyser
-   needs a stated height, because it draws bars into whatever box it is given
-   and a grid row sized by its siblings gives it the height of a readout. */
-.player-head {
-  display: grid;
-  grid-template-columns: auto minmax(240px, 1fr);
-  gap: var(--pw-space-md);
-  align-items: stretch;
-}
-
-.player-head .pw-visualiser {
-  min-height: 148px;
-  height: 100%;
-}
-
-.player-screen {
-  display: grid;
-  gap: var(--pw-space-2xs);
-  align-content: center;
-}
-
-.player-deck {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--pw-space-md);
-  align-items: center;
-}
-
-.player-seek {
-  display: grid;
-  gap: var(--pw-space-2xs);
-}
-
-.player-row {
-  display: flex;
-  gap: var(--pw-space-md);
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.player-volume { min-width: 160px; flex: 1 1 160px; }
-
-/* The equaliser is ten bands at a 44px touch target and it does not compress,
-   so it gets the column it needs and the playlist takes what is left rather
-   than the two splitting evenly and the tenth band falling off the edge. */
-.player-split {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--pw-space-md);
-  align-items: start;
-}
-
-@media (max-width: 800px) {
-  .player-split { grid-template-columns: minmax(0, 1fr); }
-  .player-head  { grid-template-columns: minmax(0, 1fr); }
-}
-
-/* The skin switcher is page chrome, not part of the player. */
-.player-chrome {
-  display: flex;
-  gap: var(--pw-space-sm);
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  font-size: var(--pw-text-micro);
-}
-
-.player-hint {
-  margin: 0;
-  max-width: 60ch;
-  text-align: center;
-  font-size: var(--pw-text-micro);
-  line-height: var(--pw-leading-body);
-  opacity: 0.8;
+@media (max-width: 620px) {
+  .deck-top { grid-template-columns: minmax(0, 1fr); }
+  .deck-controls { grid-template-columns: minmax(0, 1fr); }
+  .eq-body { grid-template-columns: minmax(0, 1fr); }
 }

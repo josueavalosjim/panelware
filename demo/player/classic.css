@@ -1,0 +1,159 @@
+/**
+ * THE 275x116 REPLICA.
+ *
+ * Winamp 2's main window was 275 by 116 pixels. Every coordinate in this file
+ * is one of its real ones. The kit's own CSS paints every surface; what this
+ * file does is place the components on that grid and shrink the control knobs
+ * to fit it.
+ *
+ * ── What this gives up, said plainly ─────────────────────────────────────
+ * WCAG 2.5.8 asks for a 24 by 24 target. Winamp's transport buttons were 23
+ * by 18, its volume slider thumb was 14 by 11, and its title bar buttons were
+ * 9 by 9. There is no arrangement of those numbers that clears the floor, so
+ * this page is under it, deliberately and visibly.
+ *
+ * The kit is not: css/tokens/density.css ships comfortable at 44px and compact
+ * at 32px, a contract test holds both over 24, and nothing here changes either
+ * of them. The overrides below live on THIS PAGE, under a data attribute the
+ * package does not define, which is the difference between a kit that lets a
+ * consumer do this and a kit that does it to them. demo/player/index.html is
+ * the same composition at a size that passes, and it is the one the showcase
+ * uses.
+ *
+ * Excluded from check:a11y on purpose. That check scans states.html and
+ * index.html, and adding a page that is knowingly under the floor would
+ * either fail the gate or teach somebody to add an exception to it.
+ */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  gap: 28px;
+  background: #1b1d21;
+  font: 12px/1.5 var(--pw-font-mono, ui-monospace, Menlo, monospace);
+  color: #c8d0d8;
+}
+
+.note {
+  max-width: 62ch;
+  text-align: center;
+  opacity: 0.72;
+}
+.note strong { color: #ffd479; font-weight: 400; }
+.note a { color: #8fc0f0; }
+
+/* The stage. 275 by 116 exactly, and not scaled here.
+
+   Nothing in this file magnifies the window, because a pixel interface should
+   be photographed at a real device pixel ratio rather than stretched in CSS.
+   Browser zoom for reading; scripts/shoot.mjs captures at
+   deviceScaleFactor 4. */
+.classic-stage {
+  width: 275px;
+  height: 116px;
+}
+
+/* THE DISPLAYS CARRY NO PADDING HERE, and that line is the whole reason the
+   clock was rendering with its bottom segments missing.
+
+   .pw-lcd ships --pw-space-sm and --pw-space-md of padding, which is right: a
+   readout in a panel needs air. On this grid it is fatal. Winamp puts the time
+   at y=26 and the analyser at y=43, seventeen pixels apart, and the digits are
+   thirteen tall. Sixteen pixels of vertical padding makes the readout box 29
+   tall, so it runs to y=55, and the analyser is painted after it in the DOM
+   and lands on top of the bottom third of every digit.
+
+   It looked exactly like a clipping or resampling bug, and a good hour went
+   into chasing it as one: every computed value on the cell matched a clone
+   that rendered perfectly, mask-image, mask-size, mask-position, box size,
+   --pw-cell-x, byte for byte. They matched because nothing was wrong with
+   them. The clone rendered correctly because nothing was sitting on it.
+
+   Winamp's own displays have no padding either. The bezel is the window. */
+.win .pw-lcd { padding: 1px 2px; }
+
+/* Winamp's knobs, which are all under the floor. Scoped to this page's own
+   attribute so nothing in the package is redefined. */
+[data-density="classic"] {
+  --pw-control-h: 18px;
+  --pw-control-min-w: 23px;
+  --pw-control-pad-x: 3px;
+  --pw-control-gap: 1px;
+  --pw-control-text: 9px;
+  --pw-thumb-w: 14px;
+  --pw-thumb-h: 11px;
+  --pw-thumb-hit: 11px;
+  --pw-track-h: 4px;
+  --pw-badge-h: 10px;
+  --pw-panel-pad: 4px;
+  --pw-lcd-scale: 1;
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+  --pw-focus-width: 1px;
+  --pw-focus-offset: 0px;
+}
+
+/* Absolute placement on the 275x116 grid. Coordinates are Winamp's. */
+.win {
+  position: relative;
+  width: 275px;
+  height: 116px;
+  overflow: hidden;
+}
+
+.win .pw-title-bar {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 14px;
+  min-height: 0;
+  padding: 0 2px;
+}
+.win .pw-title { font-size: 9px; }
+.win .pw-title-button { width: 9px; height: 9px; min-width: 0; min-height: 0; padding: 0; }
+.win .pw-title-button .pw-icon { --pw-icon-scale: 1; transform: scale(0.55); }
+
+/* The body paints the ground and nothing else. Every control is a sibling of
+   it rather than a child, so `top` resolves against the WINDOW and Winamp's
+   own coordinates can be written down unaltered.
+
+   They were children first, and every one of them was therefore 14 pixels too
+   low, which the transport row showed by having its bottom four pixels eaten
+   by the body's overflow. Winamp's numbers are window numbers; measuring them
+   from inside the title bar's shadow is a different grid. */
+.win .pw-window-body {
+  position: absolute;
+  inset: 14px 0 0 0;
+  padding: 0;
+}
+
+.at { position: absolute; z-index: 1; }
+
+/* The time display: 36,26. Winamp's digits were 9x13 and so are this kit's,
+   because both come from the same 1998 sheet. At --pw-lcd-scale: 1 the
+   readout is already the right size with nothing to adjust. */
+.at-time    { left: 36px;  top: 26px; }
+.at-vis     { left: 24px;  top: 43px; width: 76px; height: 16px; }
+.at-title   { left: 111px; top: 24px; width: 154px; }
+.at-kbps    { left: 111px; top: 43px; font-size: 8px; opacity: 0.9; }
+.at-khz     { left: 156px; top: 43px; font-size: 8px; opacity: 0.9; }
+.at-stereo  { left: 212px; top: 41px; font-size: 8px; opacity: 0.9; }
+.at-vol     { left: 107px; top: 57px; width: 68px; }
+.at-bal     { left: 177px; top: 57px; width: 38px; }
+.at-eqpl    { left: 219px; top: 58px; display: flex; gap: 1px; }
+.at-seek    { left: 16px;  top: 72px; width: 248px; }
+.at-tx      { left: 16px;  top: 88px; }
+.at-shuffle { left: 164px; top: 89px; display: flex; gap: 1px; }
+
+.win .at-vis .pw-visualiser { width: 76px; height: 16px; min-height: 0; }
+.win .at-eqpl .pw-toggle,
+.win .at-shuffle .pw-toggle {
+  min-height: 12px;
+  height: 12px;
+  min-width: 23px;
+  padding: 0 2px;
+  font-size: 8px;
+}
+.win .at-tx .pw-transport-button { width: 23px; height: 18px; min-width: 23px; }
+.win .at-tx .pw-transport-button .pw-icon { --pw-icon-scale: 1; }
