@@ -1,0 +1,230 @@
+/**
+ * THE STAGE, for demo/showcase/index.html.
+ *
+ * Not part of the package. Everything here is either the 16:9 stage and how it
+ * scales, or one of the three backdrops. No component is restyled: if a comp
+ * needed a rule pointed at a .pw- class, the comp would be lying about what
+ * the kit renders.
+ *
+ * ── Why a fixed stage and a transform ────────────────────────────────────
+ * The comps are for posting, so they have to capture at 1920x1080 exactly and
+ * still be viewable in a 900px browser window. Laying them out responsively
+ * would mean the thing on screen and the thing captured are two different
+ * compositions. So the stage is exactly 1920x1080 and `transform: scale()`
+ * fits it to whatever is looking, which keeps every proportion identical at
+ * every size and makes the capture a crop of nothing.
+ */
+
+:root { color-scheme: light dark; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #16181c;
+  font-family: var(--pw-font-mono, ui-monospace, Menlo, monospace);
+}
+
+.frame {
+  position: relative;
+  width: min(100vw, calc(100vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  transform-origin: top left;
+  display: grid;
+  place-items: center;
+  /* --fit is written by the page on resize. */
+  transform: scale(var(--fit, 1));
+}
+
+/* ── The backdrops ─────────────────────────────────────────────────────────
+   Three grounds, one attribute. */
+
+/* An original, in the same palette as the one everybody is thinking of: a sky
+   that goes deep at the top and pale at the horizon, one hill, a few soft
+   clouds. Gradients and a radial, so it is resolution independent, weighs
+   nothing, and is ours to post. */
+.stage[data-backdrop="bliss"] {
+  background:
+    /* The near hill, bright and lit from the left. */
+    radial-gradient(128% 62% at 26% 118%, #8ac63f 0%, #74b332 38%, #5f9a28 64%, transparent 65%),
+    /* A second ridge behind it and to the right, darker and hazier, which is
+       what stops the whole thing reading as one dome. */
+    radial-gradient(96% 40% at 86% 116%, #6ba22c 0%, #5c8d26 52%, transparent 72%),
+    /* Haze along the horizon, so the ridges sit in air rather than on a line. */
+    linear-gradient(to bottom, transparent 60%, rgba(207, 228, 247, 0.55) 72%, transparent 80%),
+    /* Sky. Deep at the top, washed out where it meets the grass. */
+    linear-gradient(to bottom, #2467cf 0%, #3f86e0 30%, #79b4ed 58%, #c2dcf4 72%, #a9cf72 73%, #7cb238 100%);
+}
+
+/* The clouds, on their own layer so they can be changed without touching the
+   land. Each one is three overlapping blobs rather than a single ellipse: one
+   ellipse reads as a smudge, and cumulus is lumpy. A blur does the rest,
+   because a hard-edged radial gradient is the tell. */
+.stage[data-backdrop="bliss"]::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 34% 0;
+  filter: blur(7px);
+  opacity: 0.95;
+  background:
+    radial-gradient(84px 34px at 20% 20%, #fff 0%, rgba(255,255,255,0.9) 55%, transparent 74%),
+    radial-gradient(58px 44px at 17% 17%, #fff 0%, rgba(255,255,255,0.88) 55%, transparent 74%),
+    radial-gradient(48px 30px at 25% 18%, #fff 0%, rgba(255,255,255,0.82) 55%, transparent 74%),
+
+    radial-gradient(70px 26px at 62% 13%, #fff 0%, rgba(255,255,255,0.86) 55%, transparent 74%),
+    radial-gradient(46px 34px at 59% 11%, #fff 0%, rgba(255,255,255,0.84) 55%, transparent 74%),
+
+    radial-gradient(104px 34px at 83% 27%, #fff 0%, rgba(255,255,255,0.8) 55%, transparent 76%),
+    radial-gradient(64px 44px at 79% 24%, #fff 0%, rgba(255,255,255,0.78) 55%, transparent 76%),
+
+    radial-gradient(60px 22px at 42% 33%, rgba(255,255,255,0.7) 0%, transparent 74%),
+    radial-gradient(38px 16px at 8% 36%, rgba(255,255,255,0.55) 0%, transparent 74%);
+  pointer-events: none;
+}
+
+/* The photograph, if it is sitting next to this file. Deliberately not
+   committed and deliberately not the default: it is somebody else's
+   photograph, and the look-alike above is the one that can be posted. */
+.stage[data-backdrop="photo"] {
+  background: #4e92e4 url("./bliss.jpg") center / cover no-repeat;
+}
+
+/* No landscape. The desktop blue and the Luna ramp, for when the comp is
+   about the kit rather than about the joke. */
+.stage[data-backdrop="luna"] {
+  background:
+    radial-gradient(120% 90% at 50% 0%, #4a7fc8 0%, #2f5fa8 55%, #1c3f7a 100%);
+}
+
+/* ── The comps ─────────────────────────────────────────────────────────────
+   Each is a grid cell in the same stage; only one is shown at a time. */
+
+.comp {
+  display: none;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+.comp[data-on] { display: grid; }
+
+.comp-hero { place-items: center; }
+.comp-hero .pw-window { width: 720px; }
+
+.comp-skins {
+  grid-auto-flow: column;
+  gap: 64px;
+  align-content: center;
+}
+.comp-skins > figure { margin: 0; display: grid; gap: 20px; justify-items: center; }
+.comp-skins .pw-window { width: 460px; }
+
+.comp-caption {
+  font-size: 22px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+.comp-axes { grid-template-rows: auto auto; gap: 40px; }
+.comp-axes .pw-panel { width: 760px; }
+
+.comp-icons {
+  grid-auto-flow: column;
+  gap: 72px;
+  align-content: center;
+}
+.comp-icons > figure { margin: 0; display: grid; gap: 24px; justify-items: center; }
+/* Each sheet in its own skin's ink on its own skin's ground, which is the
+   comp: the drawings differ, and so does what they are drawn in. Painting
+   them all on one white card and letting the icons inherit whatever colour
+   the page had was the first version, and every mark came out a pale grey
+   smudge on a pale grey card. An icon here is a mask in currentColor, so
+   colour is not decoration on this comp, it is the subject. */
+.comp-icons .sheet {
+  display: grid;
+  grid-template-columns: repeat(8, auto);
+  gap: 26px 30px;
+  padding: 34px 38px;
+  background-color: var(--pw-color-base-200);
+  color: var(--pw-color-base-content);
+  border-radius: var(--pw-radius-box);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3);
+}
+.comp-icons .sheet .pw-icon { --pw-icon-scale: 2; }
+
+.comp-player { place-items: center; }
+.comp-player iframe {
+  width: 900px;
+  height: 560px;
+  border: 0;
+  /* The player draws its own chassis and its own shadow through --pw-elev.
+     A second shadow on the frame would be the kit's edge plus a CSS one. */
+  background: transparent;
+  color-scheme: light;
+}
+
+/* ── Motion ────────────────────────────────────────────────────────────────
+   100 to 300ms is the house rule for interface motion and these are not
+   interface motion: they are a loop somebody watches, so they are slow on
+   purpose. transform and opacity only, and the whole thing stops when the
+   reader has asked for less. */
+.comp-skins > figure { animation: comp-breathe 9s ease-in-out infinite; }
+.comp-skins > figure:nth-child(2) { animation-delay: 3s; }
+.comp-skins > figure:nth-child(3) { animation-delay: 6s; }
+
+@keyframes comp-breathe {
+  0%, 66%, 100% { opacity: 0.55; transform: scale(0.97); }
+  16%, 50%      { opacity: 1;    transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comp-skins > figure { animation: none; opacity: 1; transform: none; }
+}
+
+/* And frozen for a still. A capture that lands mid-cycle shows one skin at
+   55% opacity and reads as a rendering bug rather than as a loop, which is
+   exactly what the first shot of this comp did. */
+body[data-capture] .comp-skins > figure {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+/* ── The controls, which are not part of any comp ─────────────────────────
+   Hidden whenever the page is being captured, so a screenshot is the comp and
+   nothing else. */
+.rig {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(12, 14, 18, 0.86);
+  color: #e9eef5;
+  font-size: 12px;
+  z-index: 10;
+}
+.rig select,
+.rig button {
+  font: inherit;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+body[data-capture] .rig { display: none; }

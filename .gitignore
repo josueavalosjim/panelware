@@ -3,3 +3,8 @@ node_modules/
 .DS_Store
 dist/
 .claude/
+
+# Composition stills. Artefacts of the repo, not part of it.
+shots/
+# Somebody else's photograph, used locally and never published.
+demo/showcase/bliss.jpg
