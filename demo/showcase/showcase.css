@@ -182,13 +182,51 @@ body {
 .comp-hero { place-items: center; }
 .comp-hero .pw-window { width: 720px; }
 
+/* Two by two, not four across.
+
+   Three windows in a row left most of a 1920x1080 frame empty, and a fourth
+   skin would only have made the row narrower. A 2x2 grid gives each window
+   twice the width, which is the difference between a reader seeing that the
+   type changed and a reader seeing that the colour did. The point of this comp
+   is that the same markup renders four ways, so the markup has to be legible. */
 .comp-skins {
-  grid-auto-flow: column;
-  gap: 64px;
+  grid-template-columns: repeat(2, 880px);
+  /* Equal rows, not auto. The four skins set type at four different sizes, so
+     the same markup produces four different window heights, and auto rows let
+     each column find its own baseline: the captions ended up at four different
+     heights and the grid read as four loose cards rather than as one
+     comparison. Equal rows and a caption pinned to the bottom of each cell is
+     what makes the four line up. */
+  /* Auto, and the figures stretch. 1fr rows were the first attempt and they
+     split the frame in half whatever the content did, which parked two
+     hundred pixels of empty desktop between the rows. Auto rows hug, the
+     stretch equalises the two figures WITHIN a row, and align-content centres
+     the block. Per-row alignment is the part that matters: nobody compares a
+     caption in row one against a caption in row two. */
+  grid-template-rows: repeat(2, auto);
+  align-items: stretch;
+  gap: 36px 64px;
   align-content: center;
+  justify-content: center;
 }
-.comp-skins > figure { margin: 0; display: grid; gap: 20px; justify-items: center; }
-.comp-skins .pw-window { width: 460px; }
+.comp-skins > figure {
+  margin: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 14px;
+  justify-items: stretch;
+}
+.comp-skins .pw-window { width: 880px; }
+.comp-skins .pw-window-body { display: grid; align-content: center; }
+.comp-skins .demo-body { display: grid; gap: 18px; }
+.comp-skins .demo-lede { margin: 0; font-size: 1.05em; }
+.comp-skins .demo-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+/* A groove, to show the one surface a skin draws that a button does not: the
+   track is sunken where every control above it is raised. No thumb, because
+   Radix positions those and this comp is static markup. */
+.comp-skins .demo-pot { flex: 0 0 320px; }
+.comp-skins .demo-pot .pw-slider { width: 320px; }
+.comp-skins figcaption { text-align: center; }
 
 .comp-caption {
   font-size: 22px;
@@ -202,9 +240,10 @@ body {
 .comp-axes .pw-panel { width: 760px; }
 
 .comp-icons {
-  grid-auto-flow: column;
-  gap: 72px;
+  grid-template-columns: repeat(2, auto);
+  gap: 56px 96px;
   align-content: center;
+  justify-content: center;
 }
 .comp-icons > figure { margin: 0; display: grid; gap: 24px; justify-items: center; }
 /* Each sheet in its own skin's ink on its own skin's ground, which is the
@@ -241,13 +280,14 @@ body {
    interface motion: they are a loop somebody watches, so they are slow on
    purpose. transform and opacity only, and the whole thing stops when the
    reader has asked for less. */
-.comp-skins > figure { animation: comp-breathe 9s ease-in-out infinite; }
+.comp-skins > figure { animation: comp-breathe 12s ease-in-out infinite; }
 .comp-skins > figure:nth-child(2) { animation-delay: 3s; }
 .comp-skins > figure:nth-child(3) { animation-delay: 6s; }
+.comp-skins > figure:nth-child(4) { animation-delay: 9s; }
 
 @keyframes comp-breathe {
-  0%, 66%, 100% { opacity: 0.55; transform: scale(0.97); }
-  16%, 50%      { opacity: 1;    transform: scale(1); }
+  0%, 74%, 100% { opacity: 0.6; transform: scale(0.98); }
+  12%, 38%      { opacity: 1;   transform: scale(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
