@@ -179,8 +179,37 @@ body {
 }
 .comp[data-on] { display: grid; }
 
-.comp-hero { place-items: center; }
-.comp-hero .pw-window { width: 720px; }
+/* Not centred, and not small.
+
+   A subject dead centre with an equal margin on all four sides is the single
+   loudest tell that a frame was assembled rather than composed, and at 720px
+   on a 1920 canvas this was ~70% empty gradient: at the 500px a feed actually
+   shows, the body copy was illegible and only the title bar survived.
+
+   Larger, and placed up and to the left, so the hill sweeps in under it and
+   the empty quarter is bottom-right where the land already is. */
+.comp-hero {
+  place-items: center start;
+  padding: 0 0 140px 170px;
+}
+/* Sized to its content, not to the frame. 1150 wide with the text ragged
+   down the left was a grey slab with a paragraph on it: wider is not bigger.
+   Three things in the window, a claim, a sentence and the install line, and
+   the window is as wide as the longest of them. */
+.comp-hero .pw-window { width: 760px; }
+.comp-hero .hero-lede { margin: 18px 0 24px; font-size: 1.45em; line-height: 1.45; }
+/* The install line, which is the one thing a launch image should carry and
+   the reason the window can hold this width without reading as empty. */
+.comp-hero .hero-install {
+  margin: 0;
+  font-family: var(--pw-font-mono);
+  font-size: 1.2em;
+}
+.comp-hero .hero-install span {
+  background-color: var(--pw-color-base-300);
+  padding: 10px 16px;
+  display: inline-block;
+}
 
 /* Two by two, not four across.
 
@@ -239,9 +268,12 @@ body {
 .comp-axes { grid-template-rows: auto auto; gap: 40px; }
 .comp-axes .pw-panel { width: 760px; }
 
+/* Three, in a row. The rack skin points --pw-icon-sheet at chrome's, so a
+   fourth cell here would be the same drawing twice under two names, which is
+   a comparison that compares nothing. */
 .comp-icons {
-  grid-template-columns: repeat(2, auto);
-  gap: 56px 96px;
+  grid-template-columns: repeat(3, auto);
+  gap: 40px 64px;
   align-content: center;
   justify-content: center;
 }
@@ -254,20 +286,27 @@ body {
    colour is not decoration on this comp, it is the subject. */
 .comp-icons .sheet {
   display: grid;
-  grid-template-columns: repeat(8, auto);
-  gap: 26px 30px;
-  padding: 34px 38px;
+  grid-template-columns: repeat(4, auto);
+  gap: 34px 38px;
+  padding: 38px 42px;
   background-color: var(--pw-color-base-200);
   color: var(--pw-color-base-content);
   border-radius: var(--pw-radius-box);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3);
+  /* No cast shadow. The ground behind these is a flat field with no implied
+     light source, so a soft drop offset two pixels straight down is a shadow
+     from nowhere, which is the thing that makes a grid of cards look
+     generated. The sheets sit on the field. */
 }
-.comp-icons .sheet .pw-icon { --pw-icon-scale: 2; }
+.comp-icons .sheet .pw-icon { --pw-icon-scale: 3; }
 
 .comp-player { place-items: center; }
 .comp-player iframe {
   width: 900px;
-  height: 560px;
+  /* The player's three stacked windows measure 892 tall. At 560 the equaliser
+     was cut off mid-fader, which reads as a broken build rather than as a
+     crop, and is the one fault in this set that is a bug rather than a
+     taste. */
+  height: 920px;
   border: 0;
   /* The player draws its own chassis and its own shadow through --pw-elev.
      A second shadow on the frame would be the kit's edge plus a CSS one. */
