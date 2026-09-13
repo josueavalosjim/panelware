@@ -1,60 +1,29 @@
 /**
- * PRESET — deck, on the chrome skin.
+ * PRESET: deck, on the chrome skin.
  *
  * A late-nineties audio deck: blue-slate chassis, black display panels,
- * phosphor readout, gold faders, cyan metadata. Winamp's base skin is the
- * reference and is cited as one in the README, the way NES.css cites Nintendo.
- * It is not the name, because a trademark is not a name to ship.
+ * phosphor readout, gold faders, cyan metadata. The player it is drawn from
+ * is cited in the README the way NES.css cites Nintendo, and is not the name,
+ * because a trademark is not a name to ship.
  *
- * A preset is one file, and this is the whole of one: a ramp, the colour roles
- * that point at it, and any knob it wants moved. Nothing else in the repo has
- * to know it exists.
+ * A preset is one file: a ramp, the roles pointing at it, and any knob it
+ * wants moved. Nothing else in the repo has to know it exists.
  *
- * ── Yes, a preset may move knobs, and this one turns gloss off ────────────
- * The reasonable objection is that if a preset can change a treatment's knobs
- * then the line between preset and skin is not where this file says it is.
+ * A preset may move a treatment's knobs and this one turns gloss off. The
+ * line between preset and skin is about who OWNS the treatment: a skin ships
+ * a file in css/treatment/ and decides what fills the elevation slot, a
+ * preset ships none and moves values that treatment already reads. Moving
+ * --pw-bevel-depth would cross it, since that is the elevation model rather
+ * than a decoration. Nothing enforces that yet.
  *
- * The line holds, and it is about who owns the treatment rather than who may
- * tune it. A skin ships a file in css/treatment/ and decides what goes in the
- * elevation slot. A preset ships none and moves values the treatment already
- * reads. --pw-gloss-opacity is a token precisely so this is possible without
- * a class or a codemod: setting it to 0 silences every [data-gloss] in a
- * consumer's markup at once and leaves the markup honest.
+ * Presets nest inside their skin rather than forming a fourth axis, because
+ * theme, density and skin are orthogonal and this is not: a deck palette
+ * under the cyber skin is nonsense, and scoping it means that combination
+ * matches nothing and falls back instead of rendering something incoherent.
  *
- * And it is the right call here on period grounds. The Web 2.0 highlight is a
- * 2005-and-after artefact; chrome's default palette is Luna, from 2001, which
- * is close enough to carry it, and a 1997 media player predates it entirely.
- * Full bevel depth, no gloss.
- *
- * The one thing a preset should not do is move --pw-bevel-depth, because that
- * is the elevation model rather than a decoration, and a preset that set it to
- * 0 would be a different skin wearing a preset's name. Nothing enforces that
- * yet; it is a rule this file is stating rather than a check.
- *
- * ── Preset is nested inside skin, not a fourth axis ───────────────────────
- * Theme, density and skin are orthogonal: every combination of them means
- * something. A preset is not. "Winamp" under the cyberpunk skin is nonsense,
- * and expressing that as a fourth independent attribute would mean either
- * validating combinations at runtime or shipping palettes that can be asked
- * for and should not be.
- *
- * Scoping it under its skin costs nothing and answers it for free:
- * [data-skin="chrome"][data-preset="deck"] simply does not match under any
- * other skin, and the page falls back to that skin's own palette rather than
- * to something incoherent.
- *
- * The specificity is deliberate too. Chrome's own light block reaches (0,2,0)
- * on [data-skin="chrome"][data-theme="light"], so a preset that only reached
- * (0,2,0) would be decided by import order. Every block here carries the
- * preset attribute as well, which puts the themed ones at (0,3,0) and settles
- * it on specificity rather than on the order of a list somebody may reorder.
- *
- * ── What makes this a preset and not a skin ───────────────────────────────
- * It ships no treatment. glow.css is scoped to the cyber skin and everything
- * else falls through to bevel.css, so this takes the stacked bevel by simply
- * not being cyber. That is the line: a preset changes values, a skin changes
- * the treatment file. Winamp needed nothing in css/treatment/ and cyber needed
- * a file of its own.
+ * Every block carries the preset attribute, which puts the themed ones at
+ * (0,3,0). Chrome's own light block reaches (0,2,0), so a preset that only
+ * reached (0,2,0) would be settled by import order instead.
  */
 
 :root {
@@ -199,7 +168,7 @@
    
    A preset may move rhythm now, and this is what that is for. The palette
    alone made deck a recolour of chrome, and the thing a late-nineties audio
-   deck actually was is tighter: less padding around a control, less air
+   deck was is tighter: less padding around a control, less air
    between them, and type a rung down. Winamp's main window was 275 by 116
    pixels, and none of the proportions here are within a mile of that, but the
    direction is the point.

@@ -1,5 +1,5 @@
 /**
- * What the components actually emit.
+ * What the components emit.
  *
  * Server rendering, which covers seven of the eight. The dialog is a portal
  * and produces nothing without a DOM, so it is verified in a real browser
@@ -90,7 +90,7 @@ describe('badge', () => {
   test('each status gets a different mark, not just a different colour', () => {
     /* Four badges that differed only in background would be colour carrying
        the whole meaning, which is the failure this component exists to
-       avoid. The cells have to actually differ. */
+       avoid. The cells have to differ. */
     const cell = (status) => {
       const name = render(h(Badge, { status }, 'x')).match(/data-icon="([a-z0-9-]+)"/)?.[1];
       assert.ok(name, `the ${status} badge names no icon`);

@@ -304,7 +304,7 @@ describe('the published reference data', () => {
 
        CSS is the product here and nothing in the toolchain parsed it. This is
        the cheapest possible version of parsing it, and it is the one that
-       catches the failure that actually happened. */
+       catches the failure that happened. */
     const files = [];
     const walk = (dir) => {
       for (const e of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
@@ -511,7 +511,7 @@ describe('the published reference data', () => {
        That is the clip-path bug again, in a different property, and it had
        already happened: .pw-visualiser declared its dot grid as a
        background-image and silently dropped the cyber skin's scanlines from
-       the one surface in the kit that is actually a screen. It uses the
+       the one surface in the kit that is a screen. It uses the
        ornament slot now.
 
        --pw-surface-layers exists so a component that genuinely must paint its
@@ -918,7 +918,7 @@ describe('the published reference data', () => {
        The set is derived rather than listed. A knob is what a skin.*.css
        declares, plus what one of those files reaches into structural.css for,
        because "copy skin.chrome.css and change the values" is the procedure
-       the README actually gives. */
+       the README gives. */
     const NOT_A_KNOB = new Map([
       ['--pw-font-mono', 'a face in the type stack, not a knob; it is what --pw-font-ui is pointed at'],
       /* A skin picking a rung off the space scale is the scale working. What

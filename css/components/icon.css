@@ -48,7 +48,7 @@
        declares its knobs in pw.tokens. pw.components sorts later, so this
        file won every time and a skin pointing the token at its own sheet was
        silently ignored: the token had been documented as a skin's to set
-       since it was written and could never actually be set. It is a skin knob
+       since it was written and could never be set. It is a skin knob
        now, declared by each skin file the way every other knob is. */
   }
 
@@ -138,7 +138,7 @@
      costs more than it saves: driving this with a transform means the sheet
      on an inner element translated inside an outer one with overflow: hidden,
      which is two elements, a clip this kit has refused everywhere else, and
-     the same number of paints. What actually happens is eight discrete
+     the same number of paints. What happens is eight discrete
      repaints of a 16x16 box per revolution, roughly ten a second. Rotating a
      single glyph with transform WOULD obey the rule and is the thing that is
      genuinely wrong: 45 degrees is not exact on a square lattice, so it
@@ -173,7 +173,7 @@
      cut continuous motion outright. A stopped spinner does not read as a
      respected preference, it reads as a hung process, which is the single
      message a busy indicator must never send. The label beside it is the
-     part that actually carries the meaning; this keeps the shape honest.
+     part that carries the meaning; this keeps the shape honest.
 
      The selector is repeated in full because a media block adds no
      specificity, so a shorter one here would lose to the rule above. */

@@ -1,22 +1,18 @@
 /**
  * WINDOW CHROME.
  *
- * A title bar, its control cluster, and the chassis around them. No Radix
- * primitive, because there is no interaction to own: the buttons are buttons
- * and the rest is structure.
+ * A title bar, its controls, and the chassis. No Radix primitive: the buttons
+ * are buttons and there is no interaction to own.
  *
  * The controls are optional and each is a callback. A window with no handlers
- * renders no controls rather than rendering dead ones, which is the same rule
- * the states page had to learn: a control that looks pressable and does
- * nothing is worse than an absent control.
+ * renders no controls rather than dead ones.
  *
- * The section is named by its own title bar. This shipped without that, and a
+ * The section is named by its own title bar. It shipped without that, and a
  * <section> with no accessible name is not exposed as a region at all: the
- * browser's accessibility tree gave the whole window role="generic" with an
- * empty name, while the prop doc below promised "an unlabelled region". It
- * was not even that. A heading inside an element does not name the element,
- * and axe cannot report the difference, because a nameless section is not a
- * landmark it can find fault with. It is simply not there.
+ * tree gave the whole window role="generic" and an empty name while the prop
+ * doc promised "an unlabelled region". A heading inside an element does not
+ * name the element, and axe cannot report it, because a nameless section is
+ * not a landmark it can find fault with.
  */
 import { useId, type HTMLAttributes, type ReactNode } from 'react';
 

@@ -1,5 +1,5 @@
 /**
- * SEMANTIC — the roles, and the whole reason a second skin is possible.
+ * SEMANTIC: the roles, and the whole reason a second skin is possible.
  *
  * Names follow DaisyUI v5 (base-100/200/300, base-content, primary,
  * primary-content, success/warning/error and their -content) with a --pw-
@@ -22,7 +22,7 @@
  * :root[data-theme="dark"] and a future :root[data-skin="cyber"] are both
  * (0,2,0). If the dark block were skin-agnostic and a cyber block came after
  * it in the bundle, then on a root carrying both attributes every token cyber
- * declares in its light block would beat dark — but only for the tokens
+ * declares in its light block would beat dark, but only for the tokens
  * cyber-dark happened not to redeclare. Writing dark as *chrome's* dark, and
  * keeping every block complete, removes the tie instead of depending on
  * bundle order. taste-check enforces the completeness at no cost: a pair
@@ -88,7 +88,7 @@
      this does not take the exemption, but it does not hold 4.5 either: a
      disabled label at full contrast does not look disabled, and the state
      would then be carried by nothing. 3.85:1 is the compromise, and it is
-     never the only cue — the press travel and the hover opacity both stop.
+     never the only cue: the press travel and the hover opacity both stop.
      XP's own disabled ink, rgb(161,161,146), measures 1.78:1 here. It is in
      HANDOFF.md as a sourced value and it is not usable as one. */
   --pw-color-disabled-content: var(--pw-silver-700);
@@ -219,7 +219,7 @@
      that it stays a grouping cue. */
   --pw-color-divider: var(--pw-silver-600);
 
-  /* What a glossed surface actually measures.
+  /* What a glossed surface measures.
      The glare is a translucent white layer sitting between the label and the
      face, so a check that composites label-over-face never sees it and reads
      high. These are that stack pre-flattened into an opaque colour, the same

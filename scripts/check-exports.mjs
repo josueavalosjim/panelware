@@ -37,7 +37,7 @@ export function exportedPaths(pkg) {
   return out;
 }
 
-/** The files npm would actually ship, from npm itself rather than from a guess. */
+/** The files npm would ship, from npm itself rather than from a guess. */
 export function packedFiles() {
   const json = execFileSync('npm', ['pack', '--dry-run', '--json'], { cwd: ROOT, encoding: 'utf8' });
   return new Set(JSON.parse(json)[0].files.map((f) => f.path));

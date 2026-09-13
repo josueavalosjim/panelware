@@ -203,7 +203,7 @@ describe('the density axis', () => {
  * css/tokens/index.css claimed for a long time that a contract test held every
  * skin to chrome's token set. There was no such test, and by the time anyone
  * looked the counts were chrome 11, cyber 41 and paper 35. These three are that
- * test, written to what the architecture actually needs rather than to what the
+ * test, written to what the architecture needs rather than to what the
  * comment happened to say.
  */
 describe('the skin contract', () => {
@@ -620,7 +620,7 @@ describe('visual state and ARIA state', () => {
        zero: delete every state rule from a component and the guard goes
        quiet, because nothing is now styled inconsistently. It also could not
        tell one rule styling both attributes from two rules styling one each,
-       which is the arrangement that actually breaks a hand-wired consumer. */
+       which is the arrangement that breaks a hand-wired consumer. */
     for (const [rel, dataAttr, ariaAttrs, floor] of pairs) {
       const css = bare(read(rel));
       const lists = [...css.matchAll(/([^{}]+)\{/g)]
@@ -730,7 +730,7 @@ describe('tokens nothing reads', () => {
   /* A token declared, documented, published in the demo's token table, and
      read by nothing is a knob a consumer will find and turn to no effect.
      --pw-depth was the worst of them: its own comment said "see bevel.css for
-     what actually reads this" and bevel.css did not. It is wired now.
+     what reads this" and bevel.css did not. It is wired now.
 
      The rest are not all bugs, and that is the point of listing them rather
      than banning them. A scale is allowed to be complete before every rung

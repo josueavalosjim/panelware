@@ -210,7 +210,7 @@ await withDemo(async (p, base) => {
  * is the whole answer to 2.4.7. The obvious check is to read the list and
  * confirm each member rings, and that check cannot fail: delete a control
  * from the list and it leaves the list the check is reading. So the subject
- * is what the page actually renders as focusable, and the list is what is
+ * is what the page renders as focusable, and the list is what is
  * being tested against it.
  *
  * Two assertions, because a bare outline is not evidence. Most of these are

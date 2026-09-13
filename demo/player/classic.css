@@ -188,7 +188,7 @@ body {
    slab running to the right of it: the box was the right width and the ink
    stopped early, which reads as a broken display rather than as a marquee with
    nothing to do. Clipped to the text instead, which is what a short title
-   actually looks like on a bitmap skin. */
+   looks like on a bitmap skin. */
 .at-title   { left: 111px; top: 27px; max-width: 154px; overflow: hidden; }
 .at-kbps    { left: 111px; top: 43px; }
 .at-khz     { left: 156px; top: 43px; }
@@ -231,7 +231,7 @@ body {
    shuffle button is 47x15 and the real repeat is 28x15. SHUF in a 23px box is
    the word touching both walls, which is what it looked like.
 
-   Fixed widths, at the sizes the bitmap actually uses. */
+   Fixed widths, at the sizes the bitmap uses. */
 .win .at-eqpl .pw-toggle,
 .win .at-shuffle .pw-toggle {
   min-width: 0;

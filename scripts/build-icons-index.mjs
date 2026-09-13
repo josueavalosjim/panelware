@@ -57,7 +57,7 @@ function bearings(name, rects = iconRects) {
  * sheet using the first one's numbers pulls its marks into or away from the
  * word beside them.
  *
- * Only the names whose ink actually moved get a rule. A skin that redrew four
+ * Only the names whose ink moved get a rule. A skin that redrew four
  * glyphs ships four rules rather than thirty-two, and the diff says which
  * four.
  *
@@ -91,7 +91,7 @@ export function skinIconsCss(skin, rects) {
  * Cells are not here and never will be. Every sheet shares ICON_ORDER, so the
  * cell a name resolves to is the same under every skin and the base index
  * already carries it. Only the ink bearings move, and only for the ${moved.length} names
- * whose drawing actually changed width.
+ * whose drawing changed width.
  */
 
 @layer pw.skin {

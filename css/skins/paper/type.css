@@ -1,5 +1,5 @@
 /**
- * SKIN — paper's face, and the one thing wrong with it.
+ * SKIN: paper's face, and the one thing wrong with it.
  *
  * The skin sets --pw-font-ui to a slab, because its own icon sheet is
  * documented as the heaviest of the three and as "a catalogue's vocabulary
@@ -15,7 +15,7 @@
  * Everything in this kit that centres a label centres the line box, because
  * that is what `align-items: center` does. Centre a box whose top sits below
  * the caps and the caps end up high. Measured on .pw-button at 15px, against
- * the cap-height centre a reader actually judges:
+ * the cap-height centre a reader judges:
  *
  *     system-ui      -0.72px   chrome, fine
  *     ui-monospace   -0.20px   cyber, fine
@@ -25,7 +25,7 @@
  * ── Why this and not a nudge on the skin ─────────────────────────────────
  * A per-skin padding or transform would correct Rockwell and then break every
  * machine that does not have Rockwell, because CSS cannot see which family in
- * a stack actually won. A consumer on Linux would get Georgia plus a three
+ * a stack won. A consumer on Linux would get Georgia plus a three
  * pixel shove.
  *
  * ascent-override is scoped exactly right instead. It repairs the metrics of

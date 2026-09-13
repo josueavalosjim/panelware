@@ -1,5 +1,5 @@
 /**
- * PRIMITIVE — the paper skin's raw ramps.
+ * PRIMITIVE: the paper skin's raw ramps.
  *
  * Scoped to the skin, not to :root, for the reason primitive.cyber.css gives
  * at length: two ramps on a bare :root tie at (0,1,0) and the later import

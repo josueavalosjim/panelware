@@ -74,7 +74,7 @@ body {
        end the shape where the 90%/90% radius said it would, it ends it at 67%
        of that radius. The arithmetic above was right and the hill still came
        out flat, crest at 85% of the frame instead of 55%, because two thirds
-       of the radius is where the green actually stopped. The transparent stop
+       of the radius is where the green stopped. The transparent stop
        has to sit at 100% and the colours have to be spaced inside it.
 
        Which also fixes the shading. The visible band is the radius from about

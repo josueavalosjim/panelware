@@ -30,7 +30,7 @@
        every band tappable: narrowing the columns to fit would put them under
        the target floor, and an equaliser that wraps to two rows is not an
        equaliser. The vertical sliders inside hand the horizontal axis back
-       to the browser so this actually scrolls under a finger. */
+       to the browser so this scrolls under a finger. */
     max-width: 100%;
     overflow-x: auto;
     overscroll-behavior-x: contain;
@@ -66,7 +66,7 @@
      So take the label row back off before applying the fraction. It is the
      band's gap plus the label's own height, and --pw-eq-label-space in
      structural.css is exactly that, derived from the two tokens the layout
-     below actually uses. Both move per skin and per density and this follows
+     below uses. Both move per skin and per density and this follows
      them. check:cssom measures the rule against the band on zero, under every
      skin, so this cannot drift back. */
   .pw-eq-well[data-zero]::before {

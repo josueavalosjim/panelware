@@ -46,7 +46,7 @@ const GEOM = `(() => {
   return {
     /* A page that never rendered has no shapes to disagree about, and would
        otherwise report every one of them as missing from one side rather than
-       as the one thing that actually went wrong. */
+       as the one thing that went wrong. */
     controls: document.querySelectorAll('.pw-button, .pw-toggle').length,
     shapes: {
       thumb: slider && box('.pw-slider-thumb', slider),
@@ -84,7 +84,7 @@ const GEOM = `(() => {
       separator: box('#structure .pw-separator'),
       visualiser: box('#visualiser .pw-visualiser'),
     },
-    /* Not sizes: what the pointer actually lands on. Null rather than absent
+    /* Not sizes: what the pointer lands on. Null rather than absent
        when there is no thumb, because 'thumb' above already reports that and
        one missing slider should read as one failure. */
     probes: thumb ? { hitAt15: hit(15, 0), hitAt20: hit(0, 20), missesAt30: !hit(30, 0) } : null,

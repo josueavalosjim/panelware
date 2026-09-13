@@ -1,5 +1,5 @@
 /**
- * SEMANTIC — what the rack skin's colours are FOR.
+ * SEMANTIC: what the rack skin's colours are FOR.
  *
  * Both blocks declare the identical set, because [data-skin="rack"] and
  * [data-skin="rack"][data-theme="dark"] tie on specificity and are decided
@@ -40,7 +40,7 @@
   --pw-color-error: var(--pw-rust-100);
   --pw-color-error-content: var(--pw-rust-800);
 
-  /* The 3D border, in the ladder the era actually used. */
+  /* The 3D border, in the ladder the era used. */
   --pw-bevel-light: var(--pw-rack-000);
   --pw-bevel-face: var(--pw-rack-050);
   --pw-bevel-shade: var(--pw-rack-300);

@@ -1,26 +1,18 @@
 /**
- * BEVEL — the chrome, as a swappable pair of shadow stacks.
+ * BEVEL: the chrome, as a swappable pair of shadow stacks.
  *
- * The pattern is 98.css's, read from its source rather than remembered: two
- * stacked inset box-shadows as a raised/sunken pair, swapped on press. The
- * whole of 98.css is 994 lines and none of it is expensive, because a
- * box-shadow never touches the live-sampling blur path that makes
- * backdrop-filter the documented jank primitive.
+ * The pattern is 98.css's: two stacked inset box-shadows as a raised/sunken
+ * pair, swapped on press. The sunken pair is the raised pair mirrored,
+ * highlight for frame and face for shade, which is 98.css's own derivation.
  *
- * 98.css writes its offsets as literals. Here they are calc()s multiplied by
- * --pw-bevel-depth, so one number flattens the kit. That is not decoration:
- * it is the mechanism by which the deferred second skin, which has no bevel
- * at all, turns this off without editing anything. Every offset below is a
- * calc for that reason. A single literal 1px sneaking in leaves a ghost edge
- * at depth 0, the flat skin stops being flat, and nothing reports an error.
+ * 98.css writes its offsets as literals. Here every one is a calc() on
+ * --pw-bevel-depth, so a skin with no bevel zeroes the lot without editing a
+ * rule. One literal 1px sneaking in leaves a ghost edge at depth 0 and
+ * nothing reports it.
  *
- * The sunken pair is the raised pair mirrored: highlight swaps with frame,
- * face swaps with shade. That is 98.css's own derivation, not a new one.
- *
- * NES.css reaches the same effect through a Sass mixin that flips the shadow
- * direction on :active. Custom properties are the better carrier here for one
- * reason: a mixin is resolved at build time and cannot be re-pointed by a
- * consumer's stylesheet, and this kit ships no build.
+ * NES.css does the same flip through a Sass mixin. Custom properties carry it
+ * better here because a mixin resolves at build time and cannot be re-pointed
+ * by a consumer, and this kit ships no build.
  */
 
 @layer pw.treatment {
@@ -30,7 +22,7 @@
      A custom property that references another one is substituted against the
      element the FIRST one is declared on. Declare --pw-bevel-1 on :root and
      its var(--pw-bevel-depth) resolves against :root's depth, once. What
-     descendants then inherit is the already-computed "1px" — so setting
+     descendants then inherit is the already-computed "1px", so setting
      --pw-bevel-depth: 0 on a container does nothing at all, and setting it
      on the readout to sink it deeper does nothing either.
 
@@ -57,7 +49,7 @@
        from DaisyUI, and until now it was declared, documented as the thing
        that flattens the kit, published in the demo's token table, and read by
        absolutely nothing. Its own comment said "see bevel.css for what
-       actually reads this" and bevel.css did not.
+       reads this" and bevel.css did not.
 
        Multiplied here rather than resolved on :root for the reason the test
        below this file's derivation checks: a custom property referencing
@@ -92,7 +84,7 @@
       0 calc(var(--pw-bevel-depth) * 1px)
         calc(var(--pw-bevel-depth) * 2px) var(--pw-shadow-outer-color);
 
-    /* The two values a component actually swaps between. A raised surface
+    /* The two values a component swaps between. A raised surface
        casts; a sunken one is a hole in something and casts nothing. */
     --pw-shadow-raised:
       var(--pw-bevel-raised-outer),
@@ -177,7 +169,7 @@
        caught. A 1px border in --pw-bevel-frame sitting immediately outside a
        1px inset shadow in --pw-bevel-frame reads as one 2px line on the dark
        side, pushes the white highlight a pixel inward where the border hides
-       half of it, and — the part that actually matters — does not scale with
+       half of it, and, and the part that matters, does not scale with
        --pw-bevel-depth, so it survived depth 0 as a ghost edge. Everything
        the comment at the top of this file warns about, shipped. */
     border: 0;

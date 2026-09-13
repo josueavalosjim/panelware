@@ -39,7 +39,7 @@
        block, which is the viewport WITHOUT its scrollbars. 100vw includes
        them. On any page long enough to scroll, and with classic rather than
        overlay scrollbars, 100vw is about 15px wider than the space the panel
-       actually has, so the gutter this is trying to reserve quietly shrinks
+       has, so the gutter this is trying to reserve quietly shrinks
        to half. Headless Chromium uses overlay scrollbars and would never
        have shown it. */
     max-width: calc(100% - (var(--pw-space-lg) * 2));

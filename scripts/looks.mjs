@@ -13,7 +13,7 @@
  * edits and the cost of forgetting one was a check that passed without ever
  * visiting the new skin. That had already happened: runtime.states covered
  * three of the six looks, so paper and two presets were measured from their
- * declared tokens and never from what the browser actually painted.
+ * declared tokens and never from what the browser painted.
  *
  * The two JSON copies cannot import this, because they are data read by a
  * tool. So they stay written out, and test/contract.test.mjs compares them to

@@ -15,7 +15,7 @@
  * on every frame, and the kit's motion rule is transform and opacity only.
  *
  * The chevron turns instead. That is a transform, it is the affordance anyone
- * actually reads, and it costs one composited property rather than a reflow.
+ * reads, and it costs one composited property rather than a reflow.
  */
 
 @layer pw.components {
