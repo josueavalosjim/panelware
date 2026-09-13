@@ -51,13 +51,13 @@ const arg = (name, fallback) => {
 const comps = arg('comp')
   ? COMPS.filter((c) => c === arg('comp'))
   : COMPS;
-/* luna first, and it is the default for a reason. A landscape drawn in CSS
+/* desktop first, and it is the default for a reason. A landscape drawn in CSS
    gradients reads as a landscape drawn in CSS gradients: it has no grain, no
    focal falloff and no texture, and at 1920 wide that is the first thing a
    viewer sees. The flat desktop ground is the honest one to post. The
    look-alike stays for anyone who wants the joke, and `photo` is there for the
    real thing if the jpeg is sitting next to the page. */
-const grounds = arg('ground') ? [arg('ground')] : ['luna', 'bliss'];
+const grounds = arg('ground') ? [arg('ground')] : ['desktop', 'bliss'];
 const skins = arg('skin') ? [arg('skin')] : ['chrome', 'cyber', 'paper'];
 const themes = arg('theme') ? [arg('theme')] : ['light'];
 

@@ -148,6 +148,17 @@ export function usePlayer({ bands = 20 } = {}) {
     if (a && playing) { voices(id); started.current = a.ctx.currentTime; }
   }, [playing, voices]);
 
+  /* Winamp's position bar is draggable, so this is a real seek: move the
+     origin the clock is measured from rather than the clock itself, or the
+     next animation frame recomputes the old value and the thumb springs
+     back. */
+  const seek = useCallback((seconds) => {
+    const a = ref.current;
+    const to = Math.max(0, Math.min(LENGTH, seconds));
+    if (a) started.current = a.ctx.currentTime - to;
+    setElapsed(to);
+  }, []);
+
   const step = useCallback((by) => {
     const at = TRACKS.findIndex((t) => t.id === track);
     choose(TRACKS[(at + by + TRACKS.length) % TRACKS.length].id);
@@ -228,6 +239,6 @@ export function usePlayer({ bands = 20 } = {}) {
     volume, setVolume, balance, setBalance,
     preamp, setPreamp, eqOn, setEqOn, loop, setLoop,
     gains, setGains, setBand,
-    play, pause, stop, choose, step,
+    play, pause, stop, choose, step, seek,
   };
 }

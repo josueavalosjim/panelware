@@ -159,9 +159,11 @@ body {
   background: #4e92e4 url("./bliss.jpg") center / cover no-repeat;
 }
 
-/* No landscape. The desktop blue and the Luna ramp, for when the comp is
-   about the kit rather than about the joke. */
-.stage[data-backdrop="luna"] {
+/* No landscape, just the desktop blue of the era. Named for what it is:
+   the vendor's name for that theme is a trademark and this repo does not use
+   one as an identifier, which test/contract.test.mjs enforces for css/ and
+   src/ and which there is no reason to break in demo/. */
+.stage[data-backdrop="desktop"] {
   background:
     radial-gradient(120% 90% at 50% 0%, #4a7fc8 0%, #2f5fa8 55%, #1c3f7a 100%);
 }

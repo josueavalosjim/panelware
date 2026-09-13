@@ -44,101 +44,21 @@ body {
 .note a { color: #cfe6ff; }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   THE LOOK. Tokens only.
+   THE LOOK IS GONE FROM THIS FILE, because it is a skin now.
+
+   It lived here as a block of token assignments for a while, which proved the
+   look was reachable through tokens and proved nothing else: a look that only
+   exists in a demo is a look a consumer cannot have. It is
+   css/tokens/skin.rack.css, and `data-skin="rack"` on this page's <html> is
+   the whole installation.
+
+   What is left below is position, and the density knobs, which the skin
+   deliberately does not touch. Winamp's buttons were 23x18 and the kit's
+   floor is a 32px target held by a contract test, so going under it is this
+   page's decision to take and not the package's to ship.
    ───────────────────────────────────────────────────────────────────────── */
 
 [data-look="winamp"] {
-  /* Win95 silver, which is what a light classic skin is. Four tiers, one
-     pixel each: white top-left, silver face, grey bottom-right, black outer.
-     The chrome skin spends two pixels on each and glosses the result. */
-  --pw-silver-000: #ffffff;
-  --pw-silver-100: #dfdfdf;
-  --pw-silver-200: #c0c0c0;
-  --pw-silver-300: #b4b4b4;
-  --pw-silver-500: #808080;
-  --pw-silver-700: #000000;
-
-  --pw-color-base-100: #c0c0c0;
-  --pw-color-base-200: #c0c0c0;
-  --pw-color-base-300: #a8a8a8;
-  --pw-color-base-content: #000000;
-  --pw-color-disabled-content: #808080;
-
-  --pw-bevel-light: #ffffff;
-  --pw-bevel-face: #c0c0c0;
-  --pw-bevel-shade: #808080;
-  --pw-bevel-frame: #000000;
-  --pw-bevel-boundary: #000000;
-  --pw-color-divider: #808080;
-
-  /* Depth 1, and NOT the 0.5 that looked clever.
-
-     Every bevel offset in bevel.css is a calc of this, so 0.5 does produce a
-     one-pixel edge where the kit draws two, which is what a 1998 skin has. It
-     also asks for half-pixel box-shadow offsets, and half a pixel cannot be
-     drawn: the browser antialiases it, and where the grey lands depends on the
-     element's own subpixel position. SHUF starts at x.5 and REP at x.78, so
-     the same edge rasterised differently on each and the pair read as
-     misaligned. It was not misaligned. It was two different antialiasings of
-     one instruction.
-
-     A crisp two-pixel edge beats a mushy one-pixel one, and the tier colours
-     below are what carry the 1998 reading anyway. */
-  --pw-bevel-depth: 1;
-
-  /* Nothing on a bitmap skin is glossy, lit, blurred or rounded. */
-  --pw-gloss-opacity: 0;
-  --pw-gloss-glare-alpha: 0;
-  --pw-gloss-cap-alpha: 0;
-  --pw-gloss-cap-height: 0%;
-  --pw-glass-blur: 0px;
-  --pw-radius-control: 0;
-  --pw-radius-box: 0;
-  --pw-clip-control: none;
-  --pw-clip-box: none;
-  --pw-texture: none;
-  --pw-texture-opacity: 0;
-  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
-  --pw-press-travel: 1px;
-
-  /* The title bar is Windows' own active gradient, which is what Winamp sat
-     inside and what its own strip imitates. */
-  --pw-color-titlebar: #000080;
-  --pw-color-titlebar-content: #ffffff;
-
-  /* The display. Black ground, phosphor green, and a glow small enough to be
-     a CRT rather than a neon sign. */
-  --pw-color-lcd: #000000;
-  --pw-color-lcd-content: #00e000;
-  --pw-glow-color: #00e000;
-  --pw-glow-intensity: 1;
-  --pw-glow-radius: 1px;
-
-  --pw-color-primary: #000080;
-  --pw-color-primary-content: #ffffff;
-  --pw-color-focus: #000000;
-  /* The pots are grooves, not progress bars. XP fills a slider with the accent
-     and that is what made these read as three blue loading bars: Winamp's
-     volume, balance and seek are a dark channel with a raised grey grabber in
-     it, and the fill is the channel's own shadow. */
-  --pw-color-range: #6a6a6a;
-  --pw-selected-bg: #000080;
-  --pw-selected-content: #ffffff;
-  --pw-selected-mark: none;
-
-  --pw-color-vis-bg: #000000;
-  /* No grid. The kit draws a faint dot lattice behind the analyser, which is
-     an instrument's vocabulary and reads as speckle at 76x16. Winamp's is
-     bare black with a grey peak dash riding each bar. */
-  --pw-color-vis-grid: transparent;
-  --pw-color-vis-low: #00a800;
-  --pw-color-vis-mid: #00c800;
-  --pw-color-vis-high: #00e800;
-  --pw-color-vis-peak: #b0b0b0;
-
-  --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
-
-  /* Winamp's knobs. All of them under the floor; see the header. */
   --pw-control-h: 18px;
   --pw-control-min-w: 23px;
   --pw-control-pad-x: 2px;
@@ -146,8 +66,6 @@ body {
   --pw-control-text: 9px;
   --pw-text-ui: 9px;
   --pw-text-micro: 8px;
-  --pw-leading-ui: 1;
-  --pw-tracking-ui: 0;
   --pw-thumb-w: 14px;
   --pw-thumb-h: 11px;
   --pw-thumb-hit: 11px;
@@ -250,7 +168,14 @@ body {
 
 .at-time    { left: 36px;  top: 26px; }
 .at-vis     { left: 24px;  top: 43px; }
-.at-title   { left: 111px; top: 27px; }
+
+/* The title display is 154 wide in Winamp and the text scrolls inside it. The
+   readout here sizes to its own cells, so a short track name left a dead black
+   slab running to the right of it: the box was the right width and the ink
+   stopped early, which reads as a broken display rather than as a marquee with
+   nothing to do. Clipped to the text instead, which is what a short title
+   actually looks like on a bitmap skin. */
+.at-title   { left: 111px; top: 27px; max-width: 154px; overflow: hidden; }
 .at-kbps    { left: 111px; top: 43px; }
 .at-khz     { left: 156px; top: 43px; }
 .at-stereo  { left: 212px; top: 42px; }
@@ -266,13 +191,18 @@ body {
   gap: 1px; padding: 0;
 }
 
+/* The small readouts. Winamp draws these as bitmap glyphs about five pixels
+   tall, dim against the chassis rather than lit like the main display. At 8px
+   Tahoma in full phosphor they were the loudest thing in the window and read
+   as labels rather than as instrumentation. */
 .win .at-kbps,
 .win .at-khz,
 .win .at-stereo {
-  font: 8px/1 var(--pw-font-ui);
-  color: #00c000;
-  letter-spacing: 0.04em;
+  font: 7px/1 var(--pw-font-ui);
+  color: #00a000;
+  letter-spacing: 0.02em;
 }
+.win .at-stereo { letter-spacing: 0.08em; }
 
 /* Fixed, not minimum. Winamp's buttons are bitmaps and every one of them is
    exactly 23 wide; a min-width plus padding means four glyphs grow the box and
@@ -298,7 +228,10 @@ body {
 .win .at-tx .pw-transport-button:last-child { width: 22px; min-width: 22px; margin-left: 5px; }
 .win .at-tx .pw-transport-button .pw-icon { --pw-icon-scale: 1; }
 
-/* The two pots and the seek bar are Winamp's, which are shallow grooves with
-   a small grabber rather than the kit's 8px track. */
+/* The two pots and the seek bar are Winamp's: a shallow groove with a raised
+   grabber in it, rather than the kit's 8px track. The position bar's grabber
+   is wider than the pots', which is Winamp's own proportion. */
 .win .pw-slider { min-height: 11px; }
-.win .at-seek .pw-slider-thumb { width: 29px; }
+.win .at-seek { height: 10px; }
+.win .at-seek .pw-slider-thumb { width: 29px; height: 10px; }
+.win .at-seek .pw-slider-track { --pw-track-h: 4px; }

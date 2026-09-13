@@ -1,0 +1,193 @@
+/**
+ * SKIN — the rack skin's own knobs.
+ *
+ * Named for the thing rather than for the product: a rack-mount unit's
+ * faceplate, silver and bevelled, with a phosphor display set into it. The
+ * player it is drawn from is named in the README as prior art, which is what
+ * everybody in this genre does and is fine; it is not what a consumer types.
+ * test/contract.test.mjs holds that line, and it holds it because this exact
+ * palette shipped under the product's name once already.
+ *
+ * The fourth skin, and the one that argues the kit's central claim hardest,
+ * because it is the furthest thing from the first. Chrome is Web 2.0 on
+ * purpose: gloss, stacked bevels, blue gradients, rounded controls. A 1998
+ * bitmap skin is its opposite on every one of those axes, and this file is
+ * the whole difference. No component changes, no forked rule.
+ *
+ * ── Where it came from ───────────────────────────────────────────────────
+ * demo/player/classic.html had all of this as a page-local block for a while,
+ * which proved it worked and proved nothing else: a look that lives in a demo
+ * is a look a consumer cannot have. It is a skin now, so `data-skin="rack"`
+ * is the whole installation.
+ *
+ * ── What it does NOT change ──────────────────────────────────────────────
+ * The density axis. Winamp's transport buttons were 23x18 and this kit's
+ * floor is a 32px target, held by a contract test, so the SKIN does not go
+ * near it. demo/player/classic.html still overrides the density knobs on its
+ * own page, under its own attribute, which is exactly the line: a consumer
+ * may go under the floor and the package may not take them there.
+ */
+
+[data-skin="rack"],
+[data-skin="rack"][data-theme="light"] {
+  /* Depth 1, not the half-pixel that looked clever. Every offset in
+     bevel.css is a calc of this, so 0.5 does draw the one-pixel edge a 1998
+     skin has, and it also asks for half-pixel shadows, which cannot be drawn:
+     the browser antialiases them and where the grey lands depends on the
+     element's own subpixel position. Two buttons side by side rasterised
+     differently and read as misaligned. The tier colours carry the era; the
+     depth just has to be an integer. */
+  --pw-bevel-depth: 1;
+
+  /* Chrome's sheet, deliberately. A period toolbar mark is solid, geometric
+     and sized to sit on a button, which is what that set already is. Drawing
+     it again to end up in the same place is how a sheet gains twenty-four
+     glyphs and no new information. */
+  --pw-icon-sheet: url("../../assets/icons.svg");
+
+  /* Nothing on a bitmap skin is glossy, lit, blurred or rounded. */
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 1px;
+  --pw-glow-color: var(--pw-lcd-green-300);
+
+  --pw-glass-blur: 0px;
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+  --pw-clip-control: none;
+  --pw-clip-box: none;
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+
+  /* A button on this chassis is an object you push, and it moves. Same
+     reasoning chrome uses; this is the other skin that earns the travel. */
+  --pw-press-travel: 1px;
+
+  /* The display is flush with the panel, not sunk into it. Winamp's is flat
+     black in the bitmap with no inset at all. */
+  --pw-lcd-depth: 0;
+
+  --pw-scrollbar-width: auto;
+  --pw-scrollbar-thumb: var(--pw-rack-100);
+  --pw-scrollbar-track: var(--pw-rack-200);
+
+  /* The UI face of the era. Not a system stack: Tahoma is what the dialogs
+     and the chassis labels were actually set in, and it is on every machine
+     that has ever had Office. */
+  --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
+  --pw-text-ui: 0.6875rem;
+
+  --pw-selected-bg: var(--pw-navy-800);
+  --pw-selected-content: var(--pw-rack-000);
+  --pw-selected-mark: none;
+
+  --pw-leading-ui: 1.2;
+  --pw-tracking-ui: 0;
+
+  /* An interface made of bitmaps does not ease. It snaps. */
+  --pw-duration-hover: var(--pw-duration-snap);
+  --pw-duration-enter: var(--pw-duration-snap);
+  --pw-ease-press: var(--pw-ease-out);
+  --pw-ease-enter: var(--pw-ease-out);
+  --pw-ease-state: var(--pw-ease-out);
+
+  --pw-control-pad-x: var(--pw-space-sm);
+  --pw-control-gap: var(--pw-space-xs);
+  --pw-panel-pad: var(--pw-space-md);
+
+  --pw-color-vis-bg: var(--pw-lcd-black);
+  --pw-color-vis-grid: transparent;
+  --pw-color-vis-low: var(--pw-lcd-green-500);
+  --pw-color-vis-mid: #00c800;
+  --pw-color-vis-high: var(--pw-lcd-green-300);
+  --pw-color-vis-peak: #b0b0b0;
+}
+
+[data-skin="rack"][data-theme="dark"] {
+  --pw-bevel-depth: 1;
+  --pw-icon-sheet: url("../../assets/icons.svg");
+
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 2px;
+  --pw-glow-color: var(--pw-lcd-green-300);
+
+  --pw-glass-blur: 0px;
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+  --pw-clip-control: none;
+  --pw-clip-box: none;
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+
+  --pw-press-travel: 1px;
+  --pw-lcd-depth: 0;
+
+  --pw-scrollbar-width: auto;
+  --pw-scrollbar-thumb: #4a4a4a;
+  --pw-scrollbar-track: var(--pw-rack-800);
+
+  --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
+  --pw-text-ui: 0.6875rem;
+
+  /* The deep navy, not the primary. navy-700 is pinned by the focus ring: it
+     has to clear 3:1 against black and 4.5:1 against white at once, which
+     lands it mid-tone, and a selected row's SECONDARY line is its content at
+     reduced opacity. White at 0.85 over that mid-tone composites to #e0e9f4
+     and measures 4.22 against it, which check-colour caught on the playlist's
+     duration column and the declared-pair block could not, because nothing
+     declares a pair for a colour that only exists after compositing. */
+  --pw-selected-bg: var(--pw-navy-900);
+  --pw-selected-content: #ffffff;
+  --pw-selected-mark: none;
+
+  --pw-leading-ui: 1.2;
+  --pw-tracking-ui: 0;
+
+  --pw-duration-hover: var(--pw-duration-snap);
+  --pw-duration-enter: var(--pw-duration-snap);
+  --pw-ease-press: var(--pw-ease-out);
+  --pw-ease-enter: var(--pw-ease-out);
+  --pw-ease-state: var(--pw-ease-out);
+
+  --pw-control-pad-x: var(--pw-space-sm);
+  --pw-control-gap: var(--pw-space-xs);
+  --pw-panel-pad: var(--pw-space-md);
+
+  --pw-color-vis-bg: var(--pw-lcd-black);
+  --pw-color-vis-grid: transparent;
+  --pw-color-vis-low: var(--pw-lcd-green-500);
+  --pw-color-vis-mid: #00c800;
+  --pw-color-vis-high: var(--pw-lcd-green-300);
+  --pw-color-vis-peak: #b0b0b0;
+}
+
+/* THE DENSITY AXIS, RESTATED, AND WRITTEN LAST.
+
+   [data-skin="rack"] and [data-density="compact"] are both (0,1,0) and this
+   file imports after density.css, so the blocks above would win the tie and
+   hold their padding at both densities. This selector is (0,2,0), which
+   settles that half.
+
+   The position settles the other half. The theme block above is also (0,2,0)
+   and carries the same knobs, because every skin x theme block here declares
+   its full set, and a tie on specificity goes to whichever is written last.
+   The paper skin shipped this exact bug with the exact same comment above it
+   claiming it could not happen. test/contract.test.mjs holds the order now. */
+[data-skin="rack"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-xs);
+  --pw-control-gap:   var(--pw-space-2xs);
+  --pw-panel-pad:     var(--pw-space-sm);
+}

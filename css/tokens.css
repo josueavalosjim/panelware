@@ -2118,6 +2118,368 @@
   --pw-panel-pad: var(--pw-space-lg);
 }
 
+/* The fourth skin, and the furthest from the first: a 1998 bitmap chassis,
+   which is chrome's Web 2.0 inverted on every axis it has. It began as a
+   page-local block in demo/player/classic.html, which proved it worked and
+   proved nothing else, because a look that lives in a demo is a look a
+   consumer cannot have. */
+/**
+ * PRIMITIVE — the rack skin's ramp.
+ *
+ * Two families, because this skin has two very different grounds. Light is
+ * Windows 95's own silver, which is what a 1998 application chassis was made
+ * of and what every bevel in that era was drawn from. Dark is Winamp's actual
+ * main.bmp grey, which is a shade nobody else in this kit uses: near-black
+ * enough to sit under a phosphor display and light enough to bevel.
+ *
+ * The phosphor is its own family and it does not follow the theme. A lit
+ * display is a light source; it does not dim because the page did. Same
+ * argument semantic.chrome.css makes for --pw-color-lcd.
+ */
+
+[data-skin="rack"] {
+  /* Win95 silver. The four tiers a raised control is drawn from, and they are
+     the reason this skin exists: 255, 223, 128, 0 is the exact ladder every
+     3D border in that decade used. */
+  --pw-rack-000: #ffffff;
+  --pw-rack-050: #dfdfdf;
+  --pw-rack-100: #c0c0c0;
+  --pw-rack-200: #a8a8a8;
+  --pw-rack-300: #808080;
+  --pw-rack-500: #666666;
+  --pw-rack-700: #3f3f3f;
+  --pw-rack-800: #2a2a2a;
+  --pw-rack-900: #1a1a1a;
+  --pw-rack-950: #000000;
+
+  /* The navy a period title bar and a selected row were both painted in.
+     Every one of these is a number the contrast gate chose, not one I liked:
+     navy-700 carries BOTH halves of the focus ring on the dark chassis, so it
+     has to clear 3:1 against black and 4.5:1 against white at the same time,
+     which is a narrow band and #2f6fb5 is in it. The first pass used the
+     authentic #0a3a6a and failed the black half at 1.83. */
+  --pw-navy-400: #5278b2;
+  --pw-navy-700: #2f6fb5;
+  --pw-navy-800: #000080;
+  --pw-navy-900: #00004a;
+
+  /* Phosphor. Fixed across both themes, for the reason in the header. */
+  --pw-lcd-green-300: #00e000;
+  --pw-lcd-green-500: #00a000;
+  --pw-lcd-black: #000000;
+
+  /* Status, in the muted inks a period dialog used. Nothing here is
+     saturated: a 1998 chassis had no room for a bright chip. */
+  --pw-moss-100: #c6dcc6;
+  --pw-moss-800: #003a00;
+  --pw-amber-100: #e8dcb0;
+  --pw-amber-800: #4a3000;
+  --pw-rust-100: #e6c0c0;
+  --pw-rust-800: #6a0000;
+  --pw-moss-300: #7fae7f;
+  --pw-amber-300: #c9b167;
+  --pw-rust-300: #d18585;
+}
+
+/**
+ * SEMANTIC — what the rack skin's colours are FOR.
+ *
+ * Both blocks declare the identical set, because [data-skin="rack"] and
+ * [data-skin="rack"][data-theme="dark"] tie on specificity and are decided
+ * by source order: a block carrying only its differences loses that tie for
+ * every token it leaves out, silently. test/contract.test.mjs holds it.
+ *
+ * ── The two grounds are not the same idea ────────────────────────────────
+ * Light is the application chassis: Win95 silver, black text, a navy title
+ * bar. Dark is the player itself, Winamp's own main.bmp grey, which is the
+ * surface a phosphor display was designed to sit on. Most skins treat dark as
+ * light inverted. This one treats it as a different object.
+ */
+
+[data-skin="rack"],
+[data-skin="rack"][data-theme="light"] {
+  --pw-color-base-100: var(--pw-rack-100);
+  --pw-color-base-200: var(--pw-rack-100);
+  --pw-color-base-300: var(--pw-rack-200);
+  --pw-color-base-content: var(--pw-rack-950);
+  --pw-color-disabled-content: var(--pw-rack-500);
+
+  --pw-color-primary: var(--pw-navy-800);
+  --pw-color-primary-content: var(--pw-rack-000);
+  --pw-color-titlebar: var(--pw-navy-800);
+  --pw-color-titlebar-content: var(--pw-rack-000);
+  --pw-color-focus: var(--pw-rack-950);
+  --pw-color-focus-contrast: var(--pw-rack-000);
+  --pw-color-range: var(--pw-navy-800);
+
+  /* The display does not follow the theme. */
+  --pw-color-lcd: var(--pw-lcd-black);
+  --pw-color-lcd-content: var(--pw-lcd-green-300);
+
+  --pw-color-success: var(--pw-moss-100);
+  --pw-color-success-content: var(--pw-moss-800);
+  --pw-color-warning: var(--pw-amber-100);
+  --pw-color-warning-content: var(--pw-amber-800);
+  --pw-color-error: var(--pw-rust-100);
+  --pw-color-error-content: var(--pw-rust-800);
+
+  /* The 3D border, in the ladder the era actually used. */
+  --pw-bevel-light: var(--pw-rack-000);
+  --pw-bevel-face: var(--pw-rack-050);
+  --pw-bevel-shade: var(--pw-rack-300);
+  --pw-bevel-frame: var(--pw-rack-950);
+  --pw-bevel-boundary: var(--pw-rack-950);
+  --pw-color-divider: var(--pw-rack-300);
+
+  /* Gloss is off in this skin, so these are the flat colours underneath it.
+     They exist because the contrast block measures a pre-flattened pair: a
+     glare is a sibling pseudo-element and no rendered-page check sees
+     through it. */
+  --pw-gloss-lit-base-200: var(--pw-rack-100);
+  --pw-gloss-lit-primary: var(--pw-navy-800);
+  --pw-color-scrim: rgba(0, 0, 0, 0.5);
+}
+
+[data-skin="rack"][data-theme="dark"] {
+  --pw-color-base-100: var(--pw-rack-700);
+  --pw-color-base-200: var(--pw-rack-700);
+  --pw-color-base-300: var(--pw-rack-800);
+  --pw-color-base-content: #e8e8e8;
+  --pw-color-disabled-content: #9a9a9a;
+
+  --pw-color-primary: var(--pw-navy-700);
+  --pw-color-primary-content: #ffffff;
+  --pw-color-titlebar: var(--pw-navy-900);
+  --pw-color-titlebar-content: #d8d8e4;
+  --pw-color-focus: #ffffff;
+  --pw-color-focus-contrast: var(--pw-rack-950);
+  --pw-color-range: var(--pw-navy-400);
+
+  --pw-color-lcd: var(--pw-lcd-black);
+  --pw-color-lcd-content: var(--pw-lcd-green-300);
+
+  --pw-color-success: var(--pw-moss-800);
+  --pw-color-success-content: var(--pw-moss-300);
+  --pw-color-warning: var(--pw-amber-800);
+  --pw-color-warning-content: var(--pw-amber-300);
+  --pw-color-error: var(--pw-rust-800);
+  --pw-color-error-content: var(--pw-rust-300);
+
+  /* On a dark chassis the LIGHT edge is the one that reads as the boundary,
+     so the roles keep their names and swap which end of the ramp they point
+     at. The boundary is held to 3:1 against the ground like every other
+     control edge in this kit, which on #3f3f3f means it cannot be the near
+     black the light theme uses. */
+  --pw-bevel-light: #707070;
+  --pw-bevel-face: #4a4a4a;
+  --pw-bevel-shade: var(--pw-rack-800);
+  --pw-bevel-frame: var(--pw-rack-900);
+  --pw-bevel-boundary: #9a9a9a;
+  /* 2:1 against the chassis, which is this tier's own contract rather than a
+     WCAG floor: a grouping line identifies nothing and changes no state, so
+     1.4.11 does not reach it. #666 is the light theme's divider and it lands
+     at 1.83 on #3f3f3f, which the gate caught. */
+  --pw-color-divider: #707070;
+
+  --pw-gloss-lit-base-200: var(--pw-rack-700);
+  --pw-gloss-lit-primary: var(--pw-navy-700);
+  --pw-color-scrim: rgba(0, 0, 0, 0.7);
+}
+
+/**
+ * SKIN — the rack skin's own knobs.
+ *
+ * Named for the thing rather than for the product: a rack-mount unit's
+ * faceplate, silver and bevelled, with a phosphor display set into it. The
+ * player it is drawn from is named in the README as prior art, which is what
+ * everybody in this genre does and is fine; it is not what a consumer types.
+ * test/contract.test.mjs holds that line, and it holds it because this exact
+ * palette shipped under the product's name once already.
+ *
+ * The fourth skin, and the one that argues the kit's central claim hardest,
+ * because it is the furthest thing from the first. Chrome is Web 2.0 on
+ * purpose: gloss, stacked bevels, blue gradients, rounded controls. A 1998
+ * bitmap skin is its opposite on every one of those axes, and this file is
+ * the whole difference. No component changes, no forked rule.
+ *
+ * ── Where it came from ───────────────────────────────────────────────────
+ * demo/player/classic.html had all of this as a page-local block for a while,
+ * which proved it worked and proved nothing else: a look that lives in a demo
+ * is a look a consumer cannot have. It is a skin now, so `data-skin="rack"`
+ * is the whole installation.
+ *
+ * ── What it does NOT change ──────────────────────────────────────────────
+ * The density axis. Winamp's transport buttons were 23x18 and this kit's
+ * floor is a 32px target, held by a contract test, so the SKIN does not go
+ * near it. demo/player/classic.html still overrides the density knobs on its
+ * own page, under its own attribute, which is exactly the line: a consumer
+ * may go under the floor and the package may not take them there.
+ */
+
+[data-skin="rack"],
+[data-skin="rack"][data-theme="light"] {
+  /* Depth 1, not the half-pixel that looked clever. Every offset in
+     bevel.css is a calc of this, so 0.5 does draw the one-pixel edge a 1998
+     skin has, and it also asks for half-pixel shadows, which cannot be drawn:
+     the browser antialiases them and where the grey lands depends on the
+     element's own subpixel position. Two buttons side by side rasterised
+     differently and read as misaligned. The tier colours carry the era; the
+     depth just has to be an integer. */
+  --pw-bevel-depth: 1;
+
+  /* Chrome's sheet, deliberately. A period toolbar mark is solid, geometric
+     and sized to sit on a button, which is what that set already is. Drawing
+     it again to end up in the same place is how a sheet gains twenty-four
+     glyphs and no new information. */
+  --pw-icon-sheet: url("../assets/icons.svg");
+
+  /* Nothing on a bitmap skin is glossy, lit, blurred or rounded. */
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 1px;
+  --pw-glow-color: var(--pw-lcd-green-300);
+
+  --pw-glass-blur: 0px;
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+  --pw-clip-control: none;
+  --pw-clip-box: none;
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+
+  /* A button on this chassis is an object you push, and it moves. Same
+     reasoning chrome uses; this is the other skin that earns the travel. */
+  --pw-press-travel: 1px;
+
+  /* The display is flush with the panel, not sunk into it. Winamp's is flat
+     black in the bitmap with no inset at all. */
+  --pw-lcd-depth: 0;
+
+  --pw-scrollbar-width: auto;
+  --pw-scrollbar-thumb: var(--pw-rack-100);
+  --pw-scrollbar-track: var(--pw-rack-200);
+
+  /* The UI face of the era. Not a system stack: Tahoma is what the dialogs
+     and the chassis labels were actually set in, and it is on every machine
+     that has ever had Office. */
+  --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
+  --pw-text-ui: 0.6875rem;
+
+  --pw-selected-bg: var(--pw-navy-800);
+  --pw-selected-content: var(--pw-rack-000);
+  --pw-selected-mark: none;
+
+  --pw-leading-ui: 1.2;
+  --pw-tracking-ui: 0;
+
+  /* An interface made of bitmaps does not ease. It snaps. */
+  --pw-duration-hover: var(--pw-duration-snap);
+  --pw-duration-enter: var(--pw-duration-snap);
+  --pw-ease-press: var(--pw-ease-out);
+  --pw-ease-enter: var(--pw-ease-out);
+  --pw-ease-state: var(--pw-ease-out);
+
+  --pw-control-pad-x: var(--pw-space-sm);
+  --pw-control-gap: var(--pw-space-xs);
+  --pw-panel-pad: var(--pw-space-md);
+
+  --pw-color-vis-bg: var(--pw-lcd-black);
+  --pw-color-vis-grid: transparent;
+  --pw-color-vis-low: var(--pw-lcd-green-500);
+  --pw-color-vis-mid: #00c800;
+  --pw-color-vis-high: var(--pw-lcd-green-300);
+  --pw-color-vis-peak: #b0b0b0;
+}
+
+[data-skin="rack"][data-theme="dark"] {
+  --pw-bevel-depth: 1;
+  --pw-icon-sheet: url("../assets/icons.svg");
+
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 2px;
+  --pw-glow-color: var(--pw-lcd-green-300);
+
+  --pw-glass-blur: 0px;
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+  --pw-clip-control: none;
+  --pw-clip-box: none;
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+
+  --pw-press-travel: 1px;
+  --pw-lcd-depth: 0;
+
+  --pw-scrollbar-width: auto;
+  --pw-scrollbar-thumb: #4a4a4a;
+  --pw-scrollbar-track: var(--pw-rack-800);
+
+  --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
+  --pw-text-ui: 0.6875rem;
+
+  /* The deep navy, not the primary. navy-700 is pinned by the focus ring: it
+     has to clear 3:1 against black and 4.5:1 against white at once, which
+     lands it mid-tone, and a selected row's SECONDARY line is its content at
+     reduced opacity. White at 0.85 over that mid-tone composites to #e0e9f4
+     and measures 4.22 against it, which check-colour caught on the playlist's
+     duration column and the declared-pair block could not, because nothing
+     declares a pair for a colour that only exists after compositing. */
+  --pw-selected-bg: var(--pw-navy-900);
+  --pw-selected-content: #ffffff;
+  --pw-selected-mark: none;
+
+  --pw-leading-ui: 1.2;
+  --pw-tracking-ui: 0;
+
+  --pw-duration-hover: var(--pw-duration-snap);
+  --pw-duration-enter: var(--pw-duration-snap);
+  --pw-ease-press: var(--pw-ease-out);
+  --pw-ease-enter: var(--pw-ease-out);
+  --pw-ease-state: var(--pw-ease-out);
+
+  --pw-control-pad-x: var(--pw-space-sm);
+  --pw-control-gap: var(--pw-space-xs);
+  --pw-panel-pad: var(--pw-space-md);
+
+  --pw-color-vis-bg: var(--pw-lcd-black);
+  --pw-color-vis-grid: transparent;
+  --pw-color-vis-low: var(--pw-lcd-green-500);
+  --pw-color-vis-mid: #00c800;
+  --pw-color-vis-high: var(--pw-lcd-green-300);
+  --pw-color-vis-peak: #b0b0b0;
+}
+
+/* THE DENSITY AXIS, RESTATED, AND WRITTEN LAST.
+
+   [data-skin="rack"] and [data-density="compact"] are both (0,1,0) and this
+   file imports after density.css, so the blocks above would win the tie and
+   hold their padding at both densities. This selector is (0,2,0), which
+   settles that half.
+
+   The position settles the other half. The theme block above is also (0,2,0)
+   and carries the same knobs, because every skin x theme block here declares
+   its full set, and a tie on specificity goes to whichever is written last.
+   The paper skin shipped this exact bug with the exact same comment above it
+   claiming it could not happen. test/contract.test.mjs holds the order now. */
+[data-skin="rack"][data-density="compact"] {
+  --pw-control-pad-x: var(--pw-space-xs);
+  --pw-control-gap:   var(--pw-space-2xs);
+  --pw-panel-pad:     var(--pw-space-sm);
+}
+
 /* Presets: palettes within a skin, scoped under the skin they belong to, so
    an incoherent pairing matches nothing rather than rendering. One file each,
    imported after every skin so a preset's themed blocks are decided on
