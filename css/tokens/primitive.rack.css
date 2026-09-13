@@ -1,0 +1,57 @@
+/**
+ * PRIMITIVE — the rack skin's ramp.
+ *
+ * Two families, because this skin has two very different grounds. Light is
+ * Windows 95's own silver, which is what a 1998 application chassis was made
+ * of and what every bevel in that era was drawn from. Dark is Winamp's actual
+ * main.bmp grey, which is a shade nobody else in this kit uses: near-black
+ * enough to sit under a phosphor display and light enough to bevel.
+ *
+ * The phosphor is its own family and it does not follow the theme. A lit
+ * display is a light source; it does not dim because the page did. Same
+ * argument semantic.chrome.css makes for --pw-color-lcd.
+ */
+
+[data-skin="rack"] {
+  /* Win95 silver. The four tiers a raised control is drawn from, and they are
+     the reason this skin exists: 255, 223, 128, 0 is the exact ladder every
+     3D border in that decade used. */
+  --pw-rack-000: #ffffff;
+  --pw-rack-050: #dfdfdf;
+  --pw-rack-100: #c0c0c0;
+  --pw-rack-200: #a8a8a8;
+  --pw-rack-300: #808080;
+  --pw-rack-500: #666666;
+  --pw-rack-700: #3f3f3f;
+  --pw-rack-800: #2a2a2a;
+  --pw-rack-900: #1a1a1a;
+  --pw-rack-950: #000000;
+
+  /* The navy a period title bar and a selected row were both painted in.
+     Every one of these is a number the contrast gate chose, not one I liked:
+     navy-700 carries BOTH halves of the focus ring on the dark chassis, so it
+     has to clear 3:1 against black and 4.5:1 against white at the same time,
+     which is a narrow band and #2f6fb5 is in it. The first pass used the
+     authentic #0a3a6a and failed the black half at 1.83. */
+  --pw-navy-400: #5278b2;
+  --pw-navy-700: #2f6fb5;
+  --pw-navy-800: #000080;
+  --pw-navy-900: #00004a;
+
+  /* Phosphor. Fixed across both themes, for the reason in the header. */
+  --pw-lcd-green-300: #00e000;
+  --pw-lcd-green-500: #00a000;
+  --pw-lcd-black: #000000;
+
+  /* Status, in the muted inks a period dialog used. Nothing here is
+     saturated: a 1998 chassis had no room for a bright chip. */
+  --pw-moss-100: #c6dcc6;
+  --pw-moss-800: #003a00;
+  --pw-amber-100: #e8dcb0;
+  --pw-amber-800: #4a3000;
+  --pw-rust-100: #e6c0c0;
+  --pw-rust-800: #6a0000;
+  --pw-moss-300: #7fae7f;
+  --pw-amber-300: #c9b167;
+  --pw-rust-300: #d18585;
+}

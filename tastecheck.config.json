@@ -18,7 +18,9 @@
       "css/tokens/semantic.paper.css",
       "css/tokens/skin.paper.css",
       "css/tokens/presets/redline.css",
-      "css/tokens/presets/newsprint.css"
+      "css/tokens/presets/newsprint.css",
+      "css/tokens/primitive.rack.css",
+      "css/tokens/semantic.rack.css"
     ],
     "themes": [
       {
@@ -121,6 +123,21 @@
           "[data-skin=\"paper\"]",
           "[data-skin=\"paper\"][data-preset=\"newsprint\"]",
           "[data-skin=\"paper\"][data-preset=\"newsprint\"][data-theme=\"dark\"]"
+        ]
+      },
+      {
+        "name": "rack-light",
+        "scopes": [
+          ":root",
+          "[data-skin=\"rack\"]"
+        ]
+      },
+      {
+        "name": "rack-dark",
+        "scopes": [
+          ":root",
+          "[data-skin=\"rack\"]",
+          "[data-skin=\"rack\"][data-theme=\"dark\"]"
         ]
       }
     ],
@@ -285,6 +302,9 @@
       "css/tokens/primitive.paper.css",
       "css/tokens/semantic.paper.css",
       "css/tokens/skin.paper.css",
+      "css/tokens/primitive.rack.css",
+      "css/tokens/semantic.rack.css",
+      "css/tokens/skin.rack.css",
       "css/treatment/halftone.css",
       "css/tokens/presets/redline.css",
       "css/tokens/presets/newsprint.css"
@@ -370,6 +390,14 @@
       {
         "name": "paper-newsprint-dark",
         "after": "document.documentElement.setAttribute('data-skin', 'paper'); document.documentElement.setAttribute('data-preset', 'newsprint'); document.documentElement.setAttribute('data-theme', 'dark')"
+      },
+      {
+        "name": "rack-light",
+        "after": "document.documentElement.setAttribute('data-skin', 'rack')"
+      },
+      {
+        "name": "rack-dark",
+        "after": "document.documentElement.setAttribute('data-skin', 'rack'); document.documentElement.setAttribute('data-theme', 'dark')"
       }
     ],
     "targets": [

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-skin="chrome" data-theme="light" data-look="winamp">
+<html lang="en" data-skin="rack" data-theme="light" data-look="winamp">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,10 +43,10 @@
   <p class="note">
     <strong>275 &times; 116.</strong> Winamp 2's real window, at its real size, and it
     plays. The look is a block of token values and no component CSS: half bevel depth,
-    gloss off, radius off, Win95 silver, phosphor green. What it gives up is the 24px
-    touch target, because Winamp's buttons were 23&times;18, so this page is knowingly
-    under WCAG 2.5.8 and sits outside <code>check:a11y</code>. The package still ships
-    44px and 32px only.
+    gloss off, radius off, Win95 silver, phosphor green. Winamp's buttons were 23&times;18 and the kit's floor is
+    a 32px target, so this page is knowingly under WCAG 2.5.8 and sits outside
+    <code>check:a11y</code>. The skin does not go near the density axis; the package
+    still ships 44px and 32px only.
     <a href="./index.html">The same components at a size that passes</a>.
   </p>
 
@@ -56,7 +56,7 @@
     import { createElement as h } from 'react';
     import { createRoot } from 'react-dom/client';
     import {
-      Progress, Readout, Slider, Toggle, Transport, TransportButton, Visualiser, Window,
+      Readout, Slider, Toggle, Transport, TransportButton, Visualiser, Window,
     } from '../../dist/index.js';
     import { usePlayer, clock } from './audio.js';
 
@@ -112,9 +112,16 @@
           h(Toggle, { pressed: p.eqOn, onPressedChange: p.setEqOn }, 'EQ'),
           h(Toggle, { pressed: true, onPressedChange: () => {} }, 'PL')),
 
+        /* A Slider, not a Progress. Winamp's position bar is draggable and a
+           Progress is a bar you can only watch: role="progressbar", not
+           focusable, no thumb. It rendered as a flat line with nothing in it,
+           which is what a progress bar correctly looks like and what a seek
+           bar does not. transport.tsx argues the same split for the same
+           reason. */
         h('span', { className: 'at at-seek' },
-          h(Progress, { value: p.elapsed, max: 30, label: 'Position',
-            format: (v, m) => `${clock(v)} of ${clock(m)}` })),
+          h(Slider, { label: 'Position', value: [p.elapsed], max: 30, step: 0.5,
+            onValueChange: ([v]) => p.seek(v),
+            format: (v) => `${clock(v)} of ${clock(30)}` })),
 
         h('span', { className: 'at at-tx' },
           h(Transport, { label: 'Transport' },
