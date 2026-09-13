@@ -115,7 +115,21 @@ body {
   letter-spacing: 0.06em;
   font-family: var(--pw-font-ui);
 }
-.win .pw-title-controls { gap: 1px; }
+/* Pinned, not centred.
+
+   The bar is 14 tall and the buttons are 9, so flex centring puts them at
+   y=2.5, and half a pixel on a 9x9 button whose whole edge is a 1px bevel
+   antialiases the edge away.
+
+   Winamp puts them at x 244, 254, 264 and y 3, in a 275 wide window. Flex was
+   leaving one pixel after the close button instead of two, and starting at
+   245. */
+.win .pw-title-controls {
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  gap: 1px;
+}
 .win .pw-title-button {
   width: 9px; height: 9px;
   min-width: 0; min-height: 0;
