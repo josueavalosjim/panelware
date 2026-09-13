@@ -181,10 +181,10 @@ body {
 .at-stereo  { left: 212px; top: 42px; }
 .at-vol     { left: 107px; top: 57px; width: 68px; }
 .at-bal     { left: 177px; top: 57px; width: 38px; }
-.at-eqpl    { left: 219px; top: 58px; display: flex; gap: 1px; }
+.at-eqpl    { left: 219px; top: 58px; display: flex; gap: 0; }
 .at-seek    { left: 16px;  top: 72px; width: 248px; }
 .at-tx      { left: 16px;  top: 88px; }
-.at-shuffle { left: 164px; top: 89px; display: flex; gap: 1px; }
+.at-shuffle { left: 164px; top: 89px; display: flex; gap: 0; }
 
 .win .at-vis .pw-visualiser {
   width: 76px; height: 16px; min-height: 0;
@@ -209,23 +209,47 @@ body {
    three do not, which is why SHUF measured 23.28 against REP's 23.00 and why
    the pair sat on different subpixels. A fractional width is also a fractional
    x for whatever follows it. */
+/* Winamp's own button sizes, which are NOT all the same.
+
+   Making them equal was a fix for a different bug: two buttons that differed
+   by 0.28px because a min-width plus padding let four glyphs grow the box and
+   three not. Equal solved that and introduced this one, because the real
+   shuffle button is 47x15 and the real repeat is 28x15. SHUF in a 23px box is
+   the word touching both walls, which is what it looked like.
+
+   Fixed widths, at the sizes the bitmap actually uses. */
 .win .at-eqpl .pw-toggle,
 .win .at-shuffle .pw-toggle {
-  width: 23px;
   min-width: 0;
-  height: 12px;
   min-height: 0;
   padding: 0;
   font: 8px/1 var(--pw-font-ui);
   overflow: hidden;
 }
+.win .at-eqpl .pw-toggle { width: 23px; height: 12px; }
+.win .at-shuffle .pw-toggle:first-child { width: 47px; height: 15px; }
+.win .at-shuffle .pw-toggle:last-child  { width: 28px; height: 15px; }
 
-.win .at-tx { display: flex; gap: 0; }
+/* The transport buttons abut. The toolbar's own gap comes from
+   --pw-space-3xs, which this page sets to 1px, and one pixel between each of
+   five buttons walked the row three pixels right of where Winamp puts it. */
+.win .at-tx .pw-transport { gap: 0; }
 .win .at-tx .pw-transport-button {
   width: 23px; height: 18px;
   min-width: 23px; min-height: 18px;
+  /* 23 minus a 16px icon is 7, and half of 7 is 3.5. A centred icon therefore
+     lands on a half pixel, which the browser resolves by antialiasing, and a
+     glyph that is a SOLID SQUARE shows that instantly where a chevron hides
+     it: the stop mark read as off-centre while measuring dead centre. Pushed
+     to a whole pixel instead, four on the left and three on the right, which
+     is the same asymmetry a bitmap artist would have picked. */
+  justify-content: flex-start;
+  padding-left: 4px;
 }
-.win .at-tx .pw-transport-button:last-child { width: 22px; min-width: 22px; margin-left: 5px; }
+.win .at-tx .pw-transport-button:last-child {
+  width: 22px; min-width: 22px; height: 16px; min-height: 16px;
+  margin-left: 5px; padding-left: 3px;
+}
 .win .at-tx .pw-transport-button .pw-icon { --pw-icon-scale: 1; }
 
 /* The two pots and the seek bar are Winamp's: a shallow groove with a raised
