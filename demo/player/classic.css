@@ -71,10 +71,20 @@ body {
   --pw-bevel-boundary: #000000;
   --pw-color-divider: #808080;
 
-  /* HALF DEPTH IS THE WHOLE TRICK. Every bevel offset in bevel.css is a calc
-     of this, so 0.5 turns the kit's two-pixel stacked edge into the one-pixel
-     edge a 1998 skin draws, with no rule touched anywhere. */
-  --pw-bevel-depth: 0.5;
+  /* Depth 1, and NOT the 0.5 that looked clever.
+
+     Every bevel offset in bevel.css is a calc of this, so 0.5 does produce a
+     one-pixel edge where the kit draws two, which is what a 1998 skin has. It
+     also asks for half-pixel box-shadow offsets, and half a pixel cannot be
+     drawn: the browser antialiases it, and where the grey lands depends on the
+     element's own subpixel position. SHUF starts at x.5 and REP at x.78, so
+     the same edge rasterised differently on each and the pair read as
+     misaligned. It was not misaligned. It was two different antialiasings of
+     one instruction.
+
+     A crisp two-pixel edge beats a mushy one-pixel one, and the tier colours
+     below are what carry the 1998 reading anyway. */
+  --pw-bevel-depth: 1;
 
   /* Nothing on a bitmap skin is glossy, lit, blurred or rounded. */
   --pw-gloss-opacity: 0;
@@ -264,12 +274,20 @@ body {
   letter-spacing: 0.04em;
 }
 
+/* Fixed, not minimum. Winamp's buttons are bitmaps and every one of them is
+   exactly 23 wide; a min-width plus padding means four glyphs grow the box and
+   three do not, which is why SHUF measured 23.28 against REP's 23.00 and why
+   the pair sat on different subpixels. A fractional width is also a fractional
+   x for whatever follows it. */
 .win .at-eqpl .pw-toggle,
 .win .at-shuffle .pw-toggle {
-  min-height: 12px; height: 12px;
-  min-width: 23px;
-  padding: 0 2px;
+  width: 23px;
+  min-width: 0;
+  height: 12px;
+  min-height: 0;
+  padding: 0;
   font: 8px/1 var(--pw-font-ui);
+  overflow: hidden;
 }
 
 .win .at-tx { display: flex; gap: 0; }
