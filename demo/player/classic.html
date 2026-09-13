@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-skin="chrome" data-theme="dark" data-density="classic">
+<html lang="en" data-skin="chrome" data-theme="light" data-look="winamp">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,14 +33,13 @@
 </head>
 <body>
   <p class="note">
-    <strong>275 &times; 116, Winamp 2's real size.</strong> Every surface is the kit's
-    own CSS. What it gives up is the 24px touch target: these buttons are 23&times;18
-    because Winamp's were, so this page is knowingly under WCAG 2.5.8 and is left out
-    of <code>check:a11y</code>. The package still ships 44px and 32px only.
-    <a href="./index.html">The same composition at a size that passes</a>.
-    Shown at its true size: use browser zoom to look closer, and
-    <code>scripts/shoot.mjs</code> captures it at a real 4x device pixel ratio,
-    which is how a pixel interface should be photographed.
+    <strong>275 &times; 116.</strong> Winamp 2's real window, at its real size, built
+    from components on npm. The look is <em>fourteen token values and no component
+    changes</em>: half bevel depth, gloss off, radius off, Win95 silver, phosphor
+    green. What it gives up is the 24px touch target, because Winamp's buttons were
+    23&times;18, so this page is knowingly under WCAG 2.5.8 and sits outside
+    <code>check:a11y</code>. The package still ships 44px and 32px only.
+    <a href="./index.html">The same components at a size that passes</a>.
   </p>
 
   <div class="classic-stage">

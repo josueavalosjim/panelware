@@ -1,28 +1,27 @@
 /**
- * THE 275x116 REPLICA.
+ * WINAMP 2, AT 275x116, IN THE LIGHT PALETTE.
  *
- * Winamp 2's main window was 275 by 116 pixels. Every coordinate in this file
- * is one of its real ones. The kit's own CSS paints every surface; what this
- * file does is place the components on that grid and shrink the control knobs
- * to fit it.
+ * Two halves, and they are deliberately kept apart.
+ *
+ * THE LOOK is the block marked [data-look="winamp"] below, and it is nothing
+ * but token assignments. No selector in it names a component, nothing is
+ * restyled, and every value is one the kit already documents as a skin's to
+ * move. That is the point: Winamp's chassis is a set of numbers, not a fork.
+ * The chrome skin ships Web 2.0 on purpose, all gloss and 2px stacked bevels
+ * and blue gradients, and a 1998 bitmap skin is the opposite of that in every
+ * axis. Trying to drag the surface back with page CSS is what made the first
+ * attempt look like neither one.
+ *
+ * THE GRID is everything after it, and it is position only. Every coordinate
+ * is one of Winamp's real ones, measured off its main window.
  *
  * ── What this gives up, said plainly ─────────────────────────────────────
- * WCAG 2.5.8 asks for a 24 by 24 target. Winamp's transport buttons were 23
- * by 18, its volume slider thumb was 14 by 11, and its title bar buttons were
- * 9 by 9. There is no arrangement of those numbers that clears the floor, so
- * this page is under it, deliberately and visibly.
- *
- * The kit is not: css/tokens/density.css ships comfortable at 44px and compact
- * at 32px, a contract test holds both over 24, and nothing here changes either
- * of them. The overrides below live on THIS PAGE, under a data attribute the
- * package does not define, which is the difference between a kit that lets a
- * consumer do this and a kit that does it to them. demo/player/index.html is
- * the same composition at a size that passes, and it is the one the showcase
- * uses.
- *
- * Excluded from check:a11y on purpose. That check scans states.html and
- * index.html, and adding a page that is knowingly under the floor would
- * either fail the gate or teach somebody to add an exception to it.
+ * WCAG 2.5.8 asks for 24x24. Winamp's transport buttons were 23x18, its
+ * volume grabber 14x11, its title buttons 9x9. There is no arrangement of
+ * those numbers that clears the floor, so this page is under it, visibly and
+ * on purpose, and it is left out of check:a11y rather than given an exception
+ * inside it. css/tokens/density.css still ships 44px and 32px only and a
+ * contract test still holds both over 24. Nothing in the package changes.
  */
 
 body {
@@ -30,72 +29,145 @@ body {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  gap: 28px;
-  background: #1b1d21;
-  font: 12px/1.5 var(--pw-font-mono, ui-monospace, Menlo, monospace);
-  color: #c8d0d8;
+  gap: 24px;
+  background: #5a7a9a;
+  font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #f2f6fa;
 }
 
 .note {
-  max-width: 62ch;
+  max-width: 64ch;
   text-align: center;
-  opacity: 0.72;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
-.note strong { color: #ffd479; font-weight: 400; }
-.note a { color: #8fc0f0; }
+.note strong { font-weight: 400; color: #ffe9a8; }
+.note a { color: #cfe6ff; }
 
-/* The stage. 275 by 116 exactly, and not scaled here.
+/* ─────────────────────────────────────────────────────────────────────────
+   THE LOOK. Tokens only.
+   ───────────────────────────────────────────────────────────────────────── */
 
-   Nothing in this file magnifies the window, because a pixel interface should
-   be photographed at a real device pixel ratio rather than stretched in CSS.
-   Browser zoom for reading; scripts/shoot.mjs captures at
-   deviceScaleFactor 4. */
-.classic-stage {
-  width: 275px;
-  height: 116px;
-}
+[data-look="winamp"] {
+  /* Win95 silver, which is what a light classic skin is. Four tiers, one
+     pixel each: white top-left, silver face, grey bottom-right, black outer.
+     The chrome skin spends two pixels on each and glosses the result. */
+  --pw-silver-000: #ffffff;
+  --pw-silver-100: #dfdfdf;
+  --pw-silver-200: #c0c0c0;
+  --pw-silver-300: #b4b4b4;
+  --pw-silver-500: #808080;
+  --pw-silver-700: #000000;
 
-/* THE DISPLAYS CARRY NO PADDING HERE, and that line is the whole reason the
-   clock was rendering with its bottom segments missing.
+  --pw-color-base-100: #c0c0c0;
+  --pw-color-base-200: #c0c0c0;
+  --pw-color-base-300: #a8a8a8;
+  --pw-color-base-content: #000000;
+  --pw-color-disabled-content: #808080;
 
-   .pw-lcd ships --pw-space-sm and --pw-space-md of padding, which is right: a
-   readout in a panel needs air. On this grid it is fatal. Winamp puts the time
-   at y=26 and the analyser at y=43, seventeen pixels apart, and the digits are
-   thirteen tall. Sixteen pixels of vertical padding makes the readout box 29
-   tall, so it runs to y=55, and the analyser is painted after it in the DOM
-   and lands on top of the bottom third of every digit.
+  --pw-bevel-light: #ffffff;
+  --pw-bevel-face: #c0c0c0;
+  --pw-bevel-shade: #808080;
+  --pw-bevel-frame: #000000;
+  --pw-bevel-boundary: #000000;
+  --pw-color-divider: #808080;
 
-   It looked exactly like a clipping or resampling bug, and a good hour went
-   into chasing it as one: every computed value on the cell matched a clone
-   that rendered perfectly, mask-image, mask-size, mask-position, box size,
-   --pw-cell-x, byte for byte. They matched because nothing was wrong with
-   them. The clone rendered correctly because nothing was sitting on it.
+  /* HALF DEPTH IS THE WHOLE TRICK. Every bevel offset in bevel.css is a calc
+     of this, so 0.5 turns the kit's two-pixel stacked edge into the one-pixel
+     edge a 1998 skin draws, with no rule touched anywhere. */
+  --pw-bevel-depth: 0.5;
 
-   Winamp's own displays have no padding either. The bezel is the window. */
-.win .pw-lcd { padding: 1px 2px; }
+  /* Nothing on a bitmap skin is glossy, lit, blurred or rounded. */
+  --pw-gloss-opacity: 0;
+  --pw-gloss-glare-alpha: 0;
+  --pw-gloss-cap-alpha: 0;
+  --pw-gloss-cap-height: 0%;
+  --pw-glass-blur: 0px;
+  --pw-radius-control: 0;
+  --pw-radius-box: 0;
+  --pw-clip-control: none;
+  --pw-clip-box: none;
+  --pw-texture: none;
+  --pw-texture-opacity: 0;
+  --pw-shadow-outer-color: rgba(0, 0, 0, 0);
+  --pw-press-travel: 1px;
 
-/* Winamp's knobs, which are all under the floor. Scoped to this page's own
-   attribute so nothing in the package is redefined. */
-[data-density="classic"] {
+  /* The title bar is Windows' own active gradient, which is what Winamp sat
+     inside and what its own strip imitates. */
+  --pw-color-titlebar: #000080;
+  --pw-color-titlebar-content: #ffffff;
+
+  /* The display. Black ground, phosphor green, and a glow small enough to be
+     a CRT rather than a neon sign. */
+  --pw-color-lcd: #000000;
+  --pw-color-lcd-content: #00e000;
+  --pw-glow-color: #00e000;
+  --pw-glow-intensity: 1;
+  --pw-glow-radius: 1px;
+
+  --pw-color-primary: #000080;
+  --pw-color-primary-content: #ffffff;
+  --pw-color-focus: #000000;
+  /* The pots are grooves, not progress bars. XP fills a slider with the accent
+     and that is what made these read as three blue loading bars: Winamp's
+     volume, balance and seek are a dark channel with a raised grey grabber in
+     it, and the fill is the channel's own shadow. */
+  --pw-color-range: #6a6a6a;
+  --pw-selected-bg: #000080;
+  --pw-selected-content: #ffffff;
+  --pw-selected-mark: none;
+
+  --pw-color-vis-bg: #000000;
+  /* No grid. The kit draws a faint dot lattice behind the analyser, which is
+     an instrument's vocabulary and reads as speckle at 76x16. Winamp's is
+     bare black with a grey peak dash riding each bar. */
+  --pw-color-vis-grid: transparent;
+  --pw-color-vis-low: #00a800;
+  --pw-color-vis-mid: #00c800;
+  --pw-color-vis-high: #00e800;
+  --pw-color-vis-peak: #b0b0b0;
+
+  --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
+
+  /* Winamp's knobs. All of them under the floor; see the header. */
   --pw-control-h: 18px;
   --pw-control-min-w: 23px;
-  --pw-control-pad-x: 3px;
-  --pw-control-gap: 1px;
+  --pw-control-pad-x: 2px;
+  --pw-control-gap: 0px;
   --pw-control-text: 9px;
+  --pw-text-ui: 9px;
+  --pw-text-micro: 8px;
+  --pw-leading-ui: 1;
+  --pw-tracking-ui: 0;
   --pw-thumb-w: 14px;
   --pw-thumb-h: 11px;
   --pw-thumb-hit: 11px;
-  --pw-track-h: 4px;
+  --pw-track-h: 2px;
   --pw-badge-h: 10px;
-  --pw-panel-pad: 4px;
+  --pw-panel-pad: 0px;
   --pw-lcd-scale: 1;
-  --pw-radius-control: 0;
-  --pw-radius-box: 0;
   --pw-focus-width: 1px;
   --pw-focus-offset: 0px;
+  --pw-space-3xs: 1px;
+  --pw-space-2xs: 1px;
+  --pw-space-xs: 2px;
+  --pw-space-sm: 2px;
+  --pw-space-md: 3px;
+  --pw-space-lg: 4px;
 }
 
-/* Absolute placement on the 275x116 grid. Coordinates are Winamp's. */
+/* ─────────────────────────────────────────────────────────────────────────
+   THE GRID. Winamp's own coordinates, and nothing but position.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.classic-stage {
+  /* Not scaled. A pixel interface is photographed at a real device pixel
+     ratio, not stretched in CSS: browser zoom to read it, and
+     scripts/shoot.mjs captures at deviceScaleFactor 4. */
+  width: 275px;
+  height: 116px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
 .win {
   position: relative;
   width: 275px;
@@ -108,37 +180,63 @@ body {
   inset: 0 0 auto 0;
   height: 14px;
   min-height: 0;
-  padding: 0 2px;
+  padding: 0 1px 0 3px;
 }
-.win .pw-title { font-size: 9px; }
-.win .pw-title-button { width: 9px; height: 9px; min-width: 0; min-height: 0; padding: 0; }
-.win .pw-title-button .pw-icon { --pw-icon-scale: 1; transform: scale(0.55); }
+.win .pw-title {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  font-family: var(--pw-font-ui);
+}
+.win .pw-title-controls { gap: 1px; }
+.win .pw-title-button {
+  width: 9px; height: 9px;
+  min-width: 0; min-height: 0;
+  padding: 0;
+}
+.win .pw-title-button .pw-icon { --pw-icon-scale: 1; transform: scale(0.5); }
 
-/* The body paints the ground and nothing else. Every control is a sibling of
-   it rather than a child, so `top` resolves against the WINDOW and Winamp's
-   own coordinates can be written down unaltered.
-
-   They were children first, and every one of them was therefore 14 pixels too
-   low, which the transport row showed by having its bottom four pixels eaten
-   by the body's overflow. Winamp's numbers are window numbers; measuring them
-   from inside the title bar's shadow is a different grid. */
+/* The body paints the ground and nothing else. Every control is a SIBLING of
+   it, so `top` resolves against the window and Winamp's numbers can be
+   written down unaltered. They were children once and every one of them was
+   therefore 14px low, which the transport row showed by losing its bottom
+   four pixels inside the body's overflow. */
 .win .pw-window-body {
   position: absolute;
   inset: 14px 0 0 0;
   padding: 0;
+  border-radius: 0;
 }
 
 .at { position: absolute; z-index: 1; }
 
-/* The time display: 36,26. Winamp's digits were 9x13 and so are this kit's,
-   because both come from the same 1998 sheet. At --pw-lcd-scale: 1 the
-   readout is already the right size with nothing to adjust. */
+/* Winamp puts the clock at 36,26 and the analyser at 24,43, seventeen pixels
+   apart, and a digit is thirteen tall. .pw-lcd ships eight pixels of vertical
+   padding, which is right in a panel and fatal here: the readout box became
+   29 tall, ran to y=55, and the analyser painted straight over the bottom
+   third of every digit. It read exactly like a clipping bug and was chased as
+   one for an hour. Nothing was clipped. Something was on top. */
+.win .pw-lcd,
+.win .pw-visualiser {
+  padding: 0;
+  /* Flat. Both of these sit in the shared elevation slot, so they arrive with
+     a sunken bevel: a white top-left highlight and a grey bottom-right shade,
+     drawn INSIDE the box. On a 400px panel that reads as a recessed well. On a
+     13px black display it is a white L across the digits and a light rim in
+     every 1px gap between cells, which is what the first light shot looked
+     like and why it read as a broken mask rather than as an edge.
+
+     Winamp's display is flat black in the bitmap, with no inset at all. The
+     slot is the supported way to say that: assign it nothing. */
+  --pw-elev: none;
+  --pw-elev-fill: none;
+}
+
 .at-time    { left: 36px;  top: 26px; }
-.at-vis     { left: 24px;  top: 43px; width: 76px; height: 16px; }
-.at-title   { left: 111px; top: 24px; width: 154px; }
-.at-kbps    { left: 111px; top: 43px; font-size: 8px; opacity: 0.9; }
-.at-khz     { left: 156px; top: 43px; font-size: 8px; opacity: 0.9; }
-.at-stereo  { left: 212px; top: 41px; font-size: 8px; opacity: 0.9; }
+.at-vis     { left: 24px;  top: 43px; }
+.at-title   { left: 111px; top: 27px; }
+.at-kbps    { left: 111px; top: 43px; }
+.at-khz     { left: 156px; top: 43px; }
+.at-stereo  { left: 212px; top: 42px; }
 .at-vol     { left: 107px; top: 57px; width: 68px; }
 .at-bal     { left: 177px; top: 57px; width: 38px; }
 .at-eqpl    { left: 219px; top: 58px; display: flex; gap: 1px; }
@@ -146,14 +244,36 @@ body {
 .at-tx      { left: 16px;  top: 88px; }
 .at-shuffle { left: 164px; top: 89px; display: flex; gap: 1px; }
 
-.win .at-vis .pw-visualiser { width: 76px; height: 16px; min-height: 0; }
+.win .at-vis .pw-visualiser {
+  width: 76px; height: 16px; min-height: 0;
+  gap: 1px; padding: 0;
+}
+
+.win .at-kbps,
+.win .at-khz,
+.win .at-stereo {
+  font: 8px/1 var(--pw-font-ui);
+  color: #00c000;
+  letter-spacing: 0.04em;
+}
+
 .win .at-eqpl .pw-toggle,
 .win .at-shuffle .pw-toggle {
-  min-height: 12px;
-  height: 12px;
+  min-height: 12px; height: 12px;
   min-width: 23px;
   padding: 0 2px;
-  font-size: 8px;
+  font: 8px/1 var(--pw-font-ui);
 }
-.win .at-tx .pw-transport-button { width: 23px; height: 18px; min-width: 23px; }
+
+.win .at-tx { display: flex; gap: 0; }
+.win .at-tx .pw-transport-button {
+  width: 23px; height: 18px;
+  min-width: 23px; min-height: 18px;
+}
+.win .at-tx .pw-transport-button:last-child { width: 22px; min-width: 22px; margin-left: 5px; }
 .win .at-tx .pw-transport-button .pw-icon { --pw-icon-scale: 1; }
+
+/* The two pots and the seek bar are Winamp's, which are shallow grooves with
+   a small grabber rather than the kit's 8px track. */
+.win .pw-slider { min-height: 11px; }
+.win .at-seek .pw-slider-thumb { width: 29px; }
