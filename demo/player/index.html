@@ -398,18 +398,22 @@
         document.documentElement.dataset.theme = theme;
       }, [skin, theme]);
 
-      return h('div', { className: 'player' },
+      return h('div', { className: 'stack' },
         h(Player),
-        h('div', { className: 'player-chrome' },
+        h('div', { className: 'page-chrome' },
           ['chrome', 'cyber', 'paper'].map((s) =>
             h(Button, { key: s, onClick: () => setSkin(s),
               'data-variant': s === skin ? 'primary' : undefined }, s)),
           h(Button, { onClick: () => setTheme(theme === 'light' ? 'dark' : 'light') },
             theme === 'light' ? 'dark' : 'light')),
-        h('p', { className: 'player-hint' },
-          'Real audio. Press play, then drag the 60 band down and listen to the bass '
-          + 'leave: every band is a biquad filter, not a picture of one. Every control '
-          + 'here is an export from the package, unmodified.'));
+        h('p', { className: 'page-hint' },
+          'Real audio, and the equaliser really filters: press play, drag the 240 band '
+          + 'down, and the analyser dents either side of it. Every control is an export '
+          + 'from the package at the size the package ships, which is why the buttons are '
+          + '44px rather than Winamp\u2019s 23. ',
+          h('a', { href: './classic.html' }, 'The 275\u00d7116 replica'),
+          ' is the same components with the knobs turned down past the touch-target '
+          + 'floor, which is a thing a consumer may do and the kit may not.'));
     }
 
     createRoot(document.getElementById('root')).render(h(Page));
