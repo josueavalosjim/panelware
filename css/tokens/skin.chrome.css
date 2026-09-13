@@ -1,9 +1,9 @@
 /**
- * SKIN — the chrome skin's own knobs.
+ * SKIN: the chrome skin's own knobs.
  *
  * Four numbers decide how much chrome this is. All of them collapse to a
  * flat kit at 0 without any component knowing, which is the test that the
- * treatment layer is actually separable from the components.
+ * treatment layer is separable from the components.
  *
  * A second skin ships its own copy of this file and MUST declare every token
  * in it, even the ones it turns off. Turning gloss off by not shipping the
@@ -28,7 +28,7 @@
      resting state and gloss on every surface is the 2007 mistake: the
      highlight stops meaning anything once everything has one.
 
-     Opacities are the ones the period tutorials actually used, recorded in
+     Opacities are the ones the period tutorials used, recorded in
      HANDOFF.md: the diagonal glare layer at Overlay 70%, the second
      white-to-transparent highlight at Soft Light 30-70%, and Isabel Nyo's
      ellipse highlight at 7-15%. Translated to a plain alpha composite here,

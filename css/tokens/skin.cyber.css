@@ -1,5 +1,5 @@
 /**
- * SKIN — the cyber skin's own knobs.
+ * SKIN: the cyber skin's own knobs.
  *
  * Every knob skin.chrome.css declares, and then some, because a skin that
  * declares fewer makes the missing ones a fact about the consumer's markup
@@ -136,7 +136,7 @@
 
      Two opposite corners rather than four. Four reads as an octagon; two
      reads as a cut, and the diagonal it sets up is what the HUD idiom is
-     actually made of.
+     made of.
 
      It reaches the eleven surfaces that do not draw a focus ring, which is
      the window chrome, the menu, the tab panel, the readout, the badge and

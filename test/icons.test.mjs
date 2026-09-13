@@ -158,7 +158,7 @@ describe('the drawings, not just the pipeline', () => {
   test('the four chevrons really are one shape turned four ways', () => {
     /* They were not. The vertical pair measured 12x7 and the horizontal pair
        6x10, and a 90 degree turn of 12x7 is 7x12. */
-    /* Clockwise, which is the order the derivation actually turns them in:
+    /* Clockwise, which is the order the derivation turns them in:
        down, left, up, right. Writing the chain in the wrong order here is
        how the two horizontal chevrons ended up swapped in the first place. */
     let g = grid('chevron-down');
@@ -189,7 +189,7 @@ describe('the drawings, not just the pipeline', () => {
 
   test('a shape symmetric on an axis has an even size on that axis', () => {
     /* An odd dimension in an even grid cannot be centred: it sits half a
-       pixel off. Only shapes that are actually symmetric are held to this,
+       pixel off. Only shapes that are symmetric are held to this,
        because a right-pointing triangle is not symmetric horizontally and
        has no business being centred there. */
     for (const name of ['stop', 'dot', 'close', 'maximize', 'restore', 'pause']) {
@@ -490,7 +490,7 @@ describe('a chevron points where its name says', () => {
        that wanted it, with this file's text looking exactly right.
 
        A lint cannot see a cascade, so this half only pins WHERE the default
-       is. check-cssom.mjs measures what it actually computes to. */
+       is. check-cssom.mjs measures what it computes to. */
     assert.doesNotMatch(rule[0], /--pw-icon-bearing:\s*0;/,
       'the default is declared on .pw-icon again, where it beats every context that switches it on');
     assert.match(read('css/tokens/structural.css'), /--pw-icon-bearing:\s*0;/,

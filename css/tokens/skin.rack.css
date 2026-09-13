@@ -1,5 +1,5 @@
 /**
- * SKIN — the rack skin's own knobs.
+ * SKIN: the rack skin's own knobs.
  *
  * Named for the thing rather than for the product: a rack-mount unit's
  * faceplate, silver and bevelled, with a phosphor display set into it. The
@@ -78,7 +78,7 @@
   --pw-scrollbar-track: var(--pw-rack-200);
 
   /* The UI face of the era. Not a system stack: Tahoma is what the dialogs
-     and the chassis labels were actually set in, and it is on every machine
+     and the chassis labels were set in, and it is on every machine
      that has ever had Office. */
   --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
   --pw-text-ui: 0.6875rem;

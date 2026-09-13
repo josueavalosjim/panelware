@@ -296,7 +296,7 @@
   .pw-select:disabled { color: var(--pw-color-disabled-content); }
   /* The same placeholder treatment as the text field, and for the reason given
      up there: this was opacity: 0.7, and element opacity is invisible to the
-     contrast gate, so the ratio it was actually painting was never measured. */
+     contrast gate, so the ratio it was painting was never measured. */
   .pw-select[data-placeholder] .pw-select-value { font-style: italic; }
 
   /* The open list reuses the menu's surface, because it is one. */

@@ -1,5 +1,5 @@
 /**
- * Every colour actually painted, against the ground it actually lands on.
+ * Every colour painted, against the ground it lands on.
  *
  * The contrast block in tastecheck.config.json checks twenty pairs somebody
  * thought to name. This checks every pair that occurs, which is a different

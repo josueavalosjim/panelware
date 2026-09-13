@@ -1,47 +1,29 @@
 /**
- * DISPLAY — the palette of a lit screen, which does not follow the page.
+ * DISPLAY: the palette of a lit screen, which does not follow the page.
  *
- * The readout already believes this and the contract test already records it:
- * --pw-color-lcd and --pw-color-lcd-content are the only two semantic colours
- * identical in light and dark, because a lit display is a light source and
- * does not dim because the page did. Every palette in the kit, including the
- * cyber skin's, resolves them to the same phosphor pair.
+ * --pw-color-lcd and its content are the only two semantic colours identical
+ * in light and dark, because a lit display is a light source and does not dim
+ * because the page did. The analyser's palette is declared once here rather
+ * than four times in the semantic files.
  *
- * So the analyser's palette is declared once here rather than four times in
- * the semantic files, and a skin overrides it the way it overrides
- * --pw-clip-control: the neutral value sits with the structure until a skin
- * says otherwise. The cyber skin says otherwise.
+ * It DOES follow the skin, though, and an earlier version of this file argued
+ * otherwise by stretching the theme argument one step too far. Light against
+ * dark is the room; chrome against cyber is what the device is. The ramp below
+ * is green, amber, red, and the cyber skin collapses success, warning and
+ * error to one cyan on purpose, so an analyser painting three hues under it
+ * contradicts the skin outright.
  *
- * It has to. The ramp below is green, amber, red, which is the chrome skin's
- * three-ink status vocabulary, and the cyber skin collapses success, warning
- * and error to a single cyan on purpose: one accent, with shape carrying what
- * hue used to. An analyser painting three hues under a skin that has no green
- * and no red anywhere else contradicts that outright.
+ * The ground is its own token rather than --pw-color-lcd. Borrowing the
+ * readout's saved a token and coupled two displays a skin has to move apart.
  *
- * The first version of this file argued the opposite, that a lit display is a
- * light source and does not follow the skin. That argument is real and it is
- * about THEMES: a readout does not dim because the page went dark. It was
- * stretched to cover skins, which is a different question. Light against dark
- * is the room; chrome against cyber is what the device is.
+ * Structure from Strider's 1998 skin specifications, which document
+ * viscolor.txt as 24 lines: 0 the background, 1 the dot grid, 2 to 17 the
+ * analyser gradient top to bottom, 18 to 22 the oscilloscope, 23 the peak
+ * marker. The structure is borrowed; the values are this kit's own.
  *
- * The ground is its own token rather than --pw-color-lcd, for the same reason.
- * Borrowing the readout's ground saved a token and coupled two displays that
- * a skin has to be able to move separately.
- *
- * ── Where the structure comes from ───────────────────────────────────────
- * Strider's 1998 "Unofficial WinAMP Skin Specifications" documents
- * viscolor.txt as 24 lines: line 0 the visualiser background, 1 the dot grid,
- * 2 to 17 the analyser gradient from top to bottom, 18 to 22 the oscilloscope
- * from centre to edge, and 23 the analyser peak marker. That structure is what
- * is borrowed here. The values are not: they are this kit's own ramps, for the
- * same reason the project cites Winamp as prior art and does not use its name.
- *
- * The sixteen gradient steps are three anchors and an interpolation. A CSS
- * gradient does per-row colouring for free, and sixteen literals would be
- * sixteen values nobody could check against anything, since the original's are
- * not reproduced here anyway.
- *
- * The oscilloscope's five lines are not implemented. There is no oscilloscope.
+ * The sixteen gradient steps are three anchors interpolated, because a CSS
+ * gradient does per-row colouring for free. The five oscilloscope lines are
+ * not implemented. There is no oscilloscope.
  */
 
 :root {

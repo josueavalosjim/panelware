@@ -1,5 +1,5 @@
 /**
- * SEMANTIC — the paper skin's colour roles.
+ * SEMANTIC: the paper skin's colour roles.
  *
  * Every role the chrome skin declares, declared again, because a skin that
  * states only its differences inherits the other one's decisions for
@@ -17,7 +17,7 @@
  * one ink further along: shape says which, colour says how loud.
  *
  * ── Dark ─────────────────────────────────────────────────────────────────
- * A light ground is what reference 7 actually is, and the kit requires both
+ * A light ground is what reference 7 is, and the kit requires both
  * themes of every skin. So dark is not an inverted sheet, it is a darker
  * stock: the same two inks printed on card rather than on paper, with the
  * inks moving up their ramps to stay legible on it.

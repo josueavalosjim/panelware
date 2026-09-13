@@ -37,7 +37,7 @@
  * shim that throws `Dynamic require of "react" is not supported` the moment the
  * page boots.
  *
- * Splitting is the tool that actually answers this. One build, five entry
+ * Splitting is the tool that answers this. One build, five entry
  * points, no externals: esbuild lifts everything shared into a chunk both
  * entries import, so react-dom and radix-ui reference the same React rather
  * than carrying one each. The import map names the five entries and the chunks
@@ -109,7 +109,7 @@ const RESERVED = new Set(['default', 'import', 'export', 'class', 'function', 'n
   'false', 'this', 'super', 'void', 'with', 'yield', 'await', 'enum']);
 
 /**
- * What a specifier actually exports, asked of Node rather than guessed.
+ * What a specifier exports, asked of Node rather than guessed.
  *
  * This is the part that took three attempts. A browser needs STATIC named
  * exports, and none of the obvious routes produce them from CommonJS:

@@ -18,7 +18,7 @@
  * demo/index.html is run too, since some states only exist live.
  *
  * Colour rules are OFF. taste-check already measures contrast against the
- * ground each token actually lands on, across three themes and 3280 painted
+ * ground each token lands on, across three themes and 3280 painted
  * pairs, which is a stricter question than axe asks. Two tools disagreeing
  * about the same pixel is a maintenance argument, not a second opinion.
  */
@@ -166,7 +166,7 @@ await withDemo(async (p, base) => {
  * at all, which is what makes it the proof the CSS stands alone and the wrong
  * page to ask what happens when you open something.
  *
- * Each opener is checked for having actually opened, by name, because a click
+ * Each opener is checked for having opened, by name, because a click
  * that lands on nothing leaves axe scanning the page it was already scanning
  * and reporting the same clean result.
  *
@@ -192,7 +192,7 @@ await withDemo(async (p, base) => {
  * Dialog does it properly and is clean, so this is a difference between two
  * Radix primitives rather than something the skin does or can fix.
  *
- * Listed with `seen`, and asserted below to have actually occurred, because
+ * Listed with `seen`, and asserted below to have occurred, because
  * an exemption nobody checks is how a fixed upstream bug stays permanently
  * excused. If Radix changes this, the entry goes stale and says so.
  */
@@ -201,7 +201,7 @@ const KNOWN = [
     why: 'Radix Select sets aria-hidden on the page without inert' },
 ];
 
-/* Which Radix this actually measured. The demo boots it from esm.sh through
+/* Which Radix this measured. The demo boots it from esm.sh through
    an import map, and it used to name an esm.sh URL that carried the version in
    its path. The demo is vendored now, so the version comes from the package
    the bundle was built from, and test/vendor.test.mjs rebuilds those bundles

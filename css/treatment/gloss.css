@@ -1,5 +1,5 @@
 /**
- * GLOSS — the Web 2.0 highlight, opt-in twice.
+ * GLOSS: the Web 2.0 highlight, opt-in twice.
  *
  * Per element with [data-gloss], and per skin with --pw-gloss-opacity. Both
  * gates exist for different reasons. The attribute keeps the decision at the
@@ -33,7 +33,7 @@
 
   /* The diagonal glare. */
   :where([data-gloss])::before,
-  /* The inset top-highlight capsule, which is the half that actually reads
+  /* The inset top-highlight capsule, which is the half that reads
      as a curved surface. The glare alone reads as a reflection on flat
      glass. */
   :where([data-gloss])::after {

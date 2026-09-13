@@ -20,7 +20,7 @@
  * margins so the optical gap beside a word is even. This element names one
  * cell and paints eight, because the CSS walks the whole row, so the cell's
  * own bearings describe a frame that is on screen an eighth of the time. It
- * named spinner-1, whose ink starts 7 in, while the frames it actually paints
+ * named spinner-1, whose ink starts 7 in, while the frames it paints
  * mostly start 2 in: a spinner in a badge was pulled 5px into the word beside
  * it, for seven frames out of eight.
  *

@@ -1,5 +1,5 @@
 /**
- * PRIMITIVE — the chrome skin's raw ramp.
+ * PRIMITIVE: the chrome skin's raw ramp.
  *
  * Nothing outside css/tokens/ reads these. They exist so the semantic layer
  * has somewhere to point and so a value moves in one place. A component that
@@ -23,7 +23,7 @@
   /* ── Silver ────────────────────────────────────────────────────────────
      The chrome itself. Neutral with a trace of warmth, so it reads as
      painted metal rather than as a grey UI. Ratios are against the ground
-     each rung actually sits on in the semantic layer. */
+     each rung sits on in the semantic layer. */
   --pw-silver-000: #ffffff;   /* bevel highlight. 1.47:1 on the face, and
                                  deliberately so: see --pw-bevel-light. */
   --pw-silver-100: #eceae4;   /* light page. Dark label: 13.10:1 on 900. */

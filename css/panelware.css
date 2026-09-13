@@ -82,7 +82,7 @@
  * theme-auto.css is deliberately not here. See its own header.
  */
 /**
- * PRIMITIVE — the chrome skin's raw ramp.
+ * PRIMITIVE: the chrome skin's raw ramp.
  *
  * Nothing outside css/tokens/ reads these. They exist so the semantic layer
  * has somewhere to point and so a value moves in one place. A component that
@@ -106,7 +106,7 @@
   /* ── Silver ────────────────────────────────────────────────────────────
      The chrome itself. Neutral with a trace of warmth, so it reads as
      painted metal rather than as a grey UI. Ratios are against the ground
-     each rung actually sits on in the semantic layer. */
+     each rung sits on in the semantic layer. */
   --pw-silver-000: #ffffff;   /* bevel highlight. 1.47:1 on the face, and
                                  deliberately so: see --pw-bevel-light. */
   --pw-silver-100: #eceae4;   /* light page. Dark label: 13.10:1 on 900. */
@@ -161,7 +161,7 @@
 }
 
 /**
- * SEMANTIC — the roles, and the whole reason a second skin is possible.
+ * SEMANTIC: the roles, and the whole reason a second skin is possible.
  *
  * Names follow DaisyUI v5 (base-100/200/300, base-content, primary,
  * primary-content, success/warning/error and their -content) with a --pw-
@@ -184,7 +184,7 @@
  * :root[data-theme="dark"] and a future :root[data-skin="cyber"] are both
  * (0,2,0). If the dark block were skin-agnostic and a cyber block came after
  * it in the bundle, then on a root carrying both attributes every token cyber
- * declares in its light block would beat dark — but only for the tokens
+ * declares in its light block would beat dark, but only for the tokens
  * cyber-dark happened not to redeclare. Writing dark as *chrome's* dark, and
  * keeping every block complete, removes the tie instead of depending on
  * bundle order. taste-check enforces the completeness at no cost: a pair
@@ -250,7 +250,7 @@
      this does not take the exemption, but it does not hold 4.5 either: a
      disabled label at full contrast does not look disabled, and the state
      would then be carried by nothing. 3.85:1 is the compromise, and it is
-     never the only cue — the press travel and the hover opacity both stop.
+     never the only cue: the press travel and the hover opacity both stop.
      XP's own disabled ink, rgb(161,161,146), measures 1.78:1 here. It is in
      HANDOFF.md as a sourced value and it is not usable as one. */
   --pw-color-disabled-content: var(--pw-silver-700);
@@ -381,7 +381,7 @@
      that it stays a grouping cue. */
   --pw-color-divider: var(--pw-silver-600);
 
-  /* What a glossed surface actually measures.
+  /* What a glossed surface measures.
      The glare is a translucent white layer sitting between the label and the
      face, so a check that composites label-over-face never sees it and reads
      high. These are that stack pre-flattened into an opaque colour, the same
@@ -465,7 +465,7 @@
 }
 
 /**
- * STRUCTURAL — everything that is not a colour.
+ * STRUCTURAL: everything that is not a colour.
  *
  * DaisyUI v5's real contribution is that it splits these out from the colour
  * roles instead of folding shape into the palette, so a theme can change how
@@ -547,7 +547,7 @@
 
   /* DaisyUI's structural scalar, kept by name. 1 is the shipped depth; 0
      flattens the kit without removing it. See css/treatment/bevel.css for
-     what actually reads this. */
+     what reads this. */
   --pw-depth: 1;
 
   /* HOW DEEP THE READOUT IS SET, as a token rather than as a number in
@@ -687,7 +687,7 @@
      component: a 44px tall equaliser is a row of switches. */
   /* A fader is not a slider grip turned on its side. The generic grip is 22
      across the travel axis, and on an equaliser that is most of the distance
-     a band actually moves: a 4dB change on a 24dB scale is 21px of a 128px
+     a band moves: a 4dB change on a 24dB scale is 21px of a 128px
      well, so the grip covered its own fill entirely and every band read as
      flat. A fader is thin along the travel and long across it, which is what
      every physical one is, and for the same reason. */
@@ -736,7 +736,7 @@
   /* What the well has below the faders: the band's gap and its frequency
      label. The rule is drawn on the well and has to be placed along the
      TRAVEL, so this is what comes off first. Derived from the two tokens the
-     band and the label actually use rather than stated, because both move per
+     band and the label use rather than stated, because both move per
      skin: the label sets line-height: 1 on --pw-text-micro, so its height is
      that token exactly. */
   --pw-eq-label-space: calc(var(--pw-space-2xs) + var(--pw-text-micro));
@@ -768,49 +768,31 @@
 }
 
 /**
- * DISPLAY — the palette of a lit screen, which does not follow the page.
+ * DISPLAY: the palette of a lit screen, which does not follow the page.
  *
- * The readout already believes this and the contract test already records it:
- * --pw-color-lcd and --pw-color-lcd-content are the only two semantic colours
- * identical in light and dark, because a lit display is a light source and
- * does not dim because the page did. Every palette in the kit, including the
- * cyber skin's, resolves them to the same phosphor pair.
+ * --pw-color-lcd and its content are the only two semantic colours identical
+ * in light and dark, because a lit display is a light source and does not dim
+ * because the page did. The analyser's palette is declared once here rather
+ * than four times in the semantic files.
  *
- * So the analyser's palette is declared once here rather than four times in
- * the semantic files, and a skin overrides it the way it overrides
- * --pw-clip-control: the neutral value sits with the structure until a skin
- * says otherwise. The cyber skin says otherwise.
+ * It DOES follow the skin, though, and an earlier version of this file argued
+ * otherwise by stretching the theme argument one step too far. Light against
+ * dark is the room; chrome against cyber is what the device is. The ramp below
+ * is green, amber, red, and the cyber skin collapses success, warning and
+ * error to one cyan on purpose, so an analyser painting three hues under it
+ * contradicts the skin outright.
  *
- * It has to. The ramp below is green, amber, red, which is the chrome skin's
- * three-ink status vocabulary, and the cyber skin collapses success, warning
- * and error to a single cyan on purpose: one accent, with shape carrying what
- * hue used to. An analyser painting three hues under a skin that has no green
- * and no red anywhere else contradicts that outright.
+ * The ground is its own token rather than --pw-color-lcd. Borrowing the
+ * readout's saved a token and coupled two displays a skin has to move apart.
  *
- * The first version of this file argued the opposite, that a lit display is a
- * light source and does not follow the skin. That argument is real and it is
- * about THEMES: a readout does not dim because the page went dark. It was
- * stretched to cover skins, which is a different question. Light against dark
- * is the room; chrome against cyber is what the device is.
+ * Structure from Strider's 1998 skin specifications, which document
+ * viscolor.txt as 24 lines: 0 the background, 1 the dot grid, 2 to 17 the
+ * analyser gradient top to bottom, 18 to 22 the oscilloscope, 23 the peak
+ * marker. The structure is borrowed; the values are this kit's own.
  *
- * The ground is its own token rather than --pw-color-lcd, for the same reason.
- * Borrowing the readout's ground saved a token and coupled two displays that
- * a skin has to be able to move separately.
- *
- * ── Where the structure comes from ───────────────────────────────────────
- * Strider's 1998 "Unofficial WinAMP Skin Specifications" documents
- * viscolor.txt as 24 lines: line 0 the visualiser background, 1 the dot grid,
- * 2 to 17 the analyser gradient from top to bottom, 18 to 22 the oscilloscope
- * from centre to edge, and 23 the analyser peak marker. That structure is what
- * is borrowed here. The values are not: they are this kit's own ramps, for the
- * same reason the project cites Winamp as prior art and does not use its name.
- *
- * The sixteen gradient steps are three anchors and an interpolation. A CSS
- * gradient does per-row colouring for free, and sixteen literals would be
- * sixteen values nobody could check against anything, since the original's are
- * not reproduced here anyway.
- *
- * The oscilloscope's five lines are not implemented. There is no oscilloscope.
+ * The sixteen gradient steps are three anchors interpolated, because a CSS
+ * gradient does per-row colouring for free. The five oscilloscope lines are
+ * not implemented. There is no oscilloscope.
  */
 
 :root {
@@ -833,7 +815,7 @@
 }
 
 /**
- * DENSITY — the third axis, and the one the accessibility floor constrains.
+ * DENSITY: the third axis, and the one the accessibility floor constrains.
  *
  * [data-density] on :root, alongside [data-theme] and [data-skin]. Three
  * orthogonal attributes, and this one is orthogonal in the real sense: it
@@ -898,7 +880,7 @@
    importing motion after the skins would have let the base win every time and
    a skin's timing would have been silently ignored. */
 /**
- * MOTION — a locked scale, and open role assignments.
+ * MOTION: a locked scale, and open role assignments.
  *
  * The scale is the house scale and a skin may not add to it. What a skin may
  * do is re-point a role at a different rung: a skin that wants a heavier
@@ -908,7 +890,7 @@
  *
  * Only transform and opacity are ever transitioned in this kit. box-shadow is
  * a paint property, so animating the bevel would drop every press off the
- * compositor — and a real bevelled button never eased anyway. It flipped.
+ * compositor, and a real bevelled button never eased anyway. It flipped.
  */
 
 :root {
@@ -958,11 +940,11 @@
 }
 
 /**
- * SKIN — the chrome skin's own knobs.
+ * SKIN: the chrome skin's own knobs.
  *
  * Four numbers decide how much chrome this is. All of them collapse to a
  * flat kit at 0 without any component knowing, which is the test that the
- * treatment layer is actually separable from the components.
+ * treatment layer is separable from the components.
  *
  * A second skin ships its own copy of this file and MUST declare every token
  * in it, even the ones it turns off. Turning gloss off by not shipping the
@@ -987,7 +969,7 @@
      resting state and gloss on every surface is the 2007 mistake: the
      highlight stops meaning anything once everything has one.
 
-     Opacities are the ones the period tutorials actually used, recorded in
+     Opacities are the ones the period tutorials used, recorded in
      HANDOFF.md: the diagonal glare layer at Overlay 70%, the second
      white-to-transparent highlight at Soft Light 30-70%, and Isabel Nyo's
      ellipse highlight at 7-15%. Translated to a plain alpha composite here,
@@ -1118,7 +1100,7 @@
    for is the point of a skin; leaving one of chrome's out is the bug. The
    test now holds the second half of that and not the first. */
 /**
- * PRIMITIVE — the cyber skin's raw ramp.
+ * PRIMITIVE: the cyber skin's raw ramp.
  *
  * Never referenced outside tokens/. Every rung exists because a semantic role
  * in semantic.cyber.css points at it, and the ratios in that file's comments
@@ -1179,7 +1161,7 @@
 }
 
 /**
- * SEMANTIC — the cyber skin's colour roles.
+ * SEMANTIC: the cyber skin's colour roles.
  *
  * The identical twenty-seven roles semantic.chrome.css declares, including the
  * five bevel inks that this skin's depth of 0 means nothing paints through the
@@ -1326,7 +1308,7 @@
 }
 
 /**
- * SKIN — the cyber skin's own knobs.
+ * SKIN: the cyber skin's own knobs.
  *
  * Every knob skin.chrome.css declares, and then some, because a skin that
  * declares fewer makes the missing ones a fact about the consumer's markup
@@ -1463,7 +1445,7 @@
 
      Two opposite corners rather than four. Four reads as an octagon; two
      reads as a cut, and the diagonal it sets up is what the HUD idiom is
-     actually made of.
+     made of.
 
      It reaches the eleven surfaces that do not draw a focus ring, which is
      the window chrome, the menu, the tab panel, the readout, the badge and
@@ -1779,7 +1761,7 @@
 /* The third skin, and the one the elevation slot was split for: its depth is
    dither density rather than a shadow. */
 /**
- * PRIMITIVE — the paper skin's raw ramps.
+ * PRIMITIVE: the paper skin's raw ramps.
  *
  * Scoped to the skin, not to :root, for the reason primitive.cyber.css gives
  * at length: two ramps on a bare :root tie at (0,1,0) and the later import
@@ -1833,7 +1815,7 @@
 }
 
 /**
- * SEMANTIC — the paper skin's colour roles.
+ * SEMANTIC: the paper skin's colour roles.
  *
  * Every role the chrome skin declares, declared again, because a skin that
  * states only its differences inherits the other one's decisions for
@@ -1851,7 +1833,7 @@
  * one ink further along: shape says which, colour says how loud.
  *
  * ── Dark ─────────────────────────────────────────────────────────────────
- * A light ground is what reference 7 actually is, and the kit requires both
+ * A light ground is what reference 7 is, and the kit requires both
  * themes of every skin. So dark is not an inverted sheet, it is a darker
  * stock: the same two inks printed on card rather than on paper, with the
  * inks moving up their ramps to stay legible on it.
@@ -1944,7 +1926,7 @@
 }
 
 /**
- * SKIN — the paper skin's own knobs.
+ * SKIN: the paper skin's own knobs.
  *
  * This is the skin the architecture was waiting for, and the reason it was
  * chosen over the two easier ones. --pw-elev is consumed as a box-shadow, both
@@ -2195,7 +2177,7 @@
    proved nothing else, because a look that lives in a demo is a look a
    consumer cannot have. */
 /**
- * PRIMITIVE — the rack skin's ramp.
+ * PRIMITIVE: the rack skin's ramp.
  *
  * Two families, because this skin has two very different grounds. Light is
  * Windows 95's own silver, which is what a 1998 application chassis was made
@@ -2253,7 +2235,7 @@
 }
 
 /**
- * SEMANTIC — what the rack skin's colours are FOR.
+ * SEMANTIC: what the rack skin's colours are FOR.
  *
  * Both blocks declare the identical set, because [data-skin="rack"] and
  * [data-skin="rack"][data-theme="dark"] tie on specificity and are decided
@@ -2294,7 +2276,7 @@
   --pw-color-error: var(--pw-rust-100);
   --pw-color-error-content: var(--pw-rust-800);
 
-  /* The 3D border, in the ladder the era actually used. */
+  /* The 3D border, in the ladder the era used. */
   --pw-bevel-light: var(--pw-rack-000);
   --pw-bevel-face: var(--pw-rack-050);
   --pw-bevel-shade: var(--pw-rack-300);
@@ -2358,7 +2340,7 @@
 }
 
 /**
- * SKIN — the rack skin's own knobs.
+ * SKIN: the rack skin's own knobs.
  *
  * Named for the thing rather than for the product: a rack-mount unit's
  * faceplate, silver and bevelled, with a phosphor display set into it. The
@@ -2437,7 +2419,7 @@
   --pw-scrollbar-track: var(--pw-rack-200);
 
   /* The UI face of the era. Not a system stack: Tahoma is what the dialogs
-     and the chassis labels were actually set in, and it is on every machine
+     and the chassis labels were set in, and it is on every machine
      that has ever had Office. */
   --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
   --pw-text-ui: 0.6875rem;
@@ -2556,62 +2538,31 @@
    imported after every skin so a preset's themed blocks are decided on
    specificity rather than on this list's order. */
 /**
- * PRESET — deck, on the chrome skin.
+ * PRESET: deck, on the chrome skin.
  *
  * A late-nineties audio deck: blue-slate chassis, black display panels,
- * phosphor readout, gold faders, cyan metadata. Winamp's base skin is the
- * reference and is cited as one in the README, the way NES.css cites Nintendo.
- * It is not the name, because a trademark is not a name to ship.
+ * phosphor readout, gold faders, cyan metadata. The player it is drawn from
+ * is cited in the README the way NES.css cites Nintendo, and is not the name,
+ * because a trademark is not a name to ship.
  *
- * A preset is one file, and this is the whole of one: a ramp, the colour roles
- * that point at it, and any knob it wants moved. Nothing else in the repo has
- * to know it exists.
+ * A preset is one file: a ramp, the roles pointing at it, and any knob it
+ * wants moved. Nothing else in the repo has to know it exists.
  *
- * ── Yes, a preset may move knobs, and this one turns gloss off ────────────
- * The reasonable objection is that if a preset can change a treatment's knobs
- * then the line between preset and skin is not where this file says it is.
+ * A preset may move a treatment's knobs and this one turns gloss off. The
+ * line between preset and skin is about who OWNS the treatment: a skin ships
+ * a file in css/treatment/ and decides what fills the elevation slot, a
+ * preset ships none and moves values that treatment already reads. Moving
+ * --pw-bevel-depth would cross it, since that is the elevation model rather
+ * than a decoration. Nothing enforces that yet.
  *
- * The line holds, and it is about who owns the treatment rather than who may
- * tune it. A skin ships a file in css/treatment/ and decides what goes in the
- * elevation slot. A preset ships none and moves values the treatment already
- * reads. --pw-gloss-opacity is a token precisely so this is possible without
- * a class or a codemod: setting it to 0 silences every [data-gloss] in a
- * consumer's markup at once and leaves the markup honest.
+ * Presets nest inside their skin rather than forming a fourth axis, because
+ * theme, density and skin are orthogonal and this is not: a deck palette
+ * under the cyber skin is nonsense, and scoping it means that combination
+ * matches nothing and falls back instead of rendering something incoherent.
  *
- * And it is the right call here on period grounds. The Web 2.0 highlight is a
- * 2005-and-after artefact; chrome's default palette is Luna, from 2001, which
- * is close enough to carry it, and a 1997 media player predates it entirely.
- * Full bevel depth, no gloss.
- *
- * The one thing a preset should not do is move --pw-bevel-depth, because that
- * is the elevation model rather than a decoration, and a preset that set it to
- * 0 would be a different skin wearing a preset's name. Nothing enforces that
- * yet; it is a rule this file is stating rather than a check.
- *
- * ── Preset is nested inside skin, not a fourth axis ───────────────────────
- * Theme, density and skin are orthogonal: every combination of them means
- * something. A preset is not. "Winamp" under the cyberpunk skin is nonsense,
- * and expressing that as a fourth independent attribute would mean either
- * validating combinations at runtime or shipping palettes that can be asked
- * for and should not be.
- *
- * Scoping it under its skin costs nothing and answers it for free:
- * [data-skin="chrome"][data-preset="deck"] simply does not match under any
- * other skin, and the page falls back to that skin's own palette rather than
- * to something incoherent.
- *
- * The specificity is deliberate too. Chrome's own light block reaches (0,2,0)
- * on [data-skin="chrome"][data-theme="light"], so a preset that only reached
- * (0,2,0) would be decided by import order. Every block here carries the
- * preset attribute as well, which puts the themed ones at (0,3,0) and settles
- * it on specificity rather than on the order of a list somebody may reorder.
- *
- * ── What makes this a preset and not a skin ───────────────────────────────
- * It ships no treatment. glow.css is scoped to the cyber skin and everything
- * else falls through to bevel.css, so this takes the stacked bevel by simply
- * not being cyber. That is the line: a preset changes values, a skin changes
- * the treatment file. Winamp needed nothing in css/treatment/ and cyber needed
- * a file of its own.
+ * Every block carries the preset attribute, which puts the themed ones at
+ * (0,3,0). Chrome's own light block reaches (0,2,0), so a preset that only
+ * reached (0,2,0) would be settled by import order instead.
  */
 
 :root {
@@ -2756,7 +2707,7 @@
    
    A preset may move rhythm now, and this is what that is for. The palette
    alone made deck a recolour of chrome, and the thing a late-nineties audio
-   deck actually was is tighter: less padding around a control, less air
+   deck was is tighter: less padding around a control, less air
    between them, and type a rung down. Winamp's main window was 275 by 116
    pixels, and none of the proportions here are within a mile of that, but the
    direction is the point.
@@ -2785,7 +2736,7 @@
 }
 
 /**
- * PRESET — redline, for the cyber skin.
+ * PRESET: redline, for the cyber skin.
  *
  * ── Why this exists ──────────────────────────────────────────────────────
  * The cyber skin is documented as "accessible cyberpunk" and it is not one. It
@@ -2978,11 +2929,11 @@
 }
 
 /**
- * PRESET — newsprint, for the paper skin.
+ * PRESET: newsprint, for the paper skin.
  *
  * The paper skin is a two-colour job: a graphite plate and one spot bought for
  * the things worth spending it on. This is the one-colour job, which is what
- * most printing actually was: cheap cool stock, one plate, and a coarser screen
+ * most printing was: cheap cool stock, one plate, and a coarser screen
  * because the paper cannot hold a fine one.
  *
  * That is the whole idea and every value follows from it.
@@ -3118,7 +3069,7 @@
 
 @layer pw.reset {
 /**
- * RESET — the smallest set of assumptions the skin needs, and nothing more.
+ * RESET: the smallest set of assumptions the skin needs, and nothing more.
  *
  * A component kit that resets globally is a kit that fights every page it is
  * dropped into. Everything here is scoped to panelware's own class names via
@@ -3218,28 +3169,20 @@
 }
 
 /**
- * BEVEL — the chrome, as a swappable pair of shadow stacks.
+ * BEVEL: the chrome, as a swappable pair of shadow stacks.
  *
- * The pattern is 98.css's, read from its source rather than remembered: two
- * stacked inset box-shadows as a raised/sunken pair, swapped on press. The
- * whole of 98.css is 994 lines and none of it is expensive, because a
- * box-shadow never touches the live-sampling blur path that makes
- * backdrop-filter the documented jank primitive.
+ * The pattern is 98.css's: two stacked inset box-shadows as a raised/sunken
+ * pair, swapped on press. The sunken pair is the raised pair mirrored,
+ * highlight for frame and face for shade, which is 98.css's own derivation.
  *
- * 98.css writes its offsets as literals. Here they are calc()s multiplied by
- * --pw-bevel-depth, so one number flattens the kit. That is not decoration:
- * it is the mechanism by which the deferred second skin, which has no bevel
- * at all, turns this off without editing anything. Every offset below is a
- * calc for that reason. A single literal 1px sneaking in leaves a ghost edge
- * at depth 0, the flat skin stops being flat, and nothing reports an error.
+ * 98.css writes its offsets as literals. Here every one is a calc() on
+ * --pw-bevel-depth, so a skin with no bevel zeroes the lot without editing a
+ * rule. One literal 1px sneaking in leaves a ghost edge at depth 0 and
+ * nothing reports it.
  *
- * The sunken pair is the raised pair mirrored: highlight swaps with frame,
- * face swaps with shade. That is 98.css's own derivation, not a new one.
- *
- * NES.css reaches the same effect through a Sass mixin that flips the shadow
- * direction on :active. Custom properties are the better carrier here for one
- * reason: a mixin is resolved at build time and cannot be re-pointed by a
- * consumer's stylesheet, and this kit ships no build.
+ * NES.css does the same flip through a Sass mixin. Custom properties carry it
+ * better here because a mixin resolves at build time and cannot be re-pointed
+ * by a consumer, and this kit ships no build.
  */
 
 @layer pw.treatment {
@@ -3249,7 +3192,7 @@
      A custom property that references another one is substituted against the
      element the FIRST one is declared on. Declare --pw-bevel-1 on :root and
      its var(--pw-bevel-depth) resolves against :root's depth, once. What
-     descendants then inherit is the already-computed "1px" — so setting
+     descendants then inherit is the already-computed "1px", so setting
      --pw-bevel-depth: 0 on a container does nothing at all, and setting it
      on the readout to sink it deeper does nothing either.
 
@@ -3276,7 +3219,7 @@
        from DaisyUI, and until now it was declared, documented as the thing
        that flattens the kit, published in the demo's token table, and read by
        absolutely nothing. Its own comment said "see bevel.css for what
-       actually reads this" and bevel.css did not.
+       reads this" and bevel.css did not.
 
        Multiplied here rather than resolved on :root for the reason the test
        below this file's derivation checks: a custom property referencing
@@ -3311,7 +3254,7 @@
       0 calc(var(--pw-bevel-depth) * 1px)
         calc(var(--pw-bevel-depth) * 2px) var(--pw-shadow-outer-color);
 
-    /* The two values a component actually swaps between. A raised surface
+    /* The two values a component swaps between. A raised surface
        casts; a sunken one is a hole in something and casts nothing. */
     --pw-shadow-raised:
       var(--pw-bevel-raised-outer),
@@ -3396,7 +3339,7 @@
        caught. A 1px border in --pw-bevel-frame sitting immediately outside a
        1px inset shadow in --pw-bevel-frame reads as one 2px line on the dark
        side, pushes the white highlight a pixel inward where the border hides
-       half of it, and — the part that actually matters — does not scale with
+       half of it, and, and the part that matters, does not scale with
        --pw-bevel-depth, so it survived depth 0 as a ghost edge. Everything
        the comment at the top of this file warns about, shipped. */
     border: 0;
@@ -3477,7 +3420,7 @@
 }
 
 /**
- * GLOSS — the Web 2.0 highlight, opt-in twice.
+ * GLOSS: the Web 2.0 highlight, opt-in twice.
  *
  * Per element with [data-gloss], and per skin with --pw-gloss-opacity. Both
  * gates exist for different reasons. The attribute keeps the decision at the
@@ -3511,7 +3454,7 @@
 
   /* The diagonal glare. */
   :where([data-gloss])::before,
-  /* The inset top-highlight capsule, which is the half that actually reads
+  /* The inset top-highlight capsule, which is the half that reads
      as a curved surface. The glare alone reads as a reflection on flat
      glass. */
   :where([data-gloss])::after {
@@ -3589,7 +3532,7 @@
    what they put in the shared slot and one attribute of specificity is all
    that separates them. */
 /**
- * TREATMENT — the cyber skin's elevation.
+ * TREATMENT: the cyber skin's elevation.
  *
  * This file is the answer to the question the token contract was built to ask:
  * can a second skin replace the treatment without touching a component? Nothing
@@ -3705,7 +3648,7 @@
 
 /* The third skin's elevation, and the first that is not a box-shadow. */
 /**
- * TREATMENT — the paper skin's elevation, which is not a shadow.
+ * TREATMENT: the paper skin's elevation, which is not a shadow.
  *
  * This file is the reason the elevation slot was split, and the answer to the
  * question the token contract was built to ask. The kit's claim is that a skin
@@ -3880,7 +3823,7 @@
        declares its knobs in pw.tokens. pw.components sorts later, so this
        file won every time and a skin pointing the token at its own sheet was
        silently ignored: the token had been documented as a skin's to set
-       since it was written and could never actually be set. It is a skin knob
+       since it was written and could never be set. It is a skin knob
        now, declared by each skin file the way every other knob is. */
   }
 
@@ -3969,7 +3912,7 @@
      costs more than it saves: driving this with a transform means the sheet
      on an inner element translated inside an outer one with overflow: hidden,
      which is two elements, a clip this kit has refused everywhere else, and
-     the same number of paints. What actually happens is eight discrete
+     the same number of paints. What happens is eight discrete
      repaints of a 16x16 box per revolution, roughly ten a second. Rotating a
      single glyph with transform WOULD obey the rule and is the thing that is
      genuinely wrong: 45 degrees is not exact on a square lattice, so it
@@ -4004,7 +3947,7 @@
      cut continuous motion outright. A stopped spinner does not read as a
      respected preference, it reads as a hung process, which is the single
      message a busy indicator must never send. The label beside it is the
-     part that actually carries the meaning; this keeps the shape honest.
+     part that carries the meaning; this keeps the shape honest.
 
      The selector is repeated in full because a media block adds no
      specificity, so a shorter one here would lose to the rule above. */
@@ -4721,7 +4664,7 @@
        block, which is the viewport WITHOUT its scrollbars. 100vw includes
        them. On any page long enough to scroll, and with classic rather than
        overlay scrollbars, 100vw is about 15px wider than the space the panel
-       actually has, so the gutter this is trying to reserve quietly shrinks
+       has, so the gutter this is trying to reserve quietly shrinks
        to half. Headless Chromium uses overlay scrollbars and would never
        have shown it. */
     max-width: calc(100% - (var(--pw-space-lg) * 2));
@@ -4774,7 +4717,7 @@
  * ── Why there is no multi-thumb variant, measured rather than deferred ────
  * HANDOFF.md deferred multi-thumb on the grounds that the WAI-ARIA APG flags
  * unresolved gaps in its own reference pattern. Building the equaliser meant
- * finding out what that actually means, and the answer changes the design
+ * finding out what that means, and the answer changes the design
  * rather than qualifying it.
  *
  * A multi-thumb slider is a RANGE. Its thumbs are the ends of one span and
@@ -5098,7 +5041,7 @@
        every band tappable: narrowing the columns to fit would put them under
        the target floor, and an equaliser that wraps to two rows is not an
        equaliser. The vertical sliders inside hand the horizontal axis back
-       to the browser so this actually scrolls under a finger. */
+       to the browser so this scrolls under a finger. */
     max-width: 100%;
     overflow-x: auto;
     overscroll-behavior-x: contain;
@@ -5134,7 +5077,7 @@
      So take the label row back off before applying the fraction. It is the
      band's gap plus the label's own height, and --pw-eq-label-space in
      structural.css is exactly that, derived from the two tokens the layout
-     below actually uses. Both move per skin and per density and this follows
+     below uses. Both move per skin and per density and this follows
      them. check:cssom measures the rule against the band on zero, under every
      skin, so this cannot drift back. */
   .pw-eq-well[data-zero]::before {
@@ -5810,7 +5753,7 @@
   .pw-select:disabled { color: var(--pw-color-disabled-content); }
   /* The same placeholder treatment as the text field, and for the reason given
      up there: this was opacity: 0.7, and element opacity is invisible to the
-     contrast gate, so the ratio it was actually painting was never measured. */
+     contrast gate, so the ratio it was painting was never measured. */
   .pw-select[data-placeholder] .pw-select-value { font-style: italic; }
 
   /* The open list reuses the menu's surface, because it is one. */
@@ -5998,7 +5941,7 @@
  * on every frame, and the kit's motion rule is transform and opacity only.
  *
  * The chevron turns instead. That is a transform, it is the affordance anyone
- * actually reads, and it costs one composited property rather than a reflow.
+ * reads, and it costs one composited property rather than a reflow.
  */
 
 @layer pw.components {
@@ -6354,7 +6297,7 @@
 }
 
 /**
- * LCD READOUT — the one genuinely custom piece.
+ * LCD READOUT: the one genuinely custom piece.
  *
  * Every other component in the kit borrows an interaction from Radix and an
  * ARIA pattern from the APG. This one has neither to borrow, because a
@@ -6614,7 +6557,7 @@
 }
 
 /**
- * VISUALISER — the spectrum analyser.
+ * VISUALISER: the spectrum analyser.
  *
  * The last piece of the console the chrome skin is drawing. The kit already
  * ships a transport, a seek bar, an equaliser and a segment readout, and the
@@ -6668,7 +6611,7 @@
        background-image here put a component rule in pw.components over the
        shared stack in pw.treatment, so this surface silently dropped the
        elevation fill and the texture: the cyber skin's scanlines never reached
-       the one thing in the kit that is actually a screen. */
+       the one thing in the kit that is a screen. */
     --pw-ornament: radial-gradient(var(--pw-color-vis-grid) 1px, transparent 1px);
     --pw-ornament-size: var(--pw-vis-grid-pitch) var(--pw-vis-grid-pitch);
   }
@@ -6697,7 +6640,7 @@
       var(--pw-color-vis-high)
     );
     /* See the header. Sized to the column and anchored to its floor, so the
-       bar shows the slice of the ramp its level actually reaches. */
+       bar shows the slice of the ramp its level reaches. */
     background-size: 100% var(--pw-vis-col);
     background-position: left bottom;
     background-repeat: no-repeat;
@@ -6737,7 +6680,7 @@
  * Cells are not here and never will be. Every sheet shares ICON_ORDER, so the
  * cell a name resolves to is the same under every skin and the base index
  * already carries it. Only the ink bearings move, and only for the 19 names
- * whose drawing actually changed width.
+ * whose drawing changed width.
  */
 
 @layer pw.skin {
@@ -6843,7 +6786,7 @@
 }
 
 /**
- * SKIN — the select, under cyber.
+ * SKIN: the select, under cyber.
  *
  * field.css says outright what the select is: "a sunken field with a raised
  * drop button on its right edge". That is a period combo box, it is correct
@@ -6910,7 +6853,7 @@
 }
 
 /**
- * SKIN — paper's face, and the one thing wrong with it.
+ * SKIN: paper's face, and the one thing wrong with it.
  *
  * The skin sets --pw-font-ui to a slab, because its own icon sheet is
  * documented as the heaviest of the three and as "a catalogue's vocabulary
@@ -6926,7 +6869,7 @@
  * Everything in this kit that centres a label centres the line box, because
  * that is what `align-items: center` does. Centre a box whose top sits below
  * the caps and the caps end up high. Measured on .pw-button at 15px, against
- * the cap-height centre a reader actually judges:
+ * the cap-height centre a reader judges:
  *
  *     system-ui      -0.72px   chrome, fine
  *     ui-monospace   -0.20px   cyber, fine
@@ -6936,7 +6879,7 @@
  * ── Why this and not a nudge on the skin ─────────────────────────────────
  * A per-skin padding or transform would correct Rockwell and then break every
  * machine that does not have Rockwell, because CSS cannot see which family in
- * a stack actually won. A consumer on Linux would get Georgia plus a three
+ * a stack won. A consumer on Linux would get Georgia plus a three
  * pixel shove.
  *
  * ascent-override is scoped exactly right instead. It repairs the metrics of
@@ -6975,7 +6918,7 @@
  * Cells are not here and never will be. Every sheet shares ICON_ORDER, so the
  * cell a name resolves to is the same under every skin and the base index
  * already carries it. Only the ink bearings move, and only for the 28 names
- * whose drawing actually changed width.
+ * whose drawing changed width.
  */
 
 @layer pw.skin {
@@ -7126,7 +7069,7 @@
 }
 
 /**
- * SKIN — the select, under paper.
+ * SKIN: the select, under paper.
  *
  * A printed form does not have a raised drop button, because print has no
  * raised anything. It has a value on a ruled line and a mark at the end of

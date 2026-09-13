@@ -14,7 +14,7 @@
  * point rather than an option.
  *
  * The body is a scroll container, so it takes a tabIndex when, and only when,
- * it actually scrolls. Chrome does not make scrollers focusable on its own,
+ * it scrolls. Chrome does not make scrollers focusable on its own,
  * so without this a long dialog has content below the fold that a keyboard
  * user cannot reach. An unconditional tabIndex would add a dead tab stop to
  * every short dialog instead, which is why it is measured.

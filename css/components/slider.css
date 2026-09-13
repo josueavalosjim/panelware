@@ -4,7 +4,7 @@
  * ── Why there is no multi-thumb variant, measured rather than deferred ────
  * HANDOFF.md deferred multi-thumb on the grounds that the WAI-ARIA APG flags
  * unresolved gaps in its own reference pattern. Building the equaliser meant
- * finding out what that actually means, and the answer changes the design
+ * finding out what that means, and the answer changes the design
  * rather than qualifying it.
  *
  * A multi-thumb slider is a RANGE. Its thumbs are the ends of one span and

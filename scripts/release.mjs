@@ -67,7 +67,7 @@ export function blockers({ version, changelog, branch, dirty, unpushed, tagExist
   return out;
 }
 
-/** What the repo actually looks like right now. */
+/** What the repo looks like right now. */
 export function state() {
   const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
   const version = pkg.version;

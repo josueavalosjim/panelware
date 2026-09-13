@@ -1,5 +1,5 @@
 /**
- * MOTION — a locked scale, and open role assignments.
+ * MOTION: a locked scale, and open role assignments.
  *
  * The scale is the house scale and a skin may not add to it. What a skin may
  * do is re-point a role at a different rung: a skin that wants a heavier
@@ -9,7 +9,7 @@
  *
  * Only transform and opacity are ever transitioned in this kit. box-shadow is
  * a paint property, so animating the bevel would drop every press off the
- * compositor — and a real bevelled button never eased anyway. It flipped.
+ * compositor, and a real bevelled button never eased anyway. It flipped.
  */
 
 :root {

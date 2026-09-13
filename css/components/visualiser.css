@@ -1,5 +1,5 @@
 /**
- * VISUALISER — the spectrum analyser.
+ * VISUALISER: the spectrum analyser.
  *
  * The last piece of the console the chrome skin is drawing. The kit already
  * ships a transport, a seek bar, an equaliser and a segment readout, and the
@@ -53,7 +53,7 @@
        background-image here put a component rule in pw.components over the
        shared stack in pw.treatment, so this surface silently dropped the
        elevation fill and the texture: the cyber skin's scanlines never reached
-       the one thing in the kit that is actually a screen. */
+       the one thing in the kit that is a screen. */
     --pw-ornament: radial-gradient(var(--pw-color-vis-grid) 1px, transparent 1px);
     --pw-ornament-size: var(--pw-vis-grid-pitch) var(--pw-vis-grid-pitch);
   }
@@ -82,7 +82,7 @@
       var(--pw-color-vis-high)
     );
     /* See the header. Sized to the column and anchored to its floor, so the
-       bar shows the slice of the ramp its level actually reaches. */
+       bar shows the slice of the ramp its level reaches. */
     background-size: 100% var(--pw-vis-col);
     background-position: left bottom;
     background-repeat: no-repeat;

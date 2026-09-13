@@ -1,5 +1,5 @@
 /**
- * VISUALISER — the spectrum analyser.
+ * VISUALISER: the spectrum analyser.
  *
  * The last piece of the console this skin is drawing, and the one everybody
  * pictures first.

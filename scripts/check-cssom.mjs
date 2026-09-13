@@ -1,5 +1,5 @@
 /**
- * Every class the kit renders has to match a rule the browser actually kept.
+ * Every class the kit renders has to match a rule the browser kept.
  *
  * Brace balance catches the way this broke in 0.1.0, where one extra } closed
  * a layer early and orphaned every rule after it. It cannot catch the other
@@ -158,7 +158,7 @@ await withDemo(async (p, base) => {
        parsed, the cascade discarded it, and the skin kept the first sheet.
        The documentation said it was a skin's to set the whole time.
 
-       So this asks the browser what the mask actually resolved to under each
+       So this asks the browser what the mask resolved to under each
        skin, rather than whether a declaration exists. */
     for (const [skin, file] of SKIN_SHEETS) {
       const got = await p.evaluate(`(() => {
@@ -179,7 +179,7 @@ await withDemo(async (p, base) => {
       }
     }
 
-    /* The equaliser's zero rule, against the band that is actually on zero.
+    /* The equaliser's zero rule, against the band that is on zero.
        They are drawn by different things against different boxes: Radix
        positions the thumb along the track and .pw-eq-fill lives inside it,
        while the rule is a pseudo-element on the well, which is taller than

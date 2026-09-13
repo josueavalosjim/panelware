@@ -1,6 +1,6 @@
 /**
  * Writes demo/docs-data.json: every token with its resolved value per theme,
- * and every contrast pair with the ratio the gate actually measured.
+ * and every contrast pair with the ratio the gate measured.
  *
  * Generated from the same sources the gate reads, and from the gate itself,
  * so the numbers in the documentation cannot drift from the numbers in the

@@ -7,7 +7,7 @@
  * Cells are not here and never will be. Every sheet shares ICON_ORDER, so the
  * cell a name resolves to is the same under every skin and the base index
  * already carries it. Only the ink bearings move, and only for the 19 names
- * whose drawing actually changed width.
+ * whose drawing changed width.
  */
 
 @layer pw.skin {

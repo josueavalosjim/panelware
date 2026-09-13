@@ -1,5 +1,5 @@
 /**
- * Is this element actually scrolling?
+ * Is this element scrolling?
  *
  * A scroll container with no focusable content is a keyboard trap in reverse:
  * Firefox makes scrollers focusable on its own, Chrome does not, so a long

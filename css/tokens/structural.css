@@ -1,5 +1,5 @@
 /**
- * STRUCTURAL — everything that is not a colour.
+ * STRUCTURAL: everything that is not a colour.
  *
  * DaisyUI v5's real contribution is that it splits these out from the colour
  * roles instead of folding shape into the palette, so a theme can change how
@@ -81,7 +81,7 @@
 
   /* DaisyUI's structural scalar, kept by name. 1 is the shipped depth; 0
      flattens the kit without removing it. See css/treatment/bevel.css for
-     what actually reads this. */
+     what reads this. */
   --pw-depth: 1;
 
   /* HOW DEEP THE READOUT IS SET, as a token rather than as a number in
@@ -221,7 +221,7 @@
      component: a 44px tall equaliser is a row of switches. */
   /* A fader is not a slider grip turned on its side. The generic grip is 22
      across the travel axis, and on an equaliser that is most of the distance
-     a band actually moves: a 4dB change on a 24dB scale is 21px of a 128px
+     a band moves: a 4dB change on a 24dB scale is 21px of a 128px
      well, so the grip covered its own fill entirely and every band read as
      flat. A fader is thin along the travel and long across it, which is what
      every physical one is, and for the same reason. */
@@ -270,7 +270,7 @@
   /* What the well has below the faders: the band's gap and its frequency
      label. The rule is drawn on the well and has to be placed along the
      TRAVEL, so this is what comes off first. Derived from the two tokens the
-     band and the label actually use rather than stated, because both move per
+     band and the label use rather than stated, because both move per
      skin: the label sets line-height: 1 on --pw-text-micro, so its height is
      that token exactly. */
   --pw-eq-label-space: calc(var(--pw-space-2xs) + var(--pw-text-micro));
