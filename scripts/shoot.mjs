@@ -44,7 +44,13 @@ const arg = (name, fallback) => {
   return at > -1 ? process.argv[at + 1] : fallback;
 };
 
-const comps = arg('comp') ? [arg('comp')] : COMPS;
+/* `classic` is not one of the stage's comps, it is its own page. Naming it
+   used to run the comp loop with a name nothing matches, which shot the empty
+   stage once per ground and called them classic-luna.png and
+   classic-bliss.png. */
+const comps = arg('comp')
+  ? COMPS.filter((c) => c === arg('comp'))
+  : COMPS;
 /* luna first, and it is the default for a reason. A landscape drawn in CSS
    gradients reads as a landscape drawn in CSS gradients: it has no grain, no
    focal falloff and no texture, and at 1920 wide that is the first thing a
@@ -159,13 +165,38 @@ if (!arg('comp') || arg('comp') === 'classic') {
       width: CLASSIC.w, height: CLASSIC.h, deviceScaleFactor: CLASSIC.scale, mobile: false,
     });
     await page.goto(`${server.url}/${CLASSIC.page}`);
-    if (!(await page.ready(`document.querySelectorAll('.pw-lcd-cell').length > 20`))) {
+    /* Both readouts, whatever they are spelling. The clock is five cells and
+       the title is however long the track's name is, so a fixed floor of
+       twenty was a bet on one particular track being first. */
+    if (!(await page.ready(`document.querySelectorAll('.pw-lcd-cell').length >= 10
+      && document.querySelectorAll('.pw-transport-button').length >= 5`))) {
       throw new Error('the replica never rendered its readout, so nothing was shot');
     }
     /* The prose above the window is for a reader, not for the shot. */
     await page.evaluate(`document.querySelector('.note').style.display = 'none';
       document.body.style.cssText += ';display:block;padding:0;margin:0;background:#000';
       document.querySelector('.classic-stage').style.margin = '0';`);
+    /* Press play, for the same reason the other player comp does: an analyser
+       at zero is a picture of a dead player. A real mouse event, because the
+       autoplay policy is specifically about trusted ones. */
+    const at = await page.evaluate(`(() => {
+      const b = document.querySelector('.pw-transport-button[aria-label="Play"]');
+      if (!b) return null;
+      const r = b.getBoundingClientRect();
+      return { x: Math.round(r.x + r.width / 2), y: Math.round(r.y + r.height / 2) };
+    })()`);
+    if (at) {
+      for (const type of ['mousePressed', 'mouseReleased']) {
+        await page.send('Input.dispatchMouseEvent', {
+          type, x: at.x, y: at.y, button: 'left', clickCount: 1,
+          buttons: type === 'mousePressed' ? 1 : 0,
+        });
+      }
+      const live = await page.ready(`[...document.querySelectorAll('.pw-visualiser-bar')]
+        .some((el) => parseFloat(el.style.getPropertyValue('--pw-vis-level')) > 0.02)`,
+        { timeout: 4000, every: 120 });
+      if (!live) console.warn('    (the analyser stayed flat, so this shot has a dead display)');
+    }
     await page.settle(400);
     const { data } = await page.send('Page.captureScreenshot',
       { format: 'png', captureBeyondViewport: false });

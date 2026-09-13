@@ -7,101 +7,130 @@
 <!--
   275 BY 116, WHICH IS WHAT WINAMP 2 ACTUALLY WAS.
 
-  Every coordinate on this page is one of its real ones, and every surface is
-  painted by the kit's own CSS with nothing forked. What it costs is the one
-  thing the kit will not give up on its own: WCAG 2.5.8's 24px target.
-  Winamp's transport buttons were 23x18 and its title bar buttons were 9x9,
-  so a replica at true size is under the floor by definition.
+  Every coordinate is one of its real ones and every control is a component
+  from the package, driven by Radix, at a set of token values that turn the
+  chrome skin into a 1998 bitmap skin. demo/player/classic.css has the look
+  and the grid, and says which is which.
 
-  The knob overrides therefore live on THIS page, under a data-density value
-  the package does not define. css/tokens/density.css still ships comfortable
-  at 44 and compact at 32, a contract test still holds both over 24, and
-  demo/player/index.html is this same composition at a size that passes. That
-  is the difference between a kit that lets a consumer do this and one that
-  does it to them.
+  ── Why this is React and not static markup ──────────────────────────────
+  It was static first, and it looked broken in a way that took a while to
+  read: the volume thumb sat on top of the EQ button, 35 pixels past the end
+  of its own track. Nothing was overlapping by accident. slider.css does not
+  position its thumb, deliberately, and there is a contract test named "the
+  slider thumb does not position itself" saying so, because Radix owns that
+  and a component that positions its own thumb fights it. Hand-written markup
+  gets no Radix, so both thumbs fell into flex flow after their track and
+  landed wherever that put them.
 
-  Static markup, deliberately. The working player is index.html; this page
-  exists to be looked at, and a still of real CSS is what it is for.
-
-  One thing worth noticing: the time display needed no adjusting at all. The
-  kit's seven-segment sheet is 9x13 per digit because it came from the same
-  1998 spec Winamp's did, so at --pw-lcd-scale: 1 it is already the right
-  size. assets/README.md has the provenance.
+  A static page can show a button. It cannot show a slider, and pretending
+  otherwise is how a replica ends up looking like nothing in particular.
 -->
 <link rel="stylesheet" href="../../css/panelware.css">
 <link rel="stylesheet" href="./classic.css">
+<script type="importmap">
+{
+  "imports": {
+    "react": "../vendor/react.js",
+    "react/jsx-runtime": "../vendor/react-jsx-runtime.js",
+    "react-dom": "../vendor/react-dom.js",
+    "react-dom/client": "../vendor/react-dom-client.js",
+    "radix-ui": "../vendor/radix-ui.js"
+  }
+}
+</script>
 </head>
 <body>
   <p class="note">
-    <strong>275 &times; 116.</strong> Winamp 2's real window, at its real size, built
-    from components on npm. The look is <em>fourteen token values and no component
-    changes</em>: half bevel depth, gloss off, radius off, Win95 silver, phosphor
-    green. What it gives up is the 24px touch target, because Winamp's buttons were
-    23&times;18, so this page is knowingly under WCAG 2.5.8 and sits outside
-    <code>check:a11y</code>. The package still ships 44px and 32px only.
+    <strong>275 &times; 116.</strong> Winamp 2's real window, at its real size, and it
+    plays. The look is a block of token values and no component CSS: half bevel depth,
+    gloss off, radius off, Win95 silver, phosphor green. What it gives up is the 24px
+    touch target, because Winamp's buttons were 23&times;18, so this page is knowingly
+    under WCAG 2.5.8 and sits outside <code>check:a11y</code>. The package still ships
+    44px and 32px only.
     <a href="./index.html">The same components at a size that passes</a>.
   </p>
 
-  <div class="classic-stage">
-    <section class="win pw-window" aria-labelledby="classic-title">
-      <div class="pw-title-bar" data-gloss>
-        <h1 class="pw-title" id="classic-title">PANELWARE</h1>
-        <div class="pw-title-controls">
-          <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
-          <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
-          <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
-        </div>
-      </div>
+  <div class="classic-stage"><div id="root"></div></div>
 
-      <div class="pw-window-body"></div>
+  <script type="module">
+    import { createElement as h } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import {
+      Progress, Readout, Slider, Toggle, Transport, TransportButton, Visualiser, Window,
+    } from '../../dist/index.js';
+    import { usePlayer, clock } from './audio.js';
 
-        <span class="at at-time pw-lcd">
-          <span class="pw-lcd-render" role="img" aria-label="Elapsed 2 minutes 31 seconds"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 12; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 3; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1; --pw-cell-y: 0"></span></span>
-        </span>
+    /* Winamp's analyser is 76px wide with a 1px gap, which is nineteen bars. */
+    const BARS = 19;
 
-        <div class="at at-vis">
-          <div class="pw-visualiser" role="img" aria-label="Spectrum analyser">
-            <span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.82"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.96"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.74"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.88"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.9"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 1.00"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.66"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.80"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.58"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.72"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.71"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.85"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.5"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.64"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.62"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.76"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.44"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.58"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.55"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.69"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.38"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.52"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.47"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.61"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.3"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.44"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.4"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.54"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.26"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.40"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.33"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.47"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.22"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.36"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.28"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.42"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.18"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.32"></span></span><span class="pw-visualiser-band" aria-hidden="true"><span class="pw-visualiser-bar" style="--pw-vis-level: 0.24"></span><span class="pw-visualiser-peak" style="--pw-vis-hold: 0.38"></span></span>
-          </div>
-        </div>
+    function Classic() {
+      const p = usePlayer({ bands: BARS });
 
-        <span class="at at-title pw-lcd">
-          <span class="pw-lcd-render" role="img" aria-label="Now playing, Llama Whippin Intro"><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 11; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 12; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 22; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 7; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 15; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 26; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 8; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 13; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 19; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 17; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="glyphs" style="--pw-cell-x: 14; --pw-cell-y: 0"></span></span>
-        </span>
+      const tx = (icon, label, onClick) =>
+        h(TransportButton, { icon, label, onClick });
 
-        <span class="at at-kbps">128</span>
-        <span class="at at-khz">44</span>
-        <span class="at at-stereo">STEREO</span>
+      /* Winamp has all three title buttons, and Window only renders a control
+         when a handler is passed, which is the rule window.tsx keeps: a
+         control that looks pressable and does nothing is worse than an absent
+         one. So these are real no-ops rather than decoration, and the labels
+         are what a screen reader gets. */
+      const noop = () => {};
 
-        <div class="at at-vol pw-slider" role="group" aria-label="Volume">
-          <span class="pw-slider-track"><span class="pw-slider-range" style="width: 72%"></span></span>
-          <span class="pw-slider-thumb" role="slider" tabindex="0" aria-label="Volume" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="left: 72%"></span>
-        </div>
+      return h(Window, {
+        title: 'PANELWARE', className: 'win',
+        onMinimize: noop, onMaximize: noop, onClose: noop,
+        minimizeLabel: 'Minimise', maximizeLabel: 'Shade', closeLabel: 'Close',
+      },
+        /* Winamp's numbers are window numbers, so every control is placed
+           against the window rather than inside its body. classic.css says
+           why that distinction cost four pixels off the transport row. */
+        h('span', { className: 'at at-time' },
+          h(Readout, { value: clock(p.elapsed), mode: 'digits',
+            label: `Elapsed ${clock(p.elapsed)}` })),
 
-        <div class="at at-bal pw-slider" role="group" aria-label="Balance">
-          <span class="pw-slider-track"><span class="pw-slider-range" style="width: 50%"></span></span>
-          <span class="pw-slider-thumb" role="slider" tabindex="0" aria-label="Balance" aria-valuenow="0" aria-valuemin="-100" aria-valuemax="100" style="left: 50%"></span>
-        </div>
+        h('span', { className: 'at at-vis' },
+          h(Visualiser, { values: p.levels, label: 'Spectrum analyser', peakDecay: 0.05 })),
 
-        <div class="at at-eqpl">
-          <button class="pw-toggle" type="button" aria-pressed="true">EQ</button>
-          <button class="pw-toggle" type="button" aria-pressed="true">PL</button>
-        </div>
+        h('span', { className: 'at at-title' },
+          h(Readout, { value: p.current.primary.toUpperCase(), mode: 'glyphs',
+            label: `Now playing, ${p.current.primary}` })),
 
-        <div class="at at-seek pw-slider" role="group" aria-label="Position">
-          <span class="pw-slider-track"><span class="pw-slider-range" style="width: 41%"></span></span>
-          <span class="pw-slider-thumb" role="slider" tabindex="0" aria-label="Position" aria-valuenow="151" aria-valuemin="0" aria-valuemax="369" style="left: 41%"></span>
-        </div>
+        h('span', { className: 'at at-kbps' }, '128'),
+        h('span', { className: 'at at-khz' }, String(p.rate)),
+        h('span', { className: 'at at-stereo' }, 'STEREO'),
 
-        <div class="at at-tx pw-transport" role="toolbar" aria-label="Transport">
-          <button class="pw-transport-button" type="button" aria-label="Previous track"><span class="pw-icon" aria-hidden="true" data-icon="previous"></span></button><button class="pw-transport-button" type="button" aria-label="Play"><span class="pw-icon" aria-hidden="true" data-icon="play"></span></button><button class="pw-transport-button" type="button" aria-label="Pause"><span class="pw-icon" aria-hidden="true" data-icon="pause"></span></button><button class="pw-transport-button" type="button" aria-label="Stop"><span class="pw-icon" aria-hidden="true" data-icon="stop"></span></button><button class="pw-transport-button" type="button" aria-label="Next track"><span class="pw-icon" aria-hidden="true" data-icon="next"></span></button><button class="pw-transport-button" type="button" aria-label="Open file"><span class="pw-icon" aria-hidden="true" data-icon="eject"></span></button>
-        </div>
+        h('span', { className: 'at at-vol' },
+          h(Slider, { label: 'Volume', value: [p.volume], max: 100,
+            onValueChange: ([v]) => p.setVolume(v), format: (v) => `${v} percent` })),
 
-        <div class="at at-shuffle">
-          <button class="pw-toggle" type="button" aria-pressed="false">SHUF</button>
-          <button class="pw-toggle" type="button" aria-pressed="true">REP</button>
-        </div>
-    </section>
-  </div>
+        h('span', { className: 'at at-bal' },
+          h(Slider, { label: 'Balance', value: [p.balance], min: -100, max: 100,
+            onValueChange: ([v]) => p.setBalance(v),
+            format: (v) => (v === 0 ? 'centred' : `${Math.abs(v)} percent ${v < 0 ? 'left' : 'right'}`) })),
+
+        h('span', { className: 'at at-eqpl' },
+          h(Toggle, { pressed: p.eqOn, onPressedChange: p.setEqOn }, 'EQ'),
+          h(Toggle, { pressed: true, onPressedChange: () => {} }, 'PL')),
+
+        h('span', { className: 'at at-seek' },
+          h(Progress, { value: p.elapsed, max: 30, label: 'Position',
+            format: (v, m) => `${clock(v)} of ${clock(m)}` })),
+
+        h('span', { className: 'at at-tx' },
+          h(Transport, { label: 'Transport' },
+            tx('previous', 'Previous track', () => p.step(-1)),
+            tx(p.playing ? 'pause' : 'play', p.playing ? 'Pause' : 'Play',
+              () => (p.playing ? p.pause() : p.play())),
+            tx('stop', 'Stop', p.stop),
+            tx('next', 'Next track', () => p.step(1)),
+            tx('eject', 'Open file', () => p.step(1)))),
+
+        h('span', { className: 'at at-shuffle' },
+          h(Toggle, { pressed: false, onPressedChange: () => {} }, 'SHUF'),
+          h(Toggle, { pressed: p.loop, onPressedChange: p.setLoop }, 'REP')));
+    }
+
+    createRoot(document.getElementById('root')).render(h(Classic));
+  </script>
 </body>
 </html>

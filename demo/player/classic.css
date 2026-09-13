@@ -195,14 +195,21 @@ body {
 }
 .win .pw-title-button .pw-icon { --pw-icon-scale: 1; transform: scale(0.5); }
 
-/* The body paints the ground and nothing else. Every control is a SIBLING of
-   it, so `top` resolves against the window and Winamp's numbers can be
-   written down unaltered. They were children once and every one of them was
-   therefore 14px low, which the transport row showed by losing its bottom
-   four pixels inside the body's overflow. */
+/* WINAMP'S NUMBERS ARE WINDOW NUMBERS, so the window has to be what they
+   resolve against.
+
+   The body is the only child a Window component takes, so every control is
+   inside it, and an absolutely positioned body would then be the containing
+   block: `top: 43px` would mean 43 from under the title bar, which is 14 too
+   low. It measured exactly that twice, and the transport row showed it by
+   losing its bottom four pixels.
+
+   Making the body static hands the job to .win, which is positioned. The body
+   still paints the ground across the whole window; the title bar is absolute
+   and sits over its top fourteen pixels, which is what a title bar does. */
 .win .pw-window-body {
-  position: absolute;
-  inset: 14px 0 0 0;
+  position: static;
+  height: 100%;
   padding: 0;
   border-radius: 0;
 }
