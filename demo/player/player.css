@@ -159,7 +159,16 @@ body[data-bare] {
   background-image: none;
 }
 body[data-bare] { min-height: 0; }
-body[data-bare] #root { padding: 0; }
+/* Centred in the frame, so a skin whose windows run shorter sits in the
+   middle of it rather than at the top: the four skins measure 522 to 576
+   tall in the same frame. Not by place-items, which centred 535.69 at
+   32.16 and blended the top edge into the ground. The page writes
+   --bare-top as a whole pixel instead. */
+body[data-bare] #root {
+  padding: var(--bare-top, 0) 0 0;
+  min-height: 100vh;
+  place-items: start center;
+}
 body[data-bare] .page-chrome,
 body[data-bare] .page-hint { display: none; }
 
