@@ -2607,7 +2607,7 @@
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
-   "ratio": 11.26,
+   "ratio": 9.86,
    "min": 4.5,
    "pass": true
   },
@@ -2814,7 +2814,7 @@
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
-   "ratio": 11.26,
+   "ratio": 9.86,
    "min": 4.5,
    "pass": true
   },
@@ -3435,7 +3435,7 @@
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
-   "ratio": 11.26,
+   "ratio": 12,
    "min": 4.5,
    "pass": true
   },
@@ -3642,7 +3642,7 @@
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
-   "ratio": 11.26,
+   "ratio": 14.1,
    "min": 4.5,
    "pass": true
   },
@@ -3849,7 +3849,7 @@
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
-   "ratio": 11.26,
+   "ratio": 9.86,
    "min": 4.5,
    "pass": true
   },
@@ -4056,7 +4056,7 @@
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
-   "ratio": 11.26,
+   "ratio": 9.86,
    "min": 4.5,
    "pass": true
   },
@@ -4263,7 +4263,7 @@
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
-   "ratio": 11.26,
+   "ratio": 12,
    "min": 4.5,
    "pass": true
   },
@@ -4470,7 +4470,7 @@
    "fg": "--pw-color-lcd-content",
    "bg": "--pw-color-lcd",
    "note": "the readout",
-   "ratio": 11.26,
+   "ratio": 12,
    "min": 4.5,
    "pass": true
   },
