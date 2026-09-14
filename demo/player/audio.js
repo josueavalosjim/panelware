@@ -34,6 +34,18 @@ export const LENGTH = 30;
 
 /** Ten bands, the Winamp spread, an octave apart from 60Hz. */
 export const BANDS = [60, 120, 240, 480, 960, 1920, 3840, 7680, 12000, 16000];
+
+/* ?mute, on this page or the page framing it: the capture scripts press play
+   to get a live analyser, and the headless browser they drive plays through
+   the machine's speakers. The analyser still reads the signal; only what
+   reaches the speakers is silenced. */
+const muted = () => {
+  try {
+    return [location, window.top.location].some((l) => new URLSearchParams(l.search).has('mute'));
+  } catch {
+    return new URLSearchParams(location.search).has('mute');
+  }
+};
 export const bandLabel = (hz) => (hz >= 1000 ? `${Math.round(hz / 100) / 10}k` : `${hz}`);
 
 export const clock = (s) => {
@@ -87,7 +99,10 @@ export function usePlayer({ bands = 20 } = {}) {
     filters[filters.length - 1].connect(gain);
     gain.connect(pan);
     pan.connect(analyser);
-    analyser.connect(ctx.destination);
+    const out = ctx.createGain();
+    out.gain.value = muted() ? 0 : 1;
+    analyser.connect(out);
+    out.connect(ctx.destination);
 
     ref.current = { ctx, filters, gain, pan, analyser, head: filters[0], voices: [] };
     return ref.current;

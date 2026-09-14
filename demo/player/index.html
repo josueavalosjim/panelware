@@ -78,6 +78,14 @@
     const BANDS = [60, 120, 240, 480, 960, 1920, 3840, 7680, 12000, 16000];
     const bandLabel = (hz) => (hz >= 1000 ? `${Math.round(hz / 100) / 10}k` : `${hz}`);
 
+    const muted = () => {
+      try {
+        return [location, window.top.location].some((l) => new URLSearchParams(l.search).has('mute'));
+      } catch {
+        return new URLSearchParams(location.search).has('mute');
+      }
+    };
+
     /* ── The graph ─────────────────────────────────────────────────────────
        Built once, lazily, because an AudioContext created before a gesture
        starts suspended in every browser and a context nobody resumed is the
@@ -117,7 +125,12 @@
         filters[filters.length - 1].connect(gain);
         gain.connect(pan);
         pan.connect(analyser);
-        analyser.connect(ctx.destination);
+        /* ?mute, on this page or the showcase framing it. demo/player/audio.js
+           says why. */
+        const out = ctx.createGain();
+        out.gain.value = muted() ? 0 : 1;
+        analyser.connect(out);
+        out.connect(ctx.destination);
 
         ref.current = { ctx, filters, gain, pan, analyser, head: filters[0], voices: [] };
         return ref.current;
