@@ -308,7 +308,7 @@
       </div>
 
       <div class="comp comp-player" data-comp="player">
-        <iframe id="player-frame" src="../player/index.html?bare=1&amp;skin=chrome&amp;theme=light&amp;layout=columns" title="panelware player"></iframe>
+        <iframe id="player-frame" src="../player/index.html?bare=1&amp;skin=chrome&amp;theme=light&amp;layout=columns&amp;lock" title="panelware player"></iframe>
       </div>
 
     </div>
@@ -368,7 +368,7 @@
     const reframe = (next) => {
       Object.assign(look, next);
       const frame = document.getElementById('player-frame');
-      frame.src = `../player/index.html?bare=1&skin=${look.skin}&theme=${look.theme}&layout=columns`;
+      frame.src = `../player/index.html?bare=1&skin=${look.skin}&theme=${look.theme}&layout=columns&lock`;
     };
     document.getElementById('pick-skin').addEventListener('change', (e) => reframe({ skin: e.target.value }));
     document.getElementById('pick-theme').addEventListener('click', () => {

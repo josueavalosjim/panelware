@@ -172,6 +172,28 @@ body[data-bare] #root {
 body[data-bare] .page-chrome,
 body[data-bare] .page-hint { display: none; }
 
+/* ?lock: every skin at the same geometry, so a clip that cuts between skins
+   changes the styling and nothing else. These are the sizing tokens that
+   differ between skins, measured, pinned to chrome's values. Fonts still
+   differ in width, so the controls sized by their label get fixed widths.
+   Everything a skin paints (colour, face, bevel, clip, texture) is left
+   to the skin. */
+body[data-lock] {
+  --pw-panel-pad: 1.5rem;
+  --pw-control-gap: 0.5rem;
+  --pw-control-pad-x: 0.75rem;
+  --pw-control-text: 0.9375rem;
+  --pw-badge-h: 1.5rem;
+  --pw-text-ui: 0.9375rem;
+  --pw-text-micro: 0.75rem;
+  --pw-leading-ui: 1.2;
+  --pw-tracking-ui: 0;
+  --pw-eq-label-space: calc(0.25rem + 0.75rem);
+}
+body[data-lock] .deck-windows .pw-toggle { width: 4.5rem; }
+body[data-lock] .eq-switches :is(.pw-toggle, .pw-button) { width: 4.5rem; }
+body[data-lock] .pw-list-secondary { flex: 0 0 3.5rem; text-align: right; }
+
 /* ?layout=columns */
 body[data-layout="columns"] .stack { width: auto; }
 body[data-layout="columns"] .stack .stack {
