@@ -37,6 +37,11 @@
     gap: var(--pw-space-2xs);
     min-height: var(--pw-badge-h);
     padding: 0 var(--pw-space-sm);
+    /* Flex centres the label's line box, not its capitals, and each skin's
+       face sits differently in it: measured, cyber's caps were 1.5px high and
+       dialup's a quarter low. Top padding moves the centred content down by
+       half of itself, so a skin's whole-pixel drop is doubled here. */
+    padding-top: calc(var(--pw-badge-text-drop) * 2);
     font-family: var(--pw-font-ui);
     font-size: var(--pw-text-micro);
     line-height: var(--pw-leading-ui);
@@ -62,5 +67,8 @@
   .pw-badge .pw-icon {
     /* A 16px mark next to 12px text sits a pixel high on the cap line. */
     margin-block: -1px;
+    /* And then the skin's own correction, relative to the text, because a
+       glyph's ink and a face's caps do not move together. */
+    translate: 0 var(--pw-badge-mark-drop);
   }
 }
