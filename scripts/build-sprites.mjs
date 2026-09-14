@@ -25,8 +25,8 @@ import {
 import {
   ICON_COLS, ICON_H, ICON_ORDER, ICON_ROWS, ICON_W, iconRects,
 } from '../assets/icon-font.mjs';
-import { iconMarkup as cyberMarkup } from '../assets/icon-font.cyber.mjs';
-import { iconMarkup as paperMarkup } from '../assets/icon-font.paper.mjs';
+import { iconMarkup as cyberMarkup, iconRects as cyberRects } from '../assets/icon-font.cyber.mjs';
+import { iconMarkup as paperMarkup, iconRects as paperRects } from '../assets/icon-font.paper.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ASSETS = join(HERE, '..', 'assets');
@@ -86,10 +86,19 @@ export function iconSheet(markup) {
   return sheet(ICON_COLS * ICON_W, ICON_ROWS * ICON_H, body);
 }
 
+/* A vector sheet's footprint as flat rects: what its ink covers, snapped to
+   whole pixels. A 45 degree line cannot fill whole pixels, so on a 1x screen
+   the vector sheet paints its diagonals grey. A skin with a vector sheet
+   ships this as well and picks between the two with image-set(), pixels at
+   1x and vector at 2x. */
+const pixels = (rects) => (name) => rects(name).map((r) => rect(r, 0, 0)).join('');
+
 /** The sheets a skin can point at, by the file each is written to. */
 export const SKIN_SHEETS = [
   ['icons.cyber.svg', cyberMarkup],
+  ['icons.cyber.px.svg', pixels(cyberRects)],
   ['icons.paper.svg', paperMarkup],
+  ['icons.paper.px.svg', pixels(paperRects)],
 ];
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -100,5 +109,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log(`lcd-digits.svg  ${DIGIT_CELLS.length * DIGIT_W}x${DIGIT_H}, ${DIGIT_CELLS.length} cells`);
   console.log(`lcd-glyphs.svg  ${GLYPH_COLS * GLYPH_W}x${GLYPH_ROWS * GLYPH_H}, ${GLYPH_ORDER.length} glyphs in ${GLYPH_COLS}x${GLYPH_ROWS}`);
   console.log(`icons.svg       ${ICON_COLS * ICON_W}x${ICON_ROWS * ICON_H}, ${ICON_ORDER.length} icons in ${ICON_COLS}x${ICON_ROWS}`);
-  for (const [file] of SKIN_SHEETS) console.log(`${file.padEnd(16)}${ICON_COLS * ICON_W}x${ICON_ROWS * ICON_H}, ${ICON_ORDER.length} icons`);
+  for (const [file] of SKIN_SHEETS) console.log(`${file.padEnd(20)}${ICON_COLS * ICON_W}x${ICON_ROWS * ICON_H}, ${ICON_ORDER.length} icons`);
 }

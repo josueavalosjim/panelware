@@ -15,7 +15,10 @@
 import { ICON_COLS, ICON_ORDER } from '../assets/icon-font.mjs';
 
 /* Which skins ship a sheet of their own, and the file each one ships. */
-const SKIN_SHEETS = [['cyber', 'icons.cyber.svg'], ['paper', 'icons.paper.svg']];
+const SKIN_SHEETS = [
+  ['cyber', ['icons.cyber.px.svg', 'icons.cyber.svg']],
+  ['paper', ['icons.paper.px.svg', 'icons.paper.svg']],
+];
 
 /* Every skin, because the zero rule's correction is derived from tokens that
    move per skin. */
@@ -160,22 +163,27 @@ await withDemo(async (p, base) => {
 
        So this asks the browser what the mask resolved to under each
        skin, rather than whether a declaration exists. */
-    for (const [skin, file] of SKIN_SHEETS) {
+    for (const [skin, files] of SKIN_SHEETS) {
       const got = await p.evaluate(`(() => {
         const root = document.documentElement;
         const before = root.getAttribute('data-skin');
         root.setAttribute('data-skin', ${JSON.stringify(skin)});
         const e = document.querySelector('.pw-icon');
-        const url = e && getComputedStyle(e).maskImage.match(/url\\("?([^")]+)"?\\)/);
+        const urls = e ? [...getComputedStyle(e).maskImage.matchAll(/url\\("?([^")]+)"?\\)/g)].map((m) => m[1]) : [];
         if (before === null) root.removeAttribute('data-skin');
         else root.setAttribute('data-skin', before);
-        return url ? url[1] : null;
+        return urls.length ? urls : null;
       })()`);
       if (got === null) continue;
       sheets += 1;
-      if (!got.endsWith(file)) {
-        failures.push(`${page}: under data-skin="${skin}" the mask resolves to ${got.split('/').pop()} ` +
-          `and that skin ships ${file}, so its sheet is being discarded by the cascade`);
+      /* Both files, in either order: a skin with a vector sheet resolves to
+         an image-set of its pixel and vector files. */
+      const names = got.map((u) => u.split('/').pop());
+      for (const file of files) {
+        if (!names.includes(file)) {
+          failures.push(`${page}: under data-skin="${skin}" the mask resolves to ${names.join(', ')} ` +
+            `and that skin ships ${file}, so its sheet is being discarded by the cascade`);
+        }
       }
     }
 

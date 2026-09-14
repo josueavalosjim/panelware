@@ -1441,18 +1441,14 @@
   --pw-font-ui: var(--pw-font-mono);
   --pw-tracking-ui: 0.045em;
 
-  /* The skin's own sprite sheet. --pw-icon-sheet has been a token since the
-     icon system was written and no skin had ever pointed it anywhere, so the
-     three skins shared one set of solid 16x16 marks drawn for a toolbar of
-     pressable objects. This set is drawn open: outlines where the first one
-     fills, right angles where it curves, and a square where it draws a
-     circle, because a HUD's dot is a cell on a grid.
-
-     Same cell, same eight columns, same ICON_ORDER, so every name still
-     resolves to the cell the index computed for it. Only the pixels change,
-     and the bearings that fall out of them, which are generated into
-     css/skins/cyber/icon-index.css. */
-  --pw-icon-sheet: url("../assets/icons.cyber.svg");
+  /* The skin's own sheet, drawn in vector to the rules in
+     assets/icon-font.cyber.mjs: 1px strokes, 45 degree diagonals, one axis.
+     Two files, one drawing. A 45 degree hairline cannot fill whole pixels,
+     so at 1x the vector sheet paints it grey; the .px sheet is the same
+     glyphs snapped to pixels, and image-set() gives each screen the one that
+     is sharp on it. Same cell and order as every sheet, and the bearings are
+     generated into css/skins/cyber/icon-index.css. */
+  --pw-icon-sheet: image-set(url("../assets/icons.cyber.px.svg") 1x, url("../assets/icons.cyber.svg") 2x);
   --pw-selected-bg: transparent;
   --pw-selected-content: inherit;
   --pw-selected-mark:
@@ -1575,18 +1571,8 @@
   --pw-font-ui: var(--pw-font-mono);
   --pw-tracking-ui: 0.045em;
 
-  /* The skin's own sprite sheet. --pw-icon-sheet has been a token since the
-     icon system was written and no skin had ever pointed it anywhere, so the
-     three skins shared one set of solid 16x16 marks drawn for a toolbar of
-     pressable objects. This set is drawn open: outlines where the first one
-     fills, right angles where it curves, and a square where it draws a
-     circle, because a HUD's dot is a cell on a grid.
-
-     Same cell, same eight columns, same ICON_ORDER, so every name still
-     resolves to the cell the index computed for it. Only the pixels change,
-     and the bearings that fall out of them, which are generated into
-     css/skins/cyber/icon-index.css. */
-  --pw-icon-sheet: url("../assets/icons.cyber.svg");
+  /* See the light block: pixels at 1x, vector at 2x. */
+  --pw-icon-sheet: image-set(url("../assets/icons.cyber.px.svg") 1x, url("../assets/icons.cyber.svg") 2x);
   --pw-selected-bg: transparent;
   --pw-selected-content: inherit;
   --pw-selected-mark:
@@ -1889,9 +1875,11 @@
 [data-skin="paper"][data-theme="light"] {
   /* No bevel and no gloss. The whole stacked-inset treatment collapses, which
      is what --pw-bevel-depth: 0 has always claimed it would do, and the
-     halftone fill is what arrives in its place. */
+     halftone fill is what arrives in its place. The icon sheet is two files,
+     pixels at 1x and vector at 2x, because its lens is the one vector glyph
+     and a curve is grey at 1x. */
   --pw-bevel-depth: 0;
-  --pw-icon-sheet: url("../assets/icons.paper.svg");
+  --pw-icon-sheet: image-set(url("../assets/icons.paper.px.svg") 1x, url("../assets/icons.paper.svg") 2x);
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
   --pw-gloss-cap-alpha: 0;
@@ -2004,7 +1992,7 @@
 
 [data-skin="paper"][data-theme="dark"] {
   --pw-bevel-depth: 0;
-  --pw-icon-sheet: url("../assets/icons.paper.svg");
+  --pw-icon-sheet: image-set(url("../assets/icons.paper.px.svg") 1x, url("../assets/icons.paper.svg") 2x);
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
   --pw-gloss-cap-alpha: 0;

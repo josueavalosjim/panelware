@@ -33,9 +33,11 @@
 [data-skin="paper"][data-theme="light"] {
   /* No bevel and no gloss. The whole stacked-inset treatment collapses, which
      is what --pw-bevel-depth: 0 has always claimed it would do, and the
-     halftone fill is what arrives in its place. */
+     halftone fill is what arrives in its place. The icon sheet is two files,
+     pixels at 1x and vector at 2x, because its lens is the one vector glyph
+     and a curve is grey at 1x. */
   --pw-bevel-depth: 0;
-  --pw-icon-sheet: url("../../assets/icons.paper.svg");
+  --pw-icon-sheet: image-set(url("../../assets/icons.paper.px.svg") 1x, url("../../assets/icons.paper.svg") 2x);
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
   --pw-gloss-cap-alpha: 0;
@@ -148,7 +150,7 @@
 
 [data-skin="paper"][data-theme="dark"] {
   --pw-bevel-depth: 0;
-  --pw-icon-sheet: url("../../assets/icons.paper.svg");
+  --pw-icon-sheet: image-set(url("../../assets/icons.paper.px.svg") 1x, url("../../assets/icons.paper.svg") 2x);
   --pw-gloss-opacity: 0;
   --pw-gloss-glare-alpha: 0;
   --pw-gloss-cap-alpha: 0;
