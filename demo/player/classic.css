@@ -281,6 +281,49 @@ body {
 .win .at-seek .pw-slider-thumb { width: 29px; height: 10px; }
 .win .at-seek .pw-slider-track { --pw-track-h: 4px; }
 
+/* ─────────────────────────────────────────────────────────────────────────
+   ?frame=wide. 320x180, 16:9, for a still that fills the frame at 6x.
+   Same controls in the same order, spread across the extra 45 pixels, and
+   an equaliser strip in the extra 64. A 12px margin on all four sides, and
+   every coordinate a whole pixel.
+   ───────────────────────────────────────────────────────────────────────── */
+[data-frame="wide"] .classic-stage,
+[data-frame="wide"] .win { width: 320px; height: 180px; }
+
+[data-frame="wide"] .at-time    { left: 28px;  top: 24px; }
+[data-frame="wide"] .at-vis     { left: 16px;  top: 41px; }
+[data-frame="wide"] .at-title   { left: 104px; top: 25px; max-width: 200px; }
+[data-frame="wide"] .at-kbps    { left: 104px; top: 42px; }
+[data-frame="wide"] .at-khz     { left: 150px; top: 42px; }
+[data-frame="wide"] .at-stereo  { left: 262px; top: 41px; }
+[data-frame="wide"] .at-vol     { left: 100px; top: 56px; width: 100px; }
+[data-frame="wide"] .at-bal     { left: 206px; top: 56px; width: 46px; }
+[data-frame="wide"] .at-eqpl    { left: 262px; top: 57px; }
+[data-frame="wide"] .at-seek    { left: 12px;  top: 72px; width: 296px; }
+[data-frame="wide"] .at-tx      { left: 12px;  top: 88px; }
+[data-frame="wide"] .at-shuffle { left: 233px; top: 89px; }
+
+/* The strip. Two groups in one sunken row, preamp apart from the bands the
+   way Winamp's own equaliser keeps it. */
+[data-frame="wide"] .at-eq {
+  left: 12px; top: 112px; width: 296px; height: 56px;
+  display: flex; gap: 8px;
+  --pw-eq-height: 50px;
+  --pw-fader-h: 6px;
+  --pw-eq-gap: 1px;
+  /* Even, on a 2px track, so the grip centres on a whole pixel. At the look's
+     11 every thumb sat at x.5. */
+  --pw-thumb-h: 12px;
+}
+[data-frame="wide"] .at-eq .pw-eq { padding: 3px 4px; }
+[data-frame="wide"] .at-eq .pw-eq:last-child { flex: 1 1 auto; }
+/* The bands' well is 254 wide, and ten 20px bands with nine 6px gaps is
+   exactly 254. space-between put them at fractional x. */
+[data-frame="wide"] .at-eq .pw-eq:last-child { --pw-eq-gap: 6px; }
+[data-frame="wide"] .at-eq .pw-eq:last-child .pw-eq-band { flex: 0 0 20px; }
+[data-frame="wide"] .at-eq .pw-eq-label { font-size: 6px; }
+[data-frame="wide"] .at-eq .pw-eq-band { gap: 2px; }
+
 /* ?zoom=N, for the showcase: no note, no ground, and the stage laid out at N
    times its size. */
 body[data-zoom] {
