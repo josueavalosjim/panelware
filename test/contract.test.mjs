@@ -910,6 +910,37 @@ describe('what would block the second skin', () => {
       + 'silently removes its ring');
   });
 
+  test('the cyber notch draws its edge on every surface it cuts, at the size it cuts', () => {
+    /* clip-path cuts a corner and draws nothing along the cut, so the notched
+       surfaces showed an open corner where their inset edge stopped.
+       css/skins/cyber/notch.css gives the same surfaces a bevel of the same
+       size, which the edge follows. Two lists and two numbers have to agree
+       with the clip for that to work, and all of them are read from the CSS. */
+    const bevel = bare(read('css/treatment/bevel.css'));
+    const painted = new Set(members(bevel.match(/:where\(([^)]*)\)\s*\{\s*\/\*[^]*?box-shadow: var\(--pw-elev\)/)?.[1]
+      ?? bevel.match(/:where\(([^)]*)\)\s*\{[^}]*box-shadow: var\(--pw-elev\)/)?.[1] ?? ''));
+    const optOut = new Set(members(bevel.match(/:where\(([^)]*)\)\s*\{\s*clip-path:\s*none/)?.[1] ?? ''));
+    const cut = [...painted].filter((c) => !optOut.has(c)).sort();
+    assert.ok(cut.length >= 8, `only ${cut.length} clipped surfaces found, so this compared nothing`);
+
+    const notch = bare(read('css/skins/cyber/notch.css'));
+    const blocks = [...notch.matchAll(/:where\(([^)]*)\)\s*\{\s*border-radius:\s*(\d+)px 0;\s*corner-shape:\s*bevel;/g)]
+      .map((m) => ({ classes: members(m[1]), px: Number(m[2]) }));
+    assert.deepEqual(blocks.flatMap((b) => b.classes).sort(), cut,
+      'notch.css does not bevel exactly the surfaces the clip cuts');
+
+    const skin = bare(read('css/tokens/skin.cyber.css'));
+    const offsets = (token) => [...skin.matchAll(new RegExp(`${token}:\\s*polygon\\((\\d+)px 0`, 'g'))].map((m) => Number(m[1]));
+    const components = readdirSync(join(ROOT, 'css', 'components')).map((f) => bare(read(join('css', 'components', f)))).join('\n');
+    const boxed = new Set([...components.matchAll(/(\.pw-[\w-]+)\s*\{[^}]*clip-path:\s*var\(--pw-clip-box\)/g)].map((m) => m[1]));
+    for (const b of blocks) {
+      const token = b.classes.every((c) => boxed.has(c)) ? '--pw-clip-box' : '--pw-clip-control';
+      const want = offsets(token);
+      assert.ok(want.length >= 2, `${token} is not declared in both cyber blocks`);
+      for (const w of want) assert.equal(b.px, w, `${b.classes.join(', ')} bevel ${b.px}px against a ${w}px ${token}`);
+    }
+  });
+
   test('no component sets overflow: hidden on a bevelled surface', () => {
     /* It is the obvious fix for a 1px corner artefact and it clips whatever a
        skin hangs off the edge of the box. The gloss clips its own

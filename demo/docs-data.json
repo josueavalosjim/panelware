@@ -1592,6 +1592,32 @@
      }
     },
     {
+     "name": "--pw-badge-text-drop",
+     "values": {
+      "light": {
+       "declared": "0",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "0",
+       "resolved": null
+      }
+     }
+    },
+    {
+     "name": "--pw-badge-mark-drop",
+     "values": {
+      "light": {
+       "declared": "0",
+       "resolved": null
+      },
+      "dark": {
+       "declared": "0",
+       "resolved": null
+      }
+     }
+    },
+    {
      "name": "--pw-lcd-depth",
      "values": {
       "light": {

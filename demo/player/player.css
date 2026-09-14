@@ -65,8 +65,11 @@ body {
   align-items: center;
 }
 
+/* 102, so twenty bands come out whole pixels: 20 x 3 plus 19 gaps and 2
+   padding of 2px each. At 92 every band was 2.5px and every other bar edge
+   was grey at 1x. */
 .deck-top .pw-visualiser {
-  width: 92px;
+  width: 102px;
   min-height: 62px;
   height: 100%;
 }
