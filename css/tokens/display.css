@@ -3,7 +3,8 @@
  *
  * --pw-color-lcd and its content are the only two semantic colours identical
  * in light and dark, because a lit display is a light source and does not dim
- * because the page did. The analyser's palette is declared once here rather
+ * because the page did. Paper is the exception: its readout is ink, nothing
+ * on it is lit, and it follows the theme. The analyser's palette is declared once here rather
  * than four times in the semantic files.
  *
  * It DOES follow the skin, though, and an earlier version of this file argued

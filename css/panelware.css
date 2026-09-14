@@ -772,7 +772,8 @@
  *
  * --pw-color-lcd and its content are the only two semantic colours identical
  * in light and dark, because a lit display is a light source and does not dim
- * because the page did. The analyser's palette is declared once here rather
+ * because the page did. Paper is the exception: its readout is ink, nothing
+ * on it is lit, and it follows the theme. The analyser's palette is declared once here rather
  * than four times in the semantic files.
  *
  * It DOES follow the skin, though, and an earlier version of this file argued
@@ -1175,8 +1176,8 @@
  *
  * The direction is a HUD rather than a chassis. Cyan carries the primary role
  * in both themes, the ground is near-black with a blue cast in dark and a cool
- * paper in light, and the readout keeps its phosphor green because a segment
- * display is the one place in this kit that is imitating a real object.
+ * paper in light, and the readout is cyan phosphor on the analyser's ground,
+ * lit the same in both themes because a segment display is a light source.
  */
 
 [data-skin="cyber"],
@@ -1215,9 +1216,11 @@
   --pw-color-range: var(--pw-cyan-800);
 
   /* The readout does not follow the theme. A segment display is a physical
-     object with its own backlight, and a light-themed LCD is a calculator. */
-  --pw-color-lcd: var(--pw-phos-950);
-  --pw-color-lcd-content: var(--pw-phos-300);
+     object with its own backlight, and a light-themed LCD is a calculator.
+     It does follow the skin: cyan phosphor on the analyser's ground, the one
+     accent this skin has, rather than chrome's green. */
+  --pw-color-lcd: var(--pw-cyan-900);
+  --pw-color-lcd-content: var(--pw-cyan-300);
 
   /* ONE ACCENT, AND SHAPE CARRIES THE REST.
      
@@ -1280,8 +1283,8 @@
   --pw-color-focus-contrast: var(--pw-slate-950);
   --pw-color-range: var(--pw-cyan-300);
 
-  --pw-color-lcd: var(--pw-phos-950);
-  --pw-color-lcd-content: var(--pw-phos-300);
+  --pw-color-lcd: var(--pw-cyan-900);
+  --pw-color-lcd-content: var(--pw-cyan-300);
 
   --pw-color-success: var(--pw-cyan-900);
   --pw-color-success-content: var(--pw-cyan-300);
@@ -1344,7 +1347,7 @@
      same mistake as gloss on every surface. */
   --pw-glow-intensity: 1;
   --pw-glow-radius: 8px;
-  --pw-glow-color: var(--pw-phos-300);
+  --pw-glow-color: var(--pw-cyan-300);
 
   --pw-glass-blur: 0px;
 
@@ -1401,11 +1404,11 @@
      scope does anyway: the ramp is one hue from dim to near-white, and the
      face goes with it so the bars are not cyan on a green ground.
 
-     The readout is left alone deliberately. It keeps the green phosphor,
-     because a segment display reading a time is a different object from a
-     spectrum, and green is what that object has always been. The two share
-     nothing but a lineage now, which is why the analyser has its own face
-     token rather than borrowing --pw-color-lcd. */
+     The readout used to keep chrome's green on the argument that a time
+     display is a different object from a spectrum. Side by side in the
+     showcase, it read as the one part of the skin nobody had reskinned. It
+     is cyan on this ground now. The analyser still has its own face token
+     rather than borrowing --pw-color-lcd, so the two can move apart. */
   --pw-color-vis-bg:   var(--pw-cyan-900);
   --pw-color-vis-grid: var(--pw-cyan-800);
   --pw-color-vis-low:  var(--pw-cyan-800);
@@ -1573,7 +1576,7 @@
 
   --pw-glow-intensity: 1;
   --pw-glow-radius: 8px;
-  --pw-glow-color: var(--pw-phos-300);
+  --pw-glow-color: var(--pw-cyan-300);
 
   --pw-glass-blur: 0px;
 
@@ -1841,9 +1844,11 @@
   --pw-color-focus-contrast: var(--pw-paper-050);
   --pw-color-range: var(--pw-warm-700);
 
-  /* The readout does not follow the skin. */
-  --pw-color-lcd: var(--pw-phos-950);
-  --pw-color-lcd-content: var(--pw-phos-300);
+  /* The readout is ink. Nothing on a printed sheet is lit, so this is the one
+     skin whose readout follows the theme, the same way its analyser does:
+     ink on a toned panel in light, paper on ink in dark. */
+  --pw-color-lcd: var(--pw-paper-200);
+  --pw-color-lcd-content: var(--pw-paper-950);
 
   /* Success is plain ink. In a two-colour job the spot is what you spend on
      the thing that needs attention, and a thing that went right does not. */
@@ -1889,8 +1894,8 @@
   --pw-color-focus-contrast: var(--pw-paper-950);
   --pw-color-range: var(--pw-warm-300);
 
-  --pw-color-lcd: var(--pw-phos-950);
-  --pw-color-lcd-content: var(--pw-phos-300);
+  --pw-color-lcd: var(--pw-paper-950);
+  --pw-color-lcd-content: var(--pw-paper-100);
 
   --pw-color-success: var(--pw-paper-800);
   --pw-color-success-content: var(--pw-paper-050);

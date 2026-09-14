@@ -39,9 +39,11 @@
   --pw-color-focus-contrast: var(--pw-paper-050);
   --pw-color-range: var(--pw-warm-700);
 
-  /* The readout does not follow the skin. */
-  --pw-color-lcd: var(--pw-phos-950);
-  --pw-color-lcd-content: var(--pw-phos-300);
+  /* The readout is ink. Nothing on a printed sheet is lit, so this is the one
+     skin whose readout follows the theme, the same way its analyser does:
+     ink on a toned panel in light, paper on ink in dark. */
+  --pw-color-lcd: var(--pw-paper-200);
+  --pw-color-lcd-content: var(--pw-paper-950);
 
   /* Success is plain ink. In a two-colour job the spot is what you spend on
      the thing that needs attention, and a thing that went right does not. */
@@ -87,8 +89,8 @@
   --pw-color-focus-contrast: var(--pw-paper-950);
   --pw-color-range: var(--pw-warm-300);
 
-  --pw-color-lcd: var(--pw-phos-950);
-  --pw-color-lcd-content: var(--pw-phos-300);
+  --pw-color-lcd: var(--pw-paper-950);
+  --pw-color-lcd-content: var(--pw-paper-100);
 
   --pw-color-success: var(--pw-paper-800);
   --pw-color-success-content: var(--pw-paper-050);
