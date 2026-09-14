@@ -939,6 +939,7 @@
      lit top edge, and a button that lights up without moving is a picture of a
      button. One pixel, the period value. */
   --pw-press-travel: 1px;
+  --pw-range-inset: 0;
 
   /* A window into a box. The deepest thing in the kit and the only element
      that overrides the depth at all. */
@@ -993,6 +994,7 @@
      lit top edge, and a button that lights up without moving is a picture of a
      button. One pixel, the period value. */
   --pw-press-travel: 1px;
+  --pw-range-inset: 0;
 
   /* A window into a box. The deepest thing in the kit and the only element
      that overrides the depth at all. */
@@ -1478,6 +1480,7 @@
      stays exactly where it was. This skin was translating a pixel anyway,
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
+  --pw-range-inset: 1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through
@@ -1632,6 +1635,7 @@
      stays exactly where it was. This skin was translating a pixel anyway,
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
+  --pw-range-inset: 1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through
@@ -1963,6 +1967,7 @@
      never been a skin's to set. Its press state is the second ink laid over
      the first, which the selection slot already does. */
   --pw-press-travel: 0;
+  --pw-range-inset: 0;
 
   /* Nor is the readout a well. Same reason as the bevel: there is no depth on
      a sheet, and the dither is what arrives in its place. */
@@ -2044,6 +2049,8 @@
   --pw-color-vis-peak: var(--pw-paper-050);
 
   --pw-press-travel: 0;
+
+  --pw-range-inset: 0;
   --pw-lcd-depth: 0;
   /* The same two rungs, reflected: the stock is near-black here, so the
      channel is the dark end of the ramp and the rule is a step up from it. */
@@ -2331,6 +2338,7 @@
   /* A button on this chassis is an object you push, and it moves. Same
      reasoning chrome uses; this is the other skin that earns the travel. */
   --pw-press-travel: 1px;
+  --pw-range-inset: 0;
 
   /* The display is flush with the panel, not sunk into it. Winamp's is flat
      black in the bitmap with no inset at all. */
@@ -2396,6 +2404,8 @@
   --pw-texture-opacity: 0;
 
   --pw-press-travel: 1px;
+
+  --pw-range-inset: 0;
   --pw-lcd-depth: 0;
 
   --pw-scrollbar-width: auto;

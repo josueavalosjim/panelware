@@ -67,9 +67,14 @@
   /* Radix sets the offset and the length inline, on the axis that varies.
      The cross axis is ours, and it has to be scoped per orientation or a
      vertical range inherits height: 100% and fills the whole track. */
-  .pw-slider-range { height: 100%; }
+  /* Inset from the track's edge by --pw-range-inset. The track draws its
+     edge as an inset shadow, which paints under its children, so a range
+     flush to the track covered the edge wherever it was and read as wider
+     than its groove. Radix sets the main axis inline. */
+  .pw-slider-range { top: var(--pw-range-inset); bottom: var(--pw-range-inset); }
   .pw-slider[data-orientation="vertical"] .pw-slider-range {
-    width: 100%;
+    left: var(--pw-range-inset);
+    right: var(--pw-range-inset);
     /* Radix writes the vertical extent inline, so this only clears the
        horizontal default rather than setting anything. */
     height: auto;

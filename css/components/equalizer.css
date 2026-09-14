@@ -90,8 +90,9 @@
      cannot know it. */
   .pw-eq-fill {
     position: absolute;
-    left: 0;
-    right: 0;
+    /* Off the track's edge, for the reason slider.css gives for the range. */
+    left: var(--pw-range-inset);
+    right: var(--pw-range-inset);
     background-color: var(--pw-color-range);
     border-radius: var(--pw-radius-control);
   }

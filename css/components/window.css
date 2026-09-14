@@ -54,6 +54,11 @@
        at exactly the size where the bar has least room to spare. */
     font-size: var(--pw-text-subhead);
     line-height: var(--pw-leading-ui);
+    /* A whole pixel. In a bar with no title buttons the title's line box IS
+       the bar's height, and 19px at 1.2 is 22.8: every window body started
+       at .8 of a pixel and every hairline under it smeared across two rows.
+       The line above is the fallback where round() is not supported. */
+    line-height: round(up, calc(var(--pw-text-subhead) * var(--pw-leading-ui)), 1px);
     font-weight: 600;
     /* A long title truncates rather than wrapping the bar to two lines and
        moving every control in it. */

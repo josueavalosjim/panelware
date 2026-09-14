@@ -164,7 +164,7 @@ body[data-bare] { min-height: 0; }
    tall in the same frame. Not by place-items, which centred 535.69 at
    32.16 and blended the top edge into the ground. The page writes
    --bare-top as a whole pixel instead. */
-body[data-bare] #root {
+[data-bare] > #root {
   padding: var(--bare-top, 0) 0 0;
   min-height: 100vh;
   place-items: start center;

@@ -68,6 +68,7 @@
   /* A button on this chassis is an object you push, and it moves. Same
      reasoning chrome uses; this is the other skin that earns the travel. */
   --pw-press-travel: 1px;
+  --pw-range-inset: 0;
 
   /* The display is flush with the panel, not sunk into it. Winamp's is flat
      black in the bitmap with no inset at all. */
@@ -133,6 +134,8 @@
   --pw-texture-opacity: 0;
 
   --pw-press-travel: 1px;
+
+  --pw-range-inset: 0;
   --pw-lcd-depth: 0;
 
   --pw-scrollbar-width: auto;
