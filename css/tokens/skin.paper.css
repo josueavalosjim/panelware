@@ -116,6 +116,7 @@
      never been a skin's to set. Its press state is the second ink laid over
      the first, which the selection slot already does. */
   --pw-press-travel: 0;
+  --pw-range-inset: 0;
 
   /* Nor is the readout a well. Same reason as the bevel: there is no depth on
      a sheet, and the dither is what arrives in its place. */
@@ -197,6 +198,8 @@
   --pw-color-vis-peak: var(--pw-paper-050);
 
   --pw-press-travel: 0;
+
+  --pw-range-inset: 0;
   --pw-lcd-depth: 0;
   /* The same two rungs, reflected: the stock is near-black here, so the
      channel is the dark end of the ramp and the rule is a step up from it. */

@@ -96,6 +96,7 @@
        lit top edge, and a button that lights up without moving is a picture of a
        button. One pixel, the period value. */
     --pw-press-travel: 1px;
+    --pw-range-inset: 0;
 
     /* A window into a box. The deepest thing in the kit and the only element
        that overrides the depth at all. */

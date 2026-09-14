@@ -237,6 +237,7 @@
      stays exactly where it was. This skin was translating a pixel anyway,
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
+  --pw-range-inset: 1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through
@@ -391,6 +392,7 @@
      stays exactly where it was. This skin was translating a pixel anyway,
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
+  --pw-range-inset: 1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through
