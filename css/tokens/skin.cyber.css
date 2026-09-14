@@ -35,7 +35,7 @@
      same mistake as gloss on every surface. */
   --pw-glow-intensity: 1;
   --pw-glow-radius: 8px;
-  --pw-glow-color: var(--pw-phos-300);
+  --pw-glow-color: var(--pw-cyan-300);
 
   --pw-glass-blur: 0px;
 
@@ -92,11 +92,11 @@
      scope does anyway: the ramp is one hue from dim to near-white, and the
      face goes with it so the bars are not cyan on a green ground.
 
-     The readout is left alone deliberately. It keeps the green phosphor,
-     because a segment display reading a time is a different object from a
-     spectrum, and green is what that object has always been. The two share
-     nothing but a lineage now, which is why the analyser has its own face
-     token rather than borrowing --pw-color-lcd. */
+     The readout used to keep chrome's green on the argument that a time
+     display is a different object from a spectrum. Side by side in the
+     showcase, it read as the one part of the skin nobody had reskinned. It
+     is cyan on this ground now. The analyser still has its own face token
+     rather than borrowing --pw-color-lcd, so the two can move apart. */
   --pw-color-vis-bg:   var(--pw-cyan-900);
   --pw-color-vis-grid: var(--pw-cyan-800);
   --pw-color-vis-low:  var(--pw-cyan-800);
@@ -264,7 +264,7 @@
 
   --pw-glow-intensity: 1;
   --pw-glow-radius: 8px;
-  --pw-glow-color: var(--pw-phos-300);
+  --pw-glow-color: var(--pw-cyan-300);
 
   --pw-glass-blur: 0px;
 

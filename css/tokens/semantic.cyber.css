@@ -13,8 +13,8 @@
  *
  * The direction is a HUD rather than a chassis. Cyan carries the primary role
  * in both themes, the ground is near-black with a blue cast in dark and a cool
- * paper in light, and the readout keeps its phosphor green because a segment
- * display is the one place in this kit that is imitating a real object.
+ * paper in light, and the readout is cyan phosphor on the analyser's ground,
+ * lit the same in both themes because a segment display is a light source.
  */
 
 [data-skin="cyber"],
@@ -53,9 +53,11 @@
   --pw-color-range: var(--pw-cyan-800);
 
   /* The readout does not follow the theme. A segment display is a physical
-     object with its own backlight, and a light-themed LCD is a calculator. */
-  --pw-color-lcd: var(--pw-phos-950);
-  --pw-color-lcd-content: var(--pw-phos-300);
+     object with its own backlight, and a light-themed LCD is a calculator.
+     It does follow the skin: cyan phosphor on the analyser's ground, the one
+     accent this skin has, rather than chrome's green. */
+  --pw-color-lcd: var(--pw-cyan-900);
+  --pw-color-lcd-content: var(--pw-cyan-300);
 
   /* ONE ACCENT, AND SHAPE CARRIES THE REST.
      
@@ -118,8 +120,8 @@
   --pw-color-focus-contrast: var(--pw-slate-950);
   --pw-color-range: var(--pw-cyan-300);
 
-  --pw-color-lcd: var(--pw-phos-950);
-  --pw-color-lcd-content: var(--pw-phos-300);
+  --pw-color-lcd: var(--pw-cyan-900);
+  --pw-color-lcd-content: var(--pw-cyan-300);
 
   --pw-color-success: var(--pw-cyan-900);
   --pw-color-success-content: var(--pw-cyan-300);
