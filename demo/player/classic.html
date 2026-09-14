@@ -60,6 +60,15 @@
     } from '../../dist/index.js';
     import { usePlayer, clock } from './audio.js';
 
+    /* ?zoom=N, which the showcase loads: the replica laid out at N times by
+       CSS zoom rather than scaled by a transform, so every mask is drawn at
+       the size it is shown instead of being resampled. */
+    const zoom = Number(new URLSearchParams(location.search).get('zoom'));
+    if (zoom) {
+      document.body.setAttribute('data-zoom', '');
+      document.documentElement.style.setProperty('--classic-zoom', zoom);
+    }
+
     /* Winamp's analyser is 76px wide with a 1px gap, which is nineteen bars. */
     const BARS = 19;
 

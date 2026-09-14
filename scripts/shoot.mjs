@@ -33,10 +33,10 @@ const COMPS = ['hero', 'skins', 'axes', 'icons', 'player'];
    every digit. demo/player/classic.css carries the diagnosis. */
 const CLASSIC = { page: 'demo/player/classic.html', scale: 4, w: 275, h: 116 };
 
-/* Which comps are worth shooting per skin. `skins` and `icons` already show
-   all three side by side, so shooting them three times produces three
-   identical files. */
-const PER_SKIN = new Set(['hero', 'axes', 'player']);
+/* Which comps are worth shooting per skin. Only the player takes the skin
+   from outside; the others carry their own looks, the hero is the dialup
+   replica, and shooting them per skin writes identical files. */
+const PER_SKIN = new Set(['player']);
 
 const arg = (name, fallback) => {
   const at = process.argv.indexOf(`--${name}`);
@@ -69,7 +69,7 @@ const themes = arg('theme') ? [arg('theme')] : ['light'];
  */
 async function startPlayer(page) {
   const at = await page.evaluate(`(() => {
-    const frame = document.getElementById('player-frame');
+    const frame = document.querySelector('.comp[data-on] iframe');
     if (!frame || !frame.contentDocument) return null;
     const btn = frame.contentDocument.querySelector('.pw-transport-button[aria-label="Play"]');
     if (!btn) return null;
@@ -97,7 +97,7 @@ async function startPlayer(page) {
      AudioContext takes to produce its first frame is a property of the
      machine. */
   const live = await page.ready(`(() => {
-    const d = document.getElementById('player-frame')?.contentDocument;
+    const d = document.querySelector('.comp[data-on] iframe')?.contentDocument;
     if (!d) return false;
     return [...d.querySelectorAll('.pw-visualiser-bar')]
       .some((el) => parseFloat(el.style.getPropertyValue('--pw-vis-level')) > 0.02);
@@ -130,8 +130,8 @@ await withPage(async (page) => {
         if (skin) await page.evaluate(`window.showcase.theme(${JSON.stringify(theme)})`);
         /* A style recalc and, for the player, a frame of React. Not a
            network wait: everything this page needs is already local. */
-        await page.settle(comp === 'player' ? 900 : 350);
-        if (comp === 'player') await startPlayer(page);
+        await page.settle(comp === 'player' || comp === 'hero' ? 1200 : 350);
+        if (comp === 'player' || comp === 'hero') await startPlayer(page);
         const { data } = await page.send('Page.captureScreenshot',
           { format: 'png', captureBeyondViewport: false });
         const name = [comp, skin, skin ? theme : null]
