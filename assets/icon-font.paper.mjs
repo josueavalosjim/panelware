@@ -13,9 +13,10 @@
  * Print has no elevation and no glow, so a mark carries entirely by WEIGHT.
  * This is the heaviest of the three sets: three-pixel strokes where the
  * chrome set uses two, solid where cyber is hollow, and round where cyber is
- * square. A bullet on a page is a dot of ink, not a cell on a grid, and the
- * magnifier gets its circular lens back for the same reason: this is a
- * catalogue's vocabulary rather than a HUD's.
+ * square. A bullet on a page is a dot of ink, not a cell on a grid: this is a
+ * catalogue's vocabulary rather than a HUD's. The magnifier's lens is the
+ * one exception to the lattice, drawn in vector, because six pixels with the
+ * corners cut is a bullet and not a lens.
  *
  * One glyph here is chrome's to the pixel, `pause`, and it is the only one.
  * Two heavy bars with a gap is what a pause mark is at 16px, and drawing it
@@ -25,8 +26,8 @@
  * ── Round, on a lattice that has no curves ────────────────────────────────
  * A circle at this size is six pixels with its four corners cut, and that is
  * the whole trick. Cutting more reads as an octagon, cutting less reads as a
- * square, and there is no third option at 16px. Every round thing here is
- * that one shape at one of two sizes, so the bullet, the question mark's
+ * square, and there is no third option at 16px. Every round thing here but
+ * the lens is that one shape at one of two sizes, so the bullet, the question mark's
  * point and the ellipsis are the same mark rather than three attempts at it.
  *
  * The lattice's one hard rule applies here as it does everywhere: a
@@ -35,6 +36,7 @@
  * strokes make that easier here than it was for the thin set.
  */
 import { derive, rectsOf, rot180 } from './icon-lattice.mjs';
+import { footprint, isVector, markupOf, ring, stroke, vector } from './icon-vector.mjs';
 
 const drawn = {
   play: [
@@ -346,27 +348,13 @@ const drawn = {
     '................',
   ],
 
-  /* The lens is round again. The cyber set squared it because a scan selects
-     an area; a catalogue's magnifier is a lens, and this set is a catalogue's
-     vocabulary. The handle meets the ring along an edge. */
-  search: [
-    '................',
-    '................',
-    '....######......',
-    '...########.....',
-    '..###....###....',
-    '..##......##....',
-    '..##......##....',
-    '..###....###....',
-    '...########.....',
-    '....######......',
-    '......####......',
-    '.......####.....',
-    '........####....',
-    '.........###....',
-    '................',
-    '................',
-  ],
+  /* The one vector glyph on this sheet. A lens built from pixels read as a
+     Q or a key at every size, so this is a real circle and a handle with a
+     round end. icon-vector.mjs measures its ink the way the rest are. */
+  search: vector(
+    ring(7, 7, 3.75, 2),
+    stroke([[9.9, 9.9], [12.5, 12.5]], { w: 2.5, cap: 'round' }),
+  ),
 
   question: [
     '................',
@@ -493,8 +481,19 @@ drawn.info = rot180(drawn.exclamation);
 const I = derive(drawn);
 
 export function iconRects(name) {
-  return rectsOf(I[name], name);
+  const g = I[name];
+  return rectsOf(isVector(g) ? footprint(g) : g, name);
+}
+
+const rectMarkup = (name) => rectsOf(I[name], name)
+  .map((r) => `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}"/>`).join('');
+
+export function iconMarkup(name) {
+  return isVector(I[name]) ? markupOf(I[name]) : rectMarkup(name);
 }
 
 export const ICON_NAMES = Object.keys(I);
-export const GLYPHS = I;
+export const GLYPHS = Object.fromEntries(ICON_NAMES.map((n) => [n, isVector(I[n]) ? footprint(I[n]) : I[n]]));
+
+/** The vector glyphs, by name, for the tests that measure geometry. */
+export const VECTORS = Object.fromEntries(ICON_NAMES.filter((n) => isVector(I[n])).map((n) => [n, I[n]]));

@@ -560,22 +560,17 @@ describe('every sheet, not just the first one', () => {
   };
 
   test('a sheet that shares a drawing with chrome says which ones', () => {
-    /* "Drawn again for the cyber skin" is the claim both alternate sheets
-       make, and six of cyber's glyphs are chrome's to the pixel. That is not
-       automatically wrong. A chevron is a stroke, so there is nothing for a
-       set whose rule is "outlines where chrome fills" to open, and the same
-       goes for the check and the exclamation. What IS wrong is it being true
-       by accident and nobody able to tell which.
+    /* A redrawn sheet that matches chrome somewhere should say where, so a
+       copied drawing and a coincidence can be told apart. Redraw one and this
+       fails with the name; copy one in without meaning to and it fails the
+       same way.
 
-       So the shared list is declared. Redraw one and this fails with the name,
-       which is the moment to decide whether the sheet gained a drawing or lost
-       a reason. Copy one in without meaning to and it fails the same way.
-
-       Measured, not asserted: chrome and paper share pause and nothing else,
-       and six more of cyber's are within eight pixels of chrome's without
-       being identical, which is a different question and not this test's. */
+       Cyber's three are the solid marks with no stroke to thin: the ellipsis,
+       the two pixel minus, and the plus derived from it. Paper shares pause.
+       Measured on footprints, so a vector glyph counts by the pixels it
+       covers. */
     const SHARED = {
-      cyber: ['check', 'chevron-down', 'chevron-left', 'chevron-right', 'chevron-up', 'exclamation'],
+      cyber: ['ellipsis', 'minus', 'plus'],
       paper: ['pause'],
     };
     for (const [name, font] of SHEETS) {
@@ -632,10 +627,15 @@ describe('every sheet, not just the first one', () => {
        diagonals are staircases two pixels wide where they turn. A one-pixel
        diagonal is not a stroke on this lattice: it is a column of pixels
        touching at their corners, which survives at 11x and renders as a
-       dotted line at 1x. */
+       dotted line at 1x.
+
+       Vector glyphs are exempt. Their diagonals antialias, so the dotted line
+       this rule prevents cannot happen, and their footprint is a staircase by
+       construction. The rule they keep instead is the one below. */
     const offenders = [];
     for (const [skin, font] of SHEETS) {
       for (const name of ICON_ORDER) {
+        if (font.VECTORS?.[name]) continue;
         const g = gridOf(font, name);
         const id = Array.from({ length: ICON_H }, () => Array(ICON_W).fill(-1));
         let next = 0;
@@ -673,6 +673,44 @@ describe('every sheet, not just the first one', () => {
     assert.deepEqual(offenders, []);
   });
 
+  test('a vector glyph puts every straight edge on a whole pixel', () => {
+    /* The half-pixel rule, for glyphs that are not drawn in pixels. A one
+       pixel stroke centred on a whole coordinate straddles two pixels and
+       comes out as two grey ones at 1x, and a square cap that ends on a whole
+       coordinate paints half a pixel past it. So an odd-width straight stroke
+       runs on a .5 centre and ends on one, and a filled edge that is straight
+       sits on a whole number. Diagonals are free to land anywhere. */
+    const half = (v) => Math.abs(v % 1) === 0.5;
+    const whole = (v) => v % 1 === 0;
+    const offenders = [];
+    let straight = 0;
+    for (const [skin, font] of SHEETS) {
+      for (const [name, glyph] of Object.entries(font.VECTORS ?? {})) {
+        for (const p of glyph.vector) {
+          const pts = p.pts ?? [];
+          const segs = pts.slice(1).map((b, i) => [pts[i], b]);
+          if (p.closed && pts.length > 2) segs.push([pts[pts.length - 1], pts[0]]);
+          for (const [[ax, ay], [bx, by]] of segs) {
+            const vertical = ax === bx, horizontal = ay === by;
+            if (!vertical && !horizontal) continue;
+            straight += 1;
+            const at = `${skin}: ${name} (${ax},${ay})-(${bx},${by})`;
+            if (p.t === 'fill') {
+              if (!(vertical ? whole(ax) : whole(ay))) offenders.push(`${at} fills to a half pixel`);
+            } else if (p.t === 'stroke' && p.w % 2 === 1) {
+              if (!(vertical ? half(ax) : half(ay))) offenders.push(`${at} straddles two pixels`);
+              if (p.cap === 'square' && !(vertical ? half(ay) && half(by) : half(ax) && half(bx))) {
+                offenders.push(`${at} ends between pixels`);
+              }
+            }
+          }
+        }
+      }
+    }
+    assert.ok(straight > 50, `only ${straight} straight edges measured, so this checked almost nothing`);
+    assert.deepEqual(offenders, []);
+  });
+
   test('no sheet lets a stroke fatten as it converges', () => {
     for (const [skin, font] of SHEETS) {
       for (const name of ['check', 'close']) {
@@ -704,8 +742,8 @@ describe('every sheet, not just the first one', () => {
   });
 
   test('a skin\'s committed sheet is what its font data draws', () => {
-    for (const [file, rects] of SKIN_SHEETS) {
-      assert.equal(read(join('assets', file)), iconSheet(rects), file);
+    for (const [file, markup] of SKIN_SHEETS) {
+      assert.equal(read(join('assets', file)), iconSheet(markup), file);
     }
     assert.ok(SKIN_SHEETS.length >= 1, 'no skin sheet is generated, so this compared nothing');
   });
