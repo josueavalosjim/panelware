@@ -940,6 +940,8 @@
      button. One pixel, the period value. */
   --pw-press-travel: 1px;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 0;
+  --pw-badge-mark-drop: 0;
 
   /* A window into a box. The deepest thing in the kit and the only element
      that overrides the depth at all. */
@@ -995,6 +997,8 @@
      button. One pixel, the period value. */
   --pw-press-travel: 1px;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 0;
+  --pw-badge-mark-drop: 0;
 
   /* A window into a box. The deepest thing in the kit and the only element
      that overrides the depth at all. */
@@ -1481,6 +1485,8 @@
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
   --pw-range-inset: 1px;
+  --pw-badge-text-drop: 1px;
+  --pw-badge-mark-drop: -1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through
@@ -1636,6 +1642,8 @@
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
   --pw-range-inset: 1px;
+  --pw-badge-text-drop: 1px;
+  --pw-badge-mark-drop: -1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through
@@ -1968,6 +1976,8 @@
      the first, which the selection slot already does. */
   --pw-press-travel: 0;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 1px;
+  --pw-badge-mark-drop: 0;
 
   /* Nor is the readout a well. Same reason as the bevel: there is no depth on
      a sheet, and the dither is what arrives in its place. */
@@ -2051,6 +2061,10 @@
   --pw-press-travel: 0;
 
   --pw-range-inset: 0;
+
+  --pw-badge-text-drop: 1px;
+
+  --pw-badge-mark-drop: 0;
   --pw-lcd-depth: 0;
   /* The same two rungs, reflected: the stock is near-black here, so the
      channel is the dark end of the ramp and the rule is a step up from it. */
@@ -2339,6 +2353,8 @@
      reasoning chrome uses; this is the other skin that earns the travel. */
   --pw-press-travel: 1px;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 0;
+  --pw-badge-mark-drop: 1px;
 
   /* The display is flush with the panel, not sunk into it. Winamp's is flat
      black in the bitmap with no inset at all. */
@@ -2406,6 +2422,10 @@
   --pw-press-travel: 1px;
 
   --pw-range-inset: 0;
+
+  --pw-badge-text-drop: 0;
+
+  --pw-badge-mark-drop: 1px;
   --pw-lcd-depth: 0;
 
   --pw-scrollbar-width: auto;

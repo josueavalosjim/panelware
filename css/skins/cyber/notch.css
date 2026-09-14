@@ -1,0 +1,36 @@
+/**
+ * SKIN: the notched corners, under cyber, with their edge drawn.
+ *
+ * skin.cyber.css cuts two corners off thirteen surfaces with --pw-clip-control
+ * and --pw-clip-box. clip-path cuts; it does not draw. Every one of those
+ * surfaces draws its edge as an inset box-shadow along the box's straight
+ * sides, so at each cut the edge simply stopped and the surface showed an
+ * open corner. On the analyser, where the dot grid and the bars run up to
+ * it, that read as a rendering fault.
+ *
+ * corner-shape: bevel draws the same cut as part of the box, and an inset
+ * shadow follows it. So the clip stays, because it is what cuts the children
+ * (a window's title bar, a well's contents), and a bevel radius of the same
+ * size puts the edge along the diagonal inside it. Where corner-shape is not
+ * supported this block does nothing and the surfaces look as they did.
+ *
+ * The radii are the clip's offsets, 3px and 5px, and test/contract.test.mjs
+ * holds them to the polygons, so the two cannot drift. The list is the
+ * surfaces the clip reaches: everything bevel.css paints, less its
+ * focus-ring opt-out.
+ */
+@layer pw.skin {
+  @supports (corner-shape: bevel) {
+    [data-skin="cyber"] :where(.pw-badge, .pw-slider-track, .pw-lcd, .pw-tab-panel,
+                               .pw-progress, .pw-visualiser, .pw-menu,
+                               .pw-select-list, .pw-select-button,
+                               .pw-switch-thumb, .pw-tooltip) {
+      border-radius: 3px 0;
+      corner-shape: bevel;
+    }
+    [data-skin="cyber"] :where(.pw-window, .pw-eq) {
+      border-radius: 5px 0;
+      corner-shape: bevel;
+    }
+  }
+}

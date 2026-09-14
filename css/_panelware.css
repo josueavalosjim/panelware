@@ -113,6 +113,7 @@
 /* Generated: the bearings this skin's own sprite sheet moves. */
 @import "./skins/cyber/icon-index.css";
 @import "./skins/cyber/field.css";
+@import "./skins/cyber/notch.css";
 @import "./skins/paper/type.css";
 @import "./skins/paper/icon-index.css";
 @import "./skins/paper/field.css";

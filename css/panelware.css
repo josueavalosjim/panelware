@@ -1011,6 +1011,8 @@
      button. One pixel, the period value. */
   --pw-press-travel: 1px;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 0;
+  --pw-badge-mark-drop: 0;
 
   /* A window into a box. The deepest thing in the kit and the only element
      that overrides the depth at all. */
@@ -1066,6 +1068,8 @@
      button. One pixel, the period value. */
   --pw-press-travel: 1px;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 0;
+  --pw-badge-mark-drop: 0;
 
   /* A window into a box. The deepest thing in the kit and the only element
      that overrides the depth at all. */
@@ -1552,6 +1556,8 @@
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
   --pw-range-inset: 1px;
+  --pw-badge-text-drop: 1px;
+  --pw-badge-mark-drop: -1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through
@@ -1707,6 +1713,8 @@
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
   --pw-range-inset: 1px;
+  --pw-badge-text-drop: 1px;
+  --pw-badge-mark-drop: -1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through
@@ -2039,6 +2047,8 @@
      the first, which the selection slot already does. */
   --pw-press-travel: 0;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 1px;
+  --pw-badge-mark-drop: 0;
 
   /* Nor is the readout a well. Same reason as the bevel: there is no depth on
      a sheet, and the dither is what arrives in its place. */
@@ -2122,6 +2132,10 @@
   --pw-press-travel: 0;
 
   --pw-range-inset: 0;
+
+  --pw-badge-text-drop: 1px;
+
+  --pw-badge-mark-drop: 0;
   --pw-lcd-depth: 0;
   /* The same two rungs, reflected: the stock is near-black here, so the
      channel is the dark end of the ramp and the rule is a step up from it. */
@@ -2410,6 +2424,8 @@
      reasoning chrome uses; this is the other skin that earns the travel. */
   --pw-press-travel: 1px;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 0;
+  --pw-badge-mark-drop: 1px;
 
   /* The display is flush with the panel, not sunk into it. Winamp's is flat
      black in the bitmap with no inset at all. */
@@ -2477,6 +2493,10 @@
   --pw-press-travel: 1px;
 
   --pw-range-inset: 0;
+
+  --pw-badge-text-drop: 0;
+
+  --pw-badge-mark-drop: 1px;
   --pw-lcd-depth: 0;
 
   --pw-scrollbar-width: auto;
@@ -6193,6 +6213,11 @@
     gap: var(--pw-space-2xs);
     min-height: var(--pw-badge-h);
     padding: 0 var(--pw-space-sm);
+    /* Flex centres the label's line box, not its capitals, and each skin's
+       face sits differently in it: measured, cyber's caps were 1.5px high and
+       dialup's a quarter low. Top padding moves the centred content down by
+       half of itself, so a skin's whole-pixel drop is doubled here. */
+    padding-top: calc(var(--pw-badge-text-drop) * 2);
     font-family: var(--pw-font-ui);
     font-size: var(--pw-text-micro);
     line-height: var(--pw-leading-ui);
@@ -6218,6 +6243,9 @@
   .pw-badge .pw-icon {
     /* A 16px mark next to 12px text sits a pixel high on the cap line. */
     margin-block: -1px;
+    /* And then the skin's own correction, relative to the text, because a
+       glyph's ink and a face's caps do not move together. */
+    translate: 0 var(--pw-badge-mark-drop);
   }
 }
 
@@ -6928,6 +6956,43 @@
      The state is not unmarked. Radix opens the listbox, which is the largest
      thing on the screen, and aria-expanded carries it for anyone not looking.
      Nothing here was ever load-bearing. */
+}
+
+/**
+ * SKIN: the notched corners, under cyber, with their edge drawn.
+ *
+ * skin.cyber.css cuts two corners off thirteen surfaces with --pw-clip-control
+ * and --pw-clip-box. clip-path cuts; it does not draw. Every one of those
+ * surfaces draws its edge as an inset box-shadow along the box's straight
+ * sides, so at each cut the edge simply stopped and the surface showed an
+ * open corner. On the analyser, where the dot grid and the bars run up to
+ * it, that read as a rendering fault.
+ *
+ * corner-shape: bevel draws the same cut as part of the box, and an inset
+ * shadow follows it. So the clip stays, because it is what cuts the children
+ * (a window's title bar, a well's contents), and a bevel radius of the same
+ * size puts the edge along the diagonal inside it. Where corner-shape is not
+ * supported this block does nothing and the surfaces look as they did.
+ *
+ * The radii are the clip's offsets, 3px and 5px, and test/contract.test.mjs
+ * holds them to the polygons, so the two cannot drift. The list is the
+ * surfaces the clip reaches: everything bevel.css paints, less its
+ * focus-ring opt-out.
+ */
+@layer pw.skin {
+  @supports (corner-shape: bevel) {
+    [data-skin="cyber"] :where(.pw-badge, .pw-slider-track, .pw-lcd, .pw-tab-panel,
+                               .pw-progress, .pw-visualiser, .pw-menu,
+                               .pw-select-list, .pw-select-button,
+                               .pw-switch-thumb, .pw-tooltip) {
+      border-radius: 3px 0;
+      corner-shape: bevel;
+    }
+    [data-skin="cyber"] :where(.pw-window, .pw-eq) {
+      border-radius: 5px 0;
+      corner-shape: bevel;
+    }
+  }
 }
 
 /**
