@@ -565,12 +565,11 @@ describe('every sheet, not just the first one', () => {
        fails with the name; copy one in without meaning to and it fails the
        same way.
 
-       Cyber's three are the solid marks with no stroke to thin: the ellipsis,
-       the two pixel minus, and the plus derived from it. Paper shares pause.
-       Measured on footprints, so a vector glyph counts by the pixels it
-       covers. */
+       Cyber shares nothing: every mark on it is a hairline and chrome has
+       none. Paper shares pause. Measured on footprints, so a vector glyph
+       counts by the pixels it covers. */
     const SHARED = {
-      cyber: ['ellipsis', 'minus', 'plus'],
+      cyber: [],
       paper: ['pause'],
     };
     for (const [name, font] of SHEETS) {
@@ -711,6 +710,43 @@ describe('every sheet, not just the first one', () => {
     assert.deepEqual(offenders, []);
   });
 
+  test('a vector sheet draws at one weight, at right angles or 45 degrees', () => {
+    /* The rule a set looks cohesive by. A sheet declares WEIGHT and every
+       stroke and ring on it is that wide. A fill is only allowed as a point,
+       no bigger than WEIGHT square, which is the stroke seen end on. And a
+       straight stroke is horizontal, vertical, or exactly 45 degrees, so no
+       two diagonals antialias differently. */
+    const offenders = [];
+    let measured = 0;
+    for (const [skin, font] of SHEETS) {
+      if (!font.VECTORS) continue;
+      assert.ok(font.WEIGHT > 0, `${skin} has vector glyphs and declares no WEIGHT`);
+      for (const [name, glyph] of Object.entries(font.VECTORS)) {
+        for (const p of glyph.vector) {
+          measured += 1;
+          if ((p.t === 'stroke' || p.t === 'ring') && p.w !== font.WEIGHT) {
+            offenders.push(`${skin}: ${name} has a ${p.w}px stroke on a ${font.WEIGHT}px sheet`);
+          }
+          if (p.t === 'fill') {
+            const xs = p.pts.map(([x]) => x), ys = p.pts.map(([, y]) => y);
+            const w = Math.max(...xs) - Math.min(...xs), h = Math.max(...ys) - Math.min(...ys);
+            if (w > font.WEIGHT || h > font.WEIGHT) offenders.push(`${skin}: ${name} fills ${w}x${h}, bigger than a point`);
+          }
+          if (p.t === 'stroke') {
+            const segs = p.pts.slice(1).map((b, i) => [p.pts[i], b]);
+            if (p.closed) segs.push([p.pts[p.pts.length - 1], p.pts[0]]);
+            for (const [[ax, ay], [bx, by]] of segs) {
+              const dx = Math.abs(bx - ax), dy = Math.abs(by - ay);
+              if (dx && dy && dx !== dy) offenders.push(`${skin}: ${name} (${ax},${ay})-(${bx},${by}) is not 45 degrees`);
+            }
+          }
+        }
+      }
+    }
+    assert.ok(measured > 50, `only ${measured} primitives measured`);
+    assert.deepEqual(offenders, []);
+  });
+
   test('no sheet lets a stroke fatten as it converges', () => {
     for (const [skin, font] of SHEETS) {
       for (const name of ['check', 'close']) {
@@ -726,17 +762,23 @@ describe('every sheet, not just the first one', () => {
   test('every sheet derives its own nine, rather than inheriting the first sheet\'s', () => {
     /* A chevron has to be a rotation of ITS OWN sheet's chevron-down. Copying
        the derivation results across would give the cyber sheet four chrome
-       chevrons and nothing would report it. */
+       chevrons and nothing would report it.
+
+       Turned about the sheet's own axis: 8 for a pixel sheet, 8.5 for the
+       hairline one, where pixel i lands on 16 - i rather than 15 - i. */
     for (const [skin, font] of SHEETS) {
+      const o = 2 * (font.AXIS ?? 8) - 1;
+      const at = (src, r, c) => (r >= 0 && r < ICON_H && c >= 0 && c < ICON_W ? src[r][c] : 0);
       const g = (n) => gridOf(font, n).map((r) => r.join('')).join('|');
       const rot = (n) => {
         const src = gridOf(font, n);
-        return src[0].map((_, x) => src.map((row) => row[x]).reverse().join('')).join('|');
+        return src.map((row, r) => row.map((_, c) => at(src, o - c, r)).join('')).join('|');
       };
       assert.equal(g('chevron-left'), rot('chevron-down'), `${skin}: chevron-left`);
       assert.equal(g('chevron-up'), rot('chevron-left'), `${skin}: chevron-up`);
       assert.equal(g('chevron-right'), rot('chevron-up'), `${skin}: chevron-right`);
-      const flipped = gridOf(font, 'previous').map((r) => [...r].reverse().join('')).join('|');
+      const src = gridOf(font, 'previous');
+      const flipped = src.map((row, r) => row.map((_, c) => at(src, r, o - c)).join('')).join('|');
       assert.equal(g('next'), flipped, `${skin}: next is not previous mirrored`);
     }
   });

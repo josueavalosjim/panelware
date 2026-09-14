@@ -2,7 +2,7 @@
  * Vector glyphs, for the sheets that are not drawn on the pixel lattice.
  *
  * The contract a sheet has to keep is the cell, the order, and a mask in
- * currentColor. None of that says pixels. Chrome and rack are pixel sets
+ * currentColor. None of that says pixels. Chrome and dialup are pixel sets
  * because that is what they are; cyber wants hairlines and true diagonals,
  * and paper wants a lens that is actually round, and a 16x16 grid can give
  * neither.
@@ -37,21 +37,25 @@ const mapPts = (g, f) => vector(...g.vector.map((p) => {
   return { ...p, pts: p.pts.map(f) };
 }));
 
-/* Clockwise, matching rot90 on rows: the cell's top-left goes top-right. */
-export const rot90V = (g) => mapPts(g, ([x, y]) => [16 - y, x]);
-export const flipXV = (g) => mapPts(g, ([x, y]) => [16 - x, y]);
-export const rot180V = (g) => rot90V(rot90V(g));
+/* Clockwise, matching rot90 on rows: the cell's top-left goes top-right.
+   `axis` is the coordinate the turn is about. A pixel sheet turns about 8,
+   the cell's middle. A one pixel stroke cannot be centred there, so a
+   hairline sheet is drawn about 8.5, the middle of pixel 8, and turns about
+   that instead. */
+export const rot90V = (g, axis = 8) => mapPts(g, ([x, y]) => [2 * axis - y, x]);
+export const flipXV = (g, axis = 8) => mapPts(g, ([x, y]) => [2 * axis - x, y]);
+export const rot180V = (g, axis = 8) => rot90V(rot90V(g, axis), axis);
 export const unionV = (a, b) => vector(...a.vector, ...b.vector);
 
 /** The nine derived glyphs, derived the way derive() does for pixel sheets. */
-export function deriveVector(drawn) {
+export function deriveVector(drawn, axis = 8) {
   const I = { ...drawn };
-  I['chevron-left'] = rot90V(I['chevron-down']);
-  I['chevron-up'] = rot90V(I['chevron-left']);
-  I['chevron-right'] = rot90V(I['chevron-up']);
-  I.next = flipXV(I.previous);
-  I.plus = unionV(I.minus, rot90V(I.minus));
-  for (const k of [1, 2, 3, 4]) I[`spinner-${k + 4}`] = rot180V(I[`spinner-${k}`]);
+  I['chevron-left'] = rot90V(I['chevron-down'], axis);
+  I['chevron-up'] = rot90V(I['chevron-left'], axis);
+  I['chevron-right'] = rot90V(I['chevron-up'], axis);
+  I.next = flipXV(I.previous, axis);
+  I.plus = unionV(I.minus, rot90V(I.minus, axis));
+  for (const k of [1, 2, 3, 4]) I[`spinner-${k + 4}`] = rot180V(I[`spinner-${k}`], axis);
   return I;
 }
 
