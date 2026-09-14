@@ -56,14 +56,20 @@
     import { createElement as h } from 'react';
     import { createRoot } from 'react-dom/client';
     import {
-      Readout, Slider, Toggle, Transport, TransportButton, Visualiser, Window,
+      Equalizer, Readout, Slider, Toggle, Transport, TransportButton, Visualiser, Window,
     } from '../../dist/index.js';
-    import { usePlayer, clock } from './audio.js';
+    import { BANDS, bandLabel, usePlayer, clock } from './audio.js';
 
     /* ?zoom=N, which the showcase loads: the replica laid out at N times by
        CSS zoom rather than scaled by a transform, so every mask is drawn at
        the size it is shown instead of being resampled. */
-    const zoom = Number(new URLSearchParams(location.search).get('zoom'));
+    const query = new URLSearchParams(location.search);
+    const zoom = Number(query.get('zoom'));
+    /* ?frame=wide: 320x180, which is 16:9, so six times it is exactly a
+       1920x1080 still. The same controls, spread to the wider frame, and the
+       equaliser as a strip underneath where Winamp stacked a second window. */
+    const WIDE = query.get('frame') === 'wide';
+    if (WIDE) document.body.setAttribute('data-frame', 'wide');
     if (zoom) {
       document.body.setAttribute('data-zoom', '');
       document.documentElement.style.setProperty('--classic-zoom', zoom);
@@ -143,7 +149,23 @@
 
         h('span', { className: 'at at-shuffle' },
           h(Toggle, { pressed: false, onPressedChange: () => {} }, 'SHUF'),
-          h(Toggle, { pressed: p.loop, onPressedChange: p.setLoop }, 'REP')));
+          h(Toggle, { pressed: p.loop, onPressedChange: p.setLoop }, 'REP')),
+
+        WIDE ? h('span', { className: 'at at-eq' },
+          h(Equalizer, {
+            label: 'Preamp', min: -12, max: 12, step: 1,
+            bands: [{ id: 'preamp', label: 'PRE', name: 'preamp', value: p.preamp }],
+            onBandChange: (_id, v) => p.setPreamp(v),
+            format: (v) => `${v > 0 ? '+' : ''}${v} decibels`,
+          }),
+          h(Equalizer, {
+            label: 'Equaliser bands', min: -12, max: 12, step: 1,
+            bands: BANDS.map((hz, i) => ({
+              id: String(hz), label: bandLabel(hz), name: `${hz} hertz`, value: p.gains[i],
+            })),
+            onBandChange: p.setBand,
+            format: (v) => `${v > 0 ? '+' : ''}${v} decibels`,
+          })) : null);
     }
 
     createRoot(document.getElementById('root')).render(h(Classic));
