@@ -114,7 +114,7 @@ const server = await startDemoServer();
 let wrote = 0;
 
 await withPage(async (page) => {
-  await page.goto(`${server.url}/demo/showcase/index.html`);
+  await page.goto(`${server.url}/demo/showcase/index.html?mute`);
   /* The stage has to have been measured before anything is captured, or the
      first shot lands at whatever scale the page booted with. */
   if (!(await page.ready('!!window.showcase && getComputedStyle(document.getElementById("stage")).getPropertyValue("--fit").trim() !== ""'))) {
@@ -152,7 +152,7 @@ if (!arg('comp') || arg('comp') === 'classic') {
     await page.send('Emulation.setDeviceMetricsOverride', {
       width: CLASSIC.w, height: CLASSIC.h, deviceScaleFactor: CLASSIC.scale, mobile: false,
     });
-    await page.goto(`${server.url}/${CLASSIC.page}`);
+    await page.goto(`${server.url}/${CLASSIC.page}?mute`);
     /* Both readouts, whatever they are spelling. The clock is five cells and
        the title is however long the track's name is, so a fixed floor of
        twenty was a bet on one particular track being first. */
