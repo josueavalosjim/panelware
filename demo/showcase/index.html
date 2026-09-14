@@ -22,7 +22,7 @@
 </head>
 <body>
   <div class="frame">
-    <div class="stage" id="stage" data-backdrop="desktop">
+    <div class="stage" id="stage">
 
       <div class="comp comp-hero" data-comp="hero" data-on>
         <section class="pw-window" aria-labelledby="sc-hero">
@@ -154,10 +154,10 @@
           </section>
           <figcaption class="comp-caption">paper</figcaption>
         </figure>
-        <figure data-skin="rack">
-          <section class="pw-window" aria-labelledby="sc-skin-rack">
+        <figure data-skin="dialup">
+          <section class="pw-window" aria-labelledby="sc-skin-dialup">
             <div class="pw-title-bar" data-gloss>
-              <h3 class="pw-title" id="sc-skin-rack">panelware</h3>
+              <h3 class="pw-title" id="sc-skin-dialup">panelware</h3>
               <div class="pw-title-controls">
                 <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
                 <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
@@ -189,7 +189,7 @@
                 </div>
               </div></div>
           </section>
-          <figcaption class="comp-caption">rack</figcaption>
+          <figcaption class="comp-caption">dialup</figcaption>
         </figure>
       </div>
 
@@ -238,16 +238,11 @@
       <option value="icons">icons</option>
       <option value="player">player</option>
     </select></label>
-    <label>ground <select id="pick-ground">
-      <option value="desktop">desktop</option>
-      <option value="bliss">bliss</option>
-      <option value="photo">photo</option>
-    </select></label>
     <label>skin <select id="pick-skin">
       <option value="chrome">chrome</option>
       <option value="cyber">cyber</option>
       <option value="paper">paper</option>
-      <option value="rack">rack</option>
+      <option value="dialup">dialup</option>
     </select></label>
     <button type="button" id="pick-theme">dark</button>
   </div>
@@ -276,9 +271,6 @@
     };
 
     document.getElementById('pick-comp').addEventListener('change', (e) => show(e.target.value));
-    document.getElementById('pick-ground').addEventListener('change', (e) => {
-      stage.dataset.backdrop = e.target.value;
-    });
     document.getElementById('pick-skin').addEventListener('change', (e) => {
       root.dataset.skin = e.target.value;
       syncCaption();
@@ -313,7 +305,7 @@
       ['chrome', 'dark', 'comfortable'],
       ['cyber', 'dark', 'compact'],
       ['paper', 'light', 'comfortable'],
-      ['rack', 'light', 'compact'],
+      ['dialup', 'light', 'compact'],
     ];
     let at = 0;
     setInterval(() => {
@@ -342,7 +334,6 @@
     /* scripts/shoot.mjs calls these. */
     window.showcase = {
       show,
-      ground: (v) => { stage.dataset.backdrop = v; },
       /* The player is in an iframe, so it is reloaded with the look rather
          than inheriting it. Everything else on the page reads the attributes
          on <html> directly. */

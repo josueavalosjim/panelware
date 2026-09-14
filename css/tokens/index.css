@@ -44,9 +44,9 @@
    page-local block in demo/player/classic.html, which proved it worked and
    proved nothing else, because a look that lives in a demo is a look a
    consumer cannot have. */
-@import "./primitive.rack.css";
-@import "./semantic.rack.css";
-@import "./skin.rack.css";
+@import "./primitive.dialup.css";
+@import "./semantic.dialup.css";
+@import "./skin.dialup.css";
 
 /* Presets: palettes within a skin, scoped under the skin they belong to, so
    an incoherent pairing matches nothing rather than rendering. One file each,

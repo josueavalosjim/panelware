@@ -11,8 +11,8 @@
  * scales to its frame, so at that width the scale lands on exactly 1 and the
  * capture is the composition at native size with no resampling anywhere.
  *
- *   node scripts/shoot.mjs                  every comp, the bliss ground
- *   node scripts/shoot.mjs --ground luna    one ground
+ *   node scripts/shoot.mjs                  every comp
+ *   node scripts/shoot.mjs --skin cyber     one skin
  *   node scripts/shoot.mjs --comp hero      one comp
  *
  * Output goes to shots/, which is gitignored: these are artefacts of the repo
@@ -32,7 +32,6 @@ const COMPS = ['hero', 'skins', 'axes', 'icons', 'player'];
    scaling a masked readout in CSS resamples the mask and loses the bottom of
    every digit. demo/player/classic.css carries the diagnosis. */
 const CLASSIC = { page: 'demo/player/classic.html', scale: 4, w: 275, h: 116 };
-const GROUNDS = ['bliss', 'luna', 'photo'];
 
 /* Which comps are worth shooting per skin. `skins` and `icons` already show
    all three side by side, so shooting them three times produces three
@@ -46,19 +45,11 @@ const arg = (name, fallback) => {
 
 /* `classic` is not one of the stage's comps, it is its own page. Naming it
    used to run the comp loop with a name nothing matches, which shot the empty
-   stage once per ground and called them classic-luna.png and
-   classic-bliss.png. */
+   stage and named it as if it were the replica. */
 const comps = arg('comp')
   ? COMPS.filter((c) => c === arg('comp'))
   : COMPS;
-/* desktop first, and it is the default for a reason. A landscape drawn in CSS
-   gradients reads as a landscape drawn in CSS gradients: it has no grain, no
-   focal falloff and no texture, and at 1920 wide that is the first thing a
-   viewer sees. The flat desktop ground is the honest one to post. The
-   look-alike stays for anyone who wants the joke, and `photo` is there for the
-   real thing if the jpeg is sitting next to the page. */
-const grounds = arg('ground') ? [arg('ground')] : ['desktop', 'bliss'];
-const skins = arg('skin') ? [arg('skin')] : ['chrome', 'cyber', 'paper'];
+const skins = arg('skin') ? [arg('skin')] : ['chrome', 'cyber', 'paper', 'dialup'];
 const themes = arg('theme') ? [arg('theme')] : ['light'];
 
 /**
@@ -133,24 +124,21 @@ await withPage(async (page) => {
 
   for (const comp of comps) {
     await page.evaluate(`window.showcase.show(${JSON.stringify(comp)})`);
-    for (const ground of grounds) {
-      await page.evaluate(`window.showcase.ground(${JSON.stringify(ground)})`);
-      for (const skin of PER_SKIN.has(comp) ? skins : [null]) {
-        if (skin) await page.evaluate(`window.showcase.skin(${JSON.stringify(skin)})`);
-        for (const theme of PER_SKIN.has(comp) ? themes : ['light']) {
-          if (skin) await page.evaluate(`window.showcase.theme(${JSON.stringify(theme)})`);
-          /* A style recalc and, for the player, a frame of React. Not a
-             network wait: everything this page needs is already local. */
-          await page.settle(comp === 'player' ? 900 : 350);
-          if (comp === 'player') await startPlayer(page);
-          const { data } = await page.send('Page.captureScreenshot',
-            { format: 'png', captureBeyondViewport: false });
-          const name = [comp, ground, skin, skin ? theme : null]
-            .filter(Boolean).join('-');
-          writeFileSync(join(out, `${name}.png`), Buffer.from(data, 'base64'));
-          wrote += 1;
-          console.log(`  ${name}.png`);
-        }
+    for (const skin of PER_SKIN.has(comp) ? skins : [null]) {
+      if (skin) await page.evaluate(`window.showcase.skin(${JSON.stringify(skin)})`);
+      for (const theme of PER_SKIN.has(comp) ? themes : ['light']) {
+        if (skin) await page.evaluate(`window.showcase.theme(${JSON.stringify(theme)})`);
+        /* A style recalc and, for the player, a frame of React. Not a
+           network wait: everything this page needs is already local. */
+        await page.settle(comp === 'player' ? 900 : 350);
+        if (comp === 'player') await startPlayer(page);
+        const { data } = await page.send('Page.captureScreenshot',
+          { format: 'png', captureBeyondViewport: false });
+        const name = [comp, skin, skin ? theme : null]
+          .filter(Boolean).join('-');
+        writeFileSync(join(out, `${name}.png`), Buffer.from(data, 'base64'));
+        wrote += 1;
+        console.log(`  ${name}.png`);
       }
     }
   }

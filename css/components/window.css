@@ -95,7 +95,11 @@
     opacity: 1;
   }
 
+  /* Grows to fill the window. A window given more height than its content,
+     by a fixed height or a stretched grid cell, otherwise showed its chassis
+     as a strip under the body. */
   .pw-window-body {
+    flex-grow: 1;
     padding: var(--pw-panel-pad);
     font-size: var(--pw-text-ui);
     line-height: var(--pw-leading-body);

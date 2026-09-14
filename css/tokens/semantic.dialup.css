@@ -1,8 +1,8 @@
 /**
- * SEMANTIC: what the rack skin's colours are FOR.
+ * SEMANTIC: what the dialup skin's colours are FOR.
  *
- * Both blocks declare the identical set, because [data-skin="rack"] and
- * [data-skin="rack"][data-theme="dark"] tie on specificity and are decided
+ * Both blocks declare the identical set, because [data-skin="dialup"] and
+ * [data-skin="dialup"][data-theme="dark"] tie on specificity and are decided
  * by source order: a block carrying only its differences loses that tie for
  * every token it leaves out, silently. test/contract.test.mjs holds it.
  *
@@ -13,20 +13,20 @@
  * light inverted. This one treats it as a different object.
  */
 
-[data-skin="rack"],
-[data-skin="rack"][data-theme="light"] {
-  --pw-color-base-100: var(--pw-rack-100);
-  --pw-color-base-200: var(--pw-rack-100);
-  --pw-color-base-300: var(--pw-rack-200);
-  --pw-color-base-content: var(--pw-rack-950);
-  --pw-color-disabled-content: var(--pw-rack-500);
+[data-skin="dialup"],
+[data-skin="dialup"][data-theme="light"] {
+  --pw-color-base-100: var(--pw-dialup-100);
+  --pw-color-base-200: var(--pw-dialup-100);
+  --pw-color-base-300: var(--pw-dialup-200);
+  --pw-color-base-content: var(--pw-dialup-950);
+  --pw-color-disabled-content: var(--pw-dialup-500);
 
   --pw-color-primary: var(--pw-navy-800);
-  --pw-color-primary-content: var(--pw-rack-000);
+  --pw-color-primary-content: var(--pw-dialup-000);
   --pw-color-titlebar: var(--pw-navy-800);
-  --pw-color-titlebar-content: var(--pw-rack-000);
-  --pw-color-focus: var(--pw-rack-950);
-  --pw-color-focus-contrast: var(--pw-rack-000);
+  --pw-color-titlebar-content: var(--pw-dialup-000);
+  --pw-color-focus: var(--pw-dialup-950);
+  --pw-color-focus-contrast: var(--pw-dialup-000);
   --pw-color-range: var(--pw-navy-800);
 
   /* The display does not follow the theme. */
@@ -41,26 +41,26 @@
   --pw-color-error-content: var(--pw-rust-800);
 
   /* The 3D border, in the ladder the era used. */
-  --pw-bevel-light: var(--pw-rack-000);
-  --pw-bevel-face: var(--pw-rack-050);
-  --pw-bevel-shade: var(--pw-rack-300);
-  --pw-bevel-frame: var(--pw-rack-950);
-  --pw-bevel-boundary: var(--pw-rack-950);
-  --pw-color-divider: var(--pw-rack-300);
+  --pw-bevel-light: var(--pw-dialup-000);
+  --pw-bevel-face: var(--pw-dialup-050);
+  --pw-bevel-shade: var(--pw-dialup-300);
+  --pw-bevel-frame: var(--pw-dialup-950);
+  --pw-bevel-boundary: var(--pw-dialup-950);
+  --pw-color-divider: var(--pw-dialup-300);
 
   /* Gloss is off in this skin, so these are the flat colours underneath it.
      They exist because the contrast block measures a pre-flattened pair: a
      glare is a sibling pseudo-element and no rendered-page check sees
      through it. */
-  --pw-gloss-lit-base-200: var(--pw-rack-100);
+  --pw-gloss-lit-base-200: var(--pw-dialup-100);
   --pw-gloss-lit-primary: var(--pw-navy-800);
   --pw-color-scrim: rgba(0, 0, 0, 0.5);
 }
 
-[data-skin="rack"][data-theme="dark"] {
-  --pw-color-base-100: var(--pw-rack-700);
-  --pw-color-base-200: var(--pw-rack-700);
-  --pw-color-base-300: var(--pw-rack-800);
+[data-skin="dialup"][data-theme="dark"] {
+  --pw-color-base-100: var(--pw-dialup-700);
+  --pw-color-base-200: var(--pw-dialup-700);
+  --pw-color-base-300: var(--pw-dialup-800);
   --pw-color-base-content: #e8e8e8;
   --pw-color-disabled-content: #9a9a9a;
 
@@ -69,7 +69,7 @@
   --pw-color-titlebar: var(--pw-navy-900);
   --pw-color-titlebar-content: #d8d8e4;
   --pw-color-focus: #ffffff;
-  --pw-color-focus-contrast: var(--pw-rack-950);
+  --pw-color-focus-contrast: var(--pw-dialup-950);
   --pw-color-range: var(--pw-navy-400);
 
   --pw-color-lcd: var(--pw-lcd-black);
@@ -89,8 +89,8 @@
      black the light theme uses. */
   --pw-bevel-light: #707070;
   --pw-bevel-face: #4a4a4a;
-  --pw-bevel-shade: var(--pw-rack-800);
-  --pw-bevel-frame: var(--pw-rack-900);
+  --pw-bevel-shade: var(--pw-dialup-800);
+  --pw-bevel-frame: var(--pw-dialup-900);
   --pw-bevel-boundary: #9a9a9a;
   /* 2:1 against the chassis, which is this tier's own contract rather than a
      WCAG floor: a grouping line identifies nothing and changes no state, so
@@ -98,7 +98,7 @@
      at 1.83 on #3f3f3f, which the gate caught. */
   --pw-color-divider: #707070;
 
-  --pw-gloss-lit-base-200: var(--pw-rack-700);
+  --pw-gloss-lit-base-200: var(--pw-dialup-700);
   --pw-gloss-lit-primary: var(--pw-navy-700);
   --pw-color-scrim: rgba(0, 0, 0, 0.7);
 }

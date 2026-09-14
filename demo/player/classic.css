@@ -49,7 +49,7 @@ body {
    It lived here as a block of token assignments for a while, which proved the
    look was reachable through tokens and proved nothing else: a look that only
    exists in a demo is a look a consumer cannot have. It is
-   css/tokens/skin.rack.css, and `data-skin="rack"` on this page's <html> is
+   css/tokens/skin.dialup.css, and `data-skin="dialup"` on this page's <html> is
    the whole installation.
 
    What is left below is position, and the density knobs, which the skin

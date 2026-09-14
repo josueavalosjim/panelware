@@ -2,7 +2,7 @@
  * THE STAGE, for demo/showcase/index.html.
  *
  * Not part of the package. Everything here is either the 16:9 stage and how it
- * scales, or one of the three backdrops. No component is restyled: if a comp
+ * scales, or the ground behind them. No component is restyled: if a comp
  * needed a rule pointed at a .pw- class, the comp would be lying about what
  * the kit renders.
  *
@@ -46,126 +46,20 @@ body {
   transform: scale(var(--fit, 1));
 }
 
-/* ── The backdrops ─────────────────────────────────────────────────────────
-   Three grounds, one attribute. */
-
-/* An original, in the same palette as the one everybody is thinking of: a sky
-   that goes deep at the top and pale at the horizon, one hill, a few soft
-   clouds. Gradients and a radial, so it is resolution independent, weighs
-   nothing, and is ours to post. */
-.stage[data-backdrop="bliss"] {
+/* ── The ground ───────────────────────────────────────────────────────────
+   A sign-in screen from the era rather than its wallpaper: a flat mid blue
+   between two dark bars, each edged with a thin rule that fades at both
+   ends. Flat on purpose. The hill and the gradient desktop both read as CSS
+   pretending to be a picture, and this is a picture made of flat fields. */
+.stage {
+  --ground-bar: #00309c;
+  --ground-field: #5a7edc;
   background:
-    /* THE LAND.
-
-       The geometry is computed rather than nudged, because nudging produced a
-       dome on the first try and a flat green band on the second. An ellipse
-       shows its top arc when its centre sits below the frame, and the numbers
-       that matter are where that arc crosses the left edge, the crest, and the
-       right edge.
-
-       For the near hill: rx 90% of 1920, ry 90% of 1080, centre at 58% 145%.
-       That puts the grass line at 76% of frame height on the left, 55% at the
-       crest, and 65% on the right, which is a shoulder leaving the frame low
-       on the left and staying high on the right. The photograph's is close to
-       that, and a shoulder is the thing a dome was missing.
-
-       One trap, and it cost two attempts. A radial gradient's colour stops
-       run from the centre to the ELLIPSE EDGE, so `transparent 67%` does not
-       end the shape where the 90%/90% radius said it would, it ends it at 67%
-       of that radius. The arithmetic above was right and the hill still came
-       out flat, crest at 85% of the frame instead of 55%, because two thirds
-       of the radius is where the green stopped. The transparent stop
-       has to sit at 100% and the colours have to be spaced inside it.
-
-       Which also fixes the shading. The visible band is the radius from about
-       0.46 at the bottom of the frame to 1.0 at the arc, so the stops run
-       dark at the low numbers and bright at the high ones: a hill lit from
-       above is brighter along its crest, and the ramp was previously the
-       wrong way round as well as the wrong length. */
-    radial-gradient(90% 90% at 58% 145%, #58941f 46%, #67a72c 66%, #7bbc34 85%, #8ec93f 99.5%, transparent 100%),
-    /* The far ridge, cresting further right and higher, desaturated and
-       lifted: distance takes contrast before it takes colour. */
-    radial-gradient(70% 62% at 96% 120%, #608c26 40%, #6d9f2e 70%, #7cb037 99.5%, transparent 100%),
-    /* Aerial haze along the join. The single thing that stopped this reading
-       as a flat vector: nothing at that distance ends on a hard line. */
-    linear-gradient(to bottom, transparent 50%, rgba(214, 232, 246, 0.6) 62%, rgba(214, 232, 246, 0.16) 70%, transparent 78%),
-    /* THE SKY, in six stops. A two-stop sky is the other half of why the
-       first version looked like a poster: the real one has a deep band up
-       top, a long even middle, a pale ring at the horizon, and a warm wash
-       just above the grass. */
-    linear-gradient(to bottom,
-      #1d5cc6 0%,
-      #2d72d5 15%,
-      #4a8ee2 32%,
-      #79b2ec 52%,
-      #b0d3f5 66%,
-      #dcebf8 73%,
-      #cfe4f7 100%);
-}
-
-/* THE CLOUDS.
-
-   Cumulus, which is lumpy, bright on top and flat underneath, and softer at
-   the edges than any single gradient gets. Each one is three or four
-   overlapping blobs, and the whole layer is blurred, because a hard-edged
-   radial gradient is the tell that gives away every CSS sky.
-
-   Two layers rather than one: a high band of small, sharp clouds and a lower
-   band of larger, softer ones. Cloud size falling off toward the horizon is
-   perspective, and it is most of what makes a flat sky read as deep. */
-.stage[data-backdrop="bliss"]::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 32% 0;
-  filter: blur(5px);
-  background:
-    /* left group */
-    radial-gradient(92px 30px at 19% 19%, #fff 0%, rgba(255,255,255,0.94) 52%, transparent 72%),
-    radial-gradient(62px 42px at 16% 16%, #fff 0%, rgba(255,255,255,0.92) 52%, transparent 72%),
-    radial-gradient(52px 32px at 24% 17%, #fff 0%, rgba(255,255,255,0.88) 52%, transparent 72%),
-    radial-gradient(120px 14px at 20% 23%, rgba(255,255,255,0.7) 0%, transparent 76%),
-    /* centre, higher and smaller */
-    radial-gradient(64px 22px at 61% 11%, #fff 0%, rgba(255,255,255,0.9) 52%, transparent 72%),
-    radial-gradient(42px 30px at 58% 9%, #fff 0%, rgba(255,255,255,0.88) 52%, transparent 72%),
-    /* right group, the biggest and lowest */
-    radial-gradient(112px 32px at 82% 25%, #fff 0%, rgba(255,255,255,0.86) 52%, transparent 74%),
-    radial-gradient(70px 46px at 78% 22%, #fff 0%, rgba(255,255,255,0.84) 52%, transparent 74%),
-    radial-gradient(56px 30px at 87% 24%, #fff 0%, rgba(255,255,255,0.8) 52%, transparent 74%),
-    radial-gradient(150px 16px at 83% 30%, rgba(255,255,255,0.62) 0%, transparent 78%);
-  pointer-events: none;
-}
-
-/* And a second, hazier band nearer the horizon, blurred much harder. Thin
-   cirrus and distance doing the same thing to cloud that it does to the
-   ridge. */
-.stage[data-backdrop="bliss"]::after {
-  content: '';
-  position: absolute;
-  inset: 22% 0 30% 0;
-  filter: blur(11px);
-  opacity: 0.72;
-  background:
-    radial-gradient(180px 12px at 12% 34%, rgba(255,255,255,0.8) 0%, transparent 76%),
-    radial-gradient(130px 10px at 44% 48%, rgba(255,255,255,0.7) 0%, transparent 78%),
-    radial-gradient(210px 13px at 71% 40%, rgba(255,255,255,0.66) 0%, transparent 78%),
-    radial-gradient(120px 9px at 93% 56%, rgba(255,255,255,0.55) 0%, transparent 80%);
-  pointer-events: none;
-}
-
-/* The photograph, if it is sitting next to this file. Deliberately not
-   committed and deliberately not the default: it is somebody else's
-   photograph, and the look-alike above is the one that can be posted. */
-.stage[data-backdrop="photo"] {
-  background: #4e92e4 url("./bliss.jpg") center / cover no-repeat;
-}
-
-/* No landscape, just the desktop blue of the era. Named for what it is:
-   the vendor's name for that theme is a trademark and this repo does not use
-   one as an identifier, which test/contract.test.mjs enforces for css/ and
-   src/ and which there is no reason to break in demo/. */
-.stage[data-backdrop="desktop"] {
-  background:
-    radial-gradient(120% 90% at 50% 0%, #4a7fc8 0%, #2f5fa8 55%, #1c3f7a 100%);
+    linear-gradient(var(--ground-bar), var(--ground-bar)) 0 0 / 100% 96px no-repeat,
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9) 35%, transparent 80%) 0 96px / 100% 2px no-repeat,
+    linear-gradient(90deg, transparent, #f5a04a 35%, transparent 80%) 0 982px / 100% 2px no-repeat,
+    linear-gradient(var(--ground-bar), var(--ground-bar)) 0 984px / 100% 96px no-repeat,
+    var(--ground-field);
 }
 
 /* ── The comps ─────────────────────────────────────────────────────────────
@@ -268,7 +162,7 @@ body {
 .comp-axes { grid-template-rows: auto auto; gap: 40px; }
 .comp-axes .pw-panel { width: 760px; }
 
-/* Three, in a row. The rack skin points --pw-icon-sheet at chrome's, so a
+/* Three, in a row. The dialup skin points --pw-icon-sheet at chrome's, so a
    fourth cell here would be the same drawing twice under two names, which is
    a comparison that compares nothing. */
 .comp-icons {
@@ -369,3 +263,4 @@ body[data-capture] .comp-skins > figure {
   padding: 4px 8px;
 }
 body[data-capture] .rig { display: none; }
+
