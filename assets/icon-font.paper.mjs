@@ -38,6 +38,9 @@
 import { derive, rectsOf, rot180 } from './icon-lattice.mjs';
 import { footprint, isVector, markupOf, ring, stroke, vector } from './icon-vector.mjs';
 
+/** The stroke every glyph on this sheet is drawn at. */
+export const WEIGHT = 3;
+
 const drawn = {
   play: [
     '................',
@@ -350,10 +353,10 @@ const drawn = {
 
   /* The one vector glyph on this sheet. A lens built from pixels read as a
      Q or a key at every size, so this is a real circle and a handle with a
-     round end. icon-vector.mjs measures its ink the way the rest are. */
+     round end, both at the sheet's 3px weight. */
   search: vector(
-    ring(7, 7, 3.75, 2),
-    stroke([[9.9, 9.9], [12.5, 12.5]], { w: 2.5, cap: 'round' }),
+    ring(7, 7, 3.5, WEIGHT),
+    stroke([[10, 10], [12.5, 12.5]], { w: WEIGHT, cap: 'round' }),
   ),
 
   question: [
