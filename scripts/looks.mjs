@@ -32,7 +32,7 @@ export const LOOKS = [
   /* The fourth skin ships no preset. A preset is a palette within a skin and
      this one's palette is the point of it; a second silver would be a
      different shade of the same argument. */
-  { skin: 'rack' },
+  { skin: 'dialup' },
 ];
 
 export const THEMES = ['light', 'dark'];

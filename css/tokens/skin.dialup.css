@@ -1,7 +1,7 @@
 /**
- * SKIN: the rack skin's own knobs.
+ * SKIN: the dialup skin's own knobs.
  *
- * Named for the thing rather than for the product: a rack-mount unit's
+ * Named for the thing rather than for the product: a dialup-mount unit's
  * faceplate, silver and bevelled, with a phosphor display set into it. The
  * player it is drawn from is named in the README as prior art, which is what
  * everybody in this genre does and is fine; it is not what a consumer types.
@@ -17,7 +17,7 @@
  * ── Where it came from ───────────────────────────────────────────────────
  * demo/player/classic.html had all of this as a page-local block for a while,
  * which proved it worked and proved nothing else: a look that lives in a demo
- * is a look a consumer cannot have. It is a skin now, so `data-skin="rack"`
+ * is a look a consumer cannot have. It is a skin now, so `data-skin="dialup"`
  * is the whole installation.
  *
  * ── What it does NOT change ──────────────────────────────────────────────
@@ -28,8 +28,8 @@
  * may go under the floor and the package may not take them there.
  */
 
-[data-skin="rack"],
-[data-skin="rack"][data-theme="light"] {
+[data-skin="dialup"],
+[data-skin="dialup"][data-theme="light"] {
   /* Depth 1, not the half-pixel that looked clever. Every offset in
      bevel.css is a calc of this, so 0.5 does draw the one-pixel edge a 1998
      skin has, and it also asks for half-pixel shadows, which cannot be drawn:
@@ -74,8 +74,8 @@
   --pw-lcd-depth: 0;
 
   --pw-scrollbar-width: auto;
-  --pw-scrollbar-thumb: var(--pw-rack-100);
-  --pw-scrollbar-track: var(--pw-rack-200);
+  --pw-scrollbar-thumb: var(--pw-dialup-100);
+  --pw-scrollbar-track: var(--pw-dialup-200);
 
   /* The UI face of the era. Not a system stack: Tahoma is what the dialogs
      and the chassis labels were set in, and it is on every machine
@@ -84,7 +84,7 @@
   --pw-text-ui: 0.6875rem;
 
   --pw-selected-bg: var(--pw-navy-800);
-  --pw-selected-content: var(--pw-rack-000);
+  --pw-selected-content: var(--pw-dialup-000);
   --pw-selected-mark: none;
 
   --pw-leading-ui: 1.2;
@@ -109,7 +109,7 @@
   --pw-color-vis-peak: #b0b0b0;
 }
 
-[data-skin="rack"][data-theme="dark"] {
+[data-skin="dialup"][data-theme="dark"] {
   --pw-bevel-depth: 1;
   --pw-icon-sheet: url("../../assets/icons.svg");
 
@@ -137,7 +137,7 @@
 
   --pw-scrollbar-width: auto;
   --pw-scrollbar-thumb: #4a4a4a;
-  --pw-scrollbar-track: var(--pw-rack-800);
+  --pw-scrollbar-track: var(--pw-dialup-800);
 
   --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
   --pw-text-ui: 0.6875rem;
@@ -176,7 +176,7 @@
 
 /* THE DENSITY AXIS, RESTATED, AND WRITTEN LAST.
 
-   [data-skin="rack"] and [data-density="compact"] are both (0,1,0) and this
+   [data-skin="dialup"] and [data-density="compact"] are both (0,1,0) and this
    file imports after density.css, so the blocks above would win the tie and
    hold their padding at both densities. This selector is (0,2,0), which
    settles that half.
@@ -186,7 +186,7 @@
    its full set, and a tie on specificity goes to whichever is written last.
    The paper skin shipped this exact bug with the exact same comment above it
    claiming it could not happen. test/contract.test.mjs holds the order now. */
-[data-skin="rack"][data-density="compact"] {
+[data-skin="dialup"][data-density="compact"] {
   --pw-control-pad-x: var(--pw-space-xs);
   --pw-control-gap:   var(--pw-space-2xs);
   --pw-panel-pad:     var(--pw-space-sm);

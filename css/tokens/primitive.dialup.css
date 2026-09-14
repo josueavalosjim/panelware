@@ -1,5 +1,5 @@
 /**
- * PRIMITIVE: the rack skin's ramp.
+ * PRIMITIVE: the dialup skin's ramp.
  *
  * Two families, because this skin has two very different grounds. Light is
  * Windows 95's own silver, which is what a 1998 application chassis was made
@@ -12,20 +12,20 @@
  * argument semantic.chrome.css makes for --pw-color-lcd.
  */
 
-[data-skin="rack"] {
+[data-skin="dialup"] {
   /* Win95 silver. The four tiers a raised control is drawn from, and they are
      the reason this skin exists: 255, 223, 128, 0 is the exact ladder every
      3D border in that decade used. */
-  --pw-rack-000: #ffffff;
-  --pw-rack-050: #dfdfdf;
-  --pw-rack-100: #c0c0c0;
-  --pw-rack-200: #a8a8a8;
-  --pw-rack-300: #808080;
-  --pw-rack-500: #666666;
-  --pw-rack-700: #3f3f3f;
-  --pw-rack-800: #2a2a2a;
-  --pw-rack-900: #1a1a1a;
-  --pw-rack-950: #000000;
+  --pw-dialup-000: #ffffff;
+  --pw-dialup-050: #dfdfdf;
+  --pw-dialup-100: #c0c0c0;
+  --pw-dialup-200: #a8a8a8;
+  --pw-dialup-300: #808080;
+  --pw-dialup-500: #666666;
+  --pw-dialup-700: #3f3f3f;
+  --pw-dialup-800: #2a2a2a;
+  --pw-dialup-900: #1a1a1a;
+  --pw-dialup-950: #000000;
 
   /* The navy a period title bar and a selected row were both painted in.
      Every one of these is a number the contrast gate chose, not one I liked:

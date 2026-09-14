@@ -2106,7 +2106,7 @@
    proved nothing else, because a look that lives in a demo is a look a
    consumer cannot have. */
 /**
- * PRIMITIVE: the rack skin's ramp.
+ * PRIMITIVE: the dialup skin's ramp.
  *
  * Two families, because this skin has two very different grounds. Light is
  * Windows 95's own silver, which is what a 1998 application chassis was made
@@ -2119,20 +2119,20 @@
  * argument semantic.chrome.css makes for --pw-color-lcd.
  */
 
-[data-skin="rack"] {
+[data-skin="dialup"] {
   /* Win95 silver. The four tiers a raised control is drawn from, and they are
      the reason this skin exists: 255, 223, 128, 0 is the exact ladder every
      3D border in that decade used. */
-  --pw-rack-000: #ffffff;
-  --pw-rack-050: #dfdfdf;
-  --pw-rack-100: #c0c0c0;
-  --pw-rack-200: #a8a8a8;
-  --pw-rack-300: #808080;
-  --pw-rack-500: #666666;
-  --pw-rack-700: #3f3f3f;
-  --pw-rack-800: #2a2a2a;
-  --pw-rack-900: #1a1a1a;
-  --pw-rack-950: #000000;
+  --pw-dialup-000: #ffffff;
+  --pw-dialup-050: #dfdfdf;
+  --pw-dialup-100: #c0c0c0;
+  --pw-dialup-200: #a8a8a8;
+  --pw-dialup-300: #808080;
+  --pw-dialup-500: #666666;
+  --pw-dialup-700: #3f3f3f;
+  --pw-dialup-800: #2a2a2a;
+  --pw-dialup-900: #1a1a1a;
+  --pw-dialup-950: #000000;
 
   /* The navy a period title bar and a selected row were both painted in.
      Every one of these is a number the contrast gate chose, not one I liked:
@@ -2164,10 +2164,10 @@
 }
 
 /**
- * SEMANTIC: what the rack skin's colours are FOR.
+ * SEMANTIC: what the dialup skin's colours are FOR.
  *
- * Both blocks declare the identical set, because [data-skin="rack"] and
- * [data-skin="rack"][data-theme="dark"] tie on specificity and are decided
+ * Both blocks declare the identical set, because [data-skin="dialup"] and
+ * [data-skin="dialup"][data-theme="dark"] tie on specificity and are decided
  * by source order: a block carrying only its differences loses that tie for
  * every token it leaves out, silently. test/contract.test.mjs holds it.
  *
@@ -2178,20 +2178,20 @@
  * light inverted. This one treats it as a different object.
  */
 
-[data-skin="rack"],
-[data-skin="rack"][data-theme="light"] {
-  --pw-color-base-100: var(--pw-rack-100);
-  --pw-color-base-200: var(--pw-rack-100);
-  --pw-color-base-300: var(--pw-rack-200);
-  --pw-color-base-content: var(--pw-rack-950);
-  --pw-color-disabled-content: var(--pw-rack-500);
+[data-skin="dialup"],
+[data-skin="dialup"][data-theme="light"] {
+  --pw-color-base-100: var(--pw-dialup-100);
+  --pw-color-base-200: var(--pw-dialup-100);
+  --pw-color-base-300: var(--pw-dialup-200);
+  --pw-color-base-content: var(--pw-dialup-950);
+  --pw-color-disabled-content: var(--pw-dialup-500);
 
   --pw-color-primary: var(--pw-navy-800);
-  --pw-color-primary-content: var(--pw-rack-000);
+  --pw-color-primary-content: var(--pw-dialup-000);
   --pw-color-titlebar: var(--pw-navy-800);
-  --pw-color-titlebar-content: var(--pw-rack-000);
-  --pw-color-focus: var(--pw-rack-950);
-  --pw-color-focus-contrast: var(--pw-rack-000);
+  --pw-color-titlebar-content: var(--pw-dialup-000);
+  --pw-color-focus: var(--pw-dialup-950);
+  --pw-color-focus-contrast: var(--pw-dialup-000);
   --pw-color-range: var(--pw-navy-800);
 
   /* The display does not follow the theme. */
@@ -2206,26 +2206,26 @@
   --pw-color-error-content: var(--pw-rust-800);
 
   /* The 3D border, in the ladder the era used. */
-  --pw-bevel-light: var(--pw-rack-000);
-  --pw-bevel-face: var(--pw-rack-050);
-  --pw-bevel-shade: var(--pw-rack-300);
-  --pw-bevel-frame: var(--pw-rack-950);
-  --pw-bevel-boundary: var(--pw-rack-950);
-  --pw-color-divider: var(--pw-rack-300);
+  --pw-bevel-light: var(--pw-dialup-000);
+  --pw-bevel-face: var(--pw-dialup-050);
+  --pw-bevel-shade: var(--pw-dialup-300);
+  --pw-bevel-frame: var(--pw-dialup-950);
+  --pw-bevel-boundary: var(--pw-dialup-950);
+  --pw-color-divider: var(--pw-dialup-300);
 
   /* Gloss is off in this skin, so these are the flat colours underneath it.
      They exist because the contrast block measures a pre-flattened pair: a
      glare is a sibling pseudo-element and no rendered-page check sees
      through it. */
-  --pw-gloss-lit-base-200: var(--pw-rack-100);
+  --pw-gloss-lit-base-200: var(--pw-dialup-100);
   --pw-gloss-lit-primary: var(--pw-navy-800);
   --pw-color-scrim: rgba(0, 0, 0, 0.5);
 }
 
-[data-skin="rack"][data-theme="dark"] {
-  --pw-color-base-100: var(--pw-rack-700);
-  --pw-color-base-200: var(--pw-rack-700);
-  --pw-color-base-300: var(--pw-rack-800);
+[data-skin="dialup"][data-theme="dark"] {
+  --pw-color-base-100: var(--pw-dialup-700);
+  --pw-color-base-200: var(--pw-dialup-700);
+  --pw-color-base-300: var(--pw-dialup-800);
   --pw-color-base-content: #e8e8e8;
   --pw-color-disabled-content: #9a9a9a;
 
@@ -2234,7 +2234,7 @@
   --pw-color-titlebar: var(--pw-navy-900);
   --pw-color-titlebar-content: #d8d8e4;
   --pw-color-focus: #ffffff;
-  --pw-color-focus-contrast: var(--pw-rack-950);
+  --pw-color-focus-contrast: var(--pw-dialup-950);
   --pw-color-range: var(--pw-navy-400);
 
   --pw-color-lcd: var(--pw-lcd-black);
@@ -2254,8 +2254,8 @@
      black the light theme uses. */
   --pw-bevel-light: #707070;
   --pw-bevel-face: #4a4a4a;
-  --pw-bevel-shade: var(--pw-rack-800);
-  --pw-bevel-frame: var(--pw-rack-900);
+  --pw-bevel-shade: var(--pw-dialup-800);
+  --pw-bevel-frame: var(--pw-dialup-900);
   --pw-bevel-boundary: #9a9a9a;
   /* 2:1 against the chassis, which is this tier's own contract rather than a
      WCAG floor: a grouping line identifies nothing and changes no state, so
@@ -2263,15 +2263,15 @@
      at 1.83 on #3f3f3f, which the gate caught. */
   --pw-color-divider: #707070;
 
-  --pw-gloss-lit-base-200: var(--pw-rack-700);
+  --pw-gloss-lit-base-200: var(--pw-dialup-700);
   --pw-gloss-lit-primary: var(--pw-navy-700);
   --pw-color-scrim: rgba(0, 0, 0, 0.7);
 }
 
 /**
- * SKIN: the rack skin's own knobs.
+ * SKIN: the dialup skin's own knobs.
  *
- * Named for the thing rather than for the product: a rack-mount unit's
+ * Named for the thing rather than for the product: a dialup-mount unit's
  * faceplate, silver and bevelled, with a phosphor display set into it. The
  * player it is drawn from is named in the README as prior art, which is what
  * everybody in this genre does and is fine; it is not what a consumer types.
@@ -2287,7 +2287,7 @@
  * ── Where it came from ───────────────────────────────────────────────────
  * demo/player/classic.html had all of this as a page-local block for a while,
  * which proved it worked and proved nothing else: a look that lives in a demo
- * is a look a consumer cannot have. It is a skin now, so `data-skin="rack"`
+ * is a look a consumer cannot have. It is a skin now, so `data-skin="dialup"`
  * is the whole installation.
  *
  * ── What it does NOT change ──────────────────────────────────────────────
@@ -2298,8 +2298,8 @@
  * may go under the floor and the package may not take them there.
  */
 
-[data-skin="rack"],
-[data-skin="rack"][data-theme="light"] {
+[data-skin="dialup"],
+[data-skin="dialup"][data-theme="light"] {
   /* Depth 1, not the half-pixel that looked clever. Every offset in
      bevel.css is a calc of this, so 0.5 does draw the one-pixel edge a 1998
      skin has, and it also asks for half-pixel shadows, which cannot be drawn:
@@ -2344,8 +2344,8 @@
   --pw-lcd-depth: 0;
 
   --pw-scrollbar-width: auto;
-  --pw-scrollbar-thumb: var(--pw-rack-100);
-  --pw-scrollbar-track: var(--pw-rack-200);
+  --pw-scrollbar-thumb: var(--pw-dialup-100);
+  --pw-scrollbar-track: var(--pw-dialup-200);
 
   /* The UI face of the era. Not a system stack: Tahoma is what the dialogs
      and the chassis labels were set in, and it is on every machine
@@ -2354,7 +2354,7 @@
   --pw-text-ui: 0.6875rem;
 
   --pw-selected-bg: var(--pw-navy-800);
-  --pw-selected-content: var(--pw-rack-000);
+  --pw-selected-content: var(--pw-dialup-000);
   --pw-selected-mark: none;
 
   --pw-leading-ui: 1.2;
@@ -2379,7 +2379,7 @@
   --pw-color-vis-peak: #b0b0b0;
 }
 
-[data-skin="rack"][data-theme="dark"] {
+[data-skin="dialup"][data-theme="dark"] {
   --pw-bevel-depth: 1;
   --pw-icon-sheet: url("../assets/icons.svg");
 
@@ -2407,7 +2407,7 @@
 
   --pw-scrollbar-width: auto;
   --pw-scrollbar-thumb: #4a4a4a;
-  --pw-scrollbar-track: var(--pw-rack-800);
+  --pw-scrollbar-track: var(--pw-dialup-800);
 
   --pw-font-ui: 'Tahoma', 'MS Sans Serif', Geneva, Verdana, sans-serif;
   --pw-text-ui: 0.6875rem;
@@ -2446,7 +2446,7 @@
 
 /* THE DENSITY AXIS, RESTATED, AND WRITTEN LAST.
 
-   [data-skin="rack"] and [data-density="compact"] are both (0,1,0) and this
+   [data-skin="dialup"] and [data-density="compact"] are both (0,1,0) and this
    file imports after density.css, so the blocks above would win the tie and
    hold their padding at both densities. This selector is (0,2,0), which
    settles that half.
@@ -2456,7 +2456,7 @@
    its full set, and a tie on specificity goes to whichever is written last.
    The paper skin shipped this exact bug with the exact same comment above it
    claiming it could not happen. test/contract.test.mjs holds the order now. */
-[data-skin="rack"][data-density="compact"] {
+[data-skin="dialup"][data-density="compact"] {
   --pw-control-pad-x: var(--pw-space-xs);
   --pw-control-gap:   var(--pw-space-2xs);
   --pw-panel-pad:     var(--pw-space-sm);

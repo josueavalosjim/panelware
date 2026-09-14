@@ -168,7 +168,7 @@
       /* Presets are nested under a skin, so the list is per skin and the
          picker resets when the skin changes rather than leaving a value
          selected that no longer means anything. */
-      const PRESETS = { chrome: ['default', 'deck'], cyber: ['default', 'redline'], paper: ['default', 'newsprint'], rack: ['default'] };
+      const PRESETS = { chrome: ['default', 'deck'], cyber: ['default', 'redline'], paper: ['default', 'newsprint'], dialup: ['default'] };
       /* The analyser's levels. The demo moves them, not the kit: the component
          redraws when its values change and has no timer of its own, which is
          the whole reason WCAG 2.2.2 does not land on it. */
@@ -237,7 +237,7 @@
               h(SelectItem, { value: 'chrome' }, 'Chrome'),
               h(SelectItem, { value: 'cyber' }, 'Cyber'),
               h(SelectItem, { value: 'paper' }, 'Paper'),
-              h(SelectItem, { value: 'rack' }, 'Rack'))),
+              h(SelectItem, { value: 'dialup' }, 'Dialup'))),
           /* Only rendered when the skin has more than one, because a picker
              with one option is a label wearing a control's clothes. */
           PRESETS[skinAxis].length > 1

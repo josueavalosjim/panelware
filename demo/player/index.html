@@ -401,7 +401,7 @@
       return h('div', { className: 'stack' },
         h(Player),
         h('div', { className: 'page-chrome' },
-          ['chrome', 'cyber', 'paper', 'rack'].map((s) =>
+          ['chrome', 'cyber', 'paper', 'dialup'].map((s) =>
             h(Button, { key: s, onClick: () => setSkin(s),
               'data-variant': s === skin ? 'primary' : undefined }, s)),
           h(Button, { onClick: () => setTheme(theme === 'light' ? 'dark' : 'light') },
