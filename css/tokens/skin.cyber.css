@@ -238,6 +238,8 @@
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
   --pw-range-inset: 1px;
+  --pw-badge-text-drop: 1px;
+  --pw-badge-mark-drop: -1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through
@@ -393,6 +395,8 @@
      because the travel had never been a skin's to set. */
   --pw-press-travel: 0;
   --pw-range-inset: 1px;
+  --pw-badge-text-drop: 1px;
+  --pw-badge-mark-drop: -1px;
 
   /* And the readout is not a well. --pw-bevel-depth: 0 above flattens the
      whole treatment, and the readout kept a chrome-bevelled surround through

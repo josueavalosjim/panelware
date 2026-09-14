@@ -117,6 +117,8 @@
      the first, which the selection slot already does. */
   --pw-press-travel: 0;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 1px;
+  --pw-badge-mark-drop: 0;
 
   /* Nor is the readout a well. Same reason as the bevel: there is no depth on
      a sheet, and the dither is what arrives in its place. */
@@ -200,6 +202,10 @@
   --pw-press-travel: 0;
 
   --pw-range-inset: 0;
+
+  --pw-badge-text-drop: 1px;
+
+  --pw-badge-mark-drop: 0;
   --pw-lcd-depth: 0;
   /* The same two rungs, reflected: the stock is near-black here, so the
      channel is the dark end of the ramp and the rule is a step up from it. */

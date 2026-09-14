@@ -69,6 +69,8 @@
      button. One pixel, the period value. */
   --pw-press-travel: 1px;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 0;
+  --pw-badge-mark-drop: 0;
 
   /* A window into a box. The deepest thing in the kit and the only element
      that overrides the depth at all. */
@@ -124,6 +126,8 @@
      button. One pixel, the period value. */
   --pw-press-travel: 1px;
   --pw-range-inset: 0;
+  --pw-badge-text-drop: 0;
+  --pw-badge-mark-drop: 0;
 
   /* A window into a box. The deepest thing in the kit and the only element
      that overrides the depth at all. */
