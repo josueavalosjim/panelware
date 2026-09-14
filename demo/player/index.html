@@ -222,6 +222,13 @@
         choose(TRACKS[(at + by + TRACKS.length) % TRACKS.length].id);
       }, [track, choose]);
 
+      /* ?drive: the player's setters on window, for the capture script that
+         animates it for the showcase clip. Nothing on the page reads them. */
+      useEffect(() => {
+        if (!params.has('drive')) return;
+        window.drive = { ...window.drive, gains: setGains, preamp: setPreamp, volume: setVolume, balance: setBalance, step };
+      }, [step]);
+
       /* One frame loop for the analyser and the clock.
 
          Twenty bands out of the 512 the FFT gives, spaced LOGARITHMICALLY
@@ -418,6 +425,8 @@
     /* ?layout=columns: the player and equaliser side by side, the playlist
        under both. */
     if (params.get('layout')) document.body.setAttribute('data-layout', params.get('layout'));
+    /* ?lock: the same geometry under every skin. player.css says which knobs. */
+    if (params.has('lock')) document.body.setAttribute('data-lock', '');
 
     function Page() {
       const [skin, setSkin] = useState(params.get('skin') ?? 'chrome');
@@ -427,6 +436,11 @@
         document.documentElement.dataset.skin = skin;
         document.documentElement.dataset.theme = theme;
       }, [skin, theme]);
+
+      useEffect(() => {
+        if (!params.has('drive')) return;
+        window.drive = { ...window.drive, look: (s, t) => { setSkin(s); setTheme(t); } };
+      }, []);
 
       return h('div', { className: 'stack' },
         h(Player),
