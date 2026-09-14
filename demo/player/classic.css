@@ -135,7 +135,14 @@ body {
   min-width: 0; min-height: 0;
   padding: 0;
 }
-.win .pw-title-button .pw-icon { --pw-icon-scale: 1; transform: scale(0.5); }
+/* Half size, and back half a pixel. The 16px icon box in a 9px button is
+   centred at -3.5, layout snaps that to -3, and every glyph landed half a
+   pixel right and low: the close X ran from 2.5 to 7.5 in a face that runs
+   2 to 7. A transform is not snapped, so it takes the half pixel back. */
+.win .pw-title-button .pw-icon {
+  --pw-icon-scale: 1;
+  transform: translate(-0.5px, -0.5px) scale(0.5);
+}
 
 /* WINAMP'S NUMBERS ARE WINDOW NUMBERS, so the window has to be what they
    resolve against.
@@ -273,3 +280,12 @@ body {
 .win .at-seek { height: 10px; }
 .win .at-seek .pw-slider-thumb { width: 29px; height: 10px; }
 .win .at-seek .pw-slider-track { --pw-track-h: 4px; }
+
+/* ?zoom=N, for the showcase: no note, no ground, and the stage laid out at N
+   times its size. */
+body[data-zoom] {
+  min-height: 0;
+  background: transparent;
+}
+body[data-zoom] .note { display: none; }
+body[data-zoom] .classic-stage { zoom: var(--classic-zoom); }
