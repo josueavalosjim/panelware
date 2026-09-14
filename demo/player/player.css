@@ -163,6 +163,14 @@ body[data-bare] #root { padding: 0; }
 body[data-bare] .page-chrome,
 body[data-bare] .page-hint { display: none; }
 
+/* ?layout=columns */
+body[data-layout="columns"] .stack { width: auto; }
+body[data-layout="columns"] .stack .stack {
+  grid-template-columns: repeat(2, 620px);
+  align-items: stretch;
+}
+body[data-layout="columns"] .stack .stack > :nth-child(3) { grid-column: 1 / -1; }
+
 @media (max-width: 620px) {
   .deck-top { grid-template-columns: minmax(0, 1fr); }
   .deck-controls { grid-template-columns: minmax(0, 1fr); }

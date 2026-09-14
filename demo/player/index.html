@@ -401,6 +401,9 @@
     const params = new URLSearchParams(location.search);
     const BARE = params.has('bare');
     if (BARE) document.body.setAttribute('data-bare', '');
+    /* ?layout=columns: the player and equaliser side by side, the playlist
+       under both. */
+    if (params.get('layout')) document.body.setAttribute('data-layout', params.get('layout'));
 
     function Page() {
       const [skin, setSkin] = useState(params.get('skin') ?? 'chrome');

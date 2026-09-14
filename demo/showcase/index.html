@@ -7,11 +7,12 @@
 <!--
   FIVE 16:9 COMPOSITIONS, FOR POSTING.
 
-  No JavaScript renders a component here. Every comp is the kit's own markup,
-  the same way demo/states.html is, which keeps this page honest: a
-  screenshot of it is a screenshot of what the CSS does, not of what a
-  framework assembled. The script at the bottom only switches which comp is
-  visible, scales the stage, and cycles the attributes in the axes comp.
+  No JavaScript renders a component on this page. The skins, axes, and icons
+  comps are the kit's own markup, the same way demo/states.html is, so a
+  screenshot of them is a screenshot of what the CSS does. The hero and the
+  player are other pages in frames, because their sliders need Radix and
+  static markup cannot show a slider. The script at the bottom only switches
+  which comp is visible and scales the stage.
 
   The stage is exactly 1920x1080 and scales to fit, so what is on screen and
   what gets captured are the same composition at two sizes. scripts/shoot.mjs
@@ -25,21 +26,8 @@
     <div class="stage" id="stage">
 
       <div class="comp comp-hero" data-comp="hero" data-on>
-        <section class="pw-window" aria-labelledby="sc-hero">
-            <div class="pw-title-bar" data-gloss>
-              <h3 class="pw-title" id="sc-hero">panelware</h3>
-              <div class="pw-title-controls">
-                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
-                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
-                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
-              </div>
-            </div>
-            <div class="pw-window-body">
-              <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>No runtime deps</span>
-              <p class="hero-lede">An accessible component kit with a chrome-and-LCD skin.
-              Radix UI does the interaction; this does the surface.</p>
-              <p class="hero-install"><span>npm i @josueavalosjim/panelware</span></p></div>
-          </section>
+        <iframe class="replica" src="../player/classic.html?zoom=4" title="panelware at 275 by 116"></iframe>
+        <p class="comp-caption hero-install">npm i @josueavalosjim/panelware</p>
       </div>
 
       <div class="comp comp-skins" data-comp="skins">
@@ -194,18 +182,114 @@
       </div>
 
       <div class="comp comp-axes" data-comp="axes">
-        <div class="pw-panel">
-          <div class="pw-panel-body">
-            <p style="margin:0 0 18px">Same markup. Same components. The attributes on
-            &lt;html&gt; are the only thing moving.</p>
-            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-              <button class="pw-button" type="button" data-variant="primary">Save changes</button>
-              <button class="pw-button" type="button">Open</button>
-              <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>Connected</span>
+        <figure data-skin="chrome" data-theme="light" data-density="comfortable">
+          <section class="pw-window" aria-labelledby="sc-axes-0">
+            <div class="pw-title-bar" data-gloss>
+              <h3 class="pw-title" id="sc-axes-0">panelware</h3>
+              <div class="pw-title-controls">
+                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+              </div>
             </div>
-          </div>
-        </div>
-        <p class="comp-caption" id="axes-caption">data-skin="chrome" &middot; data-theme="light" &middot; data-density="comfortable"</p>
+            <div class="pw-window-body">
+              <div class="demo-body">
+                <p class="demo-lede">Same markup. The attributes on this window are the only thing that changed.</p>
+                <div class="demo-row">
+                  <button class="pw-button" type="button" data-variant="primary">Save changes</button>
+                  <button class="pw-button" type="button">Open</button>
+                  <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>Connected</span>
+                </div>
+                <div class="demo-row">
+                  <span class="pw-lcd"><span class="pw-lcd-render" role="img" aria-label="Elapsed 4 minutes 21 seconds"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 12; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1; --pw-cell-y: 0"></span></span></span>
+                  <span class="pw-meta">44 kHz &middot; stereo</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <figcaption class="comp-caption">chrome &middot; light &middot; comfortable</figcaption>
+        </figure>
+        <figure data-skin="chrome" data-theme="dark" data-density="comfortable">
+          <section class="pw-window" aria-labelledby="sc-axes-1">
+            <div class="pw-title-bar" data-gloss>
+              <h3 class="pw-title" id="sc-axes-1">panelware</h3>
+              <div class="pw-title-controls">
+                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+              </div>
+            </div>
+            <div class="pw-window-body">
+              <div class="demo-body">
+                <p class="demo-lede">Same markup. The attributes on this window are the only thing that changed.</p>
+                <div class="demo-row">
+                  <button class="pw-button" type="button" data-variant="primary">Save changes</button>
+                  <button class="pw-button" type="button">Open</button>
+                  <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>Connected</span>
+                </div>
+                <div class="demo-row">
+                  <span class="pw-lcd"><span class="pw-lcd-render" role="img" aria-label="Elapsed 4 minutes 21 seconds"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 12; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1; --pw-cell-y: 0"></span></span></span>
+                  <span class="pw-meta">44 kHz &middot; stereo</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <figcaption class="comp-caption">chrome &middot; dark &middot; comfortable</figcaption>
+        </figure>
+        <figure data-skin="cyber" data-theme="dark" data-density="compact">
+          <section class="pw-window" aria-labelledby="sc-axes-2">
+            <div class="pw-title-bar" data-gloss>
+              <h3 class="pw-title" id="sc-axes-2">panelware</h3>
+              <div class="pw-title-controls">
+                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+              </div>
+            </div>
+            <div class="pw-window-body">
+              <div class="demo-body">
+                <p class="demo-lede">Same markup. The attributes on this window are the only thing that changed.</p>
+                <div class="demo-row">
+                  <button class="pw-button" type="button" data-variant="primary">Save changes</button>
+                  <button class="pw-button" type="button">Open</button>
+                  <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>Connected</span>
+                </div>
+                <div class="demo-row">
+                  <span class="pw-lcd"><span class="pw-lcd-render" role="img" aria-label="Elapsed 4 minutes 21 seconds"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 12; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1; --pw-cell-y: 0"></span></span></span>
+                  <span class="pw-meta">44 kHz &middot; stereo</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <figcaption class="comp-caption">cyber &middot; dark &middot; compact</figcaption>
+        </figure>
+        <figure data-skin="paper" data-theme="light" data-density="compact">
+          <section class="pw-window" aria-labelledby="sc-axes-3">
+            <div class="pw-title-bar" data-gloss>
+              <h3 class="pw-title" id="sc-axes-3">panelware</h3>
+              <div class="pw-title-controls">
+                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+              </div>
+            </div>
+            <div class="pw-window-body">
+              <div class="demo-body">
+                <p class="demo-lede">Same markup. The attributes on this window are the only thing that changed.</p>
+                <div class="demo-row">
+                  <button class="pw-button" type="button" data-variant="primary">Save changes</button>
+                  <button class="pw-button" type="button">Open</button>
+                  <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>Connected</span>
+                </div>
+                <div class="demo-row">
+                  <span class="pw-lcd"><span class="pw-lcd-render" role="img" aria-label="Elapsed 4 minutes 21 seconds"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 12; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1; --pw-cell-y: 0"></span></span></span>
+                  <span class="pw-meta">44 kHz &middot; stereo</span>
+                </div>
+              </div>
+            </div>
+          </section>
+          <figcaption class="comp-caption">paper &middot; light &middot; compact</figcaption>
+        </figure>
       </div>
 
       <div class="comp comp-icons" data-comp="icons">
@@ -224,7 +308,7 @@
       </div>
 
       <div class="comp comp-player" data-comp="player">
-        <iframe id="player-frame" src="../player/index.html?bare=1&amp;skin=chrome&amp;theme=light" title="panelware player"></iframe>
+        <iframe id="player-frame" src="../player/index.html?bare=1&amp;skin=chrome&amp;theme=light&amp;layout=columns" title="panelware player"></iframe>
       </div>
 
     </div>
@@ -273,7 +357,6 @@
     document.getElementById('pick-comp').addEventListener('change', (e) => show(e.target.value));
     document.getElementById('pick-skin').addEventListener('change', (e) => {
       root.dataset.skin = e.target.value;
-      syncCaption();
     });
     document.getElementById('pick-theme').addEventListener('click', (e) => {
       const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -281,50 +364,11 @@
       e.target.textContent = next === 'dark' ? 'light' : 'dark';
     });
 
-    /* The axes comp cycles on its own, because the argument it is making is
-       that the attributes are the only thing changing, and a still cannot
-       make it. Paused while the page is being captured so a shot is
-       deterministic. */
-    /* The caption reads the attributes rather than being told what they are.
-       It was written only by the cycler below, so driving the skin from
-       outside, which is what the capture script does, left a still captioned
-       data-skin="chrome" over a panel plainly rendering paper: the one comp
-       whose entire job is to say what the attributes are, saying the wrong
-       thing. */
-    const syncCaption = () => {
-      const el = document.getElementById('axes-caption');
-      if (!el) return;
-      const d = root.dataset;
-      el.textContent = `data-skin="${d.skin ?? 'chrome'}" \u00b7 data-theme="${d.theme ?? 'light'}"`
-        + ` \u00b7 data-density="${d.density ?? 'comfortable'}"`;
-    };
-    syncCaption();
-
-    const AXES = [
-      ['chrome', 'light', 'comfortable'],
-      ['chrome', 'dark', 'comfortable'],
-      ['cyber', 'dark', 'compact'],
-      ['paper', 'light', 'comfortable'],
-      ['dialup', 'light', 'compact'],
-    ];
-    let at = 0;
-    setInterval(() => {
-      if (document.body.hasAttribute('data-capture')) return;
-      const comp = document.querySelector('[data-comp="axes"][data-on]');
-      if (!comp) return;
-      at = (at + 1) % AXES.length;
-      const [skin, theme, density] = AXES[at];
-      root.dataset.skin = skin;
-      root.dataset.theme = theme;
-      root.dataset.density = density;
-      syncCaption();
-    }, 2200);
-
     const look = { skin: 'chrome', theme: 'light' };
     const reframe = (next) => {
       Object.assign(look, next);
       const frame = document.getElementById('player-frame');
-      frame.src = `../player/index.html?bare=1&skin=${look.skin}&theme=${look.theme}`;
+      frame.src = `../player/index.html?bare=1&skin=${look.skin}&theme=${look.theme}&layout=columns`;
     };
     document.getElementById('pick-skin').addEventListener('change', (e) => reframe({ skin: e.target.value }));
     document.getElementById('pick-theme').addEventListener('click', () => {
@@ -337,8 +381,8 @@
       /* The player is in an iframe, so it is reloaded with the look rather
          than inheriting it. Everything else on the page reads the attributes
          on <html> directly. */
-      skin: (v) => { root.dataset.skin = v; syncCaption(); reframe({ skin: v }); },
-      theme: (v) => { root.dataset.theme = v; syncCaption(); reframe({ theme: v }); },
+      skin: (v) => { root.dataset.skin = v; reframe({ skin: v }); },
+      theme: (v) => { root.dataset.theme = v; reframe({ theme: v }); },
       capture: (on) => {
         if (on) document.body.setAttribute('data-capture', '');
         else document.body.removeAttribute('data-capture');
