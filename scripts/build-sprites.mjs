@@ -25,8 +25,8 @@ import {
 import {
   ICON_COLS, ICON_H, ICON_ORDER, ICON_ROWS, ICON_W, iconRects,
 } from '../assets/icon-font.mjs';
-import { iconRects as cyberRects } from '../assets/icon-font.cyber.mjs';
-import { iconRects as paperRects } from '../assets/icon-font.paper.mjs';
+import { iconMarkup as cyberMarkup } from '../assets/icon-font.cyber.mjs';
+import { iconMarkup as paperMarkup } from '../assets/icon-font.paper.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ASSETS = join(HERE, '..', 'assets');
@@ -71,30 +71,32 @@ export function glyphSheet() {
  *
  * A skin points --pw-icon-sheet at a different file and nothing else moves:
  * same cell, same eight columns, same ICON_ORDER, so a name still resolves to
- * the cell the index computed for it. Only the pixels inside change. Taking
- * the rects reader as an argument is what keeps that true, because there is
- * one placement rule here rather than one per sheet.
+ * the cell the index computed for it. Only what is inside a cell changes.
+ * A skin hands over cell-local markup, pixels or vector, and this places it,
+ * so there is one placement rule here rather than one per sheet. With no
+ * argument it writes the chrome sheet as flat rects, as it always has.
  */
-export function iconSheet(rects = iconRects) {
+export function iconSheet(markup) {
   const body = ICON_ORDER.map((name, i) => {
     const dx = (i % ICON_COLS) * ICON_W;
     const dy = Math.floor(i / ICON_COLS) * ICON_H;
-    return rects(name).map((r) => rect(r, dx, dy)).join('');
+    if (markup) return `<g transform="translate(${dx} ${dy})">${markup(name)}</g>`;
+    return iconRects(name).map((r) => rect(r, dx, dy)).join('');
   });
   return sheet(ICON_COLS * ICON_W, ICON_ROWS * ICON_H, body);
 }
 
 /** The sheets a skin can point at, by the file each is written to. */
 export const SKIN_SHEETS = [
-  ['icons.cyber.svg', cyberRects],
-  ['icons.paper.svg', paperRects],
+  ['icons.cyber.svg', cyberMarkup],
+  ['icons.paper.svg', paperMarkup],
 ];
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   writeFileSync(join(ASSETS, 'lcd-digits.svg'), digitSheet());
   writeFileSync(join(ASSETS, 'lcd-glyphs.svg'), glyphSheet());
   writeFileSync(join(ASSETS, 'icons.svg'), iconSheet());
-  for (const [file, rects] of SKIN_SHEETS) writeFileSync(join(ASSETS, file), iconSheet(rects));
+  for (const [file, markup] of SKIN_SHEETS) writeFileSync(join(ASSETS, file), iconSheet(markup));
   console.log(`lcd-digits.svg  ${DIGIT_CELLS.length * DIGIT_W}x${DIGIT_H}, ${DIGIT_CELLS.length} cells`);
   console.log(`lcd-glyphs.svg  ${GLYPH_COLS * GLYPH_W}x${GLYPH_ROWS * GLYPH_H}, ${GLYPH_ORDER.length} glyphs in ${GLYPH_COLS}x${GLYPH_ROWS}`);
   console.log(`icons.svg       ${ICON_COLS * ICON_W}x${ICON_ROWS * ICON_H}, ${ICON_ORDER.length} icons in ${ICON_COLS}x${ICON_ROWS}`);

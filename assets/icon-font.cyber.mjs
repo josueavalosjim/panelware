@@ -1,526 +1,129 @@
 /**
- * The icon set, drawn again for the cyber skin.
+ * The icon set, drawn again for the cyber skin, in vector.
  *
- * Same cell, same order, same nine derived glyphs, different pixels. That is
- * the entire licence a skin gets here, and icon-lattice.mjs says why.
+ * Same cell, same order, same nine derived glyphs. The pixels are gone:
+ * icon-vector.mjs says why a sheet is allowed to leave the lattice and how its
+ * ink is still measured.
  *
- * ── What makes this set different from the chrome one ─────────────────────
- * The chrome sheet is solid. Its stop is a filled square, its dot is a filled
- * blob, its lens is a circle. That is the right vocabulary for a toolbar of
- * pressable objects and the wrong one for an instrument, where a mark is a
- * reading rather than a thing.
+ * ── The vocabulary ─────────────────────────────────────────────────────────
+ * Hairlines, 45 degree chamfers, and corner brackets. The chamfer is the cut
+ * corner on the cyber window. The brackets are --pw-selected-mark, the corner
+ * ticks this skin draws around a selected row. So stop is a solid core inside
+ * that selection, and the frames (maximize, restore, search) are windows with
+ * one corner cut.
  *
- * So this set is drawn OPEN. Outlines where chrome fills, right angles where
- * chrome curves, and a square where chrome draws a circle: a HUD's dot is a
- * cell on a grid, not a dab of ink. The magnifier's lens is rectangular for
- * the same reason, and it stops reading as a magnifier and starts reading as
- * a selection, which is what a scan actually is.
- *
- * ── Six glyphs here are chrome's, to the pixel ────────────────────────────
- * The four chevrons, the check, and the exclamation. That is deliberate and it
- * is not laziness. Every one of them is already a stroke, so there is nothing
- * for a rule that says "outlines where the first set fills" to open, and a
- * chevron drawn differently is a chevron drawn worse. The overlap is declared
- * in test/icons.test.mjs by name, so redrawing one of them fails a test rather
- * than passing quietly, which is the only way a reader can tell a shared
- * drawing from a forgotten one.
- *
- * ── The one thing a thin set may not do ───────────────────────────────────
- * A one-pixel diagonal is not a stroke on this lattice, it is a column of
- * pixels that touch at their corners and nothing else. It survives at 11x and
- * renders as a dotted line at 1x, and the set's own test rejects it: two
- * regions joined by nothing are two regions. Every diagonal here is a
- * staircase whose steps share an edge, which is why they are two pixels wide
- * where they turn. That is a constraint of the grid rather than a style, and
- * it is the reason this set is thin rather than hairline.
+ * Three glyphs stay two pixels wide: exclamation, minus, and the plus
+ * derived from it. A centred one pixel stroke is impossible on an even cell, and a
+ * plus whose arms differ by a pixel reads as a mistake before it reads as
+ * thin.
  */
-import { derive, rectsOf } from './icon-lattice.mjs';
+import { box, deriveVector, fill, footprint, isVector, markupOf, rot180V, stroke, vector } from './icon-vector.mjs';
+import { rectsOf } from './icon-lattice.mjs';
+
+const R = { cap: 'round' };
+const closedR = { cap: 'round', closed: true };
+
+/* The four corner ticks of --pw-selected-mark, arms three pixels long. */
+const brackets = (x0, y0, x1, y1) => [
+  stroke([[x0, y0 + 2], [x0, y0], [x0 + 2, y0]]),
+  stroke([[x1 - 2, y0], [x1, y0], [x1, y0 + 2]]),
+  stroke([[x1, y1 - 2], [x1, y1], [x1 - 2, y1]]),
+  stroke([[x0 + 2, y1], [x0, y1], [x0, y1 - 2]]),
+];
 
 const drawn = {
-  /* Transport, opened out. The triangles keep the two-pixel apex the chrome
-     set established, which needs an even height to exist at all. */
-  play: [
-    '................',
-    '................',
-    '....##..........',
-    '....###.........',
-    '....####........',
-    '....##.##.......',
-    '....##..##......',
-    '....##...##.....',
-    '....##...##.....',
-    '....##..##......',
-    '....##.##.......',
-    '....####........',
-    '....###.........',
-    '....##..........',
-    '................',
-    '................',
-  ],
+  play: vector(stroke([[5.5, 3.5], [12, 8], [5.5, 12.5]], closedR)),
 
-  pause: [
-    '................',
-    '................',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '................',
-    '................',
-  ],
+  pause: vector(
+    stroke([[5.5, 3.5], [5.5, 12.5]]),
+    stroke([[10.5, 3.5], [10.5, 12.5]]),
+  ),
 
-  /* Hollow, which is the whole argument of this set in one glyph: the chrome
-     stop is a filled block because a button is an object, and this is the
-     same square read as a boundary. */
-  stop: [
-    '................',
-    '................',
-    '................',
-    '................',
-    '....########....',
-    '....########....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....##....##....',
-    '....########....',
-    '....########....',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
+  stop: vector(...brackets(3.5, 3.5, 12.5, 12.5), box(6, 6, 4, 4)),
 
-  previous: [
-    '................',
-    '................',
-    '..##......##....',
-    '..##.....###....',
-    '..##....####....',
-    '..##...##.##....',
-    '..##..##..##....',
-    '..##.##...##....',
-    '..##.##...##....',
-    '..##..##..##....',
-    '..##...##.##....',
-    '..##....####....',
-    '..##.....###....',
-    '..##......##....',
-    '................',
-    '................',
-  ],
+  previous: vector(
+    stroke([[3.5, 3.5], [3.5, 12.5]]),
+    stroke([[12.5, 3.5], [6.5, 8], [12.5, 12.5]], closedR),
+  ),
 
-  eject: [
-    '................',
-    '................',
-    '.......##.......',
-    '......####......',
-    '.....##..##.....',
-    '....##....##....',
-    '...##......##...',
-    '..############..',
-    '................',
-    '................',
-    '..############..',
-    '..############..',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
+  eject: vector(
+    stroke([[3.5, 8.5], [8, 4], [12.5, 8.5]], closedR),
+    stroke([[3.5, 11.5], [12.5, 11.5]]),
+  ),
 
-  /* The X, as two crossed staircases. Its rows carry more ink where the
-     strokes cross, which is the one place the set's stroke-fattening test
-     allows a swell. */
-  close: [
-    '................',
-    '................',
-    '..##........##..',
-    '..###......###..',
-    '...###....###...',
-    '....###..###....',
-    '.....######.....',
-    '......####......',
-    '......####......',
-    '.....######.....',
-    '....###..###....',
-    '...###....###...',
-    '..###......###..',
-    '..##........##..',
-    '................',
-    '................',
-  ],
+  close: vector(
+    stroke([[3.5, 3.5], [12.5, 12.5]], R),
+    stroke([[12.5, 3.5], [3.5, 12.5]], R),
+  ),
 
-  minimize: [
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '..############..',
-    '..############..',
-    '................',
-    '................',
-    '................',
-  ],
+  minimize: vector(stroke([[3.5, 12.5], [12.5, 12.5]])),
 
-  /* A window, not a rectangle, and that is a repair rather than a flourish.
+  /* A window with its top right corner cut, and a title rule so it is not
+     mistaken for stop. */
+  maximize: vector(
+    stroke([[2.5, 3.5], [11.5, 3.5], [13.5, 5.5], [13.5, 12.5], [2.5, 12.5]], { closed: true }),
+    stroke([[2.5, 6.5], [13.5, 6.5]]),
+  ),
 
-     The chrome set tells stop from maximize by FILL: its stop is a solid
-     block and its maximize is an outline. This set's rule is outlines
-     everywhere, so it spent the one distinction chrome had and shipped two
-     hollow squares at two sizes. Side by side in a toolbar they read as the
-     same mark, which no measurement in this repo could say: every pair here
-     is more than sixty pixels apart, and sixty pixels apart is not the same
-     as telling two things apart.
+  /* Two of those windows. The one behind is only drawn where the front one
+     does not cover it, so the front reads as in front. */
+  restore: vector(
+    stroke([[2.5, 5.5], [8.5, 5.5], [10.5, 7.5], [10.5, 13.5], [2.5, 13.5]], { closed: true }),
+    stroke([[5.5, 5.5], [5.5, 2.5], [11.5, 2.5], [13.5, 4.5], [13.5, 10.5], [10.5, 10.5]]),
+  ),
 
-     So the title rule comes back, separated from the frame's own top bar by a
-     clear row. Chrome does not need it and does not have it. This set does,
-     because it gave away the answer chrome was using. */
-  maximize: [
-    '................',
-    '................',
-    '..############..',
-    '..############..',
-    '..##........##..',
-    '..##........##..',
-    '..############..',
-    '..############..',
-    '..##........##..',
-    '..##........##..',
-    '..##........##..',
-    '..##........##..',
-    '..############..',
-    '..############..',
-    '................',
-    '................',
-  ],
+  'chevron-down': vector(stroke([[3.5, 5.5], [8, 10], [12.5, 5.5]], R)),
 
-  /* Two frames, one behind the other. The chrome set draws the same idea with
-     filled bars; this keeps both outlines so the one in front reads as being
-     in front rather than as a solid patch.
+  check: vector(stroke([[3.5, 8.5], [6.5, 11.5], [12.5, 5.5]], R)),
 
-     The front frame is nine wide at every row, which it was not. Its top bar
-     and upper rails were drawn seven wide and its lower rails and bottom bar
-     nine, so the right edge stepped outward two pixels halfway down and the
-     window came out a trapezoid. Nothing caught it: a lattice test can see a
-     broken diagonal and a rotation that drifted, and it cannot see a rectangle
-     that is not one.
+  exclamation: vector(box(7, 3, 2, 6), box(7, 11, 2, 2)),
 
-     The back frame is clipped to what falls outside the front frame's box,
-     which is what makes the front read as in front. Same rule the chrome set
-     uses, and the clip has to move whenever the front frame's box does: the
-     bottom bar's stub was still cut for a seven-wide front. */
-  restore: [
-    '................',
-    '................',
-    '.....#########..',
-    '.....#########..',
-    '.....##.....##..',
-    '..#########.##..',
-    '..#########.##..',
-    '..##.....##.##..',
-    '..##.....#####..',
-    '..##.....#####..',
-    '..##.....##.....',
-    '..##.....##.....',
-    '..#########.....',
-    '..#########.....',
-    '................',
-    '................',
-  ],
+  /* Solid, with the window's cut corner. It is the radio's selected mark, and
+     a hollow mark in a well reads as the empty state. */
+  dot: vector(fill([[5, 5], [9, 5], [11, 7], [11, 11], [5, 11]])),
 
-  'chevron-down': [
-    '................',
-    '................',
-    '................',
-    '................',
-    '..##........##..',
-    '..###......###..',
-    '...###....###...',
-    '....###..###....',
-    '.....######.....',
-    '......####......',
-    '.......##.......',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
+  minus: vector(box(3, 7, 10, 2)),
 
-  /* Two staircases of a constant three pixels, meeting at the vertex. Drawn
-     at a constant width on purpose: the obvious version ran 2 3 3 5 6 6 6 4,
-     where the ink climbs steadily toward the point, and that is a tick
-     turning into a blob. This runs 3 3 3 6 6 5 3, where the sixes are the two
-     arms lying alongside each other rather than the stroke growing. */
-  check: [
-    '................',
-    '................',
-    '................',
-    '................',
-    '...........###..',
-    '..........###...',
-    '.........###....',
-    '..###...###.....',
-    '...###.###......',
-    '....#####.......',
-    '.....###........',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
+  'caret-down': vector(fill([[4, 6], [12, 6], [8, 10]])),
 
-  exclamation: [
-    '................',
-    '................',
-    '.......##.......',
-    '.......##.......',
-    '.......##.......',
-    '.......##.......',
-    '.......##.......',
-    '.......##.......',
-    '.......##.......',
-    '................',
-    '................',
-    '.......##.......',
-    '.......##.......',
-    '................',
-    '................',
-    '................',
-  ],
+  search: vector(
+    stroke([[2.5, 2.5], [7.5, 2.5], [9.5, 4.5], [9.5, 9.5], [2.5, 9.5]], { closed: true }),
+    stroke([[9.5, 9.5], [12.75, 12.75]], R),
+  ),
 
-  /* A cell on a grid rather than a dab of ink, which is what a HUD's dot is.
-     Square where the chrome set draws a circle, and solid where the rest of
-     this set is open: it is the radio's selected mark, and a hollow mark in a
-     well reads as the empty state. The well stays round, because roundness is
-     what says choose-one before a word has been read, and no skin gets to
-     square that. */
-  dot: [
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '.....######.....',
-    '.....######.....',
-    '.....######.....',
-    '.....######.....',
-    '.....######.....',
-    '.....######.....',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
+  /* Chamfered at both shoulders and stepping into the stem at 45 degrees.
+     Square shoulders read as a 7 with a tail. */
+  question: vector(
+    stroke([[4.5, 5.5], [6.5, 3.5], [9.5, 3.5], [11.5, 5.5], [11.5, 6.5], [8.5, 9.5]], R),
+    box(8, 11, 1, 2),
+  ),
 
-  minus: [
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '..############..',
-    '..############..',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
+  ellipsis: vector(box(3, 7, 2, 2), box(7, 7, 2, 2), box(11, 7, 2, 2)),
 
-  'caret-down': [
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '....########....',
-    '....########....',
-    '.....######.....',
-    '......####......',
-    '.......##.......',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
-
-  /* A rectangular lens. A circle would be the chrome set's answer, and a
-     rectangle is what a scan actually selects. The handle meets the frame
-     along an edge rather than at a corner, which is the defect the set's
-     corner test was written for. */
-  search: [
-    '................',
-    '................',
-    '..##########....',
-    '..##########....',
-    '..##......##....',
-    '..##......##....',
-    '..##......##....',
-    '..##......##....',
-    '..##########....',
-    '..##########....',
-    '........###.....',
-    '.........###....',
-    '..........###...',
-    '...........##...',
-    '................',
-    '................',
-  ],
-
-  question: [
-    '................',
-    '................',
-    '....######......',
-    '....######......',
-    '....##..##......',
-    '........##......',
-    '.......###......',
-    '......###.......',
-    '......##........',
-    '......##........',
-    '................',
-    '......##........',
-    '......##........',
-    '................',
-    '................',
-    '................',
-  ],
-
-  ellipsis: [
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '..##...##...##..',
-    '..##...##...##..',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
-
-  /* Eight positions of one mark around a ring. The second four are the first
-     four turned 180 degrees, derived rather than drawn, so the spin cannot
-     develop a wobble. */
-  'spinner-1': [
-    '................',
-    '................',
-    '......###.......',
-    '......###.......',
-    '......###.......',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
-
-  'spinner-2': [
-    '................',
-    '................',
-    '................',
-    '..........###...',
-    '..........###...',
-    '..........###...',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
-
-  'spinner-3': [
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '...........###..',
-    '...........###..',
-    '...........###..',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
-
-  'spinner-4': [
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '................',
-    '..........###...',
-    '..........###...',
-    '..........###...',
-    '................',
-    '................',
-    '................',
-    '................',
-  ],
+  /* A 2x2 mark stepping round a ring of radius five. The second four frames
+     are the first four turned 180 degrees. */
+  'spinner-1': vector(box(7, 2, 2, 2)),
+  'spinner-2': vector(box(11, 3, 2, 2)),
+  'spinner-3': vector(box(12, 7, 2, 2)),
+  'spinner-4': vector(box(11, 11, 2, 2)),
 };
 
-/* info is exclamation turned over, which is what it has always been: the same
-   bar and the same dot, read the other way up. Derived here rather than drawn
-   so the two cannot disagree. */
-import { rot180 } from './icon-lattice.mjs';
-drawn.info = rot180(drawn.exclamation);
+drawn.info = rot180V(drawn.exclamation);
 
-const I = derive(drawn);
+const I = deriveVector(drawn);
 
 export function iconRects(name) {
-  return rectsOf(I[name], name);
+  const g = I[name];
+  if (!g) throw new Error(`no icon named ${JSON.stringify(name)}`);
+  return rectsOf(isVector(g) ? footprint(g) : g, name);
+}
+
+export function iconMarkup(name) {
+  return markupOf(I[name]);
 }
 
 export const ICON_NAMES = Object.keys(I);
-export const GLYPHS = I;
+export const GLYPHS = Object.fromEntries(ICON_NAMES.map((n) => [n, footprint(I[n])]));
+
+/** The vector glyphs, by name, for the tests that measure geometry. */
+export const VECTORS = I;

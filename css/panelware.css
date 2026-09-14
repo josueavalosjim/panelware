@@ -6679,24 +6679,34 @@
  *
  * Cells are not here and never will be. Every sheet shares ICON_ORDER, so the
  * cell a name resolves to is the same under every skin and the base index
- * already carries it. Only the ink bearings move, and only for the 19 names
+ * already carries it. Only the ink bearings move, and only for the 22 names
  * whose drawing changed width.
  */
 
 @layer pw.skin {
-  [data-skin="cyber"] .pw-icon[data-icon="play"] {
-    --pw-icon-ink-l: 4;
+  [data-skin="cyber"] .pw-icon[data-icon="pause"] {
+    --pw-icon-ink-l: 5;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="close"] {
-    --pw-icon-ink-l: 2;
-    --pw-icon-ink-r: 2;
+  [data-skin="cyber"] .pw-icon[data-icon="stop"] {
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="minimize"] {
-    --pw-icon-ink-l: 2;
-    --pw-icon-ink-r: 2;
+  [data-skin="cyber"] .pw-icon[data-icon="previous"] {
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  [data-skin="cyber"] .pw-icon[data-icon="next"] {
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  [data-skin="cyber"] .pw-icon[data-icon="eject"] {
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="maximize"] {
@@ -6709,19 +6719,34 @@
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="minus"] {
-    --pw-icon-ink-l: 2;
-    --pw-icon-ink-r: 2;
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-down"] {
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="plus"] {
-    --pw-icon-ink-l: 2;
-    --pw-icon-ink-r: 2;
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-up"] {
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
+  }
+
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-right"] {
+    --pw-icon-ink-l: 5;
+    --pw-icon-ink-r: 6;
+  }
+
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-left"] {
+    --pw-icon-ink-l: 6;
+    --pw-icon-ink-r: 5;
+  }
+
+  [data-skin="cyber"] .pw-icon[data-icon="check"] {
+    --pw-icon-ink-l: 3;
+    --pw-icon-ink-r: 3;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="caret-down"] {
     --pw-icon-ink-l: 4;
-    --pw-icon-ink-r: 4;
+    --pw-icon-ink-r: 5;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="search"] {
@@ -6729,54 +6754,44 @@
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="question"] {
-    --pw-icon-ink-l: 4;
-    --pw-icon-ink-r: 6;
-  }
-
-  [data-skin="cyber"] .pw-icon[data-icon="ellipsis"] {
-    --pw-icon-ink-l: 2;
-    --pw-icon-ink-r: 2;
-  }
-
   [data-skin="cyber"] .pw-icon[data-icon="spinner-1"] {
-    --pw-icon-ink-l: 6;
+    --pw-icon-ink-l: 7;
     --pw-icon-ink-r: 7;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="spinner-2"] {
-    --pw-icon-ink-l: 10;
+    --pw-icon-ink-l: 11;
     --pw-icon-ink-r: 3;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="spinner-3"] {
-    --pw-icon-ink-l: 11;
+    --pw-icon-ink-l: 12;
     --pw-icon-ink-r: 2;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="spinner-4"] {
-    --pw-icon-ink-l: 10;
+    --pw-icon-ink-l: 11;
     --pw-icon-ink-r: 3;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="spinner-5"] {
     --pw-icon-ink-l: 7;
-    --pw-icon-ink-r: 6;
+    --pw-icon-ink-r: 7;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="spinner-6"] {
     --pw-icon-ink-l: 3;
-    --pw-icon-ink-r: 10;
+    --pw-icon-ink-r: 11;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="spinner-7"] {
     --pw-icon-ink-l: 2;
-    --pw-icon-ink-r: 11;
+    --pw-icon-ink-r: 12;
   }
 
   [data-skin="cyber"] .pw-icon[data-icon="spinner-8"] {
     --pw-icon-ink-l: 3;
-    --pw-icon-ink-r: 10;
+    --pw-icon-ink-r: 11;
   }
 
   [data-skin="cyber"] .pw-spinner .pw-icon {
@@ -7004,7 +7019,7 @@
 
   [data-skin="paper"] .pw-icon[data-icon="search"] {
     --pw-icon-ink-l: 2;
-    --pw-icon-ink-r: 4;
+    --pw-icon-ink-r: 2;
   }
 
   [data-skin="paper"] .pw-icon[data-icon="info"] {

@@ -93,7 +93,7 @@
 
   [data-skin="paper"] .pw-icon[data-icon="search"] {
     --pw-icon-ink-l: 2;
-    --pw-icon-ink-r: 4;
+    --pw-icon-ink-r: 2;
   }
 
   [data-skin="paper"] .pw-icon[data-icon="info"] {
