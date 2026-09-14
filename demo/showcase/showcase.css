@@ -183,11 +183,11 @@ body {
 
 .comp-player { place-items: center; }
 /* Player and equaliser side by side, the playlist under both: ?layout=columns
-   on the player page. Sized to what that measures, 1248x572, so the frame
-   crops nothing. */
+   on the player page. 1248 wide, which is what that measures, and 600 tall
+   because the skins run 522 to 576 and the page centres itself inside. */
 .comp-player iframe {
   width: 1248px;
-  height: 572px;
+  height: 600px;
   border: 0;
   /* The player draws its own chassis and its own shadow through --pw-elev.
      A second shadow on the frame would be the kit's edge plus a CSS one. */
@@ -250,4 +250,3 @@ body[data-capture] .comp-skins > figure {
   padding: 4px 8px;
 }
 body[data-capture] .rig { display: none; }
-

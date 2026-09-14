@@ -400,7 +400,21 @@
        be machinery for one screenshot. */
     const params = new URLSearchParams(location.search);
     const BARE = params.has('bare');
-    if (BARE) document.body.setAttribute('data-bare', '');
+    if (BARE) {
+      document.body.setAttribute('data-bare', '');
+      /* Centre the player in the frame on a whole pixel. player.css says why. */
+      const root = document.getElementById('root');
+      const place = (stack) => {
+        const top = Math.floor((innerHeight - stack.getBoundingClientRect().height) / 2);
+        root.style.setProperty('--bare-top', `${Math.max(0, top)}px`);
+      };
+      const watch = () => {
+        const stack = root.querySelector('.stack');
+        if (!stack) return requestAnimationFrame(watch);
+        new ResizeObserver(() => place(stack)).observe(stack);
+      };
+      watch();
+    }
     /* ?layout=columns: the player and equaliser side by side, the playlist
        under both. */
     if (params.get('layout')) document.body.setAttribute('data-layout', params.get('layout'));
