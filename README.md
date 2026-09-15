@@ -1,6 +1,6 @@
 # panelware
 
-An accessible component kit with three skins on one set of components.
+An accessible component kit with four skins on one set of components.
 
 Most kits in this genre are decorative. They ship a convincing surface over a
 div with a click handler, and the keyboard, the screen reader and the contrast
@@ -120,14 +120,15 @@ is a thing you throw: the label sits beside it, the state is where the thumb
 is, and `aria-checked` makes it "on" rather than "pressed". If it belongs in a
 toolbar it is a toggle; if it belongs in a settings list it is a switch.
 
-Three skins, each with a preset, each in light and dark, at two densities.
-Twelve looks on one set of components and one set of markup.
+Four skins, three of them with a preset, each in light and dark, at two
+densities. Fourteen looks on one set of components and one set of markup.
 
 | Skin | | Preset | |
 | --- | --- | --- | --- |
 | `chrome` | the bevelled chassis | `deck` | smaller, plainer, no gloss |
 | `cyber` | a squared terminal in one accent | `redline` | the same, as signage |
 | `paper` | graphite and one spot, screened | `newsprint` | one plate, coarser |
+| `dialup` | a 1998 bitmap skin: silver, navy, and a green readout | | no preset |
 
 **A note on `cyber`.** It is documented in places as "accessible cyberpunk" and
 it is not one: it is a terminal, which is what its own reference set says in its
@@ -487,7 +488,7 @@ skin has no bevel, set `--pw-bevel-depth: 0` and every offset collapses to
 nothing, then assign whatever you do have to the right slot.
 
 `--pw-elev` is consumed as a `box-shadow`, so it carries outer shadows as
-happily as insets, and both shipped skins answer with one. A skin whose raised
+happily as insets, and every shipped skin answers with one. A skin whose raised
 and sunken states differ by **dither density, hatch pitch, or any other
 pattern** cannot: that is a `background-image`, and no custom property feeds
 two different properties. Fill `--pw-fill-raised` and `--pw-fill-sunken`
@@ -539,7 +540,7 @@ markup rather than a fact about the skin. Grouped by what turning one does.
 | `--pw-badge-text-drop`, `--pw-badge-mark-drop` | whole-pixel optical corrections inside a badge, measured per skin: how far the label's capitals drop to sit on the badge's centre, and how far the mark moves relative to them. A face's caps and a glyph's ink do not sit where flex centring puts the line box, and each skin's face sits differently |
 | `--pw-range-inset` | how far a slider's range and an equaliser's fill stand off the track's edge. The edge is an inset shadow, which paints under the fill, so a fill flush to it hides it. 1px on cyber, whose track edge is a 1px line; 0 where the edge is a bevel the fill can sit over |
 | `--pw-shadow-outer-color` | the cast shadow's colour. Its geometry is derived per element in `bevel.css`. Fully transparent means a skin whose surfaces are not objects sitting on anything |
-| `--pw-glass-blur` | the one place `backdrop-filter` is allowed, and it is 0 in both shipped skins. See the perf note below |
+| `--pw-glass-blur` | the one place `backdrop-filter` is allowed, and it is 0 in every shipped skin. See the perf note below |
 
 *Gloss*
 
@@ -604,7 +605,7 @@ reinventing it:
 
 Type is a skin axis, and for three releases it was not: the paper skin never
 answered `--pw-font-ui`, so a printed sheet was set in the operating system's
-UI sans because nobody had decided it would be. All three skins declare both
+UI sans because nobody had decided it would be. Every skin declares both
 of these now, and a contract test fails if a knob resolves to the same value
 under every skin, which is what "a skin is a set of token values" has to mean
 to be worth saying.
