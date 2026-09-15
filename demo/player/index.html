@@ -443,6 +443,10 @@
       }, []);
 
       return h('div', { className: 'stack' },
+        /* The page's heading. The windows are h2s, and a page with no h1 has
+           no top to its outline; hidden because the player's own title bar
+           already says what this is to anyone looking. */
+        h('h1', { className: 'pw-sr-only' }, 'panelware player'),
         h(Player),
         h('div', { className: 'page-chrome' },
           ['chrome', 'cyber', 'paper', 'dialup'].map((s) =>

@@ -232,7 +232,7 @@ const floorFor = (row, tokens) => {
 const failures = [];
 let scanned = 0;
 await withDemo(async (p, base) => {
-  for (const page of ['demo/states.html', 'demo/index.html']) {
+  for (const page of ['demo/states.html', 'demo/index.html', 'demo/player/index.html?bare=1&layout=columns&lock&mute']) {
     for (const look of LOOKS) {
       const skin = label(look);
       for (const theme of ['light', 'dark']) {
@@ -270,4 +270,4 @@ await withDemo(async (p, base) => {
   }
 }, { width: 1200, height: 900 });
 
-report('colour', failures, `${scanned} painted pairs across 2 pages x ${LOOKS.length} looks x 2 themes`);
+report('colour', failures, `${scanned} painted pairs across 3 pages x ${LOOKS.length} looks x 2 themes`);
