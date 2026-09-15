@@ -1,5 +1,65 @@
 # Changelog
 
+## 0.9.0
+
+A fourth skin, vector icons for cyber, and a pass over every skin with a
+pixel ruler. Nothing in the component API changed. Several things look
+different, so check your screenshots.
+
+### A fourth skin: `dialup`
+
+`data-skin="dialup"` is a 1998 bitmap skin: silver chassis, a navy title bar,
+Tahoma, and a green readout. It ships no preset. It passes the colour and axe
+gates in light and dark like the others, and `demo/player/classic.html` uses
+it to rebuild Winamp's 275x116 main window from the kit's own components.
+
+### Cyber's icons are vector, drawn to written rules
+
+The cyber sheet was pixel art with three stroke weights in it. It is now
+hairline vector: 1px strokes, 45 degree diagonals, and one centre axis, with
+the rules at the top of `assets/icon-font.cyber.mjs` and a test holding the
+sheet to them. Paper's search lens is a real circle.
+
+A 45 degree hairline cannot fill whole pixels, so on a 1x screen a vector
+sheet paints its diagonals grey. Cyber and paper now ship a pixel sheet too
+(`icons.cyber.px.svg`, `icons.paper.px.svg`), and `--pw-icon-sheet` is an
+`image-set()`: pixels at 1x, vector at 2x.
+
+### The readout follows its skin
+
+Chrome, cyber, and paper all painted the clock in chrome's green. Cyber's
+readout is cyan now, and paper's is ink on a toned panel. Paper's is the one
+readout that follows the theme, since nothing on paper is lit.
+
+### Fixes
+
+- **Title bar metadata was unreadable.** A `.pw-meta` in a `Window` toolbar
+  took the body ink, which measured 1.00:1 on paper's bar and under 2.2:1 in
+  five other looks. It takes the bar's ink now. The colour and axe gates now
+  also scan the player demo, which is where it showed.
+- **A window taller than its content showed its chassis** as a strip under the
+  body. `.pw-window-body` grows to fill.
+- **Every window body started on a fraction of a pixel.** The title's
+  line-height was 22.8px, so everything below a title bar with no buttons
+  sat at .8 and every 1px line smeared. It rounds up to a whole pixel.
+- **Cyber's cut corners had no edge.** `clip-path` cuts a corner and draws
+  nothing along the cut. Where `corner-shape` is supported, the clipped
+  surfaces get a bevel of the same size and the edge follows it.
+- **Cyber's equaliser fill covered its track's edge**, so the fill read as
+  wider than its groove.
+- **Badge labels and marks sat up to 1.5px off centre**, differently in each
+  skin, because flex centres the line box rather than the capitals.
+
+### New skin knobs
+
+If you maintain your own skin, these default to chrome's values through
+`:root`, so nothing breaks, but you may want your own:
+
+- `--pw-range-inset`: how far a slider's range and an equaliser's fill stand
+  off the track's edge.
+- `--pw-badge-text-drop` and `--pw-badge-mark-drop`: whole-pixel corrections
+  that centre a badge's capitals and its mark.
+
 ## 0.8.0
 
 A blind audit, four cold reviewers with no project context, read the kit at
