@@ -15,20 +15,11 @@
  * application.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { TRACKS, limiter, playTrack } from './music.js';
 
-/* Each track is a set of partials: a frequency multiplier and the wave to
-   build it from. Not music, and not pretending to be. They are chosen to look
-   different through an analyser, because the analyser is the thing being
-   demonstrated and three tracks that all read as one hump demonstrate
-   nothing. */
-export const TRACKS = [
-  { id: 'saw', primary: 'Sawtooth in A', secondary: '0:30',
-    type: 'sawtooth', root: 110, partials: [1, 2, 3, 4, 6, 8] },
-  { id: 'bell', primary: 'Bell partials', secondary: '0:30',
-    type: 'sine', root: 220, partials: [1, 2.76, 5.4, 8.93, 13.34] },
-  { id: 'sub', primary: 'Sub and a fifth', secondary: '0:30',
-    type: 'triangle', root: 55, partials: [1, 1.5, 3, 4.5] },
-];
+/* The tracks and how they sound live in music.js, shared with the full
+   player page. */
+export { TRACKS };
 
 export const LENGTH = 30;
 
@@ -96,7 +87,9 @@ export function usePlayer({ bands = 20 } = {}) {
     analyser.fftSize = 1024;
     analyser.smoothingTimeConstant = 0.78;
 
-    filters[filters.length - 1].connect(gain);
+    const level = limiter(ctx);
+    filters[filters.length - 1].connect(level);
+    level.connect(gain);
     gain.connect(pan);
     pan.connect(analyser);
     const out = ctx.createGain();
@@ -108,21 +101,12 @@ export function usePlayer({ bands = 20 } = {}) {
     return ref.current;
   }, []);
 
+  /* One running loop at a time, kept in the voices list so stop and track
+     changes can silence it. */
   const voices = useCallback((id) => {
     const a = build();
-    a.voices.forEach((o) => { try { o.stop(); } catch { /* already stopped */ } });
-    const spec = TRACKS.find((t) => t.id === id);
-    a.voices = spec.partials.map((mult, i) => {
-      const osc = a.ctx.createOscillator();
-      osc.type = spec.type;
-      osc.frequency.value = spec.root * mult;
-      const vg = a.ctx.createGain();
-      vg.gain.value = 0.9 / (i + 1);
-      osc.connect(vg);
-      vg.connect(a.head);
-      osc.start();
-      return osc;
-    });
+    a.voices.forEach((v) => { try { v.stop(); } catch { /* already stopped */ } });
+    a.voices = [playTrack(a.ctx, a.head, id)];
   }, [build]);
 
   /* `playing` follows the AudioContext, not the click. resume() is a promise
@@ -160,7 +144,7 @@ export function usePlayer({ bands = 20 } = {}) {
     setTrack(id);
     setElapsed(0);
     const a = ref.current;
-    if (a && playing) { voices(id); started.current = a.ctx.currentTime; }
+    if (a && a.voices.length) { voices(id); started.current = a.ctx.currentTime; }
   }, [playing, voices]);
 
   /* Winamp's position bar is draggable, so this is a real seek: move the

@@ -54,23 +54,9 @@
     import { createRoot } from 'react-dom/client';
     import {
       Button, Equalizer, List, Progress, Readout, Slider, Toggle,
-      Transport, TransportButton, Visualiser, Window,
+      Tooltip, TooltipProvider, Transport, TransportButton, Visualiser, Window,
     } from '../../dist/index.js';
-
-    /* ── The tracks ────────────────────────────────────────────────────────
-       Each is a set of partials: a frequency in Hz and a relative level. Not
-       music, and not pretending to be. They are chosen to look different
-       through an analyser, because the thing being demonstrated is the
-       analyser, and three tracks that all read as one hump would demonstrate
-       nothing. */
-    const TRACKS = [
-      { id: 'saw',  primary: 'Sawtooth in A',      secondary: '0:30',
-        type: 'sawtooth', root: 110, partials: [1, 2, 3, 4, 6, 8] },
-      { id: 'bell', primary: 'Bell partials',      secondary: '0:30',
-        type: 'sine', root: 220, partials: [1, 2.76, 5.4, 8.93, 13.34] },
-      { id: 'sub',  primary: 'Sub and a fifth',    secondary: '0:30',
-        type: 'triangle', root: 55, partials: [1, 1.5, 3, 4.5] },
-    ];
+    import { TRACKS, limiter, playTrack } from './music.js';
 
     const LENGTH = 30;
 
@@ -122,7 +108,9 @@
         analyser.fftSize = 1024;
         analyser.smoothingTimeConstant = 0.78;
 
-        filters[filters.length - 1].connect(gain);
+        const level = limiter(ctx);
+        filters[filters.length - 1].connect(level);
+        level.connect(gain);
         gain.connect(pan);
         pan.connect(analyser);
         /* ?mute, on this page or the showcase framing it. demo/player/audio.js
@@ -157,23 +145,12 @@
 
       const started = useRef(0);
 
-      /* Swap the oscillator set without tearing down the chain, so the EQ
-         settings and the analyser survive a track change. */
+      /* Swap the loop without tearing down the chain, so the EQ settings and
+         the analyser survive a track change. */
       const voices = useCallback((id) => {
         const a = build();
-        a.voices.forEach((o) => { try { o.stop(); } catch {} });
-        const spec = TRACKS.find((t) => t.id === id);
-        a.voices = spec.partials.map((mult, i) => {
-          const osc = a.ctx.createOscillator();
-          osc.type = spec.type;
-          osc.frequency.value = spec.root * mult;
-          const vg = a.ctx.createGain();
-          vg.gain.value = 0.9 / (i + 1);
-          osc.connect(vg);
-          vg.connect(a.head);
-          osc.start();
-          return osc;
-        });
+        a.voices.forEach((v) => { try { v.stop(); } catch {} });
+        a.voices = [playTrack(a.ctx, a.head, id)];
       }, [build]);
 
       /* `playing` follows the AudioContext rather than the click.
@@ -214,7 +191,7 @@
         setTrack(id);
         setElapsed(0);
         const a = ref.current;
-        if (a && playing) { voices(id); started.current = a.ctx.currentTime; }
+        if (a && a.voices.length) { voices(id); started.current = a.ctx.currentTime; }
       }, [ref, playing, voices]);
 
       const step = useCallback((by) => {
@@ -340,24 +317,40 @@
               })),
 
             h('div', { className: 'deck-controls' },
+              /* Icon buttons keep their aria-label as their name, and the
+                 tooltip shows the same words to anyone pointing at them. */
               h(Transport, { label: 'Transport' },
-                h(TransportButton, { icon: 'previous', label: 'Previous track', onClick: () => step(-1) }),
-                h(TransportButton, { icon: playing ? 'pause' : 'play',
-                  label: playing ? 'Pause' : 'Play', onClick: () => (playing ? pause() : play()) }),
-                h(TransportButton, { icon: 'stop', label: 'Stop', onClick: stop }),
-                h(TransportButton, { icon: 'next', label: 'Next track', onClick: () => step(1) }),
-                h(TransportButton, { icon: 'eject', label: 'Open file',
-                  onClick: () => step(1) })),
+                [
+                  ['previous', 'Previous track', () => step(-1)],
+                  [playing ? 'pause' : 'play', playing ? 'Pause' : 'Play', () => (playing ? pause() : play())],
+                  ['stop', 'Stop', stop],
+                  ['next', 'Next track', () => step(1)],
+                  /* It was named "Open file" and skipped a track, which is a
+                     name promising something the button does not do. */
+                  ['eject', 'Load next track', () => step(1)],
+                ].map(([icon, label, onClick]) =>
+                  h(Tooltip, { key: icon === 'pause' ? 'play' : icon, label },
+                    h(TransportButton, { icon, label, onClick })))),
+              /* Visible labels and values. The slider's own name is the same
+                 word, so the visible copy is hidden from the accessibility
+                 tree rather than read twice. */
               h('div', { className: 'deck-pots' },
+                h('span', { className: 'pw-meta', 'aria-hidden': 'true' }, 'Volume'),
                 h(Slider, { label: 'Volume', value: [volume], max: 100,
                   onValueChange: ([v]) => setVolume(v), format: (v) => `${v} percent` }),
+                h('span', { className: 'pw-meta deck-value', 'aria-hidden': 'true' }, `${volume}%`),
+                h('span', { className: 'pw-meta', 'aria-hidden': 'true' }, 'Balance'),
                 h(Slider, { label: 'Balance', value: [balance], min: -100, max: 100,
                   onValueChange: ([v]) => setBalance(v),
-                  format: (v) => (v === 0 ? 'centred' : `${Math.abs(v)} percent ${v < 0 ? 'left' : 'right'}`) }))),
+                  format: (v) => (v === 0 ? 'centred' : `${Math.abs(v)} percent ${v < 0 ? 'left' : 'right'}`) }),
+                h('span', { className: 'pw-meta deck-value', 'aria-hidden': 'true' },
+                  balance === 0 ? 'C' : `${Math.abs(balance)}${balance < 0 ? 'L' : 'R'}`))),
 
             h('div', { className: 'deck-seek' },
+              h('span', { className: 'pw-meta', 'aria-hidden': 'true' }, 'Position'),
               h(Progress, { value: elapsed, max: LENGTH, label: 'Position',
-                format: (v, m) => `${clock(v)} of ${clock(m)}` })),
+                format: (v, m) => `${clock(v)} of ${clock(m)}` }),
+              h('span', { className: 'pw-meta deck-value', 'aria-hidden': 'true' }, `${clock(elapsed)} / ${clock(LENGTH)}`)),
 
             h('div', { className: 'deck-windows' },
               h(Toggle, { pressed: showEq, onPressedChange: setShowEq }, 'EQ'),
@@ -442,7 +435,7 @@
         window.drive = { ...window.drive, look: (s, t) => { setSkin(s); setTheme(t); } };
       }, []);
 
-      return h('div', { className: 'stack' },
+      return h(TooltipProvider, null, h('div', { className: 'stack' },
         /* The page's heading. The windows are h2s, and a page with no h1 has
            no top to its outline; hidden because the player's own title bar
            already says what this is to anyone looking. */
@@ -461,7 +454,7 @@
           + '44px rather than Winamp\u2019s 23. ',
           h('a', { href: './classic.html' }, 'The 275\u00d7116 replica'),
           ' is the same components with the knobs turned down past the touch-target '
-          + 'floor, which is a thing a consumer may do and the kit may not.'));
+          + 'floor, which is a thing a consumer may do and the kit may not.')));
     }
 
     createRoot(document.getElementById('root')).render(h(Page));
