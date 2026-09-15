@@ -4596,6 +4596,13 @@
     white-space: nowrap;
   }
 
+  /* The title bar's own ink, for whatever the toolbar slot holds. Metadata
+     sets the body ink, which is right in a panel and invisible here: measured
+     in the player's "playing", 1.00:1 on paper's bar and under 2.2:1 in five
+     other looks. Two classes, so it wins over .pw-meta whatever the import
+     order. */
+  .pw-title-bar .pw-meta { color: inherit; }
+
   .pw-title-controls {
     display: flex;
     align-items: center;

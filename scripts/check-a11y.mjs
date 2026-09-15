@@ -64,7 +64,7 @@ const RUN_OPEN = RUN.replace('region: { enabled: false },',
 /* Every look the kit ships, as a skin and an optional preset. Not a cross
    product: a preset is nested inside its skin, so pairing one with another
    skin is not a combination that exists. */
-const PAGES = ['demo/states.html', 'demo/index.html'];
+const PAGES = ['demo/states.html', 'demo/index.html', 'demo/player/index.html?bare=1&layout=columns&lock&mute'];
 
 
 const failures = [];
