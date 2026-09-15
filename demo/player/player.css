@@ -90,18 +90,22 @@ body {
 /* Transport on the left, volume and balance stacked on the right. */
 .deck-controls {
   display: grid;
-  grid-template-columns: auto minmax(140px, 1fr);
+  grid-template-columns: auto minmax(220px, 1fr);
   gap: var(--pw-space-md);
   align-items: center;
 }
 
-.deck-pots {
+/* Label, control, value, per row. Fixed label and value columns, so the
+   sliders are the same length under every skin's type. */
+.deck-pots,
+.deck-seek {
   display: grid;
-  gap: var(--pw-space-2xs);
+  grid-template-columns: 4.5rem minmax(0, 1fr) 6.5rem;
+  column-gap: var(--pw-space-sm);
+  row-gap: var(--pw-space-2xs);
+  align-items: center;
 }
-
-/* The seek bar, across the bottom. */
-.deck-seek { display: grid; }
+.deck-value { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* The two window toggles, bottom right, the way Winamp sits EQ and PL. */
 .deck-windows {
