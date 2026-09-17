@@ -250,3 +250,33 @@ body[data-capture] .comp-skins > figure {
   padding: 4px 8px;
 }
 body[data-capture] .rig { display: none; }
+
+/* A ground per skin, keyed on the page's own data-skin, so a comp shown
+   under one skin sits on that skin's ground: the welcome screen for chrome,
+   a faint dot grid for cyber, warm grey for paper, and teal for dialup. */
+[data-skin="cyber"] .stage {
+  background:
+    radial-gradient(circle, rgba(63, 216, 240, 0.16) 1px, transparent 1.5px) 0 0 / 24px 24px,
+    #0b1116;
+}
+[data-skin="paper"] .stage { background: #7a6f60; }
+[data-skin="dialup"] .stage { background: #008080; }
+
+/* Hero candidates, until one is picked. */
+.comp-pitch .pw-window { width: 1320px; }
+.comp-pitch .pw-window-body { padding: 56px 64px; }
+.pitch { display: grid; grid-template-columns: 1fr 500px; gap: 96px; align-items: center; }
+.pitch-copy { display: grid; gap: 22px; }
+.pitch-lede { margin: 0; font-size: 2.4em; line-height: 1.15; text-wrap: balance; }
+.pitch-lede .nowrap { white-space: nowrap; }
+.pitch-sub { margin: 0; font-size: 1.3em; line-height: 1.45; max-width: 36ch; }
+.pitch-install { margin: 10px 0 0; font-family: var(--pw-font-mono); font-size: 1.2em; }
+.pitch-install span { display: inline-block; padding: 12px 18px; background-color: var(--pw-color-base-300); }
+.pitch-demo { display: grid; gap: 24px; }
+.pitch-row { display: flex; gap: 14px; align-items: center; }
+.comp-full { gap: 40px; align-content: center; }
+.comp-full:has(.comp-caption) { grid-template-rows: auto auto; }
+.comp-full .hero-install { margin: 0; font-family: var(--pw-font-mono); text-transform: none; letter-spacing: 0.04em; }
+.comp-full .full-7 { width: 1925px; height: 812px; border: 0; color-scheme: light; }
+.comp-full .full-6 { width: 1650px; height: 696px; border: 0; color-scheme: light; }
+.comp-full .full-wide { width: 1920px; height: 1080px; border: 0; color-scheme: light; }
