@@ -24,11 +24,11 @@
     [data-skin="cyber"] :where(.pw-badge, .pw-slider-track, .pw-lcd, .pw-tab-panel,
                                .pw-progress, .pw-visualiser, .pw-menu,
                                .pw-select-list, .pw-select-button,
-                               .pw-switch-thumb, .pw-tooltip) {
+                               .pw-switch-thumb, .pw-tooltip):not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
       border-radius: 3px 0;
       corner-shape: bevel;
     }
-    [data-skin="cyber"] :where(.pw-window, .pw-eq) {
+    [data-skin="cyber"] :where(.pw-window, .pw-eq):not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
       border-radius: 5px 0;
       corner-shape: bevel;
     }

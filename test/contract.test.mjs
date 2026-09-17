@@ -924,7 +924,7 @@ describe('what would block the second skin', () => {
     assert.ok(cut.length >= 8, `only ${cut.length} clipped surfaces found, so this compared nothing`);
 
     const notch = bare(read('css/skins/cyber/notch.css'));
-    const blocks = [...notch.matchAll(/:where\(([^)]*)\)\s*\{\s*border-radius:\s*(\d+)px 0;\s*corner-shape:\s*bevel;/g)]
+    const blocks = [...notch.matchAll(/:where\(([^)]*)\)(?::not\(.*?\)\))?\s*\{\s*border-radius:\s*(\d+)px 0;\s*corner-shape:\s*bevel;/g)]
       .map((m) => ({ classes: members(m[1]), px: Number(m[2]) }));
     assert.deepEqual(blocks.flatMap((b) => b.classes).sort(), cut,
       'notch.css does not bevel exactly the surfaces the clip cuts');
@@ -939,6 +939,23 @@ describe('what would block the second skin', () => {
       assert.ok(want.length >= 2, `${token} is not declared in both cyber blocks`);
       for (const w of want) assert.equal(b.px, w, `${b.classes.join(', ')} bevel ${b.px}px against a ${w}px ${token}`);
     }
+  });
+
+  test('a skin rule stops at a nested skin', () => {
+    /* The README says skin is an attribute on any element. Rules written
+       `[data-skin="paper"] .pw-button` matched every button under a paper
+       page, so a chrome panel on it was printed in halftone and every panel on
+       a cyber page went uppercase. Each such rule carries a :not() that
+       excludes anything under a different skin nested inside its own. */
+    const css = bare(read('css/panelware.css'));
+    const selectors = [...css.matchAll(/([^{}]+)\{/g)].flatMap((m) => members(m[1]));
+    const scoped = selectors.filter((s) => /^\[data-skin="\w+"\]\s/.test(s));
+    assert.ok(scoped.length >= 30, `only ${scoped.length} skin-scoped selectors found, so this checked nothing`);
+    const open = scoped.filter((s) => {
+      const skin = s.match(/^\[data-skin="(\w+)"\]/)[1];
+      return !s.endsWith(`:not(:where([data-skin="${skin}"] [data-skin]:not([data-skin="${skin}"]) *))`);
+    });
+    assert.deepEqual(open, [], 'these skin rules reach into a different skin nested inside their own');
   });
 
   test('no component sets overflow: hidden on a bevelled surface', () => {

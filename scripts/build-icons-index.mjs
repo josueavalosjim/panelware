@@ -65,19 +65,23 @@ function bearings(name, rects = iconRects) {
  * inline: an inline style beats every layer, so the first sheet's bearings
  * were in the DOM and no rule anywhere could correct them.
  */
+/* Stops at a nested skin: an icon inside a chrome panel on a cyber page
+   keeps chrome's bearings. The same guard as the skins' own files. */
+const own = (skin) => `:not(:where([data-skin="${skin}"] [data-skin]:not([data-skin="${skin}"]) *))`;
+
 export function skinIconsCss(skin, rects) {
   const moved = ICON_ORDER
     .map((n) => [n, bearings(n), bearings(n, rects)])
     .filter(([, a, b]) => a.l !== b.l || a.r !== b.r);
 
-  const rules = moved.map(([n, , b]) => `  [data-skin="${skin}"] .pw-icon[data-icon="${n}"] {\n` +
+  const rules = moved.map(([n, , b]) => `  [data-skin="${skin}"] .pw-icon[data-icon="${n}"]${own(skin)} {\n` +
     `    --pw-icon-ink-l: ${b.l};\n` +
     `    --pw-icon-ink-r: ${b.r};\n` +
     '  }').join('\n\n');
 
   const frames = ICON_ORDER.filter((n) => n.startsWith('spinner-'));
   const shared = (side) => Math.min(...frames.map((n) => bearings(n, rects)[side]));
-  const spinner = `  [data-skin="${skin}"] .pw-spinner .pw-icon {\n` +
+  const spinner = `  [data-skin="${skin}"] .pw-spinner .pw-icon${own(skin)} {\n` +
     `    --pw-icon-ink-l: ${shared('l')};\n` +
     `    --pw-icon-ink-r: ${shared('r')};\n` +
     '  }';
