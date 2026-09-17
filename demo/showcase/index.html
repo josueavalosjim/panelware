@@ -307,6 +307,58 @@
         </figure>
       </div>
 
+
+      <!-- Hero candidates, until one is picked: the pitch window, the 16:9
+           replica at 6x, the 275x116 replica at 7x, and at 6x with the
+           install line. -->
+      <div class="comp comp-pitch" data-comp="pitch">
+        <section class="pw-window" aria-labelledby="sc-pitch">
+            <div class="pw-title-bar" data-gloss>
+              <h3 class="pw-title" id="sc-pitch">panelware</h3>
+              <div class="pw-title-controls">
+                <button class="pw-title-button" type="button" aria-label="Minimise"><span class="pw-icon" aria-hidden="true" data-icon="minimize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Maximise"><span class="pw-icon" aria-hidden="true" data-icon="maximize"></span></button>
+                <button class="pw-title-button" type="button" aria-label="Close"><span class="pw-icon" aria-hidden="true" data-icon="close"></span></button>
+              </div>
+            </div>
+            <div class="pw-window-body">
+              <div class="pitch">
+                <div class="pitch-copy">
+                  <p class="pitch-lede">An accessible component kit with a <span class="nowrap">chrome-and-LCD</span> skin.</p>
+                  <p class="pitch-sub">Radix UI does the interaction; this does the surface. Four skins, two themes, and two densities, set by attributes on &lt;html&gt;.</p>
+                  <p class="pitch-install"><span>npm i @josueavalosjim/panelware</span></p>
+                </div>
+                <div class="pitch-demo">
+                  <div class="pitch-row">
+                    <span class="pw-lcd"><span class="pw-lcd-render" role="img" aria-label="Elapsed 4 minutes 21 seconds"><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 0; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 4; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 12; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 2; --pw-cell-y: 0"></span><span class="pw-lcd-cell" data-sheet="digits" style="--pw-cell-x: 1; --pw-cell-y: 0"></span></span></span>
+                    <span class="pw-meta">44 kHz &middot; stereo</span>
+                  </div>
+                  <span class="pw-progress" role="progressbar" aria-label="Position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62"><span class="pw-progress-fill" style="transform: scaleX(0.62)"></span></span>
+                  <div class="pitch-row">
+                    <button class="pw-button" type="button" data-variant="primary">Apply</button>
+                    <button class="pw-button" type="button">Cancel</button>
+                    <button class="pw-toggle" type="button" aria-pressed="true">Repeat</button>
+                  </div>
+                  <div class="pitch-row">
+                    <span class="pw-badge" data-status="success"><span class="pw-icon" aria-hidden="true" data-icon="check"></span>No runtime deps</span>
+                    <span class="pw-badge" data-status="warning"><span class="pw-icon" aria-hidden="true" data-icon="exclamation"></span>Buffering</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+      </div>
+      <div class="comp comp-full" data-comp="full-wide">
+        <iframe class="full-wide" src="../player/classic.html?zoom=6&amp;frame=wide" title="panelware at 320 by 180"></iframe>
+      </div>
+      <div class="comp comp-full" data-comp="full-7">
+        <iframe class="full-7" src="../player/classic.html?zoom=7" title="panelware at 275 by 116"></iframe>
+      </div>
+      <div class="comp comp-full" data-comp="full-6">
+        <iframe class="full-6" src="../player/classic.html?zoom=6" title="panelware at 275 by 116"></iframe>
+        <p class="comp-caption hero-install">npm i @josueavalosjim/panelware</p>
+      </div>
+
       <div class="comp comp-player" data-comp="player">
         <iframe id="player-frame" src="../player/index.html?bare=1&amp;skin=chrome&amp;theme=light&amp;layout=columns&amp;lock" title="panelware player"></iframe>
       </div>
