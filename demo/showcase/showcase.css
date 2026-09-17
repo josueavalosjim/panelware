@@ -73,25 +73,36 @@ body {
 }
 .comp[data-on] { display: grid; }
 
-/* The replica, at four times its real 275x116, and the install line under
-   it. The frame is laid out at 4x by CSS zoom inside the page rather than
-   scaled here, so the readouts are drawn at the size they are shown. */
-.comp-hero {
-  grid-template-rows: auto auto;
-  gap: 36px;
-  align-content: center;
+/* The pitch: the claim and the install line beside live pieces of the kit,
+   in one window. */
+.comp-hero .pw-window { width: 1320px; }
+.comp-hero .pw-window-body { padding: 56px 64px; }
+.pitch {
+  display: grid;
+  grid-template-columns: 1fr 500px;
+  gap: 96px;
+  align-items: center;
 }
-.comp-hero .replica {
-  width: 1100px;
-  height: 464px;
+.pitch-copy { display: grid; gap: 22px; }
+.pitch-lede { margin: 0; font-size: 2.4em; line-height: 1.15; text-wrap: balance; }
+.pitch-lede .nowrap { white-space: nowrap; }
+.pitch-sub { margin: 0; font-size: 1.3em; line-height: 1.45; max-width: 36ch; }
+.pitch-install { margin: 10px 0 0; font-family: var(--pw-font-mono); font-size: 1.2em; }
+.pitch-install span {
+  display: inline-block;
+  padding: 12px 18px;
+  background-color: var(--pw-color-base-300);
+}
+.pitch-demo { display: grid; gap: 24px; }
+.pitch-row { display: flex; gap: 14px; align-items: center; }
+
+/* The 16:9 replica at six times: classic.html's 320x180 frame fills the
+   stage exactly, laid out at 6x by CSS zoom inside the page. */
+.comp-full .full-wide {
+  width: 1920px;
+  height: 1080px;
   border: 0;
   color-scheme: light;
-}
-.comp-hero .hero-install {
-  margin: 0;
-  font-family: var(--pw-font-mono);
-  text-transform: none;
-  letter-spacing: 0.04em;
 }
 
 /* Two by two, not four across.
@@ -261,22 +272,3 @@ body[data-capture] .rig { display: none; }
 }
 [data-skin="paper"] .stage { background: #7a6f60; }
 [data-skin="dialup"] .stage { background: #008080; }
-
-/* Hero candidates, until one is picked. */
-.comp-pitch .pw-window { width: 1320px; }
-.comp-pitch .pw-window-body { padding: 56px 64px; }
-.pitch { display: grid; grid-template-columns: 1fr 500px; gap: 96px; align-items: center; }
-.pitch-copy { display: grid; gap: 22px; }
-.pitch-lede { margin: 0; font-size: 2.4em; line-height: 1.15; text-wrap: balance; }
-.pitch-lede .nowrap { white-space: nowrap; }
-.pitch-sub { margin: 0; font-size: 1.3em; line-height: 1.45; max-width: 36ch; }
-.pitch-install { margin: 10px 0 0; font-family: var(--pw-font-mono); font-size: 1.2em; }
-.pitch-install span { display: inline-block; padding: 12px 18px; background-color: var(--pw-color-base-300); }
-.pitch-demo { display: grid; gap: 24px; }
-.pitch-row { display: flex; gap: 14px; align-items: center; }
-.comp-full { gap: 40px; align-content: center; }
-.comp-full:has(.comp-caption) { grid-template-rows: auto auto; }
-.comp-full .hero-install { margin: 0; font-family: var(--pw-font-mono); text-transform: none; letter-spacing: 0.04em; }
-.comp-full .full-7 { width: 1925px; height: 812px; border: 0; color-scheme: light; }
-.comp-full .full-6 { width: 1650px; height: 696px; border: 0; color-scheme: light; }
-.comp-full .full-wide { width: 1920px; height: 1080px; border: 0; color-scheme: light; }

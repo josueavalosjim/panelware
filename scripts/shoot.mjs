@@ -14,18 +14,20 @@
  *   node scripts/shoot.mjs                  every comp
  *   node scripts/shoot.mjs --skin cyber     one skin
  *   node scripts/shoot.mjs --comp hero      one comp
+ *   node scripts/shoot.mjs --clip           the player GIF, alone
  *
  * Output goes to shots/, which is gitignored: these are artefacts of the repo
  * rather than part of it, and a directory of PNGs in a CSS kit's history is
  * weight nobody downloading the package asked to carry.
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { ROOT, withPage } from './browser.mjs';
 import { startDemoServer } from './serve.mjs';
 
-const COMPS = ['hero', 'skins', 'axes', 'icons', 'player'];
+const COMPS = ['hero', 'full', 'skins', 'axes', 'icons', 'player'];
 
 /* The 275x116 replica is its own page rather than a comp on the stage, and it
    is shot differently: at its true size and a 4x device pixel ratio, because
@@ -34,9 +36,12 @@ const COMPS = ['hero', 'skins', 'axes', 'icons', 'player'];
 const CLASSIC = { page: 'demo/player/classic.html', scale: 4, w: 275, h: 116 };
 
 /* Which comps are worth shooting per skin. Only the player takes the skin
-   from outside; the others carry their own looks, the hero is the dialup
-   replica, and shooting them per skin writes identical files. */
+   from outside; the others carry their own looks, and shooting them per
+   skin writes identical files. */
 const PER_SKIN = new Set(['player']);
+
+/* The comps with a player in a frame, pressed play before the shot. */
+const LIVE = new Set(['player', 'full']);
 
 const arg = (name, fallback) => {
   const at = process.argv.indexOf(`--${name}`);
@@ -46,8 +51,9 @@ const arg = (name, fallback) => {
 /* `classic` is not one of the stage's comps, it is its own page. Naming it
    used to run the comp loop with a name nothing matches, which shot the empty
    stage and named it as if it were the replica. */
-const comps = arg('comp')
-  ? COMPS.filter((c) => c === arg('comp'))
+const clipOnly = process.argv.includes('--clip');
+const comps = clipOnly ? []
+  : arg('comp') ? COMPS.filter((c) => c === arg('comp'))
   : COMPS;
 const skins = arg('skin') ? [arg('skin')] : ['chrome', 'cyber', 'paper', 'dialup'];
 const themes = arg('theme') ? [arg('theme')] : ['light'];
@@ -130,8 +136,8 @@ await withPage(async (page) => {
         if (skin) await page.evaluate(`window.showcase.theme(${JSON.stringify(theme)})`);
         /* A style recalc and, for the player, a frame of React. Not a
            network wait: everything this page needs is already local. */
-        await page.settle(comp === 'player' || comp === 'hero' ? 1200 : 350);
-        if (comp === 'player' || comp === 'hero') await startPlayer(page);
+        await page.settle(LIVE.has(comp) ? 1200 : 350);
+        if (LIVE.has(comp)) await startPlayer(page);
         const { data } = await page.send('Page.captureScreenshot',
           { format: 'png', captureBeyondViewport: false });
         const name = [comp, skin, skin ? theme : null]
@@ -147,7 +153,7 @@ await withPage(async (page) => {
 /* The replica, on its own terms. A separate withPage because the device
    metrics are different: the window is the window's real size and the pixel
    ratio does the magnifying. */
-if (!arg('comp') || arg('comp') === 'classic') {
+if (!clipOnly && (!arg('comp') || arg('comp') === 'classic')) {
   await withPage(async (page) => {
     await page.send('Emulation.setDeviceMetricsOverride', {
       width: CLASSIC.w, height: CLASSIC.h, deviceScaleFactor: CLASSIC.scale, mobile: false,
@@ -192,6 +198,68 @@ if (!arg('comp') || arg('comp') === 'classic') {
     wrote += 1;
     console.log(`  classic-275x116.png  (${CLASSIC.w}x${CLASSIC.h} at ${CLASSIC.scale}x)`);
   }, { width: CLASSIC.w, height: CLASSIC.h, settle: 300 });
+}
+
+/* The clip: the player comp cycling the four skins while the equaliser,
+   volume, and balance move, as frames in shots/clip/ and then a GIF. The
+   player's ?drive hooks do the moving, so every frame is the same layout
+   and only the look changes. */
+if (clipOnly || !arg('comp')) {
+  const LOOKS = [['chrome', 'light'], ['cyber', 'dark'], ['paper', 'light'], ['dialup', 'light']];
+  const FPS = 15;
+  const PER = 1.2;
+  const N = Math.round(LOOKS.length * PER * FPS);
+  const dir = join(out, 'clip');
+  rmSync(dir, { recursive: true, force: true });
+  mkdirSync(dir, { recursive: true });
+
+  await withPage(async (page) => {
+    await page.goto(`${server.url}/demo/showcase/index.html?mute`);
+    await page.ready('!!window.showcase && getComputedStyle(document.getElementById("stage")).getPropertyValue("--fit").trim() !== ""');
+    await page.evaluate(`window.showcase.capture(true); window.showcase.show('player');
+      document.getElementById('player-frame').src = '../player/index.html?bare=1&layout=columns&lock&drive&skin=chrome&theme=light';`);
+    await page.settle(500);
+    if (!(await page.ready(`(() => {
+      const w = document.getElementById('player-frame').contentWindow;
+      return !!(w.drive && w.drive.look && w.drive.gains);
+    })()`, { timeout: 10000 }))) {
+      throw new Error('the player never exposed its drive hooks, so no clip was recorded');
+    }
+    await startPlayer(page);
+
+    let last = -1;
+    for (let k = 0; k < N; k += 1) {
+      const t = k / FPS;
+      const look = Math.floor(t / PER) % LOOKS.length;
+      const gains = Array.from({ length: 10 }, (_, i) => Math.round(9 * Math.sin(2 * Math.PI * (t / 2.4 - i / 10))));
+      const volume = Math.round(55 + 30 * Math.sin((2 * Math.PI * t) / 4.8));
+      const balance = Math.round(40 * Math.sin((2 * Math.PI * t) / 3.2));
+      const [skin, theme] = LOOKS[look];
+      /* A new look also steps the playlist, so each skin shows a new title. */
+      const swap = look === last ? ''
+        : `document.documentElement.dataset.skin = '${skin}'; w.drive.look('${skin}', '${theme}');${k ? ' w.drive.step(1);' : ''}`;
+      await page.evaluate(`(() => {
+        const w = document.getElementById('player-frame').contentWindow;
+        ${swap}
+        w.drive.gains(${JSON.stringify(gains)}); w.drive.volume(${volume}); w.drive.balance(${balance});
+      })()`);
+      last = look;
+      await page.settle(60);
+      const { data } = await page.send('Page.captureScreenshot', { format: 'png' });
+      writeFileSync(join(dir, `${String(k).padStart(3, '0')}.png`), Buffer.from(data, 'base64'));
+    }
+  }, { width: 1920, height: 1080, settle: 300 });
+
+  /* Node has no GIF encoder without a dependency, and this is the only thing
+     that would want one, so the frames go through Pillow when it is there. */
+  const gif = join(out, 'player-clip.gif');
+  const py = spawnSync('python3', [join(ROOT, 'scripts', 'build-gif.py'), dir, gif, String(FPS)], { stdio: 'inherit' });
+  if (py.status === 0) {
+    wrote += 1;
+    console.log('  player-clip.gif');
+  } else {
+    console.warn(`    (no GIF: python3 with Pillow is needed. The ${N} frames are in shots/clip/)`);
+  }
 }
 
 await server.close();
