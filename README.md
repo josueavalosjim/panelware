@@ -2,6 +2,11 @@
 
 An accessible component kit with four skins on one set of components.
 
+[![The demo player cycling through the chrome, cyber, paper, and dialup skins while its equaliser moves](https://raw.githubusercontent.com/josueavalosjim/panelware/main/.github/media/player-clip.gif)](https://josueavalosjim.github.io/panelware/demo/player/)
+
+[Try the player](https://josueavalosjim.github.io/panelware/demo/player/). It
+plays music, and every control in it is a panelware component.
+
 Most kits in this genre are decorative. They ship a convincing surface over a
 div with a click handler, and the keyboard, the screen reader and the contrast
 ratio are somebody else's problem. Most accessible primitive libraries are the
@@ -13,8 +18,8 @@ interaction, the ARIA and the focus management, because owning those from
 scratch is years of work that has already been done twice. This owns the
 surface: stacked inset bevels, a Web 2.0 gloss, a sprite-sheet segment
 readout, and a token contract another skin replaces without touching a
-component. Three of them do: a chrome and LCD chassis, a cyber terminal, and a
-dithered duotone whose depth is not a shadow at all.
+component. Four of them do: a chrome and LCD chassis, a cyber terminal, a
+dithered duotone whose depth is not a shadow at all, and a 1998 bitmap skin.
 
 The palette is not asserted to be accessible. It is measured, in CI, by
 `taste-check`, and there is a fixture in the repo whose whole job is to fail

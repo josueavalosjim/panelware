@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.9.1
+
+A fix for nested skins, and a picture at the top of the README.
+
+### A skin stops where another one starts
+
+Skin is an attribute on any element, but the skins' own rules did not
+respect that. They were written `[data-skin="paper"] .pw-button`, which
+matches every button under a paper page, including the ones inside a
+`data-skin="chrome"` panel on it. So a chrome panel on a paper page was
+printed in halftone, and every panel on a cyber page went uppercase and
+took cyber's select button and icon bearings.
+
+Every such rule in `css/treatment/` and `css/skins/` now ends in a `:not()`
+that excludes anything under a different skin nested inside its own. It adds
+no specificity, so nothing else in the cascade moves. A test holds every
+skin-scoped selector in the bundle to it.
+
+### The README opens with the player
+
+A clip of the demo player cycling through the four skins, linked to the live
+page. It lives in `.github/media/`, outside the published files.
+
 ## 0.9.0
 
 A fourth skin, vector icons for cyber, and a pass over every skin with a
