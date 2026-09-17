@@ -3,7 +3,7 @@
  *
  * Two halves, and they are deliberately kept apart.
  *
- * THE LOOK is the block marked [data-look="winamp"] below, and it is nothing
+ * THE LOOK is the block marked [data-look="classic"] below, and it is nothing
  * but token assignments. No selector in it names a component, nothing is
  * restyled, and every value is one the kit already documents as a skin's to
  * move. That is the point: Winamp's chassis is a set of numbers, not a fork.
@@ -58,7 +58,7 @@ body {
    page's decision to take and not the package's to ship.
    ───────────────────────────────────────────────────────────────────────── */
 
-[data-look="winamp"] {
+[data-look="classic"] {
   --pw-control-h: 18px;
   --pw-control-min-w: 23px;
   --pw-control-pad-x: 2px;
