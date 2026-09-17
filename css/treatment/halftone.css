@@ -31,6 +31,8 @@
  */
 
 @layer pw.treatment {
+  /* The :not() stops the treatment at a nested skin, so a chrome panel on a
+     paper page keeps its own surfaces. It adds no specificity. */
   [data-skin="paper"] :where(.pw-button,
          .pw-toggle,
          .pw-tab,
@@ -59,7 +61,7 @@
          .pw-tooltip,
          .pw-visualiser,
          .pw-raised,
-         .pw-sunken) {
+         .pw-sunken):not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     /* One line, both states. See the header. */
     --pw-shadow-raised: inset 0 0 0 1px var(--pw-bevel-boundary);
     --pw-shadow-sunken: inset 0 0 0 1px var(--pw-bevel-boundary);

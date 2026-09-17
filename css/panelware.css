@@ -3585,6 +3585,8 @@
  */
 
 @layer pw.treatment {
+  /* The :not() stops the treatment at a nested skin, so a chrome panel on a
+     cyber page keeps its own surfaces. It adds no specificity. */
   [data-skin="cyber"] :where(.pw-button,
          .pw-toggle,
          .pw-tab,
@@ -3613,7 +3615,7 @@
          .pw-tooltip,
          .pw-visualiser,
          .pw-raised,
-         .pw-sunken) {
+         .pw-sunken):not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     /* One hairline in the boundary ink, which carries WCAG 1.4.11 in this skin
        exactly as chrome's outer line did: 3.83:1 on the page and 3.30:1 on a
        control in light, 4.85:1 and 3.72:1 in dark. Chrome spent four inks on an
@@ -3664,7 +3666,7 @@
                              .pw-tab,
                              .pw-badge,
                              .pw-menubar-trigger,
-                             .pw-title) {
+                             .pw-title):not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     text-transform: uppercase;
   }
 }
@@ -3703,6 +3705,8 @@
  */
 
 @layer pw.treatment {
+  /* The :not() stops the treatment at a nested skin, so a chrome panel on a
+     paper page keeps its own surfaces. It adds no specificity. */
   [data-skin="paper"] :where(.pw-button,
          .pw-toggle,
          .pw-tab,
@@ -3731,7 +3735,7 @@
          .pw-tooltip,
          .pw-visualiser,
          .pw-raised,
-         .pw-sunken) {
+         .pw-sunken):not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     /* One line, both states. See the header. */
     --pw-shadow-raised: inset 0 0 0 1px var(--pw-bevel-boundary);
     --pw-shadow-sunken: inset 0 0 0 1px var(--pw-bevel-boundary);
@@ -6737,162 +6741,162 @@
  */
 
 @layer pw.skin {
-  [data-skin="cyber"] .pw-icon[data-icon="play"] {
+  [data-skin="cyber"] .pw-icon[data-icon="play"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 4;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="pause"] {
+  [data-skin="cyber"] .pw-icon[data-icon="pause"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="stop"] {
+  [data-skin="cyber"] .pw-icon[data-icon="stop"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="previous"] {
+  [data-skin="cyber"] .pw-icon[data-icon="previous"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="next"] {
+  [data-skin="cyber"] .pw-icon[data-icon="next"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="eject"] {
+  [data-skin="cyber"] .pw-icon[data-icon="eject"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="close"] {
+  [data-skin="cyber"] .pw-icon[data-icon="close"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="minimize"] {
+  [data-skin="cyber"] .pw-icon[data-icon="minimize"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="maximize"] {
+  [data-skin="cyber"] .pw-icon[data-icon="maximize"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="restore"] {
+  [data-skin="cyber"] .pw-icon[data-icon="restore"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="chevron-down"] {
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-down"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="chevron-up"] {
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-up"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="chevron-right"] {
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-right"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="chevron-left"] {
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-left"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="check"] {
+  [data-skin="cyber"] .pw-icon[data-icon="check"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="exclamation"] {
+  [data-skin="cyber"] .pw-icon[data-icon="exclamation"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 8;
     --pw-icon-ink-r: 7;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="dot"] {
+  [data-skin="cyber"] .pw-icon[data-icon="dot"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="minus"] {
+  [data-skin="cyber"] .pw-icon[data-icon="minus"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="plus"] {
+  [data-skin="cyber"] .pw-icon[data-icon="plus"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="caret-down"] {
+  [data-skin="cyber"] .pw-icon[data-icon="caret-down"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="info"] {
+  [data-skin="cyber"] .pw-icon[data-icon="info"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 8;
     --pw-icon-ink-r: 7;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="question"] {
+  [data-skin="cyber"] .pw-icon[data-icon="question"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="ellipsis"] {
+  [data-skin="cyber"] .pw-icon[data-icon="ellipsis"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-1"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-1"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 7;
     --pw-icon-ink-r: 6;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-2"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-2"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 11;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-3"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-3"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 13;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-4"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-4"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 11;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-5"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-5"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 7;
     --pw-icon-ink-r: 6;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-6"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-6"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 10;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-7"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-7"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 12;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-8"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-8"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 10;
   }
 
-  [data-skin="cyber"] .pw-spinner .pw-icon {
+  [data-skin="cyber"] .pw-spinner .pw-icon:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
@@ -6917,7 +6921,7 @@
  * collapsing the box to nothing would pull the caret onto the text.
  */
 @layer pw.skin {
-  [data-skin="cyber"] .pw-select-button {
+  [data-skin="cyber"] .pw-select-button:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     /* No elevation. The caret is drawn on the field, not raised off it, so
        the slot gets nothing to paint rather than a flattened shadow. */
     --pw-elev: none;
@@ -6991,11 +6995,11 @@
     [data-skin="cyber"] :where(.pw-badge, .pw-slider-track, .pw-lcd, .pw-tab-panel,
                                .pw-progress, .pw-visualiser, .pw-menu,
                                .pw-select-list, .pw-select-button,
-                               .pw-switch-thumb, .pw-tooltip) {
+                               .pw-switch-thumb, .pw-tooltip):not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
       border-radius: 3px 0;
       corner-shape: bevel;
     }
-    [data-skin="cyber"] :where(.pw-window, .pw-eq) {
+    [data-skin="cyber"] :where(.pw-window, .pw-eq):not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
       border-radius: 5px 0;
       corner-shape: bevel;
     }
@@ -7072,147 +7076,147 @@
  */
 
 @layer pw.skin {
-  [data-skin="paper"] .pw-icon[data-icon="play"] {
+  [data-skin="paper"] .pw-icon[data-icon="play"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="stop"] {
+  [data-skin="paper"] .pw-icon[data-icon="stop"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="previous"] {
+  [data-skin="paper"] .pw-icon[data-icon="previous"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="next"] {
+  [data-skin="paper"] .pw-icon[data-icon="next"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="close"] {
+  [data-skin="paper"] .pw-icon[data-icon="close"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="minimize"] {
+  [data-skin="paper"] .pw-icon[data-icon="minimize"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="maximize"] {
+  [data-skin="paper"] .pw-icon[data-icon="maximize"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="restore"] {
+  [data-skin="paper"] .pw-icon[data-icon="restore"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="chevron-right"] {
+  [data-skin="paper"] .pw-icon[data-icon="chevron-right"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 6;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="chevron-left"] {
+  [data-skin="paper"] .pw-icon[data-icon="chevron-left"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="check"] {
+  [data-skin="paper"] .pw-icon[data-icon="check"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="exclamation"] {
+  [data-skin="paper"] .pw-icon[data-icon="exclamation"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 5;
     --pw-icon-ink-r: 7;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="dot"] {
+  [data-skin="paper"] .pw-icon[data-icon="dot"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 4;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="minus"] {
+  [data-skin="paper"] .pw-icon[data-icon="minus"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="plus"] {
+  [data-skin="paper"] .pw-icon[data-icon="plus"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="caret-down"] {
+  [data-skin="paper"] .pw-icon[data-icon="caret-down"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 4;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="search"] {
+  [data-skin="paper"] .pw-icon[data-icon="search"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="info"] {
+  [data-skin="paper"] .pw-icon[data-icon="info"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 7;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="question"] {
+  [data-skin="paper"] .pw-icon[data-icon="question"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 4;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="ellipsis"] {
+  [data-skin="paper"] .pw-icon[data-icon="ellipsis"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="spinner-1"] {
+  [data-skin="paper"] .pw-icon[data-icon="spinner-1"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 6;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="spinner-2"] {
+  [data-skin="paper"] .pw-icon[data-icon="spinner-2"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 10;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="spinner-3"] {
+  [data-skin="paper"] .pw-icon[data-icon="spinner-3"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 10;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="spinner-4"] {
+  [data-skin="paper"] .pw-icon[data-icon="spinner-4"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 10;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="spinner-5"] {
+  [data-skin="paper"] .pw-icon[data-icon="spinner-5"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 6;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="spinner-6"] {
+  [data-skin="paper"] .pw-icon[data-icon="spinner-6"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 10;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="spinner-7"] {
+  [data-skin="paper"] .pw-icon[data-icon="spinner-7"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 10;
   }
 
-  [data-skin="paper"] .pw-icon[data-icon="spinner-8"] {
+  [data-skin="paper"] .pw-icon[data-icon="spinner-8"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 10;
   }
 
-  [data-skin="paper"] .pw-spinner .pw-icon {
+  [data-skin="paper"] .pw-spinner .pw-icon:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-icon-ink-l: 2;
     --pw-icon-ink-r: 2;
   }
@@ -7235,7 +7239,7 @@
  * in the slot now, which is what makes --pw-elev: none below do anything.
  */
 @layer pw.skin {
-  [data-skin="paper"] .pw-select-button {
+  [data-skin="paper"] .pw-select-button:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-elev: none;
     --pw-elev-fill: none;
     background-color: transparent;
@@ -7251,7 +7255,7 @@
   /* The field stops being a well and becomes a ruled value. The rule is the
      boundary ink rather than the accent, because newsprint has no spot colour
      at all and a form rule is not an accent anywhere. */
-  [data-skin="paper"] .pw-select {
+  [data-skin="paper"] .pw-select:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-elev: none;
     --pw-elev-fill: none;
     background-color: transparent;
@@ -7269,8 +7273,8 @@
 
   /* Pressed and open, without a shadow to move. Ink gets heavier or it does
      nothing, so the rule thickens rather than the surface sinking. */
-  [data-skin="paper"] .pw-select[data-state="open"],
-  [data-skin="paper"] .pw-select:active {
+  [data-skin="paper"] .pw-select[data-state="open"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)),
+  [data-skin="paper"] .pw-select:active:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-ornament: linear-gradient(
       to top,
       var(--pw-color-base-content) var(--pw-bracket-weight),

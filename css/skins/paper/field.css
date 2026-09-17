@@ -15,7 +15,7 @@
  * in the slot now, which is what makes --pw-elev: none below do anything.
  */
 @layer pw.skin {
-  [data-skin="paper"] .pw-select-button {
+  [data-skin="paper"] .pw-select-button:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-elev: none;
     --pw-elev-fill: none;
     background-color: transparent;
@@ -31,7 +31,7 @@
   /* The field stops being a well and becomes a ruled value. The rule is the
      boundary ink rather than the accent, because newsprint has no spot colour
      at all and a form rule is not an accent anywhere. */
-  [data-skin="paper"] .pw-select {
+  [data-skin="paper"] .pw-select:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-elev: none;
     --pw-elev-fill: none;
     background-color: transparent;
@@ -49,8 +49,8 @@
 
   /* Pressed and open, without a shadow to move. Ink gets heavier or it does
      nothing, so the rule thickens rather than the surface sinking. */
-  [data-skin="paper"] .pw-select[data-state="open"],
-  [data-skin="paper"] .pw-select:active {
+  [data-skin="paper"] .pw-select[data-state="open"]:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)),
+  [data-skin="paper"] .pw-select:active:not(:where([data-skin="paper"] [data-skin]:not([data-skin="paper"]) *)) {
     --pw-ornament: linear-gradient(
       to top,
       var(--pw-color-base-content) var(--pw-bracket-weight),

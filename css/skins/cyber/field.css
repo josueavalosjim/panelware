@@ -17,7 +17,7 @@
  * collapsing the box to nothing would pull the caret onto the text.
  */
 @layer pw.skin {
-  [data-skin="cyber"] .pw-select-button {
+  [data-skin="cyber"] .pw-select-button:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     /* No elevation. The caret is drawn on the field, not raised off it, so
        the slot gets nothing to paint rather than a flattened shadow. */
     --pw-elev: none;

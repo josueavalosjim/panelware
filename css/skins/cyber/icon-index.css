@@ -11,162 +11,162 @@
  */
 
 @layer pw.skin {
-  [data-skin="cyber"] .pw-icon[data-icon="play"] {
+  [data-skin="cyber"] .pw-icon[data-icon="play"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 4;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="pause"] {
+  [data-skin="cyber"] .pw-icon[data-icon="pause"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="stop"] {
+  [data-skin="cyber"] .pw-icon[data-icon="stop"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="previous"] {
+  [data-skin="cyber"] .pw-icon[data-icon="previous"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="next"] {
+  [data-skin="cyber"] .pw-icon[data-icon="next"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="eject"] {
+  [data-skin="cyber"] .pw-icon[data-icon="eject"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="close"] {
+  [data-skin="cyber"] .pw-icon[data-icon="close"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="minimize"] {
+  [data-skin="cyber"] .pw-icon[data-icon="minimize"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="maximize"] {
+  [data-skin="cyber"] .pw-icon[data-icon="maximize"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="restore"] {
+  [data-skin="cyber"] .pw-icon[data-icon="restore"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="chevron-down"] {
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-down"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="chevron-up"] {
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-up"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="chevron-right"] {
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-right"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="chevron-left"] {
+  [data-skin="cyber"] .pw-icon[data-icon="chevron-left"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="check"] {
+  [data-skin="cyber"] .pw-icon[data-icon="check"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="exclamation"] {
+  [data-skin="cyber"] .pw-icon[data-icon="exclamation"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 8;
     --pw-icon-ink-r: 7;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="dot"] {
+  [data-skin="cyber"] .pw-icon[data-icon="dot"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 6;
     --pw-icon-ink-r: 5;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="minus"] {
+  [data-skin="cyber"] .pw-icon[data-icon="minus"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="plus"] {
+  [data-skin="cyber"] .pw-icon[data-icon="plus"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="caret-down"] {
+  [data-skin="cyber"] .pw-icon[data-icon="caret-down"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="info"] {
+  [data-skin="cyber"] .pw-icon[data-icon="info"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 8;
     --pw-icon-ink-r: 7;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="question"] {
+  [data-skin="cyber"] .pw-icon[data-icon="question"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="ellipsis"] {
+  [data-skin="cyber"] .pw-icon[data-icon="ellipsis"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 4;
     --pw-icon-ink-r: 3;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-1"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-1"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 7;
     --pw-icon-ink-r: 6;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-2"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-2"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 11;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-3"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-3"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 13;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-4"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-4"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 11;
     --pw-icon-ink-r: 2;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-5"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-5"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 7;
     --pw-icon-ink-r: 6;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-6"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-6"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 10;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-7"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-7"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 12;
   }
 
-  [data-skin="cyber"] .pw-icon[data-icon="spinner-8"] {
+  [data-skin="cyber"] .pw-icon[data-icon="spinner-8"]:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 10;
   }
 
-  [data-skin="cyber"] .pw-spinner .pw-icon {
+  [data-skin="cyber"] .pw-spinner .pw-icon:not(:where([data-skin="cyber"] [data-skin]:not([data-skin="cyber"]) *)) {
     --pw-icon-ink-l: 3;
     --pw-icon-ink-r: 2;
   }
