@@ -146,7 +146,10 @@ describe('the class reference', () => {
     const wrong = [];
     const absent = [];
     for (const [name, { element, only }] of described) {
-      if (only === 'open' || element === null) continue;
+      /* 'measured' joins 'open' here for the same reason: the marquee's
+         pause control waits on a box to measure, which a string render does
+         not have. check:interaction drives it in a browser at two widths. */
+      if (only === 'open' || only === 'measured' || element === null) continue;
       const found = tags.get(name);
       if (!found) { absent.push(name); continue; }
       checked.push(name);

@@ -336,7 +336,92 @@ await withDemo(async (p, base) => {
   await p.send('Emulation.setEmulatedMedia', { features: [] });
 }, { width: 1100, height: 900 });
 
+/**
+ * A marquee moves only when there is more value than window.
+ *
+ * It used to move whenever one was asked for, and since it also rendered its
+ * second copy unconditionally, a value that fitted sat in the box as two
+ * copies chasing each other: at a phone's width the player's title read
+ * "LASS PADGLASS PA", which is a broken display rather than a loop.
+ *
+ * Both directions, because only checking the narrow one would pass a
+ * component that scrolls everything. The same page at two widths, so the
+ * value and the box are the only things that differ.
+ */
+let widths = 0;
+const seen = [];
+await withDemo(async (p, base) => {
+  const TITLE = `(() => {
+    const el = document.querySelector('.deck-title .pw-lcd-marquee');
+    if (!el) return null;
+    const box = el.querySelector('.pw-lcd-window');
+    const render = el.querySelector('.pw-lcd-render');
+    return {
+      scrolling: el.getAttribute('data-marquee') === 'scrolling',
+      pause: !!el.querySelector('.pw-lcd-pause'),
+      copy: el.getAttribute('data-marquee') === 'scrolling'
+        ? render.scrollWidth / 2 : render.scrollWidth,
+      box: box.clientWidth,
+    };
+  })()`;
+
+  for (const [width, height] of [[1100, 900], [320, 900]]) {
+    await p.resize(width, height);
+    await p.goto(`${base}/demo/player/index.html`);
+    if (!(await p.ready(`!!document.querySelector('.deck-title .pw-lcd-marquee')`))) {
+      failures.push(`the player never rendered its title readout at ${width}px`);
+      continue;
+    }
+    /* The longest track in the playlist, so the two widths land either side
+       of the box rather than both inside it. Picked by measuring rather than
+       by name: the demo is free to rename its tracks, and a row chosen by
+       hand here would quietly stop being the long one. */
+    const LONGEST = `(() => {
+      const rows = [...document.querySelectorAll('.pw-list-item')];
+      const row = rows.sort((a, b) => b.textContent.length - a.textContent.length)[0];
+      row?.click();
+      return row?.textContent ?? null;
+    })()`;
+    if (!(await p.evaluate(LONGEST))) {
+      failures.push(`the player rendered no playlist rows at ${width}px`);
+      continue;
+    }
+    await p.settle(300);
+    const t = await p.evaluate(TITLE);
+    widths += 1;
+    const fits = t.copy <= t.box + 1;
+    if (fits && t.scrolling) {
+      failures.push(`at ${width}px the title fits (${Math.round(t.copy)}px of ${t.box}px) and is `
+        + 'still scrolling, so a viewer sees it against its own second copy');
+    }
+    if (!fits && !t.scrolling) {
+      failures.push(`at ${width}px the title is ${Math.round(t.copy)}px in a ${t.box}px window `
+        + 'and does not scroll, so the end of it cannot be read at all');
+    }
+    /* The pause control is the 2.2.2 mechanism, so it belongs with the
+       motion and nowhere else: rendered while nothing moves it is a named,
+       focusable control with nothing to do. */
+    if (t.scrolling !== t.pause) {
+      failures.push(`at ${width}px the title is ${t.scrolling ? '' : 'not '}scrolling and the `
+        + `pause control is ${t.pause ? '' : 'not '}rendered`);
+    }
+    seen.push({ width, ...t });
+  }
+
+  /* Both widths landing on the same side of the box would pass every row
+     above while proving nothing, which is the shape of gate this repo has
+     been bitten by before: a check that cannot fail gets quoted as evidence.
+     The widths are chosen to straddle the longest title, so if they stop
+     doing that, this says so rather than going quietly green. */
+  if (seen.length === 2 && seen[0].scrolling === seen[1].scrolling) {
+    failures.push('both widths measured the title as '
+      + `${seen[0].scrolling ? 'scrolling' : 'fitting'} (${seen.map((x) => `${Math.round(x.copy)}px `
+      + `in ${x.box}px at ${x.width}`).join(', ')}), so only one side of the rule was checked`);
+  }
+}, { width: 1100, height: 900 });
+
 report('interaction', failures,
   `${scanned} sliders driven from the keyboard, ${rings} lists focused, `
   + `${ringed} focusable controls checked for the kit's own focus ring, `
-  + `${marquees} marquee pause controls checked in both motion preferences`);
+  + `${marquees} marquee pause controls checked in both motion preferences, `
+  + `${widths} widths checked for a marquee that moves only when it overflows`);

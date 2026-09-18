@@ -434,5 +434,5 @@ A sprite font, not per-segment rendering, which is what Winamp actually did: num
 | `.pw-lcd-window` | `<span>` | The clipping window a marquee scrolls inside. role="img" with the text as its label. |
 | `.pw-lcd-render` | `<span>` | The row of cells. aria-hidden, because the label on the window is what gets read. |
 | `.pw-lcd-cell` | `<span>` | One glyph cell. |
-| `.pw-lcd-pause` | `<button>` | The marquee's pause control. WCAG 2.2.2 asks for a mechanism to stop anything moving for more than five seconds, and pausing on hover is not one: a keyboard, switch or touch user cannot trigger it. |
+| `.pw-lcd-pause` | `<button>` | The marquee's pause control. WCAG 2.2.2 asks for a mechanism to stop anything moving for more than five seconds, and pausing on hover is not one: a keyboard, switch or touch user cannot trigger it. It is rendered only while the value is actually longer than its window, because that is the only time anything moves. |
 

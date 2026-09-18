@@ -6494,13 +6494,18 @@
     overflow: hidden;
   }
 
-  .pw-lcd-marquee .pw-lcd-render {
+  /* [data-marquee="scrolling"], not .pw-lcd-marquee alone: the class says
+     this readout is a scrolling box, the attribute says the value is
+     currently longer than that box. They are different questions, and
+     answering only the first is what put a short value on a loop against
+     its own second copy. readout.tsx measures it. */
+  .pw-lcd-marquee[data-marquee='scrolling'] .pw-lcd-render {
     animation: pw-lcd-scroll var(--pw-duration-marquee) linear infinite;
   }
 
   /* Hover is a convenience for a pointer. It is NOT the WCAG 2.2.2
      mechanism, because a keyboard, switch or touch user cannot trigger it. */
-  .pw-lcd-marquee:hover .pw-lcd-render {
+  .pw-lcd-marquee[data-marquee='scrolling']:hover .pw-lcd-render {
     animation-play-state: paused;
   }
 
@@ -6591,7 +6596,7 @@
     /* Continuous motion stops outright rather than speeding up. A marquee at
        1ms is not a reduced marquee, it is a strobe. The selector is repeated
        from above at its own specificity, because the media query adds none. */
-    .pw-lcd-marquee .pw-lcd-render {
+    .pw-lcd-marquee[data-marquee='scrolling'] .pw-lcd-render {
       animation: none;
       transform: none;
     }

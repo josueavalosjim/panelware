@@ -84,8 +84,15 @@ body {
   opacity: 0.85;
 }
 
-/* The title, full width, on its own line. */
-.deck-title { display: grid; }
+/* The title, full width, on its own line.
+   minmax(0, 1fr) rather than a bare grid: an auto track's width depends on
+   its content, so the readout's own `width: min(22rem, 100%)` had a
+   percentage with nothing definite to resolve against and fell back to
+   shrink-to-fit. It sized to the title and was clipped by the window around
+   it, which also meant it never measured as overflowing and so never
+   scrolled, which is the whole point of a marquee. A definite track gives
+   the percentage something to answer. */
+.deck-title { display: grid; grid-template-columns: minmax(0, 1fr); }
 
 /* Transport on the left, volume and balance stacked on the right. */
 .deck-controls {
@@ -214,3 +221,13 @@ body[data-layout="columns"] .stack .stack > :nth-child(3) { grid-column: 1 / -1;
   .deck-controls { grid-template-columns: minmax(0, 1fr); }
   .eq-body { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* The title readout is what set this page's own floor, and the floor was
+   482px: a marquee is 22rem wide by token, and with #root's inset that left a
+   phone scrolling the page sideways. The readout was already willing to
+   shrink (lcd.css sizes it min(22rem, 100%)) and the marquee already scrolls
+   copy longer than its box. What stopped it was the grid: an item's automatic
+   minimum is its content, so every box above it held the full 22rem open.
+   This is the page saying it will take the width it is given. */
+.deck,
+.deck-title { min-width: 0; }

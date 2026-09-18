@@ -44,7 +44,11 @@ export const shipped = [...new Set(
 /* `element` is what the browser ends up with, not what the JSX says: a Radix
    Checkbox.Root is a <button>, and a consumer writing this by hand needs the
    button. `open` marks a surface that exists only once something is opened,
-   which is why it cannot be server-rendered and the element check skips it. */
+   which is why it cannot be server-rendered and the element check skips it.
+   `measured` marks one that waits on a measurement instead: the marquee's
+   pause control arrives with the motion, and whether a value is longer than
+   its window is a question with no answer until there is a box to measure.
+   scripts/check-interaction.mjs asks it in a browser, at two widths. */
 export const GROUPS = [
   {
     name: 'Utility',
@@ -379,7 +383,7 @@ export const GROUPS = [
       ['pw-lcd-window', 'span', 'The clipping window a marquee scrolls inside. role="img" with the text as its label.'],
       ['pw-lcd-render', 'span', 'The row of cells. aria-hidden, because the label on the window is what gets read.'],
       ['pw-lcd-cell', 'span', 'One glyph cell.'],
-      ['pw-lcd-pause', 'button', 'The marquee\'s pause control. WCAG 2.2.2 asks for a mechanism to stop anything moving for more than five seconds, and pausing on hover is not one: a keyboard, switch or touch user cannot trigger it.'],
+      ['pw-lcd-pause', 'button', 'The marquee\'s pause control. WCAG 2.2.2 asks for a mechanism to stop anything moving for more than five seconds, and pausing on hover is not one: a keyboard, switch or touch user cannot trigger it. It is rendered only while the value is actually longer than its window, because that is the only time anything moves.', 'measured'],
     ],
   },
 ];

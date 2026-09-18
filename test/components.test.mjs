@@ -179,16 +179,29 @@ describe('readout', () => {
       /data-sheet="glyphs"/);
   });
 
-  test('a marquee ships a real pause control and a second copy', () => {
-    /* WCAG 2.2.2 asks for a mechanism to pause anything moving for more than
-       five seconds. Pausing on hover is not one: a keyboard, switch or touch
-       user has no way to trigger it. The second copy is what makes the -50%
-       translate loop instead of snapping back through an empty box. */
+  test('a marquee renders as one still copy until it is measured', () => {
+    /* The second copy and the motion both wait on a measurement, and there is
+       nothing to measure on a server: no layout, no box, no ResizeObserver.
+       So this is what the markup is before the browser has a say, and it is
+       also what a consumer with no JavaScript keeps.
+
+       It used to ship both copies and scroll unconditionally, which is the
+       bug this contract replaced: a value narrower than its window sat in the
+       box against its own second copy, reading "LASS PADGLASS PA" rather than
+       "GLASS PAD".
+
+       The pause control goes with the motion for the same reason. WCAG 2.2.2
+       asks for a mechanism to pause content moving for more than five
+       seconds, and nothing here is moving yet: rendered anyway it would be a
+       named, focusable control with nothing to do.
+
+       scripts/check-interaction.mjs drives the other half in a browser, at
+       two widths, where a box and a value both exist. */
     const html = render(h(Readout, { value: 'AB', mode: 'glyphs', marquee: true }));
-    assert.match(html, /<button[^>]*class="pw-lcd-pause"/);
-    assert.match(html, /aria-label="Pause scrolling"/);
     assert.match(html, /class="pw-lcd-window"/);
-    assert.equal(html.match(/pw-lcd-cell/g).length, 4, 'two characters, twice');
+    assert.doesNotMatch(html, /data-marquee/);
+    assert.doesNotMatch(html, /pw-lcd-pause/);
+    assert.equal(html.match(/pw-lcd-cell/g).length, 2, 'two characters, once');
   });
 
   test('a still readout has no pause control and no second copy', () => {
